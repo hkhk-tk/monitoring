@@ -1,0 +1,313 @@
+---
+# Monitooringu täienduskoolitus — VM-ide seadistamine
+# Käivita: ansible-playbook -i inventory/hosts.yml playbooks/setup.yml
+
+- name: Baasseadistus kõigile VM-idele
+  hosts: all
+  become: true
+  tasks:
+    - name: Ajavöönd Eesti
+      community.general.timezone:
+        name: Europe/Tallinn
+
+    - name: Paketid uuendada
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: safe
+      when: ansible_os_family == "Debian"
+
+    - name: Student kasutaja parool
+      ansible.builtin.user:
+        name: student
+        password: "{{ 'Monitoring2026!' | password_hash('sha512') }}"
+        shell: /bin/bash
+
+    - name: SSH parooliga login lubatud
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication yes'
+      notify: restart sshd
+
+    - name: Baaspaketid
+      ansible.builtin.apt:
+        name:
+          - vim
+          - curl
+          - wget
+          - net-tools
+          - htop
+          - jq
+          - tree
+          - tmux
+          - bash-completion
+        state: present
+      when: ansible_os_family == "Debian"
+
+  handlers:
+    - name: restart sshd
+      ansible.builtin.systemd:
+        name: sshd
+        state: restarted
+
+- name: Docker kõigile osaleja VM-idele
+  hosts: osalejad
+  become: true
+  tasks:
+    - name: Docker GPG võti
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Docker repo
+      ansible.builtin.apt_repository:
+        repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Docker paketid
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+
+    - name: Docker käivitamine
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Student kasutaja docker gruppi
+      ansible.builtin.user:
+        name: student
+        groups: docker
+        append: true
+
+    - name: Labori kaust
+      ansible.builtin.file:
+        path: /home/student/lab
+        state: directory
+        owner: student
+        group: student
+        mode: '0755'
+
+- name: Target VM — monitooritav Linux server
+  hosts: mon-target
+  become: true
+  tasks:
+    - name: Kaose tööriist (koolitaja kasutab tunni ajal)
+      ansible.builtin.apt:
+        name: stress-ng
+        state: present
+
+    - name: Node Exporter alla laadida
+      ansible.builtin.get_url:
+        url: https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+        dest: /tmp/node_exporter.tar.gz
+
+    - name: Node Exporter lahti pakkida
+      ansible.builtin.unarchive:
+        src: /tmp/node_exporter.tar.gz
+        dest: /opt/
+        remote_src: true
+
+    - name: Node Exporter symlink
+      ansible.builtin.file:
+        src: /opt/node_exporter-1.8.2.linux-amd64/node_exporter
+        dest: /usr/local/bin/node_exporter
+        state: link
+
+    - name: Node Exporter systemd service
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/node_exporter.service
+        content: |
+          [Unit]
+          Description=Node Exporter
+          After=network.target
+
+          [Service]
+          User=nobody
+          ExecStart=/usr/local/bin/node_exporter
+          Restart=on-failure
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Node Exporter käivitamine
+      ansible.builtin.systemd:
+        name: node_exporter
+        state: started
+        enabled: true
+        daemon_reload: true
+
+    - name: Zabbix agent repo
+      ansible.builtin.apt:
+        deb: https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu22.04_all.deb
+
+    - name: Zabbix agent install
+      ansible.builtin.apt:
+        name: zabbix-agent2
+        state: present
+        update_cache: true
+
+    - name: Zabbix agent konfig — lubab kõik osalejad
+      ansible.builtin.lineinfile:
+        path: /etc/zabbix/zabbix_agent2.conf
+        regexp: "^Server="
+        line: "Server=192.168.100.120,192.168.100.121,192.168.100.122,192.168.100.123,192.168.100.124,192.168.100.125,192.168.100.126"
+
+    - name: Zabbix agent käivitamine
+      ansible.builtin.systemd:
+        name: zabbix-agent2
+        state: started
+        enabled: true
+
+    - name: Logi-generaator skript (tekitab erinevaid logitasemeid)
+      ansible.builtin.copy:
+        dest: /usr/local/bin/log-generator.sh
+        mode: '0755'
+        content: |
+          #!/bin/bash
+          # Genereerib juhuslikke logisid /var/log/app.log
+          LEVELS=("INFO" "WARNING" "ERROR" "CRITICAL" "DEBUG")
+          SERVICES=("auth" "payment" "api" "database" "cache")
+          MESSAGES_INFO=("Request processed successfully" "User logged in" "Cache hit" "Health check OK")
+          MESSAGES_ERROR=("Connection timeout" "Database query failed" "Authentication error" "Disk space critical" "Out of memory")
+          while true; do
+            LEVEL=${LEVELS[$RANDOM % ${#LEVELS[@]}]}
+            SERVICE=${SERVICES[$RANDOM % ${#SERVICES[@]}]}
+            if [[ "$LEVEL" == "ERROR" || "$LEVEL" == "CRITICAL" ]]; then
+              MSG=${MESSAGES_ERROR[$RANDOM % ${#MESSAGES_ERROR[@]}]}
+            else
+              MSG=${MESSAGES_INFO[$RANDOM % ${#MESSAGES_INFO[@]}]}
+            fi
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [$LEVEL] [$SERVICE] $MSG" >> /var/log/app.log
+            sleep $((RANDOM % 5 + 1))
+          done
+
+    - name: Logi-generaator systemd service
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/log-generator.service
+        content: |
+          [Unit]
+          Description=Fake Application Log Generator
+          After=network.target
+
+          [Service]
+          ExecStart=/usr/local/bin/log-generator.sh
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Logi-generaator käivitamine
+      ansible.builtin.systemd:
+        name: log-generator
+        state: started
+        enabled: true
+        daemon_reload: true
+
+- name: Target-web VM — veebileht ja andmebaas
+  hosts: mon-target-web
+  become: true
+  tasks:
+    - name: Node Exporter alla laadida
+      ansible.builtin.get_url:
+        url: https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+        dest: /tmp/node_exporter.tar.gz
+
+    - name: Node Exporter lahti pakkida
+      ansible.builtin.unarchive:
+        src: /tmp/node_exporter.tar.gz
+        dest: /opt/
+        remote_src: true
+
+    - name: Node Exporter symlink
+      ansible.builtin.file:
+        src: /opt/node_exporter-1.8.2.linux-amd64/node_exporter
+        dest: /usr/local/bin/node_exporter
+        state: link
+
+    - name: Node Exporter service (sama mis target)
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/node_exporter.service
+        content: |
+          [Unit]
+          Description=Node Exporter
+          After=network.target
+
+          [Service]
+          User=nobody
+          ExecStart=/usr/local/bin/node_exporter
+          Restart=on-failure
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Node Exporter käivitamine
+      ansible.builtin.systemd:
+        name: node_exporter
+        state: started
+        enabled: true
+        daemon_reload: true
+
+    - name: Nginx install
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Nginx veebileht — monitooringu demo
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html><head><title>HKHK Monitoring Lab</title></head>
+          <body>
+          <h1>Monitoring Target — Web Server</h1>
+          <p>See on Haapsalu KHK monitooringu koolituse target-server.</p>
+          <p>Server: mon-target-web</p>
+          <p>Staatus: OK</p>
+          </body></html>
+
+    - name: Nginx stub_status (Zabbix/Prometheus monitooringuks)
+      ansible.builtin.copy:
+        dest: /etc/nginx/conf.d/status.conf
+        content: |
+          server {
+              listen 8080;
+              location /nginx_status {
+                  stub_status on;
+                  allow all;
+              }
+          }
+
+    - name: Nginx restart
+      ansible.builtin.systemd:
+        name: nginx
+        state: restarted
+        enabled: true
+
+    - name: Zabbix agent repo
+      ansible.builtin.apt:
+        deb: https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu22.04_all.deb
+
+    - name: Zabbix agent install
+      ansible.builtin.apt:
+        name: zabbix-agent2
+        state: present
+        update_cache: true
+
+    - name: Zabbix agent konfig
+      ansible.builtin.lineinfile:
+        path: /etc/zabbix/zabbix_agent2.conf
+        regexp: "^Server="
+        line: "Server=192.168.100.120,192.168.100.121,192.168.100.122,192.168.100.123,192.168.100.124,192.168.100.125,192.168.100.126"
+
+    - name: Zabbix agent käivitamine
+      ansible.builtin.systemd:
+        name: zabbix-agent2
+        state: started
+        enabled: true

@@ -1,0 +1,29 @@
+# Proxmox ühendus
+proxmox_endpoint  = "https://192.168.100.200:8006"
+proxmox_api_token = "root@pam!terraform=MUUDA-MIND"
+ssh_public_key    = "ssh-ed25519 AAAA... maria@hkhk"
+
+# Proxmox node — marianodea (GNS3 maas laupäeviti) või marianodeb
+target_node = "marianodea"
+template_id = 9000  # Ubuntu 22.04 cloud-init template
+
+# Osalejad — 6 osalejat + koolitaja
+osalejad = [
+  "maria",       # koolitaja/testija
+  "securer",     # Hooldusjuht, Securer OÜ
+  "poltsamaa",   # IT-spetsialist, Põltsamaa Vallavalitsus
+  "epank1",      # Infoturbejuht, Eesti Pank
+  "epank2",      # IT riskihaldur, Eesti Pank
+  "fujitsu",     # IT pilveteenuste spetsialist, Fujitsu
+  "tyootu"       # Töötu, IT spetsialist
+]
+
+# Osaleja VM specs — vaikeväärtused sobivad
+# ELK päeval (09.05) võid tõsta: osaleja_ram = 6144
+# osaleja_ram  = 4096
+# osaleja_cpu  = 2
+# osaleja_disk = 40
+
+# Target VM-id — vaikeväärtused sobivad
+# target_ip     = 140   # mon-target:     192.168.100.140
+# target_web_ip = 141   # mon-target-web: 192.168.100.141

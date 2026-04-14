@@ -1,0 +1,84 @@
+site_name: "Monitooring ja Jälgitavus — Täienduskoolitus"
+site_url: https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/
+theme:
+  name: material
+  features:
+    - mermaid
+    - navigation.tabs
+    - navigation.top
+    - navigation.expand
+    - navigation.sections
+    - navigation.indexes
+    - navigation.tracking
+    - navigation.instant
+    - toc.follow
+    - toc.sticky
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+  language: et
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: amber
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - pymdownx.keys
+  - pymdownx.critic
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji ""
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg ""
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      fallback_to_build_date: true
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
+
+nav:
+  - Avaleht: index.md
+
+  - "Päev 1 — Prometheus + Grafana":
+      - Labor: labs/01_prometheus_grafana/lab.md
+      - Loeng: materials/lectures/paev1-loeng.md
+
+  - "Päev 2 — Zabbix + Loki":
+      - Zabbix labor: labs/02_zabbix_loki/zabbix_lab.md
+      - Loki labor: labs/02_zabbix_loki/loki_lab.md
+
+  - "Päev 3 — ELK Stack":
+      - Labor: labs/03_elk_stack/lab.md
+
+  - "Päev 4 — TICK + Kesksed logimissüsteemid":
+      - TICK labor: labs/04_tick_keskne_logimine/tick_lab.md
+      - Ülevaade: labs/04_tick_keskne_logimine/keskne_logimine.md
+
+  - "Päev 5 — Tempo + OTel + Kokkuvõte":
+      - Labor: labs/05_tempo_otel/lab.md
+      - "Trendid 2026": labs/05_tempo_otel/trendid.md
+
+  - Ressursid:
+      - "VM ligipääs": resources/vm-access.md
+      - "Docker Compose cheatsheet": resources/docker-cheatsheet.md

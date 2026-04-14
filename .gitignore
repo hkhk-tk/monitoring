@@ -1,0 +1,25 @@
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/*.tfstate*
+infra/terraform/terraform.tfvars
+infra/terraform/.terraform.lock.hcl
+
+# Ansible
+infra/ansible/inventory/hosts.yml
+infra/ansible/secrets.yml
+
+# MkDocs
+site/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
