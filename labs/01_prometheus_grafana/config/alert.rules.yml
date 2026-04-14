@@ -1,0 +1,42 @@
+groups:
+  - name: node_alerts
+    rules:
+      # Masin on maas
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.instance }} on maas!"
+          description: "{{ $labels.instance }} ({{ $labels.job }}) ei vasta juba üle 1 minuti."
+
+      # CPU kasutus üle 80%
+      - alert: HighCpuUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Kõrge CPU kasutus: {{ $labels.instance }}"
+          description: "CPU kasutus on {{ $value | printf \"%.1f\" }}% (üle 80%)."
+
+      # Mälu otsas — alla 10% vaba
+      - alert: LowMemory
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 < 10
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Vähe mälu: {{ $labels.instance }}"
+          description: "Vaba mälu on ainult {{ $value | printf \"%.1f\" }}%."
+
+      # Ketas täis — alla 15% vaba
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_free_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Kettaruum otsakorral: {{ $labels.instance }}"
+          description: "Root partitsioonil on ainult {{ $value | printf \"%.1f\" }}% vaba."
