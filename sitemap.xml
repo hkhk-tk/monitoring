@@ -2,54 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/01_prometheus_grafana/koolitaja-juhend/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/01_prometheus_grafana/lab/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/02_zabbix_loki/loki_lab/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/02_zabbix_loki/zabbix_lab/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/03_elk_stack/lab/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/04_tick_keskne_logimine/keskne_logimine/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/04_tick_keskne_logimine/tick_lab/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/05_tempo_otel/lab/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/05_tempo_otel/trendid/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/materials/lectures/paev1-loeng/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
+    </url>
+    <url>
+         <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/materials/lectures/paev1-observability/</loc>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/resources/docker-cheatsheet/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
     <url>
          <loc>https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/resources/vm-access/</loc>
-         <lastmod>2026-04-14</lastmod>
+         <lastmod>2026-04-16</lastmod>
     </url>
 </urlset>

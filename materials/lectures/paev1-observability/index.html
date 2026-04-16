@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/01_prometheus_grafana/koolitaja-juhend/">
+        <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/materials/lectures/paev1-observability/">
       
       
       
@@ -21,7 +21,7 @@
     
     
       
-        <title>Koolitaja juhend - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Päev 1: Monitooring, Logimine ja Vaatlus - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#koolitaja-juhend" class="md-skip">
+        <a href="#paev-1-monitooring-logimine-ja-vaatlus" class="md-skip">
           Keri sisuni
         </a>
       
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Koolitaja juhend
+              Päev 1: Monitooring, Logimine ja Vaatlus
             
           </span>
         </div>
@@ -214,7 +214,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../lab/" class="md-tabs__link">
+        <a href="../../../labs/01_prometheus_grafana/lab/" class="md-tabs__link">
           
   
   
@@ -236,7 +236,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../02_zabbix_loki/zabbix_lab/" class="md-tabs__link">
+        <a href="../../../labs/02_zabbix_loki/zabbix_lab/" class="md-tabs__link">
           
   
   
@@ -258,7 +258,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../03_elk_stack/lab/" class="md-tabs__link">
+        <a href="../../../labs/03_elk_stack/lab/" class="md-tabs__link">
           
   
   
@@ -280,7 +280,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../04_tick_keskne_logimine/tick_lab/" class="md-tabs__link">
+        <a href="../../../labs/04_tick_keskne_logimine/tick_lab/" class="md-tabs__link">
           
   
   
@@ -302,7 +302,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../05_tempo_otel/lab/" class="md-tabs__link">
+        <a href="../../../labs/05_tempo_otel/lab/" class="md-tabs__link">
           
   
   
@@ -465,7 +465,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lab/" class="md-nav__link">
+      <a href="../../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
         
   
   
@@ -493,7 +493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev1-loeng/" class="md-nav__link">
+      <a href="../paev1-loeng/" class="md-nav__link">
         
   
   
@@ -588,7 +588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02_zabbix_loki/zabbix_lab/" class="md-nav__link">
+      <a href="../../../labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
         
   
   
@@ -616,7 +616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02_zabbix_loki/loki_lab/" class="md-nav__link">
+      <a href="../../../labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
         
   
   
@@ -709,7 +709,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03_elk_stack/lab/" class="md-nav__link">
+      <a href="../../../labs/03_elk_stack/lab/" class="md-nav__link">
         
   
   
@@ -804,7 +804,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
+      <a href="../../../labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
         
   
   
@@ -832,7 +832,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
+      <a href="../../../labs/04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
         
   
   
@@ -927,7 +927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../05_tempo_otel/lab/" class="md-nav__link">
+      <a href="../../../labs/05_tempo_otel/lab/" class="md-nav__link">
         
   
   
@@ -955,7 +955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../05_tempo_otel/trendid/" class="md-nav__link">
+      <a href="../../../labs/05_tempo_otel/trendid/" class="md-nav__link">
         
   
   
@@ -1126,6 +1126,202 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-miks-see-uldse-oluline-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Miks see üldse oluline on?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-kolm-moistet-mida-sageli-aetakse-segamini" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Kolm mõistet, mida sageli aetakse segamini
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Kolm mõistet, mida sageli aetakse segamini">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logimine-susteemi-paevik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logimine — süsteemi päevik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seire-numbrid-ajas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seire — numbrid ajas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vaatlus-sugavam-arusaamine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vaatlus — sügavam arusaamine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-use-ja-red-mida-uldse-jalgida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. USE ja RED — mida üldse jälgida?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. USE ja RED — mida üldse jälgida?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-meetod-infrastruktuuriks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        USE meetod — infrastruktuuriks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#red-meetod-teenusteks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RED meetod — teenusteks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#google-four-golden-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Google Four Golden Signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-monitoring-vs-observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Monitoring vs Observability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-tooriistad-maastiku-ulevaade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Tööriistad — maastiku ülevaade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-intsidentide-haldamine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Intsidentide haldamine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-turvalisus-ja-vastavus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Turvalisus ja vastavus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kokkuvote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allikad
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1141,9 +1337,285 @@
 
 
 
-<h1 id="koolitaja-juhend">Koolitaja juhend<a class="headerlink" href="#koolitaja-juhend" title="Permanent link">&para;</a></h1>
-<p>See fail on privaatses infra repos:
-<code>hkhk-tak/infra → planning/koolitaja-juhend-paev1.md</code></p>
+<h1 id="paev-1-monitooring-logimine-ja-vaatlus">Päev 1: Monitooring, Logimine ja Vaatlus<a class="headerlink" href="#paev-1-monitooring-logimine-ja-vaatlus" title="Permanent link">&para;</a></h1>
+<p><em>Iseseisev lugemine enne labi</em></p>
+<p><strong>Eeldused:</strong> Linux CLI põhitõed, võrgunduse alused<br />
+<strong>Kestus:</strong> ~30 minutit</p>
+<hr />
+<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Permanent link">&para;</a></h2>
+<p>Pärast seda loengut oskad:</p>
+<ul>
+<li>Selgitada, miks monitooring on IT-s eluliselt oluline — ja miks "kasutaja helistab" ei ole monitoring</li>
+<li>Eristada logimist, seiret ja vaatlust</li>
+<li>Kirjeldada observability kolme sammast: metrics, logs, traces</li>
+<li>Selgitada USE ja RED meetodeid ja kasutada neid õigetes kontekstides</li>
+</ul>
+<hr />
+<h2 id="1-miks-see-uldse-oluline-on">1. Miks see üldse oluline on?<a class="headerlink" href="#1-miks-see-uldse-oluline-on" title="Permanent link">&para;</a></h2>
+<p>Alustame ausa küsimusega: kas monitooring on tüütu kohustus või päriselt kasulik?</p>
+<p>Vastus selgub ühe looga. On reede, kell 18:00. Sinu ettevõte on just käivitanud Black Friday kampaania. Ja siis:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>18:05 — Twitter: &quot;Teie leht ei lae!&quot;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>18:07 — Email: &quot;Maksed ei tööta!&quot;
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>18:10 — CEO Slackis: &quot;MIS TOIMUB?!&quot;
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>18:12 — Sina: &quot;...ma ei tea 😰&quot;
+</span></code></pre></div>
+<p>Tulemus: kaks tundi downtime, 50 000 eurot kadunud müüki, kliendid vihased, CEO veel vihasem. Kõige hullem: sa ei teadnud, et midagi oli valesti, kuni kasutajad helistasid.</p>
+<p>See pole hüpoteetiline. Amazon on arvutanud, et üks sekund latency'i kasvu maksab neile 1,6 miljardit dollarit aastas. Bolt, Wise, Pipedrive — Eesti uhkused — investeerivad monitoorimisse miljoneid. Mitte sellepärast, et see on lahe. Sellepärast, et ilma selleta on nad pimedad.</p>
+<p><strong>Monitooring on teie süsteemi nägemine. Ilma selleta lendate ilma instrumentideta.</strong></p>
+<hr />
+<h2 id="2-kolm-moistet-mida-sageli-aetakse-segamini">2. Kolm mõistet, mida sageli aetakse segamini<a class="headerlink" href="#2-kolm-moistet-mida-sageli-aetakse-segamini" title="Permanent link">&para;</a></h2>
+<h3 id="logimine-susteemi-paevik">Logimine — süsteemi päevik<a class="headerlink" href="#logimine-susteemi-paevik" title="Permanent link">&para;</a></h3>
+<p>Logimine on sündmuste salvestamine. Iga kord kui midagi juhtub — kirjutatakse see üles.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>2026-04-18T10:23:41Z INFO  [auth] User jaan@ettevote.ee logged in
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>2026-04-18T10:23:45Z ERROR [payment] Connection timeout to db-01 after 30s
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>2026-04-18T10:24:01Z FATAL [payment] All retry attempts failed, transaction aborted
+</span></code></pre></div>
+<p>Logid vastavad küsimusele: <strong>mis juhtus ja millal?</strong></p>
+<p>Log level'id aitavad filtreerida: <code>DEBUG</code> → <code>INFO</code> → <code>WARN</code> → <code>ERROR</code> → <code>FATAL</code>. Toodangus tavaliselt <code>INFO</code> või kõrgem.</p>
+<p>Logide probleem on maht — gigabaite päevas. Ilma tsentraliseeritud lahenduseta (ELK, Loki) oled pime.</p>
+<h3 id="seire-numbrid-ajas">Seire — numbrid ajas<a class="headerlink" href="#seire-numbrid-ajas" title="Permanent link">&para;</a></h3>
+<p>Seire salvestab mõõdikuid pidevalt — aegridadena.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cpu_usage{host=&quot;web-01&quot;} 45.2  @ 10:23:00
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cpu_usage{host=&quot;web-01&quot;} 89.1  @ 10:23:30  ← midagi juhtus!
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>cpu_usage{host=&quot;web-01&quot;} 44.2  @ 10:24:00  ← lahenes
+</span></code></pre></div>
+<p>Seire vastab küsimusele: <strong>kui palju ja kas see on normaalne?</strong></p>
+<h3 id="vaatlus-sugavam-arusaamine">Vaatlus — sügavam arusaamine<a class="headerlink" href="#vaatlus-sugavam-arusaamine" title="Permanent link">&para;</a></h3>
+<p>Vaatlus (observability) ühendab kõik kolm sammast täieliku pildi saamiseks:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│   METRICS   │  │    LOGS     │  │   TRACES    │
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│             │  │             │  │             │
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│ Kui palju?  │  │ Mis juhtus? │  │ Kus on      │
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│ Kui kiire?  │  │ Millal?     │  │ kitsaskoht? │
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│             │  │             │  │             │
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│ Prometheus  │  │ Loki / ELK  │  │ Tempo/Jaeger│
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>└─────────────┘  └─────────────┘  └─────────────┘
+</span></code></pre></div>
+<p>Praktiline näide — kasutaja kaebab aeglast lehte:</p>
+<ul>
+<li><strong>Metrics</strong> näitab: andmebaasi CPU on 100%</li>
+<li><strong>Logs</strong> näitab: täistabeli skaneerimised iga sekund</li>
+<li><strong>Traces</strong> näitab: konkreetne päring viibib andmebaasis 4.5 sekundit 5-st</li>
+</ul>
+<p>Ilma kõigi kolmeta oled detektiiv ilma tõenditeta.</p>
+<hr />
+<h2 id="3-use-ja-red-mida-uldse-jalgida">3. USE ja RED — mida üldse jälgida?<a class="headerlink" href="#3-use-ja-red-mida-uldse-jalgida" title="Permanent link">&para;</a></h2>
+<p>Tuhandete võimalike mõõdikute hulgast — mida valida? Kaks raamistikku aitavad.</p>
+<h3 id="use-meetod-infrastruktuuriks">USE meetod — infrastruktuuriks<a class="headerlink" href="#use-meetod-infrastruktuuriks" title="Permanent link">&para;</a></h3>
+<p>Brendan Gregg (Netflix) — iga ressursi kohta kolm küsimust:</p>
+<ul>
+<li><strong>U</strong>tilization — kui suure osa ressursist kasutad?</li>
+<li><strong>S</strong>aturation — kas miski ootab järjekorras?</li>
+<li><strong>E</strong>rrors — kas tekivad vead?</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CPU</th>
+<th>Mälu</th>
+<th>Ketas</th>
+<th>Võrk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>U</strong></td>
+<td>CPU %</td>
+<td>RAM %</td>
+<td>I/O aeg %</td>
+<td>Bandwidth %</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td>Load average</td>
+<td>Swap kasutus</td>
+<td>I/O järjekord</td>
+<td>Dropped packets</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>—</td>
+<td>OOM kills</td>
+<td>Disk errors</td>
+<td>Interface errors</td>
+</tr>
+</tbody>
+</table>
+<h3 id="red-meetod-teenusteks">RED meetod — teenusteks<a class="headerlink" href="#red-meetod-teenusteks" title="Permanent link">&para;</a></h3>
+<p>Tom Wilkie (Grafana Labs) — iga teenuse kohta:</p>
+<ul>
+<li><strong>R</strong>ate — päringuid sekundis</li>
+<li><strong>E</strong>rrors — veaprotsent</li>
+<li><strong>D</strong>uration — vastamisaeg</li>
+</ul>
+<p>Bolt jälgib sõidupäringute RED meetrikaid reaalajas. Kui Rate langeb järsku — midagi on valesti.</p>
+<h3 id="google-four-golden-signals">Google Four Golden Signals<a class="headerlink" href="#google-four-golden-signals" title="Permanent link">&para;</a></h3>
+<p>Google SRE raamat — neli signaali katavad 80% probleemidest:</p>
+<table>
+<thead>
+<tr>
+<th>Signaal</th>
+<th>Kirjeldus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td>Kui kiiresti teenus vastab</td>
+</tr>
+<tr>
+<td><strong>Traffic</strong></td>
+<td>Kui palju päringuid tuleb</td>
+</tr>
+<tr>
+<td><strong>Errors</strong></td>
+<td>Kui suur osa ebaõnnestub</td>
+</tr>
+<tr>
+<td><strong>Saturation</strong></td>
+<td>Kui lähedal on ressurss piirile</td>
+</tr>
+</tbody>
+</table>
+<p>Alusta nendest neljast. Kõik muu on bonus.</p>
+<hr />
+<h2 id="4-monitoring-vs-observability">4. Monitoring vs Observability<a class="headerlink" href="#4-monitoring-vs-observability" title="Permanent link">&para;</a></h2>
+<p><strong>Monitoring</strong> vastab küsimusele: "Kas süsteem on üleval?"</p>
+<p><strong>Observability</strong> vastab küsimusele: "Miks süsteem on aeglane ja kus täpselt?"</p>
+<p>Monitoring on eeldefineeritud kontrollid — sa pead ette teadma mida kontrollida. Observability on võime uurida suvalist küsimust, mida sa ei osanud ette näha.</p>
+<p>Selle kursuse jooksul liigume monitoringust observability poole:
+- <strong>Päev 1</strong> — Metrics (Prometheus, Grafana)
+- <strong>Päev 2</strong> — Logs (Loki) + Zabbix
+- <strong>Päev 3</strong> — ELK Stack
+- <strong>Päev 4</strong> — TICK Stack
+- <strong>Päev 5</strong> — Traces (Tempo, OpenTelemetry)</p>
+<hr />
+<h2 id="5-tooriistad-maastiku-ulevaade">5. Tööriistad — maastiku ülevaade<a class="headerlink" href="#5-tooriistad-maastiku-ulevaade" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Sammas</th>
+<th>Tööriist</th>
+<th>Millal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Metrics</td>
+<td><strong>Prometheus</strong></td>
+<td>Dünaamilised keskkonnad, Kubernetes</td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td><strong>Zabbix</strong></td>
+<td>Suur infrastruktuur, legacy</td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td><strong>InfluxDB</strong></td>
+<td>IoT, kõrge kirjutussagedus</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td><strong>Loki</strong></td>
+<td>Prometheus ökosüsteem</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td><strong>ELK Stack</strong></td>
+<td>Keerulised otsingud, suur maht</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td><strong>Splunk</strong></td>
+<td>Enterprise, masinõpe</td>
+</tr>
+<tr>
+<td>Traces</td>
+<td><strong>Grafana Tempo</strong></td>
+<td>LGTM stack</td>
+</tr>
+<tr>
+<td>Traces</td>
+<td><strong>Jaeger</strong></td>
+<td>OpenTelemetry</td>
+</tr>
+<tr>
+<td>Visualiseerimine</td>
+<td><strong>Grafana</strong></td>
+<td>Kõik eelnimetatud</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Täna:</strong> Prometheus + Grafana + Alertmanager — kõige levinum kombinatsioon Eesti ettevõtetes.</p>
+<hr />
+<h2 id="6-intsidentide-haldamine">6. Intsidentide haldamine<a class="headerlink" href="#6-intsidentide-haldamine" title="Permanent link">&para;</a></h2>
+<p>Hoolimata parimast monitooringust juhtuvad intsidendid. Oluline on kuidas reageerid.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Tuvastamine → Klassifitseerimine → Uurimine → Lahendamine → Postmortem
+</span></code></pre></div>
+<p><strong>Kolm sammu veaotsinguks:</strong></p>
+<ol>
+<li><strong>Detektiivitöö</strong> — vaata logisid, graafikuid, kontrolli mis muutus viimati</li>
+<li><strong>Juurpõhjus</strong> — ära paranda sümptomit, leia põhjus</li>
+<li><strong>Lahenda ja dokumenteeri</strong> — rakenda, testi, kirjuta üles</li>
+</ol>
+<p>SRE kultuuris on blameless postmortem standard — viga juhtus, kuidas süsteem saab paremaks?</p>
+<hr />
+<h2 id="7-turvalisus-ja-vastavus">7. Turvalisus ja vastavus<a class="headerlink" href="#7-turvalisus-ja-vastavus" title="Permanent link">&para;</a></h2>
+<p>Logimine pole ainult tehniline küsimus. GDPR nõuab:</p>
+<ul>
+<li>Kõigi juurdepääsude logimine isikuandmetele</li>
+<li>Isikuandmete kustutamine nõudmisel</li>
+<li>Teavitamine andmelekkest 72 tunni jooksul</li>
+</ul>
+<p>Wise, kes töötleb miljoneid finantstehinguid, peab audit logisid hoidma aastaid. GDPR trahvid ulatuvad 4%-ni aastakäibest — see on konkreetne äririsk.</p>
+<hr />
+<h2 id="kokkuvote">Kokkuvõte<a class="headerlink" href="#kokkuvote" title="Permanent link">&para;</a></h2>
+<p><strong>Kolm sammast:</strong> Metrics (kui palju?), Logs (mis juhtus?), Traces (kus aeglustub?)</p>
+<p><strong>USE</strong> infrastruktuuri jaoks, <strong>RED</strong> teenuste jaoks — need ütlevad mida jälgida</p>
+<p><strong>Monitoring</strong> = "kas töötab?", <strong>Observability</strong> = "miks ei tööta ja kus täpselt?"</p>
+<p>Järgmine: <a href="../paev1-loeng/">Prometheus loeng</a></p>
+<hr />
+<h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Allikas</th>
+<th>Miks lugeda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE raamat — peatükk 6</a></td>
+<td>Four Golden Signals, hajutatud süsteemide monitooring — tööstusstandard</td>
+</tr>
+<tr>
+<td><a href="https://sre.google/books/">Google SRE raamat (tasuta)</a></td>
+<td>Must-read kõigile kes haldavad tootmissüsteeme</td>
+</tr>
+<tr>
+<td><a href="https://www.brendangregg.com/usemethod.html">Brendan Gregg — USE Method</a></td>
+<td>USE meetodi looja, Netflix/Oracle</td>
+</tr>
+<tr>
+<td><a href="https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/">Tom Wilkie — RED Method</a></td>
+<td>Grafana Labs CTO, RED meetodi autor</td>
+</tr>
+<tr>
+<td><a href="https://www.oreilly.com/library/view/observability-engineering/9781492076438/">Observability Engineering (O'Reilly)</a></td>
+<td>Charity Majors — sügavam lugemine</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cncf/tag-observability/blob/main/whitepaper.md">CNCF Observability Whitepaper</a></td>
+<td>Cloud Native Computing Foundation ametlik seisukoht</td>
+</tr>
+<tr>
+<td><a href="https://observability.dev/">observability.dev</a></td>
+<td>Praktilised näited</td>
+</tr>
+</tbody>
+</table>
 
 
 
