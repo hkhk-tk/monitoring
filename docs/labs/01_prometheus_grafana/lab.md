@@ -28,7 +28,7 @@ ssh <sinu-nimi>@192.168.100.12X
 
 ## Osa 1: Monitooringu stack üles (45 min)
 
-Selle osa lõpuks jookseb sinu VM-il neli konteinerit: Prometheus, Grafana, Alertmanager ja Node Exporter. Kõik omavahel ühendatud.
+Selle osa lõpuks jookseb sinu VM-il kolm konteinerit: Prometheus, Grafana ja Alertmanager. Node Exporter töötab juba sinu VM-il eraldi süsteemiteenusena — Docker seda ei käivita.
 
 ### Samm 1.1 — Töökausta loomine
 
@@ -126,21 +126,6 @@ services:
       - "mon-target-web:192.168.100.141"
     restart: unless-stopped
 
-  node-exporter:
-    image: prom/node-exporter:v1.8.2
-    container_name: node-exporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--path.rootfs=/rootfs'
-    ports:
-      - "9100:9100"
-    restart: unless-stopped
-
   grafana:
     image: grafana/grafana:11.1.0
     container_name: grafana
@@ -169,9 +154,8 @@ volumes:
 
 Salvesta: `Ctrl+O` → `Enter` → `Ctrl+X`
 
-> **Kolm asja mida märkida:**
+> **Kaks asja mida märkida:**
 > - `extra_hosts` — ütleb Prometheuse konteinerile et `mon-target` = `192.168.100.140`. Ilma selleta ei teaks konteiner seda nime.
-> - `volumes:` — `/proc:/host/proc:ro` annab Node Exporterile juurdepääsu Linuxi süsteemiinfole. `:ro` = read-only, turvalisem.
 > - `web.enable-lifecycle` — lubab Prometheuse konfiguratsiooni uuendada HTTP kaudu (ilma restartita).
 
 ---
@@ -202,7 +186,7 @@ scrape_configs:
 
   - job_name: 'local'
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets: ['localhost:9100']
         labels:
           host: 'minu-vm'
 
@@ -223,11 +207,11 @@ scrape_configs:
 > - `rule_files` — kust leida alertireegleid
 > - `scrape_configs` — **keda** jälgida. Iga `job_name` on grupp sihtmärke. `labels` lisab metainfot — näiteks `role: webserver` ütleb hiljem Grafanas et see on veebiserver.
 
-**Mõtlemisküsimus:** Miks kasutame `node-exporter:9100` mitte `localhost:9100`?
+**Mõtlemisküsimus:** Miks kasutame `localhost:9100` mitte `node-exporter:9100`?
 
 <details>
 <summary>Vastus</summary>
-Prometheus jookseb Docker konteineris. Konteineri sees tähendab `localhost` tema enda konteinerit, mitte VM-i. Docker võrgus saavad konteinerid üksteisega rääkida teenuse nimega — `node-exporter` on teenuse nimi `docker-compose.yml`-is.
+Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile süsteemiteenusena. Prometheus konteiner näeb VM-i `localhost`-i tänu sellele, et port 9090 on avatud host-võrku. Seega `localhost:9100` viitab VM-i node_exporterile, mitte mõnele konteinerile.
 </details>
 
 ---
@@ -328,7 +312,7 @@ Kontrolli konteinerite olek:
 docker compose ps
 ```
 
-⚡ **Kõik 4 konteinerit peavad olema `running`.** Kui mõni on `exited`:
+⚡ **Kõik 3 konteinerit peavad olema `running`.** Kui mõni on `exited`:
 ```bash
 docker compose logs <teenuse-nimi>
 ```
@@ -366,7 +350,7 @@ Peaks avanema UI ilma errorita.
 
 Enne edasi liikumist veendu:
 
-- [ ] `docker compose ps` — 4 konteinerit staatuses `running`
+- [ ] `docker compose ps` — 3 konteinerit staatuses `running`
 - [ ] Prometheus Targets — 3 sihtmärki staatuses `UP`
 - [ ] Grafana avab sisselogimislehe
 - [ ] Alertmanager UI avaneb

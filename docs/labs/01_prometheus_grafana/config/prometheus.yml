@@ -19,7 +19,7 @@ scrape_configs:
   # Sinu enda VM (kohalik node_exporter)
   - job_name: 'local'
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets: ['localhost:9100']
         labels:
           host: 'minu-vm'
 
