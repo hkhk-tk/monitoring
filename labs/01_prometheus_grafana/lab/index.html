@@ -6,15 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026">
+      
+      
+        <meta name="author" content="Maria Talvik">
       
       
         <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/01_prometheus_grafana/lab/">
       
       
-        <link rel="prev" href="../../..">
+        <link rel="prev" href="../../../materials/lectures/paev1-loeng/">
       
       
-        <link rel="next" href="../../../materials/lectures/paev1-loeng/">
+        <link rel="next" href="../../02_zabbix_loki/zabbix_lab/">
       
       
         
@@ -46,10 +50,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -123,7 +129,21 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Tume teema"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Tume teema" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Hele teema"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Hele teema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
     
   
 </form>
@@ -220,7 +240,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../../../materials/paev1-kava/" class="md-tabs__link">
           
   
   
@@ -364,7 +384,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
@@ -419,6 +441,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -466,6 +492,90 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/paev1-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev1-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 1: Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev1-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 2: Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -941,34 +1051,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev1-loeng/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Loeng
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1573,436 +1655,6 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#meie-keskkond-tana" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Meie keskkond täna
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#osa-1-monitooringu-stack-ules-45-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Osa 1: Monitooringu stack üles (45 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Osa 1: Monitooringu stack üles (45 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#samm-11-tookausta-loomine" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.1 — Töökausta loomine
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-12-mida-me-uldse-ehitame" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.2 — Mida me üldse ehitame?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-13-node-exporter-kontrolli-et-tootab" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.3 — Node Exporter: kontrolli et töötab
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-14-docker-composeyml-teenuste-kirjeldus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.4 — docker-compose.yml: teenuste kirjeldus
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-15-prometheusyml-mida-jalgida" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.5 — prometheus.yml: mida jälgida?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-16-alertrulesyml-kolm-esimest-reeglit" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.6 — alert.rules.yml: kolm esimest reeglit
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-17-kaks-vaikest-konfifaili" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.7 — Kaks väikest konfifaili
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-18-kaivita-stack" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.8 — Käivita stack
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-19-kontrolli-brauseris" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 1.9 — Kontrolli brauseris
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#osa-1-lopukontroll" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ✅ Osa 1 lõpukontroll
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#osa-2-promql-kusi-andmeid-kolmelt-serverilt-30-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Osa 2: PromQL — küsi andmeid kolmelt serverilt (30 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Osa 2: PromQL — küsi andmeid kolmelt serverilt (30 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#samm-21-kes-vastab" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 2.1 — Kes vastab?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-22-esimene-paris-moodik" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 2.2 — Esimene päris mõõdik
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-23-counter-vs-gauge" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 2.3 — Counter vs Gauge
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-24-filtreerimine-labelite-jargi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 2.4 — Filtreerimine label'ite järgi
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-25-valjakutsed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 2.5 — Väljakutsed
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#osa-3-grafana-use-meetodi-dashboard-35-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Osa 3: Grafana — USE meetodi dashboard (35 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Osa 3: Grafana — USE meetodi dashboard (35 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#samm-31-impordi-professionaalne-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 3.1 — Impordi professionaalne dashboard
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-32-loo-oma-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 3.2 — Loo oma dashboard
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-33-variables-dunaamiline-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 3.3 — Variables: dünaamiline dashboard
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#osa-4-alerting-hoiatuste-testimine-20-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Osa 4: Alerting — hoiatuste testimine (20 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Osa 4: Alerting — hoiatuste testimine (20 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#samm-41-vaata-olemasolevaid-reegleid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 4.1 — Vaata olemasolevaid reegleid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-42-tekita-alert-ise" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 4.2 — Tekita alert ise
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#samm-43-lisa-oma-alert" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Samm 4.3 — Lisa oma alert
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#arutelu-alert-design-5-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Arutelu: Alert design (5 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#osa-5-kaose-test-leia-probleem-15-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Osa 5: 🔥 Kaose test — leia probleem (15 min)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#lisaulesanded-kui-aega-jaab" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lisaülesanded (kui aega jääb)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Lisaülesanded (kui aega jääb)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#a-recording-rules" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        A — Recording rules
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#b-monitoori-kaasoppijat" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        B — Monitoori kaasõppijat
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#puhastamine-parast-tundi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Puhastamine (pärast tundi)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#torkeotsing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tõrkeotsing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Allikad
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           
             <div class="md-content" data-md-component="content">
@@ -2013,13 +1665,13 @@
 
 
 
-<h1 id="paev-1-prometheus-grafana-labor">Päev 1: Prometheus + Grafana — Labor<a class="headerlink" href="#paev-1-prometheus-grafana-labor" title="Permanent link">&para;</a></h1>
+<h1 id="paev-1-prometheus-grafana-labor">Päev 1: Prometheus + Grafana — Labor<a class="headerlink" href="#paev-1-prometheus-grafana-labor" title="Lingi sektsioonile">&para;</a></h1>
 <p><strong>18. aprill 2026 · 10:00–14:30</strong></p>
 <blockquote>
 <p><strong>Enne labi:</strong> Loe läbi <a href="../../../materials/lectures/paev1-observability/">observability loeng</a> ja <a href="../../../materials/lectures/paev1-loeng/">Prometheus loeng</a>.</p>
 </blockquote>
 <hr />
-<h2 id="meie-keskkond-tana">Meie keskkond täna<a class="headerlink" href="#meie-keskkond-tana" title="Permanent link">&para;</a></h2>
+<h2 id="meie-keskkond-tana">Meie keskkond täna<a class="headerlink" href="#meie-keskkond-tana" title="Lingi sektsioonile">&para;</a></h2>
 <p>Sinu VM on juba ette valmistatud. Kolm serverit ootavad monitoorimist:</p>
 <table>
 <thead>
@@ -2053,9 +1705,9 @@
 <p><strong>Kirjuta oma IP siia:</strong> <code>_______________________</code><br />
 (vajad seda kogu labori vältel brauseri URL-is)</p>
 <hr />
-<h2 id="osa-1-monitooringu-stack-ules-45-min">Osa 1: Monitooringu stack üles (45 min)<a class="headerlink" href="#osa-1-monitooringu-stack-ules-45-min" title="Permanent link">&para;</a></h2>
+<h2 id="osa-1-monitooringu-stack-ules-45-min">Osa 1: Monitooringu stack üles (45 min)<a class="headerlink" href="#osa-1-monitooringu-stack-ules-45-min" title="Lingi sektsioonile">&para;</a></h2>
 <p>Selle osa lõpuks jookseb sinu VM-il kolm konteinerit: Prometheus, Grafana ja Alertmanager. Node Exporter töötab juba sinu VM-il eraldi süsteemiteenusena — Docker seda ei käivita.</p>
-<h3 id="samm-11-tookausta-loomine">Samm 1.1 — Töökausta loomine<a class="headerlink" href="#samm-11-tookausta-loomine" title="Permanent link">&para;</a></h3>
+<h3 id="samm-11-tookausta-loomine">Samm 1.1 — Töökausta loomine<a class="headerlink" href="#samm-11-tookausta-loomine" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/paev1/config
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>~/paev1
 </span></code></pre></div>
@@ -2067,7 +1719,7 @@
 </span></code></pre></div>
 Peaksid nägema <code>/home/&lt;sinu-nimi&gt;/paev1</code></p>
 <hr />
-<h3 id="samm-12-mida-me-uldse-ehitame">Samm 1.2 — Mida me üldse ehitame?<a class="headerlink" href="#samm-12-mida-me-uldse-ehitame" title="Permanent link">&para;</a></h3>
+<h3 id="samm-12-mida-me-uldse-ehitame">Samm 1.2 — Mida me üldse ehitame?<a class="headerlink" href="#samm-12-mida-me-uldse-ehitame" title="Lingi sektsioonile">&para;</a></h3>
 <p>Enne failide loomist — vaata seda pilti:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Sinu VM
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>┌─────────────────────────────────────────────────┐
@@ -2090,7 +1742,7 @@ Peaksid nägema <code>/home/&lt;sinu-nimi&gt;/paev1</code></p>
 </span></code></pre></div>
 <p>Prometheus <strong>tõmbab</strong> (pull) meetrikaid kõigilt kolmelt sihtmärgilt. Grafana küsib Prometheuselt andmeid visualiseerimiseks. Alertmanager võtab vastu hoiatusi Prometheuselt.</p>
 <hr />
-<h3 id="samm-13-node-exporter-kontrolli-et-tootab">Samm 1.3 — Node Exporter: kontrolli et töötab<a class="headerlink" href="#samm-13-node-exporter-kontrolli-et-tootab" title="Permanent link">&para;</a></h3>
+<h3 id="samm-13-node-exporter-kontrolli-et-tootab">Samm 1.3 — Node Exporter: kontrolli et töötab<a class="headerlink" href="#samm-13-node-exporter-kontrolli-et-tootab" title="Lingi sektsioonile">&para;</a></h3>
 <p>Enne stacki käivitamist — veendu, et sihtmärgid vastavad:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>http://localhost:9100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-5
 </span></code></pre></div>
@@ -2103,7 +1755,7 @@ Peaksid nägema <code>/home/&lt;sinu-nimi&gt;/paev1</code></p>
 </blockquote>
 <p>⚡ <strong>Kontrolli:</strong> Kõik kolm peavad vastama. Kui mõni ei vasta — teavita koolitajat.</p>
 <hr />
-<h3 id="samm-14-docker-composeyml-teenuste-kirjeldus">Samm 1.4 — <code>docker-compose.yml</code>: teenuste kirjeldus<a class="headerlink" href="#samm-14-docker-composeyml-teenuste-kirjeldus" title="Permanent link">&para;</a></h3>
+<h3 id="samm-14-docker-composeyml-teenuste-kirjeldus">Samm 1.4 — <code>docker-compose.yml</code>: teenuste kirjeldus<a class="headerlink" href="#samm-14-docker-composeyml-teenuste-kirjeldus" title="Lingi sektsioonile">&para;</a></h3>
 <p>Loo fail:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>nano<span class="w"> </span>docker-compose.yml
 </span></code></pre></div></p>
@@ -2158,7 +1810,7 @@ Peaksid nägema <code>/home/&lt;sinu-nimi&gt;/paev1</code></p>
 - <code>web.enable-lifecycle</code> — lubab Prometheuse konfiguratsiooni uuendada HTTP kaudu (ilma restartita).</p>
 </blockquote>
 <hr />
-<h3 id="samm-15-prometheusyml-mida-jalgida">Samm 1.5 — <code>prometheus.yml</code>: mida jälgida?<a class="headerlink" href="#samm-15-prometheusyml-mida-jalgida" title="Permanent link">&para;</a></h3>
+<h3 id="samm-15-prometheusyml-mida-jalgida">Samm 1.5 — <code>prometheus.yml</code>: mida jälgida?<a class="headerlink" href="#samm-15-prometheusyml-mida-jalgida" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>nano<span class="w"> </span>config/prometheus.yml
 </span></code></pre></div>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">global</span><span class="p">:</span>
@@ -2208,7 +1860,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 </details>
 
 <hr />
-<h3 id="samm-16-alertrulesyml-kolm-esimest-reeglit">Samm 1.6 — <code>alert.rules.yml</code>: kolm esimest reeglit<a class="headerlink" href="#samm-16-alertrulesyml-kolm-esimest-reeglit" title="Permanent link">&para;</a></h3>
+<h3 id="samm-16-alertrulesyml-kolm-esimest-reeglit">Samm 1.6 — <code>alert.rules.yml</code>: kolm esimest reeglit<a class="headerlink" href="#samm-16-alertrulesyml-kolm-esimest-reeglit" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>nano<span class="w"> </span>config/alert.rules.yml
 </span></code></pre></div>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">groups</span><span class="p">:</span>
@@ -2242,7 +1894,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 <p><strong><code>for: 1m</code> on kriitiline.</strong> Ilma selleta saad alerti iga lühiajalise spike peale. <code>for: 1m</code> tähendab: "tingimus peab kehtima katkematult 1 minuti enne hoiatuse saatmist." See väldib valehäireid.</p>
 </blockquote>
 <hr />
-<h3 id="samm-17-kaks-vaikest-konfifaili">Samm 1.7 — Kaks väikest konfifaili<a class="headerlink" href="#samm-17-kaks-vaikest-konfifaili" title="Permanent link">&para;</a></h3>
+<h3 id="samm-17-kaks-vaikest-konfifaili">Samm 1.7 — Kaks väikest konfifaili<a class="headerlink" href="#samm-17-kaks-vaikest-konfifaili" title="Lingi sektsioonile">&para;</a></h3>
 <p>Alertmanager:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>nano<span class="w"> </span>config/alertmanager.yml
 </span></code></pre></div>
@@ -2275,7 +1927,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 <p>See fail ütleb Grafanale käivitumisel: "Lisa automaatselt Prometheus andmeallikas, URL on <code>http://prometheus:9090</code>." Ilma selleta peaks seda käsitsi tegema.</p>
 </blockquote>
 <hr />
-<h3 id="samm-18-kaivita-stack">Samm 1.8 — Käivita stack<a class="headerlink" href="#samm-18-kaivita-stack" title="Permanent link">&para;</a></h3>
+<h3 id="samm-18-kaivita-stack">Samm 1.8 — Käivita stack<a class="headerlink" href="#samm-18-kaivita-stack" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 </span></code></pre></div>
 <p>Vaata mis juhtub — Docker laeb pildid alla (esimene kord võtab kauem):
@@ -2289,7 +1941,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>&lt;teenuse-nimi&gt;
 </span></code></pre></div></p>
 <hr />
-<h3 id="samm-19-kontrolli-brauseris">Samm 1.9 — Kontrolli brauseris<a class="headerlink" href="#samm-19-kontrolli-brauseris" title="Permanent link">&para;</a></h3>
+<h3 id="samm-19-kontrolli-brauseris">Samm 1.9 — Kontrolli brauseris<a class="headerlink" href="#samm-19-kontrolli-brauseris" title="Lingi sektsioonile">&para;</a></h3>
 <p>Ava brauseris (kasuta oma IP-d):</p>
 <p><strong>Prometheus:</strong> <code>http://192.168.100.12X:9090</code></p>
 <p>Mine <code>Status → Targets</code>. Näed nimekirja sihtmärkidest.</p>
@@ -2303,19 +1955,19 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 <p><strong>Alertmanager:</strong> <code>http://192.168.100.12X:9093</code></p>
 <p>Peaks avanema UI ilma errorita.</p>
 <hr />
-<h3 id="osa-1-lopukontroll">✅ Osa 1 lõpukontroll<a class="headerlink" href="#osa-1-lopukontroll" title="Permanent link">&para;</a></h3>
+<h3 id="osa-1-lopukontroll">✅ Osa 1 lõpukontroll<a class="headerlink" href="#osa-1-lopukontroll" title="Lingi sektsioonile">&para;</a></h3>
 <p>Enne edasi liikumist veendu:</p>
-<ul>
-<li>[ ] <code>docker compose ps</code> — 3 konteinerit staatuses <code>running</code></li>
-<li>[ ] Prometheus Targets — 3 sihtmärki staatuses <code>UP</code></li>
-<li>[ ] Grafana avab sisselogimislehe</li>
-<li>[ ] Alertmanager UI avaneb</li>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker compose ps</code> — 3 konteinerit staatuses <code>running</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Prometheus Targets — 3 sihtmärki staatuses <code>UP</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Grafana avab sisselogimislehe</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Alertmanager UI avaneb</li>
 </ul>
 <p>Kui kõik on roheline — oled valmis PromQL-iks. 🟢</p>
 <hr />
-<h2 id="osa-2-promql-kusi-andmeid-kolmelt-serverilt-30-min">Osa 2: PromQL — küsi andmeid kolmelt serverilt (30 min)<a class="headerlink" href="#osa-2-promql-kusi-andmeid-kolmelt-serverilt-30-min" title="Permanent link">&para;</a></h2>
+<h2 id="osa-2-promql-kusi-andmeid-kolmelt-serverilt-30-min">Osa 2: PromQL — küsi andmeid kolmelt serverilt (30 min)<a class="headerlink" href="#osa-2-promql-kusi-andmeid-kolmelt-serverilt-30-min" title="Lingi sektsioonile">&para;</a></h2>
 <p>Prometheus UI → <strong>Graph</strong> tab. Siin kirjutad päringuid ja näed tulemusi.</p>
-<h3 id="samm-21-kes-vastab">Samm 2.1 — Kes vastab?<a class="headerlink" href="#samm-21-kes-vastab" title="Permanent link">&para;</a></h3>
+<h3 id="samm-21-kes-vastab">Samm 2.1 — Kes vastab?<a class="headerlink" href="#samm-21-kes-vastab" title="Lingi sektsioonile">&para;</a></h3>
 <p>Kirjuta päringukasti ja vajuta <code>Execute</code>:</p>
 <div class="language-promql highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nv">up</span>
 </span></code></pre></div>
@@ -2324,7 +1976,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 </blockquote>
 <p>Vaheta vaade <code>Table</code> ja <code>Graph</code> vahel. Mis vahe on?</p>
 <hr />
-<h3 id="samm-22-esimene-paris-moodik">Samm 2.2 — Esimene päris mõõdik<a class="headerlink" href="#samm-22-esimene-paris-moodik" title="Permanent link">&para;</a></h3>
+<h3 id="samm-22-esimene-paris-moodik">Samm 2.2 — Esimene päris mõõdik<a class="headerlink" href="#samm-22-esimene-paris-moodik" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-promql highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nv">node_memory_MemTotal_bytes</span>
 </span></code></pre></div>
 <p>Näed kolme rida — üks iga serveri kohta. Väärtus on baitides.</p>
@@ -2358,7 +2010,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 </tbody>
 </table>
 <hr />
-<h3 id="samm-23-counter-vs-gauge">Samm 2.3 — Counter vs Gauge<a class="headerlink" href="#samm-23-counter-vs-gauge" title="Permanent link">&para;</a></h3>
+<h3 id="samm-23-counter-vs-gauge">Samm 2.3 — Counter vs Gauge<a class="headerlink" href="#samm-23-counter-vs-gauge" title="Lingi sektsioonile">&para;</a></h3>
 <p>Proovi:
 <div class="language-promql highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nv">node_cpu_seconds_total</span>
 </span></code></pre></div></p>
@@ -2377,7 +2029,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 <p>Vaheta <code>Graph</code> vaatesse. Näed trendi ajas kolme serveril.</p>
 <p><strong>Küsimus:</strong> Milline server on hetkel kõige rohkem koormatud?</p>
 <hr />
-<h3 id="samm-24-filtreerimine-labelite-jargi">Samm 2.4 — Filtreerimine label'ite järgi<a class="headerlink" href="#samm-24-filtreerimine-labelite-jargi" title="Permanent link">&para;</a></h3>
+<h3 id="samm-24-filtreerimine-labelite-jargi">Samm 2.4 — Filtreerimine label'ite järgi<a class="headerlink" href="#samm-24-filtreerimine-labelite-jargi" title="Lingi sektsioonile">&para;</a></h3>
 <p>Kõik mõõdikud kõigilt serveritelt korraga võib olla palju. Filtreeri:</p>
 <div class="language-promql highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Ainult mon-target</span>
 </span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="nv">node_load1</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">&quot;</span><span class="s">targets</span><span class="p">&quot;,</span><span class="w"> </span><span class="nl">host</span><span class="o">=</span><span class="p">&quot;</span><span class="s">target-linux</span><span class="p">&quot;}</span>
@@ -2395,7 +2047,7 @@ Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile s
 <div class="language-promql highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nv">node_load1</span><span class="p">{</span><span class="nl">job</span><span class="o">=~</span><span class="p">&quot;</span><span class="s">targ.*</span><span class="p">&quot;}</span>
 </span></code></pre></div></p>
 <hr />
-<h3 id="samm-25-valjakutsed">Samm 2.5 — Väljakutsed<a class="headerlink" href="#samm-25-valjakutsed" title="Permanent link">&para;</a></h3>
+<h3 id="samm-25-valjakutsed">Samm 2.5 — Väljakutsed<a class="headerlink" href="#samm-25-valjakutsed" title="Lingi sektsioonile">&para;</a></h3>
 <p><strong>Väljakutse 1:</strong> Kirjuta päring mis näitab mitu päeva on iga masin töötanud.</p>
 <details>
 <summary>Vihje</summary>
@@ -2435,12 +2087,12 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 </details>
 
 <hr />
-<h2 id="osa-3-grafana-use-meetodi-dashboard-35-min">Osa 3: Grafana — USE meetodi dashboard (35 min)<a class="headerlink" href="#osa-3-grafana-use-meetodi-dashboard-35-min" title="Permanent link">&para;</a></h2>
+<h2 id="osa-3-grafana-use-meetodi-dashboard-35-min">Osa 3: Grafana — USE meetodi dashboard (35 min)<a class="headerlink" href="#osa-3-grafana-use-meetodi-dashboard-35-min" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
 <p><strong>Loengust meenu:</strong> USE = Utilization, Saturation, Errors. Iga ressursi kohta kolm küsimust. See annab süsteemaatilise ülevaate ilma tähtsat maha jätmata.</p>
 </blockquote>
 <p>Grafana: <code>http://192.168.100.12X:3000</code></p>
-<h3 id="samm-31-impordi-professionaalne-dashboard">Samm 3.1 — Impordi professionaalne dashboard<a class="headerlink" href="#samm-31-impordi-professionaalne-dashboard" title="Permanent link">&para;</a></h3>
+<h3 id="samm-31-impordi-professionaalne-dashboard">Samm 3.1 — Impordi professionaalne dashboard<a class="headerlink" href="#samm-31-impordi-professionaalne-dashboard" title="Lingi sektsioonile">&para;</a></h3>
 <p>Enne oma dashboardi ehitamist — vaata mida professionaalsed tööriistad pakuvad.</p>
 <p><strong>Dashboards → New → Import</strong></p>
 <p>Sisesta ID: <code>1860</code> → <strong>Load</strong> → vali Prometheus → <strong>Import</strong></p>
@@ -2450,7 +2102,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 - Kliki ühel paneelis <code>Edit</code> — vaata PromQL päringut
 - Mis on sinu VM-i CPU kasutus praegu?</p>
 <hr />
-<h3 id="samm-32-loo-oma-dashboard">Samm 3.2 — Loo oma dashboard<a class="headerlink" href="#samm-32-loo-oma-dashboard" title="Permanent link">&para;</a></h3>
+<h3 id="samm-32-loo-oma-dashboard">Samm 3.2 — Loo oma dashboard<a class="headerlink" href="#samm-32-loo-oma-dashboard" title="Lingi sektsioonile">&para;</a></h3>
 <p><strong>Dashboards → New → New Dashboard → + Add visualization</strong></p>
 <p><strong>Esimene paneel — serverite staatus:</strong></p>
 <p>Päring:
@@ -2506,7 +2158,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 <p>Apply.</p>
 <p>Salvesta dashboard: <code>Ctrl+S</code> → nimi: <strong>"Päev 1 — USE ülevaade"</strong></p>
 <hr />
-<h3 id="samm-33-variables-dunaamiline-dashboard">Samm 3.3 — Variables: dünaamiline dashboard<a class="headerlink" href="#samm-33-variables-dunaamiline-dashboard" title="Permanent link">&para;</a></h3>
+<h3 id="samm-33-variables-dunaamiline-dashboard">Samm 3.3 — Variables: dünaamiline dashboard<a class="headerlink" href="#samm-33-variables-dunaamiline-dashboard" title="Lingi sektsioonile">&para;</a></h3>
 <p>Praegu näitab dashboard kõiki servereid korraga. Lisa filter.</p>
 <p><strong>Dashboard settings</strong> (hammasratas) → <strong>Variables</strong> → <strong>Add variable</strong>:</p>
 <table>
@@ -2550,8 +2202,8 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 <p>Tee sama kõigile paneelidele.</p>
 <p>⚡ <strong>Kontrolli:</strong> Vali dropdown'ist ainult <code>mon-target</code> — kas teised kaovad?</p>
 <hr />
-<h2 id="osa-4-alerting-hoiatuste-testimine-20-min">Osa 4: Alerting — hoiatuste testimine (20 min)<a class="headerlink" href="#osa-4-alerting-hoiatuste-testimine-20-min" title="Permanent link">&para;</a></h2>
-<h3 id="samm-41-vaata-olemasolevaid-reegleid">Samm 4.1 — Vaata olemasolevaid reegleid<a class="headerlink" href="#samm-41-vaata-olemasolevaid-reegleid" title="Permanent link">&para;</a></h3>
+<h2 id="osa-4-alerting-hoiatuste-testimine-20-min">Osa 4: Alerting — hoiatuste testimine (20 min)<a class="headerlink" href="#osa-4-alerting-hoiatuste-testimine-20-min" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="samm-41-vaata-olemasolevaid-reegleid">Samm 4.1 — Vaata olemasolevaid reegleid<a class="headerlink" href="#samm-41-vaata-olemasolevaid-reegleid" title="Lingi sektsioonile">&para;</a></h3>
 <p>Prometheus: <code>http://192.168.100.12X:9090/alerts</code></p>
 <p>Näed kolme reeglit staatuses <strong>Inactive</strong> — tingimused ei kehti praegu.</p>
 <p><strong>Olekud:</strong>
@@ -2559,7 +2211,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 - 🟡 <code>Pending</code> — tingimus kehtib, aga <code>for:</code> aeg pole täis
 - 🔴 <code>Firing</code> — hoiatus aktiivne</p>
 <hr />
-<h3 id="samm-42-tekita-alert-ise">Samm 4.2 — Tekita alert ise<a class="headerlink" href="#samm-42-tekita-alert-ise" title="Permanent link">&para;</a></h3>
+<h3 id="samm-42-tekita-alert-ise">Samm 4.2 — Tekita alert ise<a class="headerlink" href="#samm-42-tekita-alert-ise" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>node_exporter
 </span></code></pre></div>
 <p>Mine Prometheus → Alerts. Jälgi muutust:</p>
@@ -2573,7 +2225,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>node_exporter
 </span></code></pre></div></p>
 <hr />
-<h3 id="samm-43-lisa-oma-alert">Samm 4.3 — Lisa oma alert<a class="headerlink" href="#samm-43-lisa-oma-alert" title="Permanent link">&para;</a></h3>
+<h3 id="samm-43-lisa-oma-alert">Samm 4.3 — Lisa oma alert<a class="headerlink" href="#samm-43-lisa-oma-alert" title="Lingi sektsioonile">&para;</a></h3>
 <p>Ava fail:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>nano<span class="w"> </span>config/alert.rules.yml
 </span></code></pre></div></p>
@@ -2591,7 +2243,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 </span></code></pre></div></p>
 <p>Kontrolli: <code>Status → Rules</code> — uus reegel peab olema nähtav.</p>
 <hr />
-<h3 id="arutelu-alert-design-5-min">Arutelu: Alert design (5 min)<a class="headerlink" href="#arutelu-alert-design-5-min" title="Permanent link">&para;</a></h3>
+<h3 id="arutelu-alert-design-5-min">Arutelu: Alert design (5 min)<a class="headerlink" href="#arutelu-alert-design-5-min" title="Lingi sektsioonile">&para;</a></h3>
 <p>Mõtle oma töökontekstis:</p>
 <ul>
 <li>Milline alert peaks sind <strong>kell 3 öösel</strong> äratama?</li>
@@ -2599,7 +2251,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 <li>Milline alert on <strong>mõttetu müra</strong> mida keegi ei vaata?</li>
 </ul>
 <hr />
-<h2 id="osa-5-kaose-test-leia-probleem-15-min">Osa 5: 🔥 Kaose test — leia probleem (15 min)<a class="headerlink" href="#osa-5-kaose-test-leia-probleem-15-min" title="Permanent link">&para;</a></h2>
+<h2 id="osa-5-kaose-test-leia-probleem-15-min">Osa 5: 🔥 Kaose test — leia probleem (15 min)<a class="headerlink" href="#osa-5-kaose-test-leia-probleem-15-min" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>Koolitaja tekitab probleeme.</strong> Sinu ülesanne on need ise üles leida.</p>
 <p>Jälgi samaaegselt:
 - Grafana dashboard
@@ -2611,8 +2263,8 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 3. Mis hetkel probleem algas? (vaata graafikut)
 4. Kas alert käivitus? Kui kaua läks?</p>
 <hr />
-<h2 id="lisaulesanded-kui-aega-jaab">Lisaülesanded (kui aega jääb)<a class="headerlink" href="#lisaulesanded-kui-aega-jaab" title="Permanent link">&para;</a></h2>
-<h3 id="a-recording-rules">A — Recording rules<a class="headerlink" href="#a-recording-rules" title="Permanent link">&para;</a></h3>
+<h2 id="lisaulesanded-kui-aega-jaab">Lisaülesanded (kui aega jääb)<a class="headerlink" href="#lisaulesanded-kui-aega-jaab" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="a-recording-rules">A — Recording rules<a class="headerlink" href="#a-recording-rules" title="Lingi sektsioonile">&para;</a></h3>
 <p>Keerulised päringud on aeglased. Recording rules arvutavad need ette.</p>
 <p>Loo <code>config/recording.rules.yml</code>:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="nt">groups</span><span class="p">:</span>
@@ -2631,7 +2283,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 </span></code></pre></div></p>
 <p>Reload ja proovi: <code>instance:cpu_utilization:ratio</code> — tulemus on sama, aga palju kiirem.</p>
 <hr />
-<h3 id="b-monitoori-kaasoppijat">B — Monitoori kaasõppijat<a class="headerlink" href="#b-monitoori-kaasoppijat" title="Permanent link">&para;</a></h3>
+<h3 id="b-monitoori-kaasoppijat">B — Monitoori kaasõppijat<a class="headerlink" href="#b-monitoori-kaasoppijat" title="Lingi sektsioonile">&para;</a></h3>
 <p>Lisa <code>config/prometheus.yml</code> scrape_configs sektsiooni:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;naaber&#39;</span>
 </span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
@@ -2644,13 +2296,13 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 </span></code></pre></div>
 <p>Nüüd näed naabri meetrikaid oma dashboardis. Kes teist on rohkem koormatud?</p>
 <hr />
-<h2 id="puhastamine-parast-tundi">Puhastamine (pärast tundi)<a class="headerlink" href="#puhastamine-parast-tundi" title="Permanent link">&para;</a></h2>
+<h2 id="puhastamine-parast-tundi">Puhastamine (pärast tundi)<a class="headerlink" href="#puhastamine-parast-tundi" title="Lingi sektsioonile">&para;</a></h2>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="nb">cd</span><span class="w"> </span>~/paev1
 </span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v
 </span></code></pre></div>
 <p>Järgmisel laupäeval alustame puhtalt — Zabbix + Loki.</p>
 <hr />
-<h2 id="torkeotsing">Tõrkeotsing<a class="headerlink" href="#torkeotsing" title="Permanent link">&para;</a></h2>
+<h2 id="torkeotsing">Tõrkeotsing<a class="headerlink" href="#torkeotsing" title="Lingi sektsioonile">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2686,7 +2338,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
 </tbody>
 </table>
 <hr />
-<h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Permanent link">&para;</a></h2>
+<h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2803,7 +2455,7 @@ Kui tulemus on `1` — ketas saab täis järgmise 24h jooksul praeguse tarbimist
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["mermaid", "navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.sticky", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>

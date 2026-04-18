@@ -6,6 +6,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026">
+      
+      
+        <meta name="author" content="Maria Talvik">
       
       
         <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/resources/vm-access/">
@@ -46,10 +50,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -123,7 +129,21 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Tume teema"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Tume teema" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Hele teema"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Hele teema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
     
   
 </form>
@@ -218,7 +238,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../labs/01_prometheus_grafana/lab/" class="md-tabs__link">
+        <a href="../../materials/paev1-kava/" class="md-tabs__link">
           
   
   
@@ -364,7 +384,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
@@ -412,6 +434,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -471,14 +497,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
+      <a href="../../materials/paev1-kava/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Labor
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../materials/lectures/paev1-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 1: Observability
   
 
     
@@ -506,7 +560,35 @@
   <span class="md-ellipsis">
     
   
-    Loeng
+    Loeng 2: Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
   
 
     
@@ -1119,10 +1201,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#sinu-masin" class="md-nav__link">
+  <a href="#kaks-vorku" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sinu masin
+        Kaks võrku
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sinu-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sinu VM
       
     </span>
   </a>
@@ -1141,10 +1234,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#target-masinad" class="md-nav__link">
+  <a href="#target-masinad-jagatud" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Target-masinad
+        Target-masinad (jagatud)
       
     </span>
   </a>
@@ -1213,76 +1306,6 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#sinu-masin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sinu masin
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#brauserist-ligipaas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Brauserist ligipääs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#target-masinad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Target-masinad
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kasulikud-kasud" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kasulikud käsud
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           
             <div class="md-content" data-md-component="content">
@@ -1293,13 +1316,119 @@
 
 
 
-<h1 id="vm-ligipaas">VM ligipääs<a class="headerlink" href="#vm-ligipaas" title="Permanent link">&para;</a></h1>
-<h2 id="sinu-masin">Sinu masin<a class="headerlink" href="#sinu-masin" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ssh<span class="w"> </span>student@192.168.5.12X
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># parool: Monitoring2026!</span>
+<h1 id="vm-ligipaas">VM ligipääs<a class="headerlink" href="#vm-ligipaas" title="Lingi sektsioonile">&para;</a></h1>
+<p>Igal osalejal on oma isiklik VM Proxmoxi peal. VM-il on <strong>kaks IP-aadressi</strong> — üks klassivõrgus ja teine VPN/haldusvõrgus. Kasuta seda, mis su asukohale sobib.</p>
+<h2 id="kaks-vorku">Kaks võrku<a class="headerlink" href="#kaks-vorku" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Võrk</th>
+<th>Prefiks</th>
+<th>Millal kasutada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Klassiruum</td>
+<td><code>192.168.35.0/24</code></td>
+<td>Kui oled koolis, ühendatud klassi Wi-Fisse või võrku</td>
+</tr>
+<tr>
+<td>Haldus / VPN</td>
+<td><code>192.168.100.0/24</code></td>
+<td>Kui töötad kodust, VPN peab olema aktiivne</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sama VM, samad sisu — ainult IP erineb.</strong> Vali endale sobivam ja hoia sellega.</p>
+<h2 id="sinu-vm">Sinu VM<a class="headerlink" href="#sinu-vm" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Osaleja</th>
+<th>Kasutajanimi</th>
+<th>Klassis (35.x)</th>
+<th>VPNiga (100.x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kaarel</td>
+<td>kaarel</td>
+<td>192.168.35.121</td>
+<td>192.168.100.121</td>
+</tr>
+<tr>
+<td>Siim</td>
+<td>siim</td>
+<td>192.168.35.122</td>
+<td>192.168.100.122</td>
+</tr>
+<tr>
+<td>Margus</td>
+<td>margus</td>
+<td>192.168.35.123</td>
+<td>192.168.100.123</td>
+</tr>
+<tr>
+<td>Heini</td>
+<td>heini</td>
+<td>192.168.35.124</td>
+<td>192.168.100.124</td>
+</tr>
+<tr>
+<td>Allar</td>
+<td>allar</td>
+<td>192.168.35.125</td>
+<td>192.168.100.125</td>
+</tr>
+<tr>
+<td>Marko</td>
+<td>marko</td>
+<td>192.168.35.126</td>
+<td>192.168.100.126</td>
+</tr>
+<tr>
+<td>Kuido</td>
+<td>kuido</td>
+<td>192.168.35.127</td>
+<td>192.168.100.127</td>
+</tr>
+<tr>
+<td>Andres</td>
+<td>andres</td>
+<td>192.168.35.128</td>
+<td>192.168.100.128</td>
+</tr>
+<tr>
+<td>Andrus</td>
+<td>andrus</td>
+<td>192.168.35.129</td>
+<td>192.168.100.129</td>
+</tr>
+<tr>
+<td>Mailis</td>
+<td>mailis</td>
+<td>192.168.35.130</td>
+<td>192.168.100.130</td>
+</tr>
+<tr>
+<td>Ahti</td>
+<td>ahti</td>
+<td>192.168.35.131</td>
+<td>192.168.100.131</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SSH:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ssh<span class="w"> </span>&lt;kasutajanimi&gt;@&lt;sinu-ip&gt;
 </span></code></pre></div>
-<p>Asenda <code>X</code> oma numbriga (jagatakse kohapeal).</p>
-<h2 id="brauserist-ligipaas">Brauserist ligipääs<a class="headerlink" href="#brauserist-ligipaas" title="Permanent link">&para;</a></h2>
+<p>Näide Kaarelile klassis:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ssh<span class="w"> </span>kaarel@192.168.35.121
+</span></code></pre></div>
+<p>Parool jagatakse kohapeal (küsi koolitajalt kui vaja).</p>
+<h2 id="brauserist-ligipaas">Brauserist ligipääs<a class="headerlink" href="#brauserist-ligipaas" title="Lingi sektsioonile">&para;</a></h2>
+<p>Asenda <code>&lt;sinu-ip&gt;</code> oma VM-i IP-ga — kas <code>192.168.35.12X</code> (klassis) või <code>192.168.100.12X</code> (VPNiga).</p>
 <table>
 <thead>
 <tr>
@@ -1311,55 +1440,61 @@
 <tbody>
 <tr>
 <td>Prometheus</td>
-<td><code>http://192.168.5.12X:9090</code></td>
+<td><code>http://&lt;sinu-ip&gt;:9090</code></td>
 <td>PromQL päringud, targets, alerts</td>
 </tr>
 <tr>
 <td>Grafana</td>
-<td><code>http://192.168.5.12X:3000</code></td>
-<td>admin / monitoring2026</td>
+<td><code>http://&lt;sinu-ip&gt;:3000</code></td>
+<td>admin / <code>monitoring2026</code></td>
 </tr>
 <tr>
 <td>Alertmanager</td>
-<td><code>http://192.168.5.12X:9093</code></td>
+<td><code>http://&lt;sinu-ip&gt;:9093</code></td>
 <td>Alertide ülevaade</td>
 </tr>
 <tr>
 <td>Node Exporter</td>
-<td><code>http://192.168.5.12X:9100/metrics</code></td>
+<td><code>http://&lt;sinu-ip&gt;:9100/metrics</code></td>
 <td>Toormetrikad</td>
 </tr>
 </tbody>
 </table>
-<h2 id="target-masinad">Target-masinad<a class="headerlink" href="#target-masinad" title="Permanent link">&para;</a></h2>
-<p>Need on jagatud — kõik osalejad monitoorivad samu masinaid.</p>
+<h2 id="target-masinad-jagatud">Target-masinad (jagatud)<a class="headerlink" href="#target-masinad-jagatud" title="Lingi sektsioonile">&para;</a></h2>
+<p>Need on jagatud — kõik osalejad monitoorivad samu masinaid. Target-masinatel on ka kaks IP-d, kasuta sedasama võrku, mis su VM-ile pääsemisel.</p>
 <table>
 <thead>
 <tr>
 <th>Masin</th>
-<th>IP</th>
+<th>Klassis</th>
+<th>VPNiga</th>
 <th>Teenused</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>mon-target</td>
-<td>192.168.5.140</td>
-<td>node_exporter (:9100), zabbix-agent (:10050), logi-generaator (/var/log/app.log)</td>
+<td>192.168.35.140</td>
+<td>192.168.100.140</td>
+<td>node_exporter (:9100), zabbix-agent (:10050), logi-generaator (<code>/var/log/app.log</code>)</td>
 </tr>
 <tr>
 <td>mon-target-web</td>
-<td>192.168.5.141</td>
+<td>192.168.35.141</td>
+<td>192.168.100.141</td>
 <td>nginx (:80), stub_status (:8080), node_exporter (:9100), zabbix-agent (:10050)</td>
 </tr>
 </tbody>
 </table>
-<h2 id="kasulikud-kasud">Kasulikud käsud<a class="headerlink" href="#kasulikud-kasud" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w">        </span><span class="c1"># Käivita stack</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w">            </span><span class="c1"># Staatuse kontroll</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w">       </span><span class="c1"># Logide jälgimine</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v<span class="w">       </span><span class="c1"># Peata ja kustuta kõik</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w">       </span><span class="c1"># Taaskäivita</span>
+<blockquote>
+<p><strong>Labori juhendis näete IP-d <code>192.168.100.140</code> / <code>.141</code></strong> — see töötab alati (VPN + klassis). Kui eelistad klassivõrku, asenda <code>100</code> → <code>35</code> päringutes.</p>
+</blockquote>
+<h2 id="kasulikud-kasud">Kasulikud käsud<a class="headerlink" href="#kasulikud-kasud" title="Lingi sektsioonile">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w">        </span><span class="c1"># Käivita stack</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w">            </span><span class="c1"># Staatuse kontroll</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w">       </span><span class="c1"># Logide jälgimine</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v<span class="w">       </span><span class="c1"># Peata ja kustuta kõik</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w">       </span><span class="c1"># Taaskäivita</span>
 </span></code></pre></div>
 
 
@@ -1381,7 +1516,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="14. aprill 2026 18:13:17 UTC">14. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="18. aprill 2026 05:19:58 UTC">18. aprill 2026</span>
   </span>
 
     
@@ -1439,7 +1574,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["mermaid", "navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.sticky", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

@@ -6,13 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026">
+      
+      
+        <meta name="author" content="Maria Talvik">
       
       
         <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/">
       
       
       
-        <link rel="next" href="labs/01_prometheus_grafana/lab/">
+        <link rel="next" href="materials/paev1-kava/">
       
       
         
@@ -44,10 +48,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -121,7 +127,21 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Tume teema"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Tume teema" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Hele teema"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Hele teema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
     
   
 </form>
@@ -218,7 +238,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="labs/01_prometheus_grafana/lab/" class="md-tabs__link">
+        <a href="materials/paev1-kava/" class="md-tabs__link">
           
   
   
@@ -362,7 +382,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
@@ -578,6 +600,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -632,14 +658,42 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/01_prometheus_grafana/lab/" class="md-nav__link">
+      <a href="materials/paev1-kava/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Labor
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="materials/lectures/paev1-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 1: Observability
   
 
     
@@ -667,7 +721,35 @@
   <span class="md-ellipsis">
     
   
-    Loeng
+    Loeng 2: Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="labs/01_prometheus_grafana/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
   
 
     
@@ -1280,148 +1362,6 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#ajakava" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ajakava
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#laborikeskkond" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Laborikeskkond
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kuidas-me-tootame" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kuidas me töötame
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mida-monitoorime" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Mida monitoorime
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#paevade-ulevaade" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päevade ülevaade
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Päevade ülevaade">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#paev-1-prometheus-grafana" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 1: Prometheus + Grafana
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-2-zabbix-loki" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 2: Zabbix + Loki
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-3-elastic-stack" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 3: Elastic Stack
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-4-tick-stack-laiem-pilt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 4: TICK Stack + laiem pilt
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-5-lgtm-tervik-tulevik" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 5: LGTM tervik + Tulevik
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           
             <div class="md-content" data-md-component="content">
@@ -1432,10 +1372,10 @@
 
 
 
-<h1 id="kaasaegne-it-susteemide-monitooring-ja-jalgitavus">Kaasaegne IT-süsteemide monitooring ja jälgitavus<a class="headerlink" href="#kaasaegne-it-susteemide-monitooring-ja-jalgitavus" title="Permanent link">&para;</a></h1>
+<h1 id="kaasaegne-it-susteemide-monitooring-ja-jalgitavus">Kaasaegne IT-süsteemide monitooring ja jälgitavus<a class="headerlink" href="#kaasaegne-it-susteemide-monitooring-ja-jalgitavus" title="Lingi sektsioonile">&para;</a></h1>
 <p><strong>Täienduskoolitus</strong> · 26 akadeemilist tundi · 5 laupäeva · Haapsalu KHK · 2026</p>
 <hr />
-<h2 id="ajakava">Ajakava<a class="headerlink" href="#ajakava" title="Permanent link">&para;</a></h2>
+<h2 id="ajakava">Ajakava<a class="headerlink" href="#ajakava" title="Lingi sektsioonile">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1478,14 +1418,14 @@
 </tr>
 </tbody>
 </table>
-<h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Permanent link">&para;</a></h2>
+<h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Lingi sektsioonile">&para;</a></h2>
 <p>Igal osalejal on isiklik virtuaalmasin (4GB RAM, Docker eelinstallitud):</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mon-&lt;sinu-nimi&gt;       — sinu Docker host (192.168.5.12X)
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mon-target            — jagatud Linux server (192.168.5.140)
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mon-target-web        — jagatud veebiserver (192.168.5.141)
 </span></code></pre></div>
 <p>Ligipääs: <code>ssh student@192.168.5.12X</code> (parool jagatakse kohapeal)</p>
-<h2 id="kuidas-me-tootame">Kuidas me töötame<a class="headerlink" href="#kuidas-me-tootame" title="Permanent link">&para;</a></h2>
+<h2 id="kuidas-me-tootame">Kuidas me töötame<a class="headerlink" href="#kuidas-me-tootame" title="Lingi sektsioonile">&para;</a></h2>
 <p>Iga teema on ehitatud üles tsüklitena:</p>
 <ol>
 <li><strong>Probleem</strong> — reaalse olukorra kirjeldus (5 min)</li>
@@ -1494,23 +1434,23 @@
 <li><strong>Väljakutse</strong> — iseseisvalt lahendatav ülesanne (10 min)</li>
 </ol>
 <p>Teooria tuleb <strong>pärast</strong> praktikat, mitte enne. Iga päev alustame ja lõpetame lühikese aruteluga.</p>
-<h2 id="mida-monitoorime">Mida monitoorime<a class="headerlink" href="#mida-monitoorime" title="Permanent link">&para;</a></h2>
+<h2 id="mida-monitoorime">Mida monitoorime<a class="headerlink" href="#mida-monitoorime" title="Lingi sektsioonile">&para;</a></h2>
 <p>Kaks jagatud target-masinat simuleerivad "tootmiskeskkonda":</p>
 <ul>
 <li><strong>mon-target</strong> — Linux server kus jooksevad teenused ja genereeritakse logisid (sh vigaseid)</li>
 <li><strong>mon-target-web</strong> — Nginx veebiserver kus tekivad HTTP vead ja aeglased päringud</li>
 </ul>
 <p>Koolitaja tekitab jooksvalt probleeme — teie ülesanne on need oma monitooringust leida.</p>
-<h2 id="paevade-ulevaade">Päevade ülevaade<a class="headerlink" href="#paevade-ulevaade" title="Permanent link">&para;</a></h2>
-<h3 id="paev-1-prometheus-grafana">Päev 1: Prometheus + Grafana<a class="headerlink" href="#paev-1-prometheus-grafana" title="Permanent link">&para;</a></h3>
+<h2 id="paevade-ulevaade">Päevade ülevaade<a class="headerlink" href="#paevade-ulevaade" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="paev-1-prometheus-grafana">Päev 1: Prometheus + Grafana<a class="headerlink" href="#paev-1-prometheus-grafana" title="Lingi sektsioonile">&para;</a></h3>
 <p>Metrics-sammas. Prometheus kogub mõõdikuid, Grafana visualiseerib. Lõpuks on teil töötav dashboard alertidega.</p>
-<h3 id="paev-2-zabbix-loki">Päev 2: Zabbix + Loki<a class="headerlink" href="#paev-2-zabbix-loki" title="Permanent link">&para;</a></h3>
+<h3 id="paev-2-zabbix-loki">Päev 2: Zabbix + Loki<a class="headerlink" href="#paev-2-zabbix-loki" title="Lingi sektsioonile">&para;</a></h3>
 <p>Agent-based monitoring (Zabbix) + logi-sammas (Loki). Grafanas näete nii metrikaid kui logisid koos.</p>
-<h3 id="paev-3-elastic-stack">Päev 3: Elastic Stack<a class="headerlink" href="#paev-3-elastic-stack" title="Permanent link">&para;</a></h3>
+<h3 id="paev-3-elastic-stack">Päev 3: Elastic Stack<a class="headerlink" href="#paev-3-elastic-stack" title="Lingi sektsioonile">&para;</a></h3>
 <p>Alternatiivne logimislahendus. Elasticsearch indekseerib, Logstash töötleb, Kibana visualiseerib. Võrdlus Lokiga.</p>
-<h3 id="paev-4-tick-stack-laiem-pilt">Päev 4: TICK Stack + laiem pilt<a class="headerlink" href="#paev-4-tick-stack-laiem-pilt" title="Permanent link">&para;</a></h3>
+<h3 id="paev-4-tick-stack-laiem-pilt">Päev 4: TICK Stack + laiem pilt<a class="headerlink" href="#paev-4-tick-stack-laiem-pilt" title="Lingi sektsioonile">&para;</a></h3>
 <p>Ajaridade monitooring (InfluxDB) + ülevaade Opensearch, Graylog, Kafka — millal mida kasutada?</p>
-<h3 id="paev-5-lgtm-tervik-tulevik">Päev 5: LGTM tervik + Tulevik<a class="headerlink" href="#paev-5-lgtm-tervik-tulevik" title="Permanent link">&para;</a></h3>
+<h3 id="paev-5-lgtm-tervik-tulevik">Päev 5: LGTM tervik + Tulevik<a class="headerlink" href="#paev-5-lgtm-tervik-tulevik" title="Lingi sektsioonile">&para;</a></h3>
 <p>Tempo lisamine traces-sambana. Kogu LGTM stack: metrics↔logs↔traces navigeerimine Grafanas. Observability trendid 2026.</p>
 <hr />
 <p><em>Koolitaja: Maria Talvik · maria.talvik@haapsalu.kutsehariduskeskus.ee</em></p>
@@ -1592,7 +1532,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["mermaid", "navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.sticky", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
       <script src="assets/javascripts/bundle.79ae519e.min.js"></script>

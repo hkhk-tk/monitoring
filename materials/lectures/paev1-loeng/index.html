@@ -6,15 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026">
+      
+      
+        <meta name="author" content="Maria Talvik">
       
       
         <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/materials/lectures/paev1-loeng/">
       
       
-        <link rel="prev" href="../../../labs/01_prometheus_grafana/lab/">
+        <link rel="prev" href="../paev1-observability/">
       
       
-        <link rel="next" href="../../../labs/02_zabbix_loki/zabbix_lab/">
+        <link rel="next" href="../../../labs/01_prometheus_grafana/lab/">
       
       
         
@@ -25,7 +29,7 @@
     
     
       
-        <title>Loeng - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Loeng 2: Prometheus + Grafana - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
@@ -46,10 +50,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -110,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Loeng
+              Loeng 2: Prometheus + Grafana
             
           </span>
         </div>
@@ -123,7 +129,21 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Tume teema"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Tume teema" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Hele teema"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Hele teema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
     
   
 </form>
@@ -220,7 +240,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../../labs/01_prometheus_grafana/lab/" class="md-tabs__link">
+        <a href="../../paev1-kava/" class="md-tabs__link">
           
   
   
@@ -364,7 +384,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
@@ -414,6 +436,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -474,14 +500,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
+      <a href="../../paev1-kava/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Labor
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev1-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 1: Observability
   
 
     
@@ -518,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Loeng
+    Loeng 2: Prometheus + Grafana
   
 
     
@@ -536,7 +590,7 @@
   <span class="md-ellipsis">
     
   
-    Loeng
+    Loeng 2: Prometheus + Grafana
   
 
     
@@ -573,22 +627,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sissejuhatus-miks-me-seda-vajame" class="md-nav__link">
+  <a href="#1-kontekst-miks-prometheus-tekkis-ja-mida-see-lahendab" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sissejuhatus: Miks Me Seda Vajame?
+        1. Kontekst: miks Prometheus tekkis ja mida see lahendab
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Sissejuhatus: Miks Me Seda Vajame?">
+    <nav class="md-nav" aria-label="1. Kontekst: miks Prometheus tekkis ja mida see lahendab">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mikroteenuste-probleem" class="md-nav__link">
+  <a href="#11-tehniline-kontekst" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mikroteenuste probleem
+        1.1 Tehniline kontekst
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-kus-prometheus-ei-sobi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Kus Prometheus ei sobi
       
     </span>
   </a>
@@ -601,22 +666,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-mis-on-prometheus-pohimotteliselt" class="md-nav__link">
+  <a href="#2-arhitektuur" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Mis on Prometheus põhimõtteliselt?
+        2. Arhitektuur
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Mis on Prometheus põhimõtteliselt?">
+    <nav class="md-nav" aria-label="2. Arhitektuur">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#prometheus-kusib-ise-pull-mudel" class="md-nav__link">
+  <a href="#21-komponendid-ja-nende-vastutusalad" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prometheus KÜSIB ise — pull mudel
+        2.1 Komponendid ja nende vastutusalad
       
     </span>
   </a>
@@ -624,21 +689,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#koik-on-aegread" class="md-nav__link">
+  <a href="#22-pull-mudel-disainivalik-ja-selle-tagajarjed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kõik on aegread
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#voimas-paringukeel-promql" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Võimas päringukeel PromQL
+        2.2 Pull-mudel: disainivalik ja selle tagajärjed
       
     </span>
   </a>
@@ -651,33 +705,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-mis-prometheus-ei-ole" class="md-nav__link">
+  <a href="#3-aegrea-andmemudel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Mis Prometheus EI OLE
+        3. Aegrea andmemudel
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-arhitektuur-kuidas-see-tootab" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Arhitektuur — kuidas see töötab
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. Arhitektuur — kuidas see töötab">
+    <nav class="md-nav" aria-label="3. Aegrea andmemudel">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#komponendid" class="md-nav__link">
+  <a href="#31-labelid-joud-ja-oht" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Komponendid
+        3.1 Label'id — jõud ja oht
       
     </span>
   </a>
@@ -685,10 +728,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ametlik-arhitektuuri-diagramm" class="md-nav__link">
+  <a href="#32-hea-labeli-disaini-reegleid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ametlik arhitektuuri diagramm
+        3.2 Hea label'i disaini reegleid
       
     </span>
   </a>
@@ -701,22 +744,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-aegrea-andmemudel" class="md-nav__link">
+  <a href="#4-moodikutuubid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Aegrea andmemudel
+        4. Mõõdikutüübid
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. Aegrea andmemudel">
+    <nav class="md-nav" aria-label="4. Mõõdikutüübid">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#andmemudeli-struktuur" class="md-nav__link">
+  <a href="#41-counter-ainult-kasvav" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Andmemudeli struktuur
+        4.1 Counter — ainult kasvav
       
     </span>
   </a>
@@ -724,10 +767,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#labelid-miks-need-on-voimsad" class="md-nav__link">
+  <a href="#42-gauge-vabalt-liikuv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Label'id — miks need on võimsad
+        4.2 Gauge — vabalt liikuv
       
     </span>
   </a>
@@ -735,10 +778,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#kardinaalsuse-ohumark" class="md-nav__link">
+  <a href="#43-histogram-jaotus-bucketites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kardinaalsuse ohumärk
+        4.3 Histogram — jaotus bucket'ites
       
     </span>
   </a>
@@ -746,10 +789,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#neli-moodikutuupi" class="md-nav__link">
+  <a href="#44-summary-kliendipoolsed-protsentiilid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Neli mõõdikutüüpi
+        4.4 Summary — kliendipoolsed protsentiilid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-natiivsed-histogrammid-prometheus-3x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Natiivsed histogrammid (Prometheus 3.x)
       
     </span>
   </a>
@@ -762,10 +816,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-moodikute-formaat-metrics-endpointil" class="md-nav__link">
+  <a href="#5-metrics-endpoint-ja-exposition-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Mõõdikute formaat /metrics endpoint'il
+        5. /metrics endpoint ja exposition format
       
     </span>
   </a>
@@ -773,22 +827,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-promql-paringukeel-luhidalt" class="md-nav__link">
+  <a href="#6-promql-paringukeel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. PromQL — päringukeel lühidalt
+        6. PromQL — päringukeel
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6. PromQL — päringukeel lühidalt">
+    <nav class="md-nav" aria-label="6. PromQL — päringukeel">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#filtreerimine-labelite-jargi" class="md-nav__link">
+  <a href="#61-instant-vs-range-vektor" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Filtreerimine label'ite järgi
+        6.1 Instant vs range vektor
       
     </span>
   </a>
@@ -796,10 +850,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#rate-koige-olulisem-funktsioon" class="md-nav__link">
+  <a href="#62-filtreerimine-labelite-jargi" class="md-nav__link">
     <span class="md-ellipsis">
       
-        rate() — kõige olulisem funktsioon
+        6.2 Filtreerimine label'ite järgi
       
     </span>
   </a>
@@ -807,10 +861,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#aken-ja-scrape-interval-kriitiline-reegel" class="md-nav__link">
+  <a href="#63-rate-counteri-kasvukiirus" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Aken ja scrape interval — kriitiline reegel
+        6.3 rate() — counter'i kasvukiirus
       
     </span>
   </a>
@@ -818,10 +872,54 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#agregeerimine" class="md-nav__link">
+  <a href="#64-agregeerimine" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Agregeerimine
+        6.4 Agregeerimine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-binaarsed-operaatorid-ja-vektor-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Binaarsed operaatorid ja vektor-matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-cpu-kasutuse-klassikaline-paring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 CPU kasutuse klassikaline päring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-histogram-paringud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7 Histogram päringud
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-recording-rules-eelarvutus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.8 Recording rules — eelarvutus
       
     </span>
   </a>
@@ -834,22 +932,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-hoiatused-automaatne-reaktsioon" class="md-nav__link">
+  <a href="#7-alerting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Hoiatused — automaatne reaktsioon
+        7. Alerting
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="7. Hoiatused — automaatne reaktsioon">
+    <nav class="md-nav" aria-label="7. Alerting">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#alerti-elutsukkel" class="md-nav__link">
+  <a href="#71-alert-reegli-anatoomia" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Alert'i elutsükkel
+        7.1 Alert-reegli anatoomia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-oleku-uleminekud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Oleku üleminekud
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-alert-design-parimad-praktikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Alert-design parimad praktikad
       
     </span>
   </a>
@@ -862,22 +982,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-grafana-visualiseerimise-platvorm" class="md-nav__link">
+  <a href="#8-alertmanager" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Grafana — visualiseerimise platvorm
+        8. AlertManager
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8. Grafana — visualiseerimise platvorm">
+    <nav class="md-nav" aria-label="8. AlertManager">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#grafana-andmevoog" class="md-nav__link">
+  <a href="#81-marsruutimispuu" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Grafana andmevoog
+        8.1 Marsruutimispuu
       
     </span>
   </a>
@@ -885,43 +1005,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#pohimoisted" class="md-nav__link">
+  <a href="#82-silencing-ja-inhibition" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Põhimõisted
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#visualiseerimistuubid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Visualiseerimistüübid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#thresholds-ja-alertid-grafanas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Thresholds ja alert'id Grafanas
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dashboard-kui-kood" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dashboard kui kood
+        8.2 Silencing ja inhibition
       
     </span>
   </a>
@@ -934,10 +1021,121 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#kokkuvote" class="md-nav__link">
+  <a href="#9-grafana" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kokkuvõte
+        9. Grafana
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Grafana">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-pohimoisted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Põhimõisted
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-visualiseeringute-valik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Visualiseeringute valik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-dashboard-as-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Dashboard-as-Code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-alerting-grafanas-vs-prometheuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Alerting Grafanas vs Prometheuses
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-skaleerimine-ja-sailitus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Skaleerimine ja säilitus
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Skaleerimine ja säilitus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-kohaliku-tsdb-piirangud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Kohaliku TSDB piirangud
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-skaleerimismustrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Skaleerimismustrid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-praktiline-orientatsioon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Praktiline orientatsioon
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-kokkuvote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Kokkuvõte
       
     </span>
   </a>
@@ -945,15 +1143,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
+  <a href="#enesekontrolli-kusimused" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Allikad
+        Enesekontrolli küsimused
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Allikad">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viited-ja-suvendatud-lugemine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Viited ja süvendatud lugemine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Viited ja süvendatud lugemine">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -968,10 +1177,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#grafana-ametlik" class="md-nav__link">
+  <a href="#grafana" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Grafana ametlik
+        Grafana
       
     </span>
   </a>
@@ -979,21 +1188,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#kogukond-ja-oppematerjalid" class="md-nav__link">
+  <a href="#tootmiskogemus" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kogukond ja õppematerjalid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prometheus-opentelemetry" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prometheus + OpenTelemetry
+        Tootmiskogemus
       
     </span>
   </a>
@@ -1009,6 +1207,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1613,476 +1839,6 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#opivaljundid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Õpiväljundid
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sissejuhatus-miks-me-seda-vajame" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sissejuhatus: Miks Me Seda Vajame?
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Sissejuhatus: Miks Me Seda Vajame?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mikroteenuste-probleem" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Mikroteenuste probleem
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#1-mis-on-prometheus-pohimotteliselt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Mis on Prometheus põhimõtteliselt?
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="1. Mis on Prometheus põhimõtteliselt?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#prometheus-kusib-ise-pull-mudel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prometheus KÜSIB ise — pull mudel
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#koik-on-aegread" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kõik on aegread
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#voimas-paringukeel-promql" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Võimas päringukeel PromQL
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-mis-prometheus-ei-ole" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Mis Prometheus EI OLE
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-arhitektuur-kuidas-see-tootab" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Arhitektuur — kuidas see töötab
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. Arhitektuur — kuidas see töötab">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#komponendid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Komponendid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ametlik-arhitektuuri-diagramm" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ametlik arhitektuuri diagramm
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-aegrea-andmemudel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Aegrea andmemudel
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Aegrea andmemudel">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#andmemudeli-struktuur" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Andmemudeli struktuur
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#labelid-miks-need-on-voimsad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Label'id — miks need on võimsad
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kardinaalsuse-ohumark" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kardinaalsuse ohumärk
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#neli-moodikutuupi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Neli mõõdikutüüpi
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-moodikute-formaat-metrics-endpointil" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Mõõdikute formaat /metrics endpoint'il
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-promql-paringukeel-luhidalt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. PromQL — päringukeel lühidalt
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="6. PromQL — päringukeel lühidalt">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#filtreerimine-labelite-jargi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filtreerimine label'ite järgi
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rate-koige-olulisem-funktsioon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        rate() — kõige olulisem funktsioon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aken-ja-scrape-interval-kriitiline-reegel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Aken ja scrape interval — kriitiline reegel
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#agregeerimine" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Agregeerimine
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-hoiatused-automaatne-reaktsioon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Hoiatused — automaatne reaktsioon
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="7. Hoiatused — automaatne reaktsioon">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#alerti-elutsukkel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Alert'i elutsükkel
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-grafana-visualiseerimise-platvorm" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Grafana — visualiseerimise platvorm
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="8. Grafana — visualiseerimise platvorm">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#grafana-andmevoog" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Grafana andmevoog
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#pohimoisted" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Põhimõisted
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#visualiseerimistuubid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Visualiseerimistüübid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#thresholds-ja-alertid-grafanas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Thresholds ja alert'id Grafanas
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dashboard-kui-kood" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dashboard kui kood
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kokkuvote" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kokkuvõte
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Allikad
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Allikad">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ametlik-dokumentatsioon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ametlik dokumentatsioon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#grafana-ametlik" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Grafana ametlik
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kogukond-ja-oppematerjalid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kogukond ja õppematerjalid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prometheus-opentelemetry" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prometheus + OpenTelemetry
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           
             <div class="md-content" data-md-component="content">
@@ -2093,300 +1849,597 @@
 
 
 
-<h1 id="paev-1-prometheus-ja-grafana">Päev 1: Prometheus ja Grafana<a class="headerlink" href="#paev-1-prometheus-ja-grafana" title="Permanent link">&para;</a></h1>
-<p><em>Iseseisev lugemine enne labi</em></p>
-<p><strong>Eeldused:</strong> <a href="../paev1-observability/">Observability loeng</a> loetud
-<strong>Dokumentatsioon:</strong> <a href="https://prometheus.io">prometheus.io</a> · <a href="https://grafana.com/docs/">grafana.com/docs</a> · <a href="https://training.promlabs.com/">PromLabs Training</a>
-<strong>Versioon:</strong> Prometheus 3.x (meie laboris), Grafana 11.x</p>
+<h1 id="paev-1-prometheus-ja-grafana">Päev 1: Prometheus ja Grafana<a class="headerlink" href="#paev-1-prometheus-ja-grafana" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>Kestus:</strong> ~50 minutit iseseisvat lugemist
+<strong>Eeldused:</strong> <a href="../paev1-observability/">Loeng 1: Observability</a> loetud, Linux CLI põhitõed, võrgunduse alused
+<strong>Versioonid laboris:</strong> Prometheus 3.x (LTS, november 2024+), Grafana 11.x, Alertmanager 0.27+
+<strong>Viited:</strong> <a href="https://prometheus.io/docs/">prometheus.io/docs</a> · <a href="https://openmetrics.io/">OpenMetrics spec</a> · <a href="https://grafana.com/docs/grafana/latest/">Grafana docs</a></p>
 <hr />
-<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Permanent link">&para;</a></h2>
-<p>Pärast seda loengut:</p>
-<ul>
-<li>Mõistad, miks Prometheus loodi ja milliseid probleeme see lahendab</li>
-<li>Oskad selgitada, kuidas Prometheus erineb traditsioonilistest seiretööriistadest</li>
-<li>Tead, millal Prometheus sobib ja millal mitte</li>
-<li>Mõistad aegrea andmemudelit ja label'ite tähtsust</li>
-<li>Oskad lugeda lihtsamaid PromQL päringuid</li>
-<li>Tead, kuidas hoiatused töötavad</li>
-<li>Mõistad Grafana rolli ja põhimõisteid (data source, dashboard, panel, variables)</li>
-</ul>
-<hr />
-<h2 id="sissejuhatus-miks-me-seda-vajame">Sissejuhatus: Miks Me Seda Vajame?<a class="headerlink" href="#sissejuhatus-miks-me-seda-vajame" title="Permanent link">&para;</a></h2>
-<p>Alustame küsimusega: miks me üldse vajame Prometheust? Kas pole Nagios, Zabbix ja teised tööriistad juba olemas?</p>
-<h3 id="mikroteenuste-probleem">Mikroteenuste probleem<a class="headerlink" href="#mikroteenuste-probleem" title="Permanent link">&para;</a></h3>
+<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p>Pärast selle materjali läbitöötamist osaleja:</p>
 <ol>
-<li>aastatel hakkas toimuma suur muutus: monoliitrakendustest mikroteenustesse. Äkki pole teil enam 10 serverit, vaid 100 konteinerit. Need konteinerid tulevad ja lähevad automaatselt. Kubernetes skaleerib neid vastavalt koormusele.</li>
+<li><strong>Selgitab</strong> Prometheuse pull-mudeli põhjuseid ja piire (sh kasutusjuhud, kus see ei sobi)</li>
+<li><strong>Tõlgendab</strong> aegrea andmemudelit, sealhulgas label'ite rolli ja kardinaalsuse mõju salvestuskulule</li>
+<li><strong>Eristab</strong> nelja mõõdikutüüpi (counter, gauge, histogram, summary) ning teab, millal kumba valida</li>
+<li><strong>Loeb ja kirjutab</strong> PromQL instant- ja range-vektori päringuid, rakendab <code>rate()</code>, agregeerimist ja vektorite ühildamist</li>
+<li><strong>Konfigureerib</strong> alert-reeglid <code>for:</code>-väljaga ja selgitab olekute <code>Inactive → Pending → Firing</code> semantikat</li>
+<li><strong>Kavandab</strong> Grafana dashboardi Prometheus andmeallikaga, kasutades muutujaid (variables) ja thresholds</li>
+<li><strong>Põhjendab</strong> millal kasutada Prometheus-e föderatsiooni, <code>remote_write</code>-i või Thanos/Mimir ökosüsteemi</li>
 </ol>
-<p>Vana seire ei sobinud enam:
-- Nagios: käsitsi konfigureerid iga serveri
-- Zabbix: agendid peavad olema eelnevalt seadistatud
-- Mõlemad: ei tea konteinerite dünaamilisest elust midagi</p>
-<p>SoundCloud seisis 2012. aastal sama probleemi ees. Neil oli sadu mikroteenuseid, mis muutusid pidevalt. Julius Volz ja tema meeskond otsustasid luua midagi uut — Prometheus sündis. 2016. aastal liitus Prometheus CNCF-iga teise projektina pärast Kubernetes-t, ja 2018. aastal sai sellest teine CNCF-ist graduate'inud projekt. Täna kasutavad Prometheust Bolt, Wise, Pipedrive, Uber ja tuhanded teised.</p>
-<p>Kursuse jaoks oluline: <strong>kasutame Prometheus 3.x</strong>, mis tuli välja novembris 2024 — esimene suur versioon 7 aasta jooksul. Mitmed võrgus leiduvad juhendid viitavad veel v2.x süntaksile; erinevused on olemas, aga põhikontseptsioonid (pull-mudel, label'id, PromQL) pole muutunud.</p>
 <hr />
-<h2 id="1-mis-on-prometheus-pohimotteliselt">1. Mis on Prometheus põhimõtteliselt?<a class="headerlink" href="#1-mis-on-prometheus-pohimotteliselt" title="Permanent link">&para;</a></h2>
-<p>Prometheus on avatud lähtekoodiga süsteemide seire ja hoiatuste tööriistakomplekt. Kolm asja teevad selle eriliseks.</p>
-<h3 id="prometheus-kusib-ise-pull-mudel">Prometheus KÜSIB ise — pull mudel<a class="headerlink" href="#prometheus-kusib-ise-pull-mudel" title="Permanent link">&para;</a></h3>
-<p>Traditsiooniline seire saadab andmeid serverile. Prometheus teeb vastupidi — küsib ise regulaarselt igast sihtmärgist.</p>
-<pre class="mermaid"><code>flowchart LR
-    subgraph PUSH["PUSH mudel (Zabbix, Nagios)"]
-        A1[Agent] --&gt;|saadab| S1[Server]
-        A2[Agent] --&gt;|saadab| S1
-        A3[Agent] --&gt;|saadab| S1
-    end
-
-    subgraph PULL["PULL mudel (Prometheus)"]
-        P1[Prometheus] --&gt;|küsib| T1[Target]
-        P1 --&gt;|küsib| T2[Target]
-        P1 --&gt;|küsib| T3[Target]
-    end</code></pre>
-<p><strong>Miks pull on parem dünaamilises keskkonnas?</strong> Kui agent vaikib push-mudelis, ei tea sa miks — kas agent on katki, võrk on maas, või pole lihtsalt midagi saata? Pull-mudelis küsib Prometheus ise iga 15 sekundi järel. Kui sihtmärk ei vasta — Prometheus näeb seda kohe, sisemine <code>up</code> mõõdik läheb nulli ja alert käivitub. Lisaks saad sihtmärgi <code>/metrics</code> lehe brauseris avada ja näed täpselt seda, mida Prometheus näeks — debug on triviaalne.</p>
-<h3 id="koik-on-aegread">Kõik on aegread<a class="headerlink" href="#koik-on-aegread" title="Permanent link">&para;</a></h3>
-<p>Iga mõõdik on aegrida — väärtuste jada ajas. Mitte lihtsalt "CPU on 45%", vaid "CPU oli 43%, siis 45%, siis 47%..." See võimaldab näha trende, ennustada probleeme, mõista mustreid.</p>
-<h3 id="voimas-paringukeel-promql">Võimas päringukeel PromQL<a class="headerlink" href="#voimas-paringukeel-promql" title="Permanent link">&para;</a></h3>
-<p>Sa ei küsi "mis on CPU kasutus?". Sa küsid "kui palju on CPU kasutus kasvanud viimase 5 minuti jooksul, grupeerituna serveri järgi?" — ja saad vastuse sekunditega.</p>
+<h2 id="1-kontekst-miks-prometheus-tekkis-ja-mida-see-lahendab">1. Kontekst: miks Prometheus tekkis ja mida see lahendab<a class="headerlink" href="#1-kontekst-miks-prometheus-tekkis-ja-mida-see-lahendab" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="11-tehniline-kontekst">1.1 Tehniline kontekst<a class="headerlink" href="#11-tehniline-kontekst" title="Lingi sektsioonile">&para;</a></h3>
+<ol>
+<li>
+<p>aasta paiku seisis SoundCloud silmitsi skaleerumisprobleemiga. Monoliitrakendustelt liikumine mikroteenustesse lõi olukorra, kus senised seiretööriistad (Nagios, Munin, Ganglia) enam ei sobinud:</p>
+</li>
+<li>
+<p><strong>Konfiguratsioon oli staatiline</strong> — igast sihtmärgist tuli manuaalselt teada anda</p>
+</li>
+<li><strong>Push-mudel varjas vigu</strong> — kui agent vaikis, polnud selge, kas probleem oli agentides, võrgus või rakenduses</li>
+<li><strong>Dimensionaalsus puudus</strong> — mõõdikud olid nimede tasandil (<code>server1.cpu.idle</code>), mitte label'ite kaupa</li>
+<li><strong>Päringukeeled olid jäigad</strong> — agregeerimine ja dimensionaalne analüüs olid kas puudu või aeglased</li>
+</ol>
+<p>Julius Volz ja Matt T. Proud disainisid süsteemi, mis võttis vastu Google'i sisemise seiretööriista (Borgmon) põhimõtteid. 2015. aastal avaldati 1.0, 2016. aastal liitus projekt CNCF-iga Kubernetese järel teise graduated projektina, 2024. aasta novembris ilmus versioon 3.0 — esimene suur väljalase seitsme aasta jooksul.</p>
+<p><strong>Meie laboris: Prometheus 3.x.</strong> Olulised erinevused versioonist 2.x:</p>
+<ul>
+<li>UTF-8 tugi mõõdikunimedes ja label'ite väärtustes (mõjutab rahvusvahelisi deploy'e)</li>
+<li>Stabiilne <a href="https://prometheus.io/docs/specs/native_histograms/">natiivsete histogrammide</a> tugi (v3.8 alates)</li>
+<li>Täiustatud OTLP (OpenTelemetry Protocol) vastuvõtt</li>
+<li>Mitmed PromQL paranevused vektormatchingus</li>
+</ul>
+<h3 id="12-kus-prometheus-ei-sobi">1.2 Kus Prometheus <strong>ei sobi</strong><a class="headerlink" href="#12-kus-prometheus-ei-sobi" title="Lingi sektsioonile">&para;</a></h3>
+<p>Ootuste kalibreerimine hoiab ära hilisemad pettumused. Prometheus ei ole:</p>
+<table>
+<thead>
+<tr>
+<th>Mida vajad</th>
+<th>Mida kasutada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pikaajaline (aastad) mõõdikute säilitus</td>
+<td>Thanos, Mimir, Cortex, VictoriaMetrics</td>
+</tr>
+<tr>
+<td>Logihaldus ja täistekstiotsing</td>
+<td>Loki, ELK, OpenSearch, Splunk</td>
+</tr>
+<tr>
+<td>Distribueeritud jälgimine (traces)</td>
+<td>Tempo, Jaeger, Zipkin + OpenTelemetry</td>
+</tr>
+<tr>
+<td>100% täpsusega arvestus / arveldus</td>
+<td>Eraldi transaktsioonisüsteem (event log + OLAP)</td>
+</tr>
+<tr>
+<td>Sündmuste audit (kes, mida, millal)</td>
+<td>Auditlogimine eraldi süsteemis</td>
+</tr>
+<tr>
+<td>Reaalajas (alla sekundilise latentsuse) mõõtmised</td>
+<td>Streaming-süsteem (Kafka + Flink/Spark)</td>
+</tr>
+</tbody>
+</table>
+<p>Sellest tulenevalt kasutavad reaalsed tootmiskeskkonnad <strong>mitut tööriista koos</strong>. Selle kursuse viie päeva jooksul näed kõiki neid klasse.</p>
 <hr />
-<h2 id="2-mis-prometheus-ei-ole">2. Mis Prometheus EI OLE<a class="headerlink" href="#2-mis-prometheus-ei-ole" title="Permanent link">&para;</a></h2>
-<p>Enne sügavamale minekut — ootuste haldamine hoiab ära hilisemad pettumused.</p>
-<p><strong>Prometheus ei ole pikaajaline salvestus.</strong> Ta hoiab mõõdikuid vaikimisi 15 päeva (seadistatav <code>--storage.tsdb.retention.time</code> parameetriga). Aastate trendide jaoks vajad Thanos-t, Mimir-it või Cortex-i.</p>
-<p><strong>Prometheus ei ole logihaldussüsteem.</strong> Ta on ainult mõõdikute jaoks. Logide analüüsiks kasuta Loki-t või ELK Stack-i — mõlemad tulevad järgmistel nädalatel.</p>
-<p><strong>Prometheus ei ole distributed tracing.</strong> Jaeger ja Tempo näitavad päringu teekonda läbi mikroteenuste. Prometheus näitab kui kiiresti need teenused töötavad — aga mitte päringute teed. Tracing tuleb kursuse lõpus.</p>
-<p><strong>Prometheus ei sobi 100% täpsust nõudvale arveldusele.</strong> Pull-mudelis võib üksikud mõõtmised vahele jääda, kui target on hetkeliselt maas. Arveldusele kasuta eraldi süsteemi.</p>
-<hr />
-<h2 id="3-arhitektuur-kuidas-see-tootab">3. Arhitektuur — kuidas see töötab<a class="headerlink" href="#3-arhitektuur-kuidas-see-tootab" title="Permanent link">&para;</a></h2>
-<p>Prometheus ei ole üks programm — see on tööriistakomplekt mitmest komponendist.</p>
+<h2 id="2-arhitektuur">2. Arhitektuur<a class="headerlink" href="#2-arhitektuur" title="Lingi sektsioonile">&para;</a></h2>
+<p>Prometheus ei ole monoliitne rakendus — see on komponentide kogum, millest igaüks lahendab ühe ülesande.</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph Targets["Mõõdikute allikad"]
-        APP1[Rakendus&lt;br&gt;/metrics]
-        APP2[Rakendus&lt;br&gt;/metrics]
+        APP1[Instrumenteeritud&lt;br&gt;rakendus&lt;br&gt;/metrics]
         NODE[Node Exporter&lt;br&gt;:9100/metrics]
+        EXP[Blackbox / MySQL /&lt;br&gt;Nginx exporter]
         BATCH[Batch job] -.-&gt;|push| PG[Pushgateway&lt;br&gt;:9091]
     end
 
     PROM[Prometheus Server&lt;br&gt;:9090]
-    TSDB[(TSDB&lt;br&gt;15 päeva)]
+    TSDB[(TSDB&lt;br&gt;lokaalne, 15 päeva)]
+    REMOTE[(Remote storage:&lt;br&gt;Thanos / Mimir)]
     AM[AlertManager&lt;br&gt;:9093]
     GRAF[Grafana&lt;br&gt;:3000]
-    NOTIF[Email / Slack /&lt;br&gt;PagerDuty]
+    NOTIF[Email / Slack /&lt;br&gt;PagerDuty / OpsGenie]
 
     APP1 --&gt;|scrape| PROM
-    APP2 --&gt;|scrape| PROM
     NODE --&gt;|scrape| PROM
+    EXP --&gt;|scrape| PROM
     PG --&gt;|scrape| PROM
 
-    PROM &lt;--&gt; TSDB
+    PROM &lt;--&gt;|read/write| TSDB
+    PROM -.-&gt;|remote_write| REMOTE
     PROM --&gt;|alerts| AM
     AM --&gt; NOTIF
-    GRAF --&gt;|PromQL| PROM</code></pre>
-<h3 id="komponendid">Komponendid<a class="headerlink" href="#komponendid" title="Permanent link">&para;</a></h3>
-<p><strong>Prometheus Server</strong> on süda. Ta kogub mõõdikuid HTTP GET päringuga <code>/metrics</code> endpoint'ilt, salvestab need aegrea andmebaasi (TSDB) ja hindab hoiatuste reegleid.</p>
-<p><strong>Exporterid</strong> on tõlkijad. Linux server ei tea mis on Prometheus. Nginx ei tea. MySQL ei tea. Exporter on väike programm, mis loeb süsteemi statistikat (näiteks Linuxi <code>/proc</code> ja <code>/sys</code> kataloogidest) ja pakub seda Prometheus-e formaadis <code>/metrics</code> endpoint'il. Node Exporter teeb seda Linuxi serveri jaoks — CPU, mälu, ketas, võrk.</p>
-<p><strong>Pushgateway</strong> on erijuht — <strong>ainult</strong> lühiajaliste batch job'ide jaoks. Cronjob, mis töötab 30 sekundit ja lõpeb, ei jõua Prometheus-e scrape'imist oodata. Ta saadab mõõdikud Pushgateway'le, Prometheus loeb sealt.</p>
+    GRAF --&gt;|PromQL| PROM
+    GRAF -.-&gt;|PromQL| REMOTE</code></pre>
+<h3 id="21-komponendid-ja-nende-vastutusalad">2.1 Komponendid ja nende vastutusalad<a class="headerlink" href="#21-komponendid-ja-nende-vastutusalad" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Prometheus Server</strong> on kesksüda. Ta täidab nelja funktsiooni:</p>
+<ol>
+<li><strong>Service discovery</strong> — leiab, milliseid sihtmärke scrape'ida (staatiline konfiguratsioon, Kubernetes, Consul, EC2, file-based jne)</li>
+<li><strong>Scraping</strong> — saadab HTTP GET päringuid <code>/metrics</code> endpointile</li>
+<li><strong>Storage</strong> — salvestab andmed kohalikku TSDB-sse (ja/või remote storage-sse)</li>
+<li><strong>Evaluation</strong> — hindab alert- ja recording-reegleid regulaarselt</li>
+</ol>
+<p>Vaikimisi scrape interval on 15 sekundit, alert evaluation interval sama. Need on <strong>sõltumatud</strong> — scrape võib toimuda sagedamini kui alert evaluation.</p>
+<p><strong>Exporter-id</strong> on tõlkijad. Süsteem (Linux kernel, MySQL, Redis) ei räägi Prometheuse keelt. Exporter on väike deemon, mis loeb süsteemi statistikat selle natiivsest liidesest (<code>/proc</code>, SNMP, SQL query, HTTP API) ja pakub seda Prometheuse tekstiformaadis <code>/metrics</code> endpointis.</p>
+<p>Levinuimad exporterid:</p>
+<table>
+<thead>
+<tr>
+<th>Exporter</th>
+<th>Otstarve</th>
+<th>Port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>node_exporter</strong></td>
+<td>Linuxi host mõõdikud (CPU, mälu, ketas, võrk)</td>
+<td>9100</td>
+</tr>
+<tr>
+<td><strong>windows_exporter</strong></td>
+<td>Windows-i ekvivalent</td>
+<td>9182</td>
+</tr>
+<tr>
+<td><strong>blackbox_exporter</strong></td>
+<td>Välised (black-box) testid: HTTP, ICMP, TCP, DNS</td>
+<td>9115</td>
+</tr>
+<tr>
+<td><strong>mysqld_exporter</strong></td>
+<td>MySQL / MariaDB</td>
+<td>9104</td>
+</tr>
+<tr>
+<td><strong>postgres_exporter</strong></td>
+<td>PostgreSQL</td>
+<td>9187</td>
+</tr>
+<tr>
+<td><strong>nginx-prometheus-exporter</strong></td>
+<td>Nginx stub_status</td>
+<td>9113</td>
+</tr>
+<tr>
+<td><strong>cadvisor</strong></td>
+<td>Docker konteinerite mõõdikud</td>
+<td>8080</td>
+</tr>
+<tr>
+<td><strong>kube-state-metrics</strong></td>
+<td>Kubernetese objektide olek</td>
+<td>8080</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pushgateway</strong> on erijuhtum — ainult lühiajaliste batch-tööde jaoks. Cronjob, mis käivitub 30 sekundiks ja lõpeb, ei jõua Prometheuse scrape'i oodata. Batch-töö saadab oma mõõdikud Pushgateway'le, Prometheus loeb neid sealt. Tähtis: <strong>see ei ole üldine push-API</strong> — Pushgateway hoiab viimast talle saadetud väärtust tähtajatult, kuni keegi ei kustuta.</p>
 <blockquote>
-<p>⚠️ <strong>Levinud viga:</strong> Pushgateway ei ole lahendus firewall-probleemidele ega üldine "ma tahan push-i" tööriist. Ametlik dok (<a href="https://prometheus.io/docs/practices/pushing/">When to use the Pushgateway</a>) ütleb otse — enamikus juhtumites on Pushgateway anti-pattern. Kasuta seda ainult service-level batch job'ide jaoks.</p>
+<p><strong>Ametlik hoiatus (<a href="https://prometheus.io/docs/practices/pushing/">When to use the Pushgateway</a>):</strong> enamikus olukordades on Pushgateway anti-muster. Kui sul on pikaajaline teenus — lisa sinna <code>/metrics</code> endpoint ja lase Prometheusel seda scrape'ida.</p>
 </blockquote>
-<p><strong>AlertManager</strong> on intelligentne teavitaja. Prometheus tuvastab probleemi, AlertManager otsustab mida teha: grupeerib sarnased hoiatused üheks emailiks, suunab andmebaasi alertid DBA meeskonnale, summutab hoiatused plaanilise hoolduse ajal.</p>
-<p><strong>Grafana</strong> on visualiseerimisplatvorm (eraldi projekt Grafana Labs-ilt). Prometheus-el on oma minimaalne UI, aga reaalses töös kasutatakse alati Grafana-t.</p>
-<h3 id="ametlik-arhitektuuri-diagramm">Ametlik arhitektuuri diagramm<a class="headerlink" href="#ametlik-arhitektuuri-diagramm" title="Permanent link">&para;</a></h3>
-<p>Allpool on Prometheus-e ametlikust dokumentatsioonist pärit arhitektuuri joonis, mis näitab kogu ökosüsteemi:</p>
-<p><img alt="Prometheus ametlik arhitektuur" src="https://prometheus.io/assets/docs/architecture.svg" /></p>
-<p><em>Allikas: <a href="https://prometheus.io/docs/introduction/overview/">prometheus.io/docs/introduction/overview</a> — CC-BY-4.0</em></p>
+<p><strong>AlertManager</strong> tegeleb <strong>kõigega pärast</strong> alerti tuvastamist:</p>
+<ul>
+<li><strong>Deduplikatsioon</strong> — sama alert mitmest Prometheuse instantsist → üks teavitus</li>
+<li><strong>Grupeerimine</strong> — kümme seotud alerti → üks kokkuvõttev teade</li>
+<li><strong>Marsruutimine</strong> — andmebaasialertid DBA meeskonnale, võrgu omad võrgumeeskonnale</li>
+<li><strong>Summutamine (silencing)</strong> — planeeritud hooldus → ignoreerida X tundi</li>
+<li><strong>Inhibeerimine</strong> — kui DC on maas, ära saada iga üksiku teenuse alertit</li>
+</ul>
+<p><strong>Grafana</strong> on eraldiseisev projekt (Grafana Labs), mitte osa Prometheuse ökosüsteemist. Prometheusel on oma minimalistlik UI, aga tootmises kasutatakse peaaegu alati Grafanat.</p>
+<h3 id="22-pull-mudel-disainivalik-ja-selle-tagajarjed">2.2 Pull-mudel: disainivalik ja selle tagajärjed<a class="headerlink" href="#22-pull-mudel-disainivalik-ja-selle-tagajarjed" title="Lingi sektsioonile">&para;</a></h3>
+<p>Küsimus "kumb on parem — pull või push?" ei ole ühene. Prometheus valib pull-i ja see valik kannab konkreetseid tagajärgi.</p>
+<table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Pull (Prometheus)</th>
+<th>Push (Zabbix agent, Graphite)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sihtmärkide registreerimine</strong></td>
+<td>Tsentraalne (scrape_configs või SD)</td>
+<td>Iga agent teab serveri aadressi</td>
+</tr>
+<tr>
+<td><strong>"Kas mu agent töötab?"</strong></td>
+<td><code>up == 0</code> kohe nähtav</td>
+<td>Võib jääda märkamatuks</td>
+</tr>
+<tr>
+<td><strong>Debug</strong></td>
+<td><code>curl /metrics</code> annab sama pildi mida Prometheus näeks</td>
+<td>Vaja uurida agendi logisid</td>
+</tr>
+<tr>
+<td><strong>Firewall</strong></td>
+<td>Prometheus peab sihtmärgini jõudma</td>
+<td>Agent peab serverini jõudma</td>
+</tr>
+<tr>
+<td><strong>NAT-i taga sihtmärgid</strong></td>
+<td>Problemaatiline (vaja reverse proxy)</td>
+<td>Töötab otse</td>
+</tr>
+<tr>
+<td><strong>Üürike batch-töö</strong></td>
+<td>Vaja Pushgateway'd</td>
+<td>Loomulik sobivus</td>
+</tr>
+<tr>
+<td><strong>Kardinaalsuse kontroll</strong></td>
+<td>Server määrab sagedust ja sihtmärke</td>
+<td>Iga agent võib kaos tekitada</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Operatiivne tagajärg:</strong> pull-mudel teeb <code>up</code> mõõdiku esimeseks diagnostikatööriistaks. Kui <code>up == 0</code>, tead kohe, et Prometheus ei suutnud sihtmärgiga kontakti saada. See <code>up</code> ei pärine sihtmärgist endast — Prometheus genereerib selle ise iga scrape-i tulemusena.</p>
 <hr />
-<h2 id="4-aegrea-andmemudel">4. Aegrea andmemudel<a class="headerlink" href="#4-aegrea-andmemudel" title="Permanent link">&para;</a></h2>
-<p>Kuidas Prometheus andmeid salvestab? See on kogu süsteemi võtmekontseptsioon.</p>
-<p>Tavalises andmebaasis on read: kasutaja nimi, email, vanus. Prometheus-es on aegread — sama väärtus erinevatel aegadel:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cpu_usage 10:00 → 45%
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>cpu_usage 10:01 → 47%
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cpu_usage 10:02 → 43%
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>cpu_usage 10:03 → 50%
+<h2 id="3-aegrea-andmemudel">3. Aegrea andmemudel<a class="headerlink" href="#3-aegrea-andmemudel" title="Lingi sektsioonile">&para;</a></h2>
+<p>Iga <strong>aegrida</strong> (time series) Prometheuses on unikaalselt identifitseeritud mõõdiku nime ja label'ite kombinatsiooni poolt.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>http_requests_total{method=&quot;POST&quot;, handler=&quot;/api/users&quot;, status=&quot;201&quot;} 1543 @1713436800
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                  │                                                     │     │
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>└── mõõdiku nimi   └── label&#39;id (key-value)                               │     └── ajatempel (Unix ms)
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                                                                          └── väärtus (float64)
 </span></code></pre></div>
-<p>Meid huvitab muutus ajas — kas CPU tõuseb? Kui kiiresti? Mis hetkel täpselt hakkas tõusma?</p>
-<h3 id="andmemudeli-struktuur">Andmemudeli struktuur<a class="headerlink" href="#andmemudeli-struktuur" title="Permanent link">&para;</a></h3>
-<p>Iga aegrida koosneb kolmest osast — mõõdiku nimest, label'itest ja väärtusest koos ajatempliga:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>http_requests_total{method=&quot;GET&quot;, path=&quot;/api/users&quot;, status=&quot;200&quot;} 1234 @14:23:45
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│                   │                                               │     │
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└── mõõdiku nimi    └── label&#39;id                                     │     └── ajatempel
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>                                                                     └── väärtus
+<p>Oluline: <strong>erinev label'ite kombinatsioon loob uue aegrea.</strong> Kaks järgmist rida on erinevad aegread:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>http_requests_total{method=&quot;GET&quot;,  status=&quot;200&quot;}   — aegrida A
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>http_requests_total{method=&quot;POST&quot;, status=&quot;200&quot;}   — aegrida B
 </span></code></pre></div>
-<h3 id="labelid-miks-need-on-voimsad">Label'id — miks need on võimsad<a class="headerlink" href="#labelid-miks-need-on-voimsad" title="Permanent link">&para;</a></h3>
-<p>Ilma label'iteta vajaksid eraldi mõõdiku iga kombinatsiooni jaoks: <code>server1_api_users_get_requests</code>, <code>server1_api_users_post_requests</code>... 3 serverit × 2 endpoint'i × 2 meetodit = 12 erinevat mõõdikut.</p>
-<p>Label'itega on üks mõõdik <code>http_requests_total</code> ja iga unikaalne kombinatsioon label'e moodustab omaette aegrea:</p>
+<h3 id="31-labelid-joud-ja-oht">3.1 Label'id — jõud ja oht<a class="headerlink" href="#31-labelid-joud-ja-oht" title="Lingi sektsioonile">&para;</a></h3>
+<p>Label'id võimaldavad ühe mõõdiku all esitada tuhandeid dimensioonilisi variante:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>http_requests_total
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>         │
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>         ├── {method=&quot;GET&quot;,  status=&quot;200&quot;}  ─── aegrida #1:  100 → 110 → 125 → 140 ...
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>         ├── {method=&quot;GET&quot;,  status=&quot;500&quot;}  ─── aegrida #2:    2 →   3 →   5 →   4 ...
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>         ├── {method=&quot;POST&quot;, status=&quot;201&quot;}  ─── aegrida #3:   50 →  55 →  60 →  58 ...
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>         └── {method=&quot;POST&quot;, status=&quot;500&quot;}  ─── aegrida #4:    1 →   1 →   2 →   1 ...
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>         ├── {method=&quot;GET&quot;,  status=&quot;200&quot;}  ─── aegrida #1
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>         ├── {method=&quot;GET&quot;,  status=&quot;500&quot;}  ─── aegrida #2
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>         ├── {method=&quot;POST&quot;, status=&quot;201&quot;}  ─── aegrida #3
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>         └── {method=&quot;POST&quot;, status=&quot;500&quot;}  ─── aegrida #4
 </span></code></pre></div>
-<p>Filtreerid PromQL-is täpselt vajalikku kombinatsiooni:</p>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">&quot;</span><span class="s">GET</span><span class="p">&quot;,</span><span class="w"> </span><span class="nl">status</span><span class="o">=</span><span class="p">&quot;</span><span class="s">500</span><span class="p">&quot;}</span><span class="w">   </span><span class="c1"># Ainult GET vead</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">&quot;</span><span class="s">5..</span><span class="p">&quot;}</span><span class="w">                </span><span class="c1"># Kõik 5xx vead (regex)</span>
-</span></code></pre></div>
-<h3 id="kardinaalsuse-ohumark">Kardinaalsuse ohumärk<a class="headerlink" href="#kardinaalsuse-ohumark" title="Permanent link">&para;</a></h3>
-<p><strong>Ära kasuta label'ina midagi, millel on tuhandeid unikaalseid väärtusi</strong> — <code>user_id</code>, <code>email</code>, <code>session_id</code>, täielik URL path parameetritega. 3 serverit × 10 000 kasutajat = 30 000 aegrida. Kui iga aegrida võtab ~3 KB RAM-i, on see 90 MB ainult ühest mõõdikust. Suured label-plahvatused on Prometheus-e tapjaks #1.</p>
-<p>Label'id peavad olema madala kardinaalsusega:
-- ✅ <code>method</code> (GET, POST, PUT, DELETE, PATCH) — 5 väärtust
-- ✅ <code>status</code> (2xx, 3xx, 4xx, 5xx kombinatsioonid) — ~10-20 väärtust
-- ✅ <code>service</code> (nimi) — kümneid
-- ❌ <code>user_id</code> — tuhandeid või miljoneid
-- ❌ <code>timestamp</code> — lõpmatu</p>
-<h3 id="neli-moodikutuupi">Neli mõõdikutüüpi<a class="headerlink" href="#neli-moodikutuupi" title="Permanent link">&para;</a></h3>
-<p><strong>Counter</strong> ainult kasvab — päringute arv, vigade arv, töödeldud baidid. Nullistub ainult teenuse taaskäivitusel. Kasuta alati koos <code>rate()</code> funktsiooniga.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>COUNTER (ainult kasvab)           GAUGE (tõuseb ja langeb)
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  │                                 │
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  │         ▁▂▅█                    │   ▅▇█▇▅▃▂▃▅▇█▇▅
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  │      ▁▂▄                        │
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  │   ▁▂▃                           │
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  └─────────────▶ aeg                └─────────────▶ aeg
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  päringute arv kokku                CPU kasutus (%)
-</span></code></pre></div>
-<p><strong>Gauge</strong> tõuseb ja langeb vabalt — CPU kasutus, mälu hulk, aktiivsete ühenduste arv, temperatuur. Kasuta otse, ilma <code>rate()</code>-ta.</p>
-<p><strong>Histogram</strong> mõõdab jaotust bucket'ites — vastuse ajad, päringu suurused. Kasuta <code>histogram_quantile()</code> funktsiooniga p95, p99 arvutamiseks:</p>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_request_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="o">)</span>
-</span></code></pre></div>
-<p><code>le</code> label on eriline — see tähendab "less than or equal", bucket'i ülemine piir. <code>sum by(le)</code> agregeerib bucket'eid üle serverite.</p>
-<p><strong>Summary</strong> arvutab protsentiilid kliendi poolel — täpsem aga <strong>ei ole agregeeritav</strong> üle instantside. Kui sul on 5 serverit, ei saa Summary-ga globaalset p95-t arvutada. Histogram saab. <strong>Reegel:</strong> eelista Histogram-i.</p>
-<blockquote>
-<p>💡 <strong>Tulevikumärk:</strong> Prometheus 3.8 (november 2025) tegi stabiilseks <strong>native histograms</strong> — efektiivsem alternatiiv klassikalistele histogrammidele ilma eelnevalt määratud bucket-piirideta. Klassikaline histogram on praegu veel standard, aga 3-5 aasta perspektiivis native histograms võtab üle. Vaata <a href="https://prometheus.io/docs/specs/native_histograms/">ametlikku spetsifikatsiooni</a>.</p>
-</blockquote>
+<p><strong>Kardinaalsus</strong> (cardinality) = unikaalsete aegridade arv ühe mõõdiku kohta. See on Prometheuse produktsioonis peamine probleem #1.</p>
+<p><strong>Reegel:</strong> iga label peab olema madala kardinaalsusega ja piiratud väärtuste hulgaga.</p>
+<table>
+<thead>
+<tr>
+<th>✅ Sobivad label'id</th>
+<th>❌ Ei tohi label'iks panna</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>method</code> (GET, POST, ...) — ~5 väärtust</td>
+<td><code>user_id</code> — miljonid</td>
+</tr>
+<tr>
+<td><code>status_code</code> — ~40 võimalikku</td>
+<td><code>email</code>, <code>ip_address</code></td>
+</tr>
+<tr>
+<td><code>environment</code> (prod, staging, dev)</td>
+<td><code>request_id</code>, <code>trace_id</code></td>
+</tr>
+<tr>
+<td><code>region</code> (eu-north-1, ...)</td>
+<td>Täielik URL (teekonna parameetritega)</td>
+</tr>
+<tr>
+<td><code>service</code> (auth, billing, ...)</td>
+<td>Ajatempel / kellaaeg</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ressursikulu ligikaudu:</strong> iga aegrida tarbib ~3 kB RAM-i (aktiivses olekus) ja ~1-3 baiti mõõtmise kohta (kokkupakituna kettal). Kui üks mõõdik on 100 000 aegrida × 15 sekundi interval × 24h = palju. Prometheus 2.x default <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config">sample_limit</a> on piiramatu — vaja on käsitsi seada, et kaitsta serverit kardinaalsuse plahvatuse eest.</p>
+<h3 id="32-hea-labeli-disaini-reegleid">3.2 Hea label'i disaini reegleid<a class="headerlink" href="#32-hea-labeli-disaini-reegleid" title="Lingi sektsioonile">&para;</a></h3>
+<ol>
+<li><strong>Ära kasuta label'eid üksiku üksuse identifitseerimiseks.</strong> Unikaalsed ID-d kuuluvad logidesse.</li>
+<li><strong>Konstantne aja jooksul.</strong> Kui label väärtus muutub tihti (nt versiooni string rakenduse iga deploy-ga), tekib aegridade plahvatus.</li>
+<li><strong>Äriloogika kuulub mõõdiku sisse, mitte label'ite nime.</strong> <code>requests_total{type="login"}</code>, mitte <code>login_requests_total</code>.</li>
+<li><strong>Piira kardinaalsust sihtmärgi poolel.</strong> Rakenduste instrumentaalne kood peab teadma, millised label-väärtused on lubatud.</li>
+</ol>
 <hr />
-<h2 id="5-moodikute-formaat-metrics-endpointil">5. Mõõdikute formaat <code>/metrics</code> endpoint'il<a class="headerlink" href="#5-moodikute-formaat-metrics-endpointil" title="Permanent link">&para;</a></h2>
-<p>Prometheus kasutab lihtsat tekstiformaati — inimloetav, lihtne parsida:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a># HELP http_requests_total The total number of HTTP requests.
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a># TYPE http_requests_total counter
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>http_requests_total{method=&quot;GET&quot;,path=&quot;/api/users&quot;,status=&quot;200&quot;} 1234
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>http_requests_total{method=&quot;POST&quot;,path=&quot;/api/users&quot;,status=&quot;201&quot;} 567
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a># HELP node_memory_MemAvailable_bytes Memory information field MemAvailable.
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a># TYPE node_memory_MemAvailable_bytes gauge
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>node_memory_MemAvailable_bytes 2147483648
+<h2 id="4-moodikutuubid">4. Mõõdikutüübid<a class="headerlink" href="#4-moodikutuubid" title="Lingi sektsioonile">&para;</a></h2>
+<p>Prometheus toetab nelja põhitüüpi. Valik mõjutab nii salvestust kui ka seda, milliseid PromQL operatsioone saab rakendada.</p>
+<h3 id="41-counter-ainult-kasvav">4.1 Counter — ainult kasvav<a class="headerlink" href="#41-counter-ainult-kasvav" title="Lingi sektsioonile">&para;</a></h3>
+<p>Näited: <code>http_requests_total</code>, <code>node_cpu_seconds_total</code>, <code>process_cpu_seconds_total</code>.</p>
+<p>Counter nullistub ainult protsessi taaskäivitamisel. PromQL-i funktsioonid (<code>rate()</code>, <code>increase()</code>) tuvastavad selle automaatselt ja käsitlevad õigesti.</p>
+<p><strong>Konventsioon:</strong> counter'i nimi lõpeb tavaliselt <code>_total</code>-iga. OpenMetrics spec (<a href="https://openmetrics.io/">openmetrics.io</a>) formaliseerib selle.</p>
+<h3 id="42-gauge-vabalt-liikuv">4.2 Gauge — vabalt liikuv<a class="headerlink" href="#42-gauge-vabalt-liikuv" title="Lingi sektsioonile">&para;</a></h3>
+<p>Näited: <code>node_memory_MemAvailable_bytes</code>, <code>node_filesystem_free_bytes</code>, <code>go_goroutines</code>, temperatuur, kasutajate arv.</p>
+<p>Gauge'iga kasutad väärtust otse — ei mingit <code>rate()</code>. Agregeerimisel (nt <code>avg</code>, <code>sum</code>) tuleb ise aru saada, kas see on semantiliselt õige.</p>
+<h3 id="43-histogram-jaotus-bucketites">4.3 Histogram — jaotus bucket'ites<a class="headerlink" href="#43-histogram-jaotus-bucketites" title="Lingi sektsioonile">&para;</a></h3>
+<p>Histogram mõõdab <strong>jaotust</strong>, mitte ühte väärtust. Tüüpiline kasutus: vastamisaeg, päringu suurus.</p>
+<p>Histogram exposes kolme aegrida perekonda:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>http_request_duration_seconds_bucket{le=&quot;0.1&quot;}   — mitu päringut alla 100ms
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>http_request_duration_seconds_bucket{le=&quot;0.5&quot;}   — mitu alla 500ms
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>http_request_duration_seconds_bucket{le=&quot;1.0&quot;}   — mitu alla 1s
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>http_request_duration_seconds_bucket{le=&quot;+Inf&quot;}  — kõik (sama mis _count)
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>http_request_duration_seconds_count              — päringute arv kokku
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>http_request_duration_seconds_sum                — kõikide kestuste summa
 </span></code></pre></div>
-<p><code># HELP</code> rida on inimestele — kirjeldab mida mõõdik tähendab. <code># TYPE</code> rida on Prometheus-ele — ütleb kas tegemist on counter, gauge, histogram või summary-ga.</p>
-<p>Sa saad seda ise kontrollida:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>http://localhost:9100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
-</span></code></pre></div></p>
-<p>See on täpselt see, mida Prometheus iga 15 sekundi järel sihtmärkidelt saab.</p>
+<p><code>le</code> = less than or equal, bucket'i ülemine piir.</p>
+<p><strong>Protsentiilid arvutad serveri pool agregeeritud andmetest:</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">le</span><span class="p">,</span><span class="w"> </span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_request_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>Eelis:</strong> histogrammid on <strong>agregeeritavad üle instanside</strong>. Kui sul on 10 serverit, saad kõigi koondp95 välja arvutada.</p>
+<p><strong>Bucket'ite valik on kriitiline.</strong> Vaikimisi Prometheus'e klient-teekides on [<code>0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10</code>] sekundit. Kui su teenus vastab 50-200 ms-ga, pole enamik neist bucket'eist kasutatavad. Kohanda vastavalt SLO-le.</p>
+<h3 id="44-summary-kliendipoolsed-protsentiilid">4.4 Summary — kliendipoolsed protsentiilid<a class="headerlink" href="#44-summary-kliendipoolsed-protsentiilid" title="Lingi sektsioonile">&para;</a></h3>
+<p>Summary arvutab protsentiilid <strong>klient-rakenduses endas</strong>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>rpc_duration_seconds{quantile=&quot;0.5&quot;}   0.012
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>rpc_duration_seconds{quantile=&quot;0.95&quot;}  0.089
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>rpc_duration_seconds{quantile=&quot;0.99&quot;}  0.234
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>rpc_duration_seconds_count             14521
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>rpc_duration_seconds_sum               78.3
+</span></code></pre></div>
+<p><strong>Piirang:</strong> summary <strong>ei ole agregeeritav üle instanside.</strong> Kahe serveri p95 keskmine ≠ koondp95.</p>
+<p><strong>Reegel:</strong> eelista histogrammi, välja arvatud siis, kui vajad kõrget protsentiilide täpsust ja kõik päringud käivad ühe instansi kaudu.</p>
+<h3 id="45-natiivsed-histogrammid-prometheus-3x">4.5 Natiivsed histogrammid (Prometheus 3.x)<a class="headerlink" href="#45-natiivsed-histogrammid-prometheus-3x" title="Lingi sektsioonile">&para;</a></h3>
+<p>Klassikalise histogrammi puudus on <strong>bucket'ite staatilisus</strong> — valid valed piirid ja su andmed on kasutud. Natiivne histogramm (Prometheus 3.8+ stabiilne) lahendab selle: bucket'ite piirid tuletatakse automaatselt eksponentsiaalse skaala järgi.</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_request_duration_seconds</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)))</span>
+</span></code></pre></div>
+<p>Märka: <code>_bucket</code> sufiks puudub. Native histogrammid on tulevik, aga ökosüsteem (klient-teegid, dashboard template'id) on veel mõlemaga ühilduv. Vaata <a href="https://prometheus.io/docs/specs/native_histograms/">spetsifikatsiooni</a>.</p>
 <hr />
-<h2 id="6-promql-paringukeel-luhidalt">6. PromQL — päringukeel lühidalt<a class="headerlink" href="#6-promql-paringukeel-luhidalt" title="Permanent link">&para;</a></h2>
-<p>PromQL on spetsiaalselt aegrea andmete jaoks loodud keel. Erineb SQL-ist fundamentaalselt.</p>
-<h3 id="filtreerimine-labelite-jargi">Filtreerimine label'ite järgi<a class="headerlink" href="#filtreerimine-labelite-jargi" title="Permanent link">&para;</a></h3>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Kõik HTTP päringud</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nv">http_requests_total</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Ainult GET päringud</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">&quot;</span><span class="s">GET</span><span class="p">&quot;}</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Kõik peale GET</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">!=</span><span class="p">&quot;</span><span class="s">GET</span><span class="p">&quot;}</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># Regex — kõik 5xx vastused</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">&quot;</span><span class="s">5..</span><span class="p">&quot;}</span>
+<h2 id="5-metrics-endpoint-ja-exposition-format">5. <code>/metrics</code> endpoint ja exposition format<a class="headerlink" href="#5-metrics-endpoint-ja-exposition-format" title="Lingi sektsioonile">&para;</a></h2>
+<p>Prometheus ei räägi oma protokolli — ta loeb lihtsat tekstiformaati HTTP kaudu.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a># HELP http_requests_total Kõik vastu võetud HTTP päringud.
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a># TYPE http_requests_total counter
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>http_requests_total{method=&quot;GET&quot;,handler=&quot;/api/users&quot;,status=&quot;200&quot;} 1543
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>http_requests_total{method=&quot;POST&quot;,handler=&quot;/api/users&quot;,status=&quot;201&quot;} 217
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a># HELP node_memory_MemAvailable_bytes Memory information field MemAvailable.
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a># TYPE node_memory_MemAvailable_bytes gauge
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>node_memory_MemAvailable_bytes 4.147483648e+09
 </span></code></pre></div>
-<h3 id="rate-koige-olulisem-funktsioon"><code>rate()</code> — kõige olulisem funktsioon<a class="headerlink" href="#rate-koige-olulisem-funktsioon" title="Permanent link">&para;</a></h3>
-<p>Counter väärtus ise ei ütle midagi kasulikku — 1 234 567 päringut alates käivitusest. <code>rate()</code> arvutab <strong>keskmise kasvu sekundis</strong> antud ajaakna jooksul:</p>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># VALE — absoluutarv, kasvab pidevalt</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">http_requests_total</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># ÕIGE — keskmine päringute arv sekundis viimase 5 minuti jooksul</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<p>Metadata read:</p>
+<ul>
+<li><code># HELP &lt;nimi&gt; &lt;kirjeldus&gt;</code> — inimloetav selgitus</li>
+<li><code># TYPE &lt;nimi&gt; &lt;tüüp&gt;</code> — üks neljast tüübist</li>
+</ul>
+<p>Formaat on spetsifitseeritud OpenMetrics-is (<a href="https://openmetrics.io/">openmetrics.io</a>), mis on CNCF-i projekt. Ajalooliselt oli see Prometheuse-spetsiifiline; nüüd on see laiem standard, mida järgivad ka teised süsteemid (OpenTelemetry).</p>
+<p>Kontrolli sihtmärki käsurealt:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:9100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-30
 </span></code></pre></div>
-<h3 id="aken-ja-scrape-interval-kriitiline-reegel">Aken ja scrape interval — kriitiline reegel<a class="headerlink" href="#aken-ja-scrape-interval-kriitiline-reegel" title="Permanent link">&para;</a></h3>
-<p><code>[5m]</code> on ajavahemik, mida Prometheus vaatab. Aga aken peab olema <strong>vähemalt 4× scrape interval</strong>, muidu saad tühja tulemuse:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>scrape iga 15s:    │──│──│──│──│──│──│──│──│──│──│──│──│──│──│──│──│
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>                   ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>rate(x[1m]):       └──────┘     ← 4 scrape&#39;i ✓ minimaalne
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>rate(x[5m]):       └──────────────────────────────────┘  ← 20 scrape&#39;i ✓ silutud
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>rate(x[15s]):      └──┘                        ← 1 scrape ✗ TÜHI TULEMUS!
-</span></code></pre></div>
-<p>Mida laiem aken, seda silutum graafik — aga ka aeglasem reaktsioon. Tavaline valik: <code>[5m]</code> dashboardidele, <code>[1m]</code> alert'idele.</p>
-<h3 id="agregeerimine">Agregeerimine<a class="headerlink" href="#agregeerimine" title="Permanent link">&para;</a></h3>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Kõigi serverite päringud kokku</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Grupeeritud meetodi järgi</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">method</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
-</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># CPU kasutus % per server</span>
-</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="mi">100</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">(</span><span class="k">avg</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">instance</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">node_cpu_seconds_total</span><span class="p">{</span><span class="nl">mode</span><span class="o">=</span><span class="p">&quot;</span><span class="s">idle</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="o">)</span>
-</span></code></pre></div>
+<p>See annab täpselt sama pildi, mida Prometheus scrape-imisel näeks.</p>
 <hr />
-<h2 id="7-hoiatused-automaatne-reaktsioon">7. Hoiatused — automaatne reaktsioon<a class="headerlink" href="#7-hoiatused-automaatne-reaktsioon" title="Permanent link">&para;</a></h2>
-<p>Prometheus hindab reegleid regulaarselt. Kui tingimus kehtib, käivitub hoiatus:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighCPUUsage</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=&quot;idle&quot;}[5m])) * 100) &gt; 80</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2m</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
-</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Kõrge</span><span class="nv"> </span><span class="s">CPU:</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.instance</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<h2 id="6-promql-paringukeel">6. PromQL — päringukeel<a class="headerlink" href="#6-promql-paringukeel" title="Lingi sektsioonile">&para;</a></h2>
+<p>PromQL on deklaratiivne keel aegrea andmete päringuteks. Erineb SQL-ist fundamentaalselt — töötab vektoritega, mitte ridadega.</p>
+<h3 id="61-instant-vs-range-vektor">6.1 Instant vs range vektor<a class="headerlink" href="#61-instant-vs-range-vektor" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Instant vektor</strong> — väärtused <strong>ühel ajahetkel</strong> (praegu või <code>@</code> operaatoriga ajaloo hetkel):</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">node_cpu_seconds_total</span><span class="p">{</span><span class="nl">mode</span><span class="o">=</span><span class="p">&quot;</span><span class="s">idle</span><span class="p">&quot;}</span>
 </span></code></pre></div>
-<p><code>for: 2m</code> on kriitiline — tingimus peab kehtima katkematult 2 minutit enne hoiatuse saatmist. See väldib valehoiatusi mööduvate spike'ide peale.</p>
-<h3 id="alerti-elutsukkel">Alert'i elutsükkel<a class="headerlink" href="#alerti-elutsukkel" title="Permanent link">&para;</a></h3>
+<p>Tagastab n-aegrida × üks väärtus = vektor.</p>
+<p><strong>Range vektor</strong> — väärtused <strong>ajavahemiku kohta</strong>, iga aegrea jaoks rida väärtusi:</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">node_cpu_seconds_total</span><span class="p">{</span><span class="nl">mode</span><span class="o">=</span><span class="p">&quot;</span><span class="s">idle</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span>
+</span></code></pre></div>
+<p>Tagastab n-aegrida × m-väärtust akna kohta.</p>
+<p><strong>Funktsioonid nagu <code>rate()</code> võtavad range vektori ja tagastavad instant vektori.</strong></p>
+<h3 id="62-filtreerimine-labelite-jargi">6.2 Filtreerimine label'ite järgi<a class="headerlink" href="#62-filtreerimine-labelite-jargi" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=</span><span class="p">&quot;</span><span class="s">500</span><span class="p">&quot;}</span><span class="w">              </span><span class="c1"># täpne vaste</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">!=</span><span class="p">&quot;</span><span class="s">200</span><span class="p">&quot;}</span><span class="w">             </span><span class="c1"># mitte võrdne</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">&quot;</span><span class="s">5..</span><span class="p">&quot;}</span><span class="w">             </span><span class="c1"># regex — kõik 5xx</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">!~</span><span class="p">&quot;</span><span class="s">2..|3..</span><span class="p">&quot;}</span><span class="w">         </span><span class="c1"># mitte 2xx/3xx</span>
+</span></code></pre></div>
+<p>Erijuhud:</p>
+<ul>
+<li><code>{}</code> ilma label'iteta ei ole lubatud (peab olema vähemalt üks matcher)</li>
+<li>Mõõdiku nimi on tegelikult sisemine label <code>__name__</code>. Seega <code>http_requests_total{}</code> = <code>{__name__="http_requests_total"}</code></li>
+</ul>
+<h3 id="63-rate-counteri-kasvukiirus">6.3 <code>rate()</code> — counter'i kasvukiirus<a class="headerlink" href="#63-rate-counteri-kasvukiirus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Counter'i absoluutväärtus (nt 1 543 892) ei ütle midagi kasulikku. <code>rate()</code> arvutab <strong>keskmise muutuse sekundis</strong> ajaakna jooksul:</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Päringuid sekundis, keskmine viimase 5 minuti jooksul</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>Reegel:</strong> aja-aken peab olema <strong>vähemalt 4× scrape interval</strong>. 15-sekundilise scrape-iga <code>[1m]</code> on minimaalselt toimiv (4 mõõtmist), <code>[5m]</code> annab silutud graafiku. Liiga kitsas aken → tühi tulemus või mürarikas graafik.</p>
+<p><strong><code>rate()</code> vs <code>irate()</code> vs <code>increase()</code>:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Funktsioon</th>
+<th>Mida teeb</th>
+<th>Millal kasutada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rate(x[5m])</code></td>
+<td>Keskmine / sek üle 5 min</td>
+<td>Dashboardid, alert-id, üldine trend</td>
+</tr>
+<tr>
+<td><code>irate(x[5m])</code></td>
+<td>Kiirus viimase kahe mõõtmise vahel</td>
+<td>Kitsa resolutsiooniga graafikud, spike'ide tuvastus — aga mürarikkam</td>
+</tr>
+<tr>
+<td><code>increase(x[5m])</code></td>
+<td>Kogukasv 5 min jooksul (sek-i asemel)</td>
+<td>"Mitu päringut viimase 5 minutiga tuli?"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="64-agregeerimine">6.4 Agregeerimine<a class="headerlink" href="#64-agregeerimine" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Kõigi instanside summa</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Grupeeritud status-koodi järgi (by säilitab ainult nimetatud label&#39;id)</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">status</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Grupeeritud, välja arvatud instance (without eemaldab nimetatud label&#39;id)</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="k">sum</span><span class="w"> </span><span class="k">without</span><span class="o">(</span><span class="nv">instance</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<p>Agregeerimisoperatorid: <code>sum</code>, <code>min</code>, <code>max</code>, <code>avg</code>, <code>stddev</code>, <code>stdvar</code>, <code>count</code>, <code>count_values</code>, <code>bottomk</code>, <code>topk</code>, <code>quantile</code>, <code>group</code>.</p>
+<p><strong>Top 5 kõige koormatum endpoint:</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">topk</span><span class="o">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">handler</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)))</span>
+</span></code></pre></div>
+<h3 id="65-binaarsed-operaatorid-ja-vektor-matching">6.5 Binaarsed operaatorid ja vektor-matching<a class="headerlink" href="#65-binaarsed-operaatorid-ja-vektor-matching" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kahe vektori kombineerimine vajab <strong>matching reegleid</strong>. Vaikimisi ühildatakse kõikide label'ite järgi, mis mõlemal pool on.</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Näide: veaprotsent = vead / koguarv</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">&quot;</span><span class="s">5..</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="o">/</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<p>Mõlemas vektor-väljendis on sama label <code>service</code> — need ühildatakse automaatselt.</p>
+<p><strong>Kui label'id erinevad</strong>, kasuta <code>on(...)</code> või <code>ignoring(...)</code>:</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nv">instance_cpu_cores</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">on</span><span class="o">(</span><span class="nv">instance</span><span class="o">)</span><span class="w"> </span><span class="k">group_left</span><span class="w"> </span><span class="nv">node_load1</span>
+</span></code></pre></div>
+<p><code>group_left</code> / <code>group_right</code> võimaldavad ühildada n-to-1 (üks pool on "paljudega" pool). See on PromQL-i rikkalikum osa — detailid dokus: <a href="https://prometheus.io/docs/prometheus/latest/querying/operators/#vector-matching">Vector matching</a>.</p>
+<h3 id="66-cpu-kasutuse-klassikaline-paring">6.6 CPU kasutuse klassikaline päring<a class="headerlink" href="#66-cpu-kasutuse-klassikaline-paring" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="mi">100</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="k">avg</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">instance</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">node_cpu_seconds_total</span><span class="p">{</span><span class="nl">mode</span><span class="o">=</span><span class="p">&quot;</span><span class="s">idle</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="o">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="o">)</span>
+</span></code></pre></div>
+<p>Lugemine samm-sammult:</p>
+<ol>
+<li><code>node_cpu_seconds_total{mode="idle"}</code> — counter iga (instance, cpu) jaoks, ainult idle-aeg</li>
+<li><code>[5m]</code> — range vektor</li>
+<li><code>rate(... [5m])</code> — keskmine idle-sekundit sekundis (0-1 vahel)</li>
+<li><code>avg by(instance) (...)</code> — keskmine üle kõigi CPU-de ühe masina kohta</li>
+<li><code>* 100</code> — protsent idle</li>
+<li><code>100 - ...</code> — protsent kasutuses</li>
+</ol>
+<h3 id="67-histogram-paringud">6.7 Histogram päringud<a class="headerlink" href="#67-histogram-paringud" title="Lingi sektsioonile">&para;</a></h3>
+<p>P95 latentsus iga teenuse kohta:</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="o">(</span><span class="nv">service</span><span class="p">,</span><span class="w"> </span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_request_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="o">)</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="o">)</span>
+</span></code></pre></div>
+<p>Kriitiline: <code>le</code> peab säilima <code>by</code> klauslis, muidu <code>histogram_quantile</code> ei saa bucketteid õigesti töödelda.</p>
+<h3 id="68-recording-rules-eelarvutus">6.8 Recording rules — eelarvutus<a class="headerlink" href="#68-recording-rules-eelarvutus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Keerulised päringud on aeglased. Recording rule arvutab tulemuse regulaarselt ja salvestab selle uue aegreana:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># recording.rules.yml</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nt">groups</span><span class="p">:</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">recording_examples</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instance:node_cpu_utilization:ratio</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1 - avg by(instance) (rate(node_cpu_seconds_total{mode=&quot;idle&quot;}[5m]))</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service:http_error_rate:ratio</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">          </span><span class="no">sum by(service) (rate(http_requests_total{status=~&quot;5..&quot;}[5m]))</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">          </span><span class="no">/</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">          </span><span class="no">sum by(service) (rate(http_requests_total[5m]))</span>
+</span></code></pre></div>
+<p><strong>Konventsioon nimetuses</strong> (Prometheus doc-ist): <code>level:metric:operation</code> — <code>instance:node_cpu_utilization:ratio</code> tähendab "per-instance näitaja, CPU kasutus, suhe 0-1".</p>
+<p>Kasu: Grafana dashboard, mis päringut korduvalt teeb, saab tuhandeid kordi kiiremini kasutada eelarvutatud mõõdikut.</p>
+<hr />
+<h2 id="7-alerting">7. Alerting<a class="headerlink" href="#7-alerting" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="71-alert-reegli-anatoomia">7.1 Alert-reegli anatoomia<a class="headerlink" href="#71-alert-reegli-anatoomia" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">groups</span><span class="p">:</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_health</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighCpuUsage</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=&quot;idle&quot;}[5m])) * 100) &gt; 80</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">        </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2m</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">        </span><span class="nt">labels</span><span class="p">:</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">          </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="w">          </span><span class="nt">team</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">platform</span>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="w">          </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Kõrge</span><span class="nv"> </span><span class="s">CPU:</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.instance</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">({{</span><span class="nv"> </span><span class="s">$value</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">printf</span><span class="nv"> </span><span class="s">\&quot;%.0f\&quot;</span><span class="nv"> </span><span class="s">}}%)&quot;</span>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="w">          </span><span class="nt">runbook_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://wiki.example.com/runbooks/high-cpu&quot;</span>
+</span></code></pre></div>
+<p><strong>Väljade selgitus:</strong></p>
+<ul>
+<li><code>alert</code> — unikaalne nimi</li>
+<li><code>expr</code> — PromQL-väljend; kui tagastab tühja vektori, tingimus ei kehti; kui tagastab vähemalt ühe rea, iga sellest rea label'ite kombinatsioon on eraldi aktiivne alert</li>
+<li><code>for</code> — kestus, mille jooksul <code>expr</code> peab katkematult tõene olema enne Firing oleku algust</li>
+<li><code>labels</code> — staatilised label'id, mis lisatakse alertile (AlertManager kasutab neid marsruutimiseks)</li>
+<li><code>annotations</code> — inimloetavad väljad; <code>{{ $labels.X }}</code> ja <code>{{ $value }}</code> on Go template süntaks</li>
+</ul>
+<h3 id="72-oleku-uleminekud">7.2 Oleku üleminekud<a class="headerlink" href="#72-oleku-uleminekud" title="Lingi sektsioonile">&para;</a></h3>
 <pre class="mermaid"><code>stateDiagram-v2
-    [*] --&gt; Inactive: Reegel loodud
-    Inactive --&gt; Pending: expr = true
+    [*] --&gt; Inactive: reegel aktiivne
+    Inactive --&gt; Pending: expr kehtib
     Pending --&gt; Firing: for aeg täis
-    Pending --&gt; Inactive: expr = false&lt;br&gt;(enne for aega)
-    Firing --&gt; Inactive: expr = false
-    Firing --&gt; [*]: Reegel eemaldatud</code></pre>
-<p>AlertManager võtab firing hoiatused vastu ja otsustab mida teha:
-- <strong>Grupeerib</strong> — 10 serverit on maas → 1 teade, mitte 10
-- <strong>Suunab</strong> — andmebaasi alertid DBA meeskonnale, kriitilised kõigile
-- <strong>Summutab</strong> — planeeritud hooldus, 2 tundi vaikust
-- <strong>Inhibeerib</strong> — kui terve data center on maas, ära saada iga üksiku teenuse alertit eraldi</p>
+    Pending --&gt; Inactive: expr ei kehti&lt;br&gt;(enne for aega)
+    Firing --&gt; Inactive: expr ei kehti
+    Firing --&gt; [*]: reegel eemaldatud</code></pre>
+<p><strong><code>for:</code> on kriitiline valehäirete vältimiseks.</strong> Ilma <code>for:</code>-ta saadab Prometheus alerti iga 15-sekundilise spike peale. Praktikas: <code>for: 1m</code> minimaalne, <code>for: 5m-10m</code> tüüpiline.</p>
+<h3 id="73-alert-design-parimad-praktikad">7.3 Alert-design parimad praktikad<a class="headerlink" href="#73-alert-design-parimad-praktikad" title="Lingi sektsioonile">&para;</a></h3>
+<ol>
+<li><strong>Iga alert peab olema actionable.</strong> Kui sa ei tea, mida teha, kui alert saabub — see on vale alert.</li>
+<li><strong>Symptom-based, not cause-based.</strong> Kasutaja probleem (kõrge vastamisaeg) on parem alert kui süsteemi detail (CPU 90%).</li>
+<li><strong>Severity hierarhia</strong> — <code>critical</code> (äratab öösel), <code>warning</code> (hommikuks Slack), <code>info</code> (dashboard).</li>
+<li><strong>Runbook igal alertil.</strong> <code>annotations.runbook_url</code> viitab wikile, kus on sammud lahendamiseks.</li>
+<li><strong>Alert fatigue on reaalne.</strong> Kui alert on regulaarne "müra", meeskond lakkab vastamast <strong>kõigile</strong> alert-itele.</li>
+</ol>
+<p><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE raamat, peatükk 6</a> on selles vallas viidatuim allikas.</p>
 <hr />
-<h2 id="8-grafana-visualiseerimise-platvorm">8. Grafana — visualiseerimise platvorm<a class="headerlink" href="#8-grafana-visualiseerimise-platvorm" title="Permanent link">&para;</a></h2>
-<p>Prometheus-el on oma lihtne UI päringute tegemiseks. Aga see on arendaja tööriist — ei sobi tootmis-dashboardideks ega juhtkonnale näitamiseks.</p>
-<p>Grafana on visualiseerimisplatvorm, mis ühendab erinevaid andmeallikaid. Oluline: <strong>Grafana ise ei kogu andmeid</strong> — ta küsib neid Prometheus-elt (või Loki-lt, Elasticsearch-ist, InfluxDB-st jne) ja kuvab graafikutena.</p>
-<p>See tähendab, et ühel Grafana dashboardil saad näidata mõõdikuid Prometheus-est, logisid Loki-st ja trace-e Tempo-st — kõik koos, täielik observability pilt.</p>
-<h3 id="grafana-andmevoog">Grafana andmevoog<a class="headerlink" href="#grafana-andmevoog" title="Permanent link">&para;</a></h3>
-<pre class="mermaid"><code>flowchart LR
-    subgraph Sources["Andmeallikad"]
-        P[Prometheus]
-        L[Loki]
-        E[Elasticsearch]
-        I[InfluxDB]
-    end
-
-    subgraph Grafana["Grafana Server"]
-        DS[Data Source&lt;br&gt;plugin]
-        Q[Query]
-        T[Transform]
-        PAN[Panel]
-    end
-
-    U[Kasutaja&lt;br&gt;brauser]
-
-    P --&gt; DS
-    L --&gt; DS
-    E --&gt; DS
-    I --&gt; DS
-    DS --&gt; Q --&gt; T --&gt; PAN --&gt; U</code></pre>
-<h3 id="pohimoisted">Põhimõisted<a class="headerlink" href="#pohimoisted" title="Permanent link">&para;</a></h3>
-<p><strong>Data Source</strong> on ühendus välise andmebaasiga. Igal andmeallika tüübil on oma plugin, mis teab kuidas suhelda selle teenusega ja millist päringukeelt kasutada (PromQL Prometheuse jaoks, LogQL Loki jaoks, SQL MySQL-i jaoks).</p>
-<p><strong>Dashboard</strong> on konteiner paneelide jaoks. Sisaldab:
-- Paneele (graafikud, tabelid, näitud)
-- Variables (dünaamilised filtrid)
-- Time range (globaalne ajavahemik kõigile paneelidele)
-- Annotations (sündmuste märkimine — deploy, incident)</p>
-<p><strong>Panel</strong> on üks visualiseering dashboardil. Kolm osa, mida Grafana ametlik <a href="https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/">dashboards-overview</a> nimetab "kolmeks väravaks":</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Andmeallikas → [Query] → [Transform] → [Panel/Visualization]
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>                  │           │                │
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>                  ▼           ▼                ▼
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>              Päring      Kombineeri       Graafik,
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>              (PromQL)    andmed enne      tabel, gauge
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>                          renderdust        (valik 25+ tüübist)
+<h2 id="8-alertmanager">8. AlertManager<a class="headerlink" href="#8-alertmanager" title="Lingi sektsioonile">&para;</a></h2>
+<p>AlertManager on eraldi protsess. Prometheus saadab alertid HTTP POST-iga AlertManagerile, kes teeb ülejäänu.</p>
+<h3 id="81-marsruutimispuu">8.1 Marsruutimispuu<a class="headerlink" href="#81-marsruutimispuu" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">route</span><span class="p">:</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;default&#39;</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;alertname&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;cluster&#39;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span><span class="nt">group_wait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">  </span><span class="nt">group_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">  </span><span class="nt">repeat_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4h</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">  </span><span class="nt">routes</span><span class="p">:</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="w">        </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="w">      </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pager&#39;</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="w">      </span><span class="nt">continue</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="w">        </span><span class="nt">team</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="w">      </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;dba-slack&#39;</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match_re</span><span class="p">:</span>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a><span class="w">        </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">^(frontend|cdn)$</span>
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a><span class="w">      </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;web-team&#39;</span>
+</span><span id="__span-21-18"><a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a>
+</span><span id="__span-21-19"><a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a><span class="nt">receivers</span><span class="p">:</span>
+</span><span id="__span-21-20"><a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;default&#39;</span>
+</span><span id="__span-21-21"><a id="__codelineno-21-21" name="__codelineno-21-21" href="#__codelineno-21-21"></a><span class="w">    </span><span class="nt">email_configs</span><span class="p">:</span>
+</span><span id="__span-21-22"><a id="__codelineno-21-22" name="__codelineno-21-22" href="#__codelineno-21-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;devops@example.com&#39;</span>
+</span><span id="__span-21-23"><a id="__codelineno-21-23" name="__codelineno-21-23" href="#__codelineno-21-23"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pager&#39;</span>
+</span><span id="__span-21-24"><a id="__codelineno-21-24" name="__codelineno-21-24" href="#__codelineno-21-24"></a><span class="w">    </span><span class="nt">pagerduty_configs</span><span class="p">:</span>
+</span><span id="__span-21-25"><a id="__codelineno-21-25" name="__codelineno-21-25" href="#__codelineno-21-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">service_key</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&lt;key&gt;&#39;</span>
+</span><span id="__span-21-26"><a id="__codelineno-21-26" name="__codelineno-21-26" href="#__codelineno-21-26"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;dba-slack&#39;</span>
+</span><span id="__span-21-27"><a id="__codelineno-21-27" name="__codelineno-21-27" href="#__codelineno-21-27"></a><span class="w">    </span><span class="nt">slack_configs</span><span class="p">:</span>
+</span><span id="__span-21-28"><a id="__codelineno-21-28" name="__codelineno-21-28" href="#__codelineno-21-28"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">channel</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#db-alerts&#39;</span>
+</span><span id="__span-21-29"><a id="__codelineno-21-29" name="__codelineno-21-29" href="#__codelineno-21-29"></a><span class="w">        </span><span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&lt;webhook&gt;&#39;</span>
 </span></code></pre></div>
-<p><strong>Variables</strong> teevad dashboardi dünaamiliseks. Näiteks <code>$server</code> variable täitub automaatselt PromQL päringust:</p>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">label_values</span><span class="o">(</span><span class="nv">node_cpu_seconds_total</span><span class="p">,</span><span class="w"> </span><span class="nv">instance</span><span class="o">)</span>
+<p><strong>Mõisted:</strong></p>
+<ul>
+<li><strong><code>group_by</code></strong> — kogub samasse gruppi alertid, millel on need label'id võrdsed</li>
+<li><strong><code>group_wait</code></strong> — esimene teavitus saadetakse pärast seda ooteaega (et grupp jõuaks täituda)</li>
+<li><strong><code>group_interval</code></strong> — uue alerti lisamine olemasolevasse gruppi ootab vähemalt nii kaua</li>
+<li><strong><code>repeat_interval</code></strong> — kui alert pole lahendatud, korda teavitust iga <code>repeat_interval</code> tagant</li>
+</ul>
+<h3 id="82-silencing-ja-inhibition">8.2 Silencing ja inhibition<a class="headerlink" href="#82-silencing-ja-inhibition" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Silencing</strong> — ajutine alert-i ignoreerimine. UI kaudu või API-ga. Kasutus: planeeritud hooldus, teadaolev probleem.</p>
+<p><strong>Inhibition</strong> — kui üks alert on aktiivne, summuta teised sõltuvad alertid automaatselt.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">inhibit_rules</span><span class="p">:</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source_match</span><span class="p">:</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">      </span><span class="nt">alertname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DatacenterDown</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="nt">target_match</span><span class="p">:</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">    </span><span class="nt">equal</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;datacenter&#39;</span><span class="p p-Indicator">]</span>
 </span></code></pre></div>
-<p>Kasutaja valib dropdown-ist serveri ja <strong>kõik paneelid uuenevad automaatselt</strong>, sest iga paneeli päringus on <code>{instance="$server"}</code>.</p>
-<h3 id="visualiseerimistuubid">Visualiseerimistüübid<a class="headerlink" href="#visualiseerimistuubid" title="Permanent link">&para;</a></h3>
-<p>Grafana pakub 25+ visualiseeringut. Tavakasutuses:</p>
+<p>Lugemine: "Kui <code>DatacenterDown</code> (critical) on aktiivne, summuta kõik <code>warning</code>-alertid samast datacentrist."</p>
+<hr />
+<h2 id="9-grafana">9. Grafana<a class="headerlink" href="#9-grafana" title="Lingi sektsioonile">&para;</a></h2>
+<p>Prometheus ise pakub minimalistliku UI päringuteks (<code>/graph</code> endpoint), aga see on tööriist arendusele, mitte dashboard'iks. Grafana on visualiseerimiskiht, mis ühendab <strong>mitut andmeallikat samas dashboardis</strong> — Prometheus mõõdikud, Loki logid, Tempo trace-id, ärimõõdikud SQL-andmebaasist.</p>
+<h3 id="91-pohimoisted">9.1 Põhimõisted<a class="headerlink" href="#91-pohimoisted" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Data source</strong> — ühendus välise andmesüsteemiga. Igal tüübil on oma plugin, mis teab protokolli ja päringukeelt (PromQL Prometheusele, LogQL Lokile, SQL andmebaasile).</p>
+<p><strong>Dashboard</strong> — konteiner paneelide ja muutujate jaoks. JSON-fail, mida saab Git-iga versioneerida.</p>
+<p><strong>Panel</strong> — üks visualiseering. Kolm etappi (<a href="https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/">Grafana dashboards overview</a>):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>[Andmeallikas] → [Query] → [Transform] → [Visualization]
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>   (plugin)      PromQL    kombineerimine  graafik, tabel,
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>                                           gauge, stat...
+</span></code></pre></div>
+<p><strong>Variable</strong> — muudab dashboardi dünaamiliseks. Nt <code>$instance</code> muutuja täitub päringust <code>label_values(up, instance)</code>; kasutaja valib dropdownist, kõik paneelid filtreeruvad automaatselt.</p>
+<p><strong>Annotation</strong> — ajaline märge. Näiteks deploy sündmused, intsidentide algus — kuvatakse kõigil paneelidel vertikaaljoontena.</p>
+<h3 id="92-visualiseeringute-valik">9.2 Visualiseeringute valik<a class="headerlink" href="#92-visualiseeringute-valik" title="Lingi sektsioonile">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2397,23 +2450,23 @@
 <tbody>
 <tr>
 <td><strong>Time series</strong></td>
-<td>Trendid ajas — CPU, mälu, võrguliiklus, latentsus</td>
+<td>Trendid ajas — CPU, mälu, latentsus, päringusagedus</td>
 </tr>
 <tr>
 <td><strong>Stat</strong></td>
-<td>Üks hetkenumber — aktiivsete kasutajate arv</td>
+<td>Üks hetkenumber — aktiivsed kasutajad, SLO staatus</td>
 </tr>
 <tr>
 <td><strong>Gauge</strong></td>
-<td>Protsent poolringina — ketta täituvus, SLA</td>
+<td>Protsent piiri lähenemisega — ketta täituvus</td>
 </tr>
 <tr>
 <td><strong>Bar gauge</strong></td>
-<td>Võrdlus kategooriate vahel — top 5 aeglasem endpoint</td>
+<td>Võrdlus kategooriate vahel — top-k ressursitarbijad</td>
 </tr>
 <tr>
 <td><strong>Table</strong></td>
-<td>Detailne pilt paljude dimensioonidega</td>
+<td>Mitmedimensiooniline detail — kõikide instanside olek</td>
 </tr>
 <tr>
 <td><strong>Heatmap</strong></td>
@@ -2421,43 +2474,158 @@
 </tr>
 <tr>
 <td><strong>Logs</strong></td>
-<td>Logide otsing (Loki data source)</td>
+<td>Loki logid koos metrics-paneeliga</td>
 </tr>
 <tr>
 <td><strong>Trace</strong></td>
-<td>Distributed tracing (Tempo/Jaeger data source)</td>
+<td>Tempo / Jaeger trace-id</td>
 </tr>
 </tbody>
 </table>
-<h3 id="thresholds-ja-alertid-grafanas">Thresholds ja alert'id Grafanas<a class="headerlink" href="#thresholds-ja-alertid-grafanas" title="Permanent link">&para;</a></h3>
-<p><strong>Thresholds</strong> värvivad väärtused automaatselt: alla 70% roheline, 70-90% kollane, üle 90% punane. Visuaalne abiline, ei saada hoiatusi.</p>
-<p><strong>Grafana unified alerting</strong> (v8+) võimaldab dashboard-ist otse alerte teha — erinevalt Prometheus-e AlertManager-ist, mis töötab tekstipõhiste reeglitega. Kumba kasutada?</p>
+<h3 id="93-dashboard-as-code">9.3 Dashboard-as-Code<a class="headerlink" href="#93-dashboard-as-code" title="Lingi sektsioonile">&para;</a></h3>
+<p>Grafana dashboard on JSON. Head praktikad:</p>
+<ol>
+<li><strong>Versioneeri dashboardid Git-is.</strong> Iga muudatus läbib code review.</li>
+<li><strong>Kasuta provisioning'ut.</strong> <code>provisioning/dashboards/*.yaml</code> laeb käivitusel automaatselt.</li>
+<li><strong>Abstraheeri datasource.</strong> Dashboard kasutab muutujat <code>${DS_PROMETHEUS}</code>, mitte kõvakodeeritud UID-d — sama dashboard töötab dev/staging/prod.</li>
+<li><strong>Grafonnet / Jsonnet</strong> keerukate dashboardide jaoks. Aga algajale piisab JSON-failist.</li>
+</ol>
+<h3 id="94-alerting-grafanas-vs-prometheuses">9.4 Alerting Grafanas vs Prometheuses<a class="headerlink" href="#94-alerting-grafanas-vs-prometheuses" title="Lingi sektsioonile">&para;</a></h3>
+<p>Grafana 8+ toob unified alerting — saad defineerida alerti otse dashboardist. Kumba eelistada?</p>
+<table>
+<thead>
+<tr>
+<th>Kriteerium</th>
+<th>Prometheus + AlertManager</th>
+<th>Grafana alerting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Infrastructure-as-code</td>
+<td>Loomulik — YAML Git-is</td>
+<td>Võimalik, aga vähem verbose</td>
+</tr>
+<tr>
+<td>Dashbord-põhine iteratsioon</td>
+<td>Vaja eraldi faili muuta</td>
+<td>Kõik UI-s</td>
+</tr>
+<tr>
+<td>Mitmikallika alertid</td>
+<td>Ei saa (ainult PromQL)</td>
+<td>Jah (PromQL + SQL + Loki kombineeritud)</td>
+</tr>
+<tr>
+<td>Ökosüsteem (awesome-prometheus-alerts jne)</td>
+<td>Suur</td>
+<td>Väiksem</td>
+</tr>
+<tr>
+<td>Tootmissüsteemi standard</td>
+<td>Domineeriv</td>
+<td>Kasvab</td>
+</tr>
+</tbody>
+</table>
+<p>Praktikas kasutatakse sageli mõlemat — kriitilised süsteemialertid Prometheus-es (versioneeritud), ärianalüütika-alertid Grafanas.</p>
+<hr />
+<h2 id="10-skaleerimine-ja-sailitus">10. Skaleerimine ja säilitus<a class="headerlink" href="#10-skaleerimine-ja-sailitus" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="101-kohaliku-tsdb-piirangud">10.1 Kohaliku TSDB piirangud<a class="headerlink" href="#101-kohaliku-tsdb-piirangud" title="Lingi sektsioonile">&para;</a></h3>
+<p>Prometheus TSDB on optimeeritud kirjutamiseks ja hiljutiseks päringuteks. Piirangud:</p>
 <ul>
-<li><strong>Prometheus alert rules + AlertManager</strong> — kui su alert'id on versioneeritud Git-is koos Prometheus konfiga, soovid infrastructure-as-code lähenemist</li>
-<li><strong>Grafana alerting</strong> — kui meeskond töötab peamiselt Grafana UI-s, soovib kiiret iteratsiooni</li>
+<li><strong>Retention vaikimisi 15 päeva</strong> (seadistatav <code>--storage.tsdb.retention.time=1y</code>)</li>
+<li><strong>Üks Prometheus = üks kirjutushetk</strong> — skaleerub vertikaalselt, aga mitte horisontaalselt</li>
+<li><strong>Ei replikeeri</strong> — kui serveri ketas lendab, andmed kaovad</li>
+<li><strong>Päring läheb aeglaseks</strong> kui aegridu on miljoneid</li>
 </ul>
-<p>Tootmises kasutatakse sageli mõlemat — Prometheus kriitilised süsteemialertid, Grafana ärianalüütika ja dashboard-põhised.</p>
-<h3 id="dashboard-kui-kood">Dashboard kui kood<a class="headerlink" href="#dashboard-kui-kood" title="Permanent link">&para;</a></h3>
-<p>Dashboardid on JSON-failid. Saad need eksportida, commit-ida Git-i ja <strong>provisioning</strong> mehhanismi kaudu automaatselt laadida. See tähendab:
-- Versioneerimine (kes muutis mida, millal)
-- Code review dashboard-muudatustele
-- Sama dashboard dev/staging/prod keskkondades
-- Grafana.com on tuhandeid valmis dashboarde — <a href="https://grafana.com/grafana/dashboards/1860/">Node Exporter Full (ID 1860)</a> on klassika</p>
+<h3 id="102-skaleerimismustrid">10.2 Skaleerimismustrid<a class="headerlink" href="#102-skaleerimismustrid" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Föderatsioon</strong> — väiksem Prometheus scrape-ib suuremat:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">scrape_configs</span><span class="p">:</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;federate&#39;</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15s</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="nt">honor_labels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">metrics_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/federate&#39;</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">    </span><span class="nt">params</span><span class="p">:</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">      </span><span class="s">&#39;match[]&#39;</span><span class="p p-Indicator">:</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;{job=&quot;critical-service&quot;}&#39;</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;prod-prom-1:9090&#39;</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
+<p>Klassikaline kasutus: iga datacentri Prometheus scrape-ib kohalikku, tsentraalne Prometheus scrape-ib datacentrite Prometheus-eid (ainult agregeeritud mõõdikuid).</p>
+<p><strong><code>remote_write</code></strong> — Prometheus kirjutab ka eksternsesse salvestusse (Thanos, Mimir, Cortex, VictoriaMetrics):</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">remote_write</span><span class="p">:</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://mimir.example.com/api/v1/push&quot;</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="nt">basic_auth</span><span class="p">:</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;user&quot;</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">      </span><span class="nt">password_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/secrets/mimir-password&quot;</span>
+</span></code></pre></div>
+<p><strong>Thanos / Mimir / Cortex</strong> — horisontaalselt skaleeruvad lahendused, mis kasutavad object storage-t (S3, GCS) pikaajaliseks säilitamiseks.</p>
+<table>
+<thead>
+<tr>
+<th>Lahendus</th>
+<th>Päritolu</th>
+<th>Iseloomulik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Thanos</strong></td>
+<td>Improbable, CNCF</td>
+<td>Sidecar-põhine, integreerub olemasoleva Prometheus-ega</td>
+</tr>
+<tr>
+<td><strong>Mimir</strong></td>
+<td>Grafana Labs</td>
+<td>Cortex'i hark; pull-põhine nagu Prometheus ise</td>
+</tr>
+<tr>
+<td><strong>Cortex</strong></td>
+<td>Algne CNCF</td>
+<td>Mimir'i alus; multi-tenant</td>
+</tr>
+<tr>
+<td><strong>VictoriaMetrics</strong></td>
+<td>VictoriaMetrics Inc</td>
+<td>Mitte-CNCF; fookuses on jõudlus ja ressursitõhusus</td>
+</tr>
+</tbody>
+</table>
+<h3 id="103-praktiline-orientatsioon">10.3 Praktiline orientatsioon<a class="headerlink" href="#103-praktiline-orientatsioon" title="Lingi sektsioonile">&para;</a></h3>
+<ul>
+<li><strong>Kuni ~1M aktiivset aegrida, retention 15 päeva</strong> → üks Prometheus piisab</li>
+<li><strong>1M–10M aegrida, retention kuni 1 aasta</strong> → Prometheus + <code>remote_write</code> Thanos/Mimir'isse</li>
+<li><strong>&gt;10M aegrida, multi-tenancy vajalik</strong> → natiivne Mimir/Cortex</li>
+</ul>
 <hr />
-<h2 id="kokkuvote">Kokkuvõte<a class="headerlink" href="#kokkuvote" title="Permanent link">&para;</a></h2>
-<p>Prometheus lahendab dünaamiliste keskkondade monitooringu probleemi pull-mudeliga, aegrea andmebaasiga ja võimsa PromQL päringkeelega. Grafana lisab visualiseerimiskihi ja ühendab mõõdikud teiste andmeallikatega. AlertManager tegeleb intelligentse teavitamisega.</p>
-<p><strong>Meeles pidada:</strong>
-- Counter vajab <code>rate()</code> — ilma selleta on arv kasutu
-- Label'id on võimsad aga hoia kardinaalsus madalal
-- <code>rate()</code> aken peab olema vähemalt 4× scrape interval
-- <code>for:</code> alertireeglites väldib valehoiatusi
-- Pushgateway ainult lühiajaliste batch job'ide jaoks
-- Grafana ei kogu andmeid — ta ainult küsib neid
-- Eelista Histogram-it Summary asemel (agregeeritav)</p>
-<p>Laboris ehitad Prometheus 3.x + Grafana 11.x + AlertManager stacki ja näed kõiki neid kontseptsioone praktikas.</p>
+<h2 id="11-kokkuvote">11. Kokkuvõte<a class="headerlink" href="#11-kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Peamised mõisted, mida peab meeles pidama:</strong></p>
+<ul>
+<li><strong>Pull-mudel ja <code>up</code> mõõdik</strong> — esimene diagnostikatööriist, kui midagi ei tööta</li>
+<li><strong>Label'id ja kardinaalsus</strong> — võimsus, mis muutub kiiresti koormaks; hoia label'ite hulka &lt;10</li>
+<li><strong>Counter vajab <code>rate()</code></strong> — ilma selleta on absoluutarv kasutu</li>
+<li><strong><code>rate([5m])</code> aken</strong> peab olema ≥4× scrape interval</li>
+<li><strong>Histogram &gt; Summary</strong> — agregeeritav üle instanside</li>
+<li><strong><code>for:</code> alert-reeglites</strong> — väldib valehäireid mööduvate spike'ide korral</li>
+<li><strong>Recording rules</strong> — keeruliste päringute eelarvutus, kriitiline dashboardide jõudluse jaoks</li>
+<li><strong>Grafana ei salvestata andmeid</strong> — ta ainult küsib neid andmeallikatelt</li>
+</ul>
+<p><strong>Järgmine samm:</strong> <a href="../../../labs/01_prometheus_grafana/lab/">Päev 1 labor</a> — ehita töötav stack, kirjuta esimesed PromQL päringud, seadista alert mis käivitub.</p>
 <hr />
-<h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Permanent link">&para;</a></h2>
-<h3 id="ametlik-dokumentatsioon">Ametlik dokumentatsioon<a class="headerlink" href="#ametlik-dokumentatsioon" title="Permanent link">&para;</a></h3>
+<h2 id="enesekontrolli-kusimused">Enesekontrolli küsimused<a class="headerlink" href="#enesekontrolli-kusimused" title="Lingi sektsioonile">&para;</a></h2>
+<ol>
+<li>Milline on pull-mudeli peamine operatiivne eelis push-mudeli ees?</li>
+<li>Miks on <code>user_id</code> halb label? Mis juhtuks kui selle lisaksid?</li>
+<li>Kirjuta PromQL päring, mis näitab veaprotsendi (5xx/kogusumma) iga teenuse kohta viimase 5 minuti jooksul.</li>
+<li>Mis on erinevus <code>rate()</code> ja <code>irate()</code> vahel? Millal kumba eelistad?</li>
+<li>Mida teeb <code>for: 5m</code> alert-reeglis ja miks see kriitiline on?</li>
+<li>Kui sul on 10 serverit, iga väljastab summary-d <code>rpc_duration_seconds{quantile="0.95"}</code>. Kas saad arvutada koond-p95? Miks / miks mitte?</li>
+<li>Millal eelistad föderatsiooni ja millal <code>remote_write</code>-i?</li>
+</ol>
+<hr />
+<h2 id="viited-ja-suvendatud-lugemine">Viited ja süvendatud lugemine<a class="headerlink" href="#viited-ja-suvendatud-lugemine" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="ametlik-dokumentatsioon">Ametlik dokumentatsioon<a class="headerlink" href="#ametlik-dokumentatsioon" title="Lingi sektsioonile">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2467,44 +2635,52 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="https://prometheus.io/docs/introduction/overview/">Prometheus Overview</a></td>
-<td>Ametlik sissejuhatus — arhitektuuri diagramm, komponendid</td>
+<td><a href="https://prometheus.io/docs/introduction/overview/">Prometheus Docs — Introduction</a></td>
+<td>Lähtepunkt kõigele</td>
 </tr>
 <tr>
-<td><a href="https://prometheus.io/docs/concepts/data_model/">Prometheus Data model</a></td>
-<td>Kuidas aegrea andmed struktureeritud on</td>
+<td><a href="https://prometheus.io/docs/concepts/data_model/">Data Model</a></td>
+<td>Label'ite ja aegrea sügavam selgitus</td>
 </tr>
 <tr>
-<td><a href="https://prometheus.io/docs/concepts/metric_types/">Metric types</a></td>
-<td>Counter, Gauge, Histogram, Summary — ametlik seletus</td>
+<td><a href="https://prometheus.io/docs/concepts/metric_types/">Metric Types</a></td>
+<td>Counter, gauge, histogram, summary ametlikult</td>
 </tr>
 <tr>
 <td><a href="https://prometheus.io/docs/prometheus/latest/querying/basics/">PromQL basics</a></td>
-<td>Päringukeele ametlik õpetus</td>
+<td>Keele formaalne määratlus</td>
 </tr>
 <tr>
-<td><a href="https://prometheus.io/docs/practices/histograms/">Best practices — Histograms and summaries</a></td>
-<td>Miks Histogram &gt; Summary enamikus juhtudes</td>
+<td><a href="https://prometheus.io/docs/prometheus/latest/querying/operators/">PromQL operators</a></td>
+<td>Vector matching, group_left/right</td>
+</tr>
+<tr>
+<td><a href="https://prometheus.io/docs/practices/histograms/">Best practices — Histograms</a></td>
+<td>Miks Histogram &gt; Summary</td>
 </tr>
 <tr>
 <td><a href="https://prometheus.io/docs/practices/pushing/">When to use the Pushgateway</a></td>
-<td>Pushgateway anti-pattern'i hoiatused</td>
+<td>Pushgateway anti-muster</td>
 </tr>
 <tr>
 <td><a href="https://prometheus.io/docs/alerting/latest/alertmanager/">AlertManager</a></td>
-<td>Routing, grouping, silencing, inhibition</td>
+<td>Routing, grouping, silencing</td>
 </tr>
 <tr>
-<td><a href="https://prometheus.io/blog/2024/11/14/prometheus-3-0/">Prometheus 3.0 release notes</a></td>
-<td>Mis on uut v3-s võrreldes v2-ga</td>
+<td><a href="https://prometheus.io/blog/2024/11/14/prometheus-3-0/">Prometheus 3.0 release</a></td>
+<td>V2 → V3 migratsioon</td>
 </tr>
 <tr>
-<td><a href="https://prometheus.io/docs/specs/native_histograms/">Native Histograms spec</a></td>
-<td>Tuleviku histogrammi mudel</td>
+<td><a href="https://prometheus.io/docs/specs/native_histograms/">Native Histograms</a></td>
+<td>Tuleviku histogrammi spetsifikatsioon</td>
+</tr>
+<tr>
+<td><a href="https://openmetrics.io/">OpenMetrics spec</a></td>
+<td>Exposition formaadi standard</td>
 </tr>
 </tbody>
 </table>
-<h3 id="grafana-ametlik">Grafana ametlik<a class="headerlink" href="#grafana-ametlik" title="Permanent link">&para;</a></h3>
+<h3 id="grafana">Grafana<a class="headerlink" href="#grafana" title="Lingi sektsioonile">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2514,16 +2690,12 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/">Grafana dashboards overview</a></td>
-<td>"Kolm väravat" — plugin, query, transform</td>
+<td><a href="https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/">Dashboards overview</a></td>
+<td>Kolm etappi: plugin → query → transform</td>
 </tr>
 <tr>
 <td><a href="https://grafana.com/docs/grafana/latest/panels-visualizations/">Panels and visualizations</a></td>
-<td>Kõik visualiseerimistüübid ühes kohas</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/docs/grafana/latest/fundamentals/getting-started/first-dashboards/">Build your first dashboard</a></td>
-<td>Ametlik samm-sammult juhend</td>
+<td>Kõik visualiseeringutüübid</td>
 </tr>
 <tr>
 <td><a href="https://grafana.com/docs/grafana/latest/dashboards/variables/">Variables</a></td>
@@ -2531,11 +2703,15 @@
 </tr>
 <tr>
 <td><a href="https://grafana.com/docs/grafana/latest/alerting/">Grafana alerting</a></td>
-<td>Unified alerting dokumentatsioon</td>
+<td>Unified alerting</td>
+</tr>
+<tr>
+<td><a href="https://grafana.com/docs/grafana/latest/administration/provisioning/">Provisioning</a></td>
+<td>Dashboard-as-Code</td>
 </tr>
 </tbody>
 </table>
-<h3 id="kogukond-ja-oppematerjalid">Kogukond ja õppematerjalid<a class="headerlink" href="#kogukond-ja-oppematerjalid" title="Permanent link">&para;</a></h3>
+<h3 id="tootmiskogemus">Tootmiskogemus<a class="headerlink" href="#tootmiskogemus" title="Lingi sektsioonile">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2545,36 +2721,31 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="https://training.promlabs.com/">PromLabs Training</a></td>
-<td>Julius Volz (Prometheus looja) tasuta kursused</td>
-</tr>
-<tr>
-<td><a href="https://promlabs.com/promql-cheat-sheet/">PromQL Cheat Sheet</a></td>
-<td>Prindi välja, hoia laua peal</td>
+<td><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE raamat — peatükk 6</a></td>
+<td>Four Golden Signals, alert-disaini filosoofia</td>
 </tr>
 <tr>
 <td><a href="https://samber.github.io/awesome-prometheus-alerts/">Awesome Prometheus alerts</a></td>
-<td>Valmis alertireeglid tootmiseks</td>
+<td>Production-valmis alert-reeglid</td>
 </tr>
 <tr>
 <td><a href="https://grafana.com/grafana/dashboards/1860">Node Exporter Full (ID 1860)</a></td>
-<td>Professionaalne dashboard näide — kasutatakse laboris</td>
+<td>Kõige kasutatum referents-dashboard</td>
 </tr>
 <tr>
-<td><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE raamat — peatükk 6</a></td>
-<td>Four Golden Signals, tööstusstandard</td>
+<td><a href="https://training.promlabs.com/">PromLabs training</a></td>
+<td>Julius Volz (Prometheus looja) kursused</td>
 </tr>
 <tr>
-<td><a href="https://grafana.com/blog/">Grafana Labs blog</a></td>
-<td>Uued funktsioonid ja parimad praktikad</td>
+<td><a href="https://promlabs.com/promql-cheat-sheet/">PromQL cheat sheet</a></td>
+<td>Prindi välja, hoia laua peal</td>
+</tr>
+<tr>
+<td><a href="https://grafana.com/blog/2022/04/19/cortex-vs-mimir-vs-thanos-why-grafana-mimir/">Cortex, Mimir, Thanos compared</a></td>
+<td>Otsuspuu skaleerimisel</td>
 </tr>
 </tbody>
 </table>
-<h3 id="prometheus-opentelemetry">Prometheus + OpenTelemetry<a class="headerlink" href="#prometheus-opentelemetry" title="Permanent link">&para;</a></h3>
-<p>Tänase päeva arengusuund — Prometheus 3.x toetab natiivselt OpenTelemetry mõõdikute vastuvõtmist. Kui labis töötame klassikalise pull-mudeli ja exporterite-ga, siis tööturul kohtad järjest enam OTLP (OpenTelemetry Protocol) sissetulevaid mõõdikuid.</p>
-<ul>
-<li><a href="https://prometheus.io/docs/guides/opentelemetry/">OpenTelemetry + Prometheus guide</a> — ametlik integratsioonijuhend</li>
-</ul>
 
 
 
@@ -2595,7 +2766,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="16. aprill 2026 18:06:37 UTC">16. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="18. aprill 2026 05:19:58 UTC">18. aprill 2026</span>
   </span>
 
     
@@ -2653,7 +2824,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["mermaid", "navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.sticky", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>

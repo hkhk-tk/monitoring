@@ -12,31 +12,31 @@
         <meta name="author" content="Maria Talvik">
       
       
-        <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/labs/03_elk_stack/lab/">
+        <link rel="canonical" href="https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/materials/paev1-kava/">
       
       
-        <link rel="prev" href="../../02_zabbix_loki/loki_lab/">
+        <link rel="prev" href="../..">
       
       
-        <link rel="next" href="../../04_tick_keskne_logimine/tick_lab/">
+        <link rel="next" href="../lectures/paev1-observability/">
       
       
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Labor - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Kava - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#paev-3-elastic-stack-labor" class="md-skip">
+        <a href="#paev-1-kava-ja-ettevalmistus" class="md-skip">
           Keri sisuni
         </a>
       
@@ -96,7 +96,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Päis">
-    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Labor
+              Kava
             
           </span>
         </div>
@@ -217,7 +217,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -234,11 +234,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../../materials/paev1-kava/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -260,7 +262,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../02_zabbix_loki/zabbix_lab/" class="md-tabs__link">
+        <a href="../../labs/02_zabbix_loki/zabbix_lab/" class="md-tabs__link">
           
   
   
@@ -278,13 +280,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../labs/03_elk_stack/lab/" class="md-tabs__link">
           
   
   
@@ -306,7 +306,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../04_tick_keskne_logimine/tick_lab/" class="md-tabs__link">
+        <a href="../../labs/04_tick_keskne_logimine/tick_lab/" class="md-tabs__link">
           
   
   
@@ -328,7 +328,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../05_tempo_otel/lab/" class="md-tabs__link">
+        <a href="../../labs/05_tempo_otel/lab/" class="md-tabs__link">
           
   
   
@@ -350,7 +350,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../resources/vm-access/" class="md-tabs__link">
+        <a href="../../resources/vm-access/" class="md-tabs__link">
           
   
   
@@ -388,7 +388,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -406,7 +406,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -430,8 +430,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -447,21 +449,22 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -479,7 +482,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -494,10 +497,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../materials/paev1-kava/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -513,6 +543,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#paeva-ulesehitus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Päeva ülesehitus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enne-klassi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enne klassi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laborikeskkond" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laborikeskkond
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jargmine-kord-2504" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Järgmine kord (25.04)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -525,7 +630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev1-observability/" class="md-nav__link">
+      <a href="../lectures/paev1-observability/" class="md-nav__link">
         
   
   
@@ -553,7 +658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev1-loeng/" class="md-nav__link">
+      <a href="../lectures/paev1-loeng/" class="md-nav__link">
         
   
   
@@ -581,7 +686,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01_prometheus_grafana/lab/" class="md-nav__link">
+      <a href="../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
         
   
   
@@ -676,7 +781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02_zabbix_loki/zabbix_lab/" class="md-nav__link">
+      <a href="../../labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
         
   
   
@@ -704,7 +809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02_zabbix_loki/loki_lab/" class="md-nav__link">
+      <a href="../../labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
         
   
   
@@ -736,10 +841,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -749,22 +852,21 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -782,7 +884,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -797,19 +899,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../labs/03_elk_stack/lab/" class="md-nav__link">
         
   
   
@@ -825,7 +918,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -905,7 +997,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
+      <a href="../../labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
         
   
   
@@ -933,7 +1025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
+      <a href="../../labs/04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
         
   
   
@@ -1028,7 +1120,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../05_tempo_otel/lab/" class="md-nav__link">
+      <a href="../../labs/05_tempo_otel/lab/" class="md-nav__link">
         
   
   
@@ -1056,7 +1148,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../05_tempo_otel/trendid/" class="md-nav__link">
+      <a href="../../labs/05_tempo_otel/trendid/" class="md-nav__link">
         
   
   
@@ -1151,7 +1243,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/vm-access/" class="md-nav__link">
+      <a href="../../resources/vm-access/" class="md-nav__link">
         
   
   
@@ -1179,7 +1271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
+      <a href="../../resources/docker-cheatsheet/" class="md-nav__link">
         
   
   
@@ -1224,14 +1316,146 @@
 
 
 
-<h1 id="paev-3-elastic-stack-labor">Päev 3: Elastic Stack — Labor<a class="headerlink" href="#paev-3-elastic-stack-labor" title="Lingi sektsioonile">&para;</a></h1>
-<p><em>Tuleb 9. mail</em></p>
-<hr />
-<div class="admonition info">
-<p class="admonition-title">Ettevalmistus</p>
-<p>Puhasta eelmine stack: <code>cd ~/paev2 &amp;&amp; docker compose down -v</code>
-ELK vajab rohkem mälu — VM RAM tõstetakse 6GB-le.</p>
-</div>
+<h1 id="paev-1-kava-ja-ettevalmistus">Päev 1 — Kava ja ettevalmistus<a class="headerlink" href="#paev-1-kava-ja-ettevalmistus" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>18. aprill 2026 · 10:00–14:30 · Haapsalu KHK</strong></p>
+<h2 id="paeva-ulesehitus">Päeva ülesehitus<a class="headerlink" href="#paeva-ulesehitus" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Kell</th>
+<th>Kestus</th>
+<th>Mida teeme</th>
+<th>Kus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10:00–10:15</td>
+<td>15 min</td>
+<td>Tutvumine, ülevaade kursusest, tehnilised kontrollid</td>
+<td>Klass</td>
+</tr>
+<tr>
+<td>10:15–10:45</td>
+<td>30 min</td>
+<td><strong>Loeng 1</strong> — monitooring, logimine, observability</td>
+<td>Klass</td>
+</tr>
+<tr>
+<td>10:45–11:30</td>
+<td>45 min</td>
+<td><strong>Loeng 2</strong> — Prometheus arhitektuur, pull-mudel, andmemudel</td>
+<td>Klass</td>
+</tr>
+<tr>
+<td>11:30–11:45</td>
+<td>15 min</td>
+<td><strong>Paus</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>11:45–12:30</td>
+<td>45 min</td>
+<td><strong>Labor osa 1</strong> — Docker Compose stack üles</td>
+<td>Oma VM</td>
+</tr>
+<tr>
+<td>12:30–13:00</td>
+<td>30 min</td>
+<td><strong>Lõunapaus</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>13:00–13:30</td>
+<td>30 min</td>
+<td><strong>Labor osa 2</strong> — PromQL harjutused</td>
+<td>Oma VM</td>
+</tr>
+<tr>
+<td>13:30–14:05</td>
+<td>35 min</td>
+<td><strong>Labor osa 3</strong> — Grafana dashboard USE meetodiga</td>
+<td>Oma VM</td>
+</tr>
+<tr>
+<td>14:05–14:25</td>
+<td>20 min</td>
+<td><strong>Labor osa 4</strong> — Alerting + kaose test</td>
+<td>Oma VM</td>
+</tr>
+<tr>
+<td>14:25–14:30</td>
+<td>5 min</td>
+<td>Kokkuvõte, järgmise päeva eelvaade</td>
+<td>Klass</td>
+</tr>
+</tbody>
+</table>
+<h2 id="enne-klassi">Enne klassi<a class="headerlink" href="#enne-klassi" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Lugemine (ligikaudu 75 min kokku):</strong></p>
+<ol>
+<li><a href="../lectures/paev1-observability/">Loeng 1: Monitooring, logimine, vaatlus</a> — ~30 min</li>
+<li><a href="../lectures/paev1-loeng/">Loeng 2: Prometheus ja Grafana</a> — ~45 min</li>
+</ol>
+<p><strong>Tehniline kontroll:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SSH ligipääs VM-ile töötab (<a href="../../resources/vm-access/">vm-access</a>)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Kas VPN töötab (kui töötad kodust)?</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Terminal ja brauser käepärast</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Docker ja <code>docker compose</code> VM-il (eelinstallitud)</li>
+</ul>
+<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päeva lõpuks osaleja:</p>
+<ul>
+<li><strong>Eristab</strong> logimise, seire ja observability kontseptsioone, seostab need sellega, milliseid küsimusi iga sammas vastab</li>
+<li><strong>Rakendab</strong> USE ja RED meetodeid konkreetse süsteemi jälgitavuse kavandamisel</li>
+<li><strong>Ehitab</strong> töötava Prometheus + Grafana + Alertmanager stacki Docker Compose'iga</li>
+<li><strong>Kirjutab</strong> PromQL päringuid kolmele erinevale mõõdikutüübile (counter, gauge, histogram)</li>
+<li><strong>Kavandab</strong> Grafana dashboardi USE raamistiku järgi, sealhulgas dünaamilised muutujad</li>
+<li><strong>Konfigureerib</strong> alertireegli ja demonstreerib olekumuutust Pending → Firing</li>
+</ul>
+<h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Lingi sektsioonile">&para;</a></h2>
+<p>Iga osaleja: oma VM (4 GB RAM, 2 CPU, Docker eelinstallitud) + jagatud <code>mon-target</code> ja <code>mon-target-web</code> masinad.</p>
+<table>
+<thead>
+<tr>
+<th>Teenus</th>
+<th>Port</th>
+<th>Kirjeldus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prometheus</td>
+<td>9090</td>
+<td>Andmekogumine ja PromQL</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>3000</td>
+<td>Visualiseerimine</td>
+</tr>
+<tr>
+<td>Alertmanager</td>
+<td>9093</td>
+<td>Hoiatuste haldamine</td>
+</tr>
+<tr>
+<td>node_exporter</td>
+<td>9100</td>
+<td>Süsteemi mõõdikud (VM-il endal)</td>
+</tr>
+</tbody>
+</table>
+<p>Täpsemad IP-d ja sisselogimisandmed: <a href="../../resources/vm-access/">VM ligipääs</a>.</p>
+<h2 id="jargmine-kord-2504">Järgmine kord (25.04)<a class="headerlink" href="#jargmine-kord-2504" title="Lingi sektsioonile">&para;</a></h2>
+<p>Teisel päeval vaatleme agent-põhist monitooringut (<strong>Zabbix</strong>) ja Grafana ökosüsteemi logimislahendust (<strong>Loki</strong> + Promtail). Õpid kuidas:</p>
+<ul>
+<li>Zabbix-agent erineb Prometheus pull-mudelist ja millal kumba eelistada</li>
+<li>Loki indekseerib logisid label'ite järgi (mitte täissisu kaupa nagu ELK)</li>
+<li>Dashboard ühendab mõõdikud ja logid ühele vaatele (LogQL + PromQL koos)</li>
+</ul>
+<p>Eeltöö enne 25.04: päev 1 labori kodutöö esitatud.</p>
 
 
 
@@ -1252,7 +1476,7 @@ ELK vajab rohkem mälu — VM RAM tõstetakse 6GB-le.</p>
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="14. aprill 2026 18:13:17 UTC">14. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="18. aprill 2026 05:19:58 UTC">18. aprill 2026</span>
   </span>
 
     
@@ -1310,10 +1534,10 @@ ELK vajab rohkem mälu — VM RAM tõstetakse 6GB-le.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js"></script>
       
