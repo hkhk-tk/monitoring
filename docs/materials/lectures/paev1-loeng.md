@@ -1,521 +1,773 @@
 # Päev 1: Prometheus ja Grafana
 
-*Iseseisev lugemine enne labi*
-
-**Eeldused:** [Observability loeng](paev1-observability.md) loetud
-**Dokumentatsioon:** [prometheus.io](https://prometheus.io) · [grafana.com/docs](https://grafana.com/docs/) · [PromLabs Training](https://training.promlabs.com/)
-**Versioon:** Prometheus 3.x (meie laboris), Grafana 11.x
+**Kestus:** ~50 minutit iseseisvat lugemist
+**Eeldused:** [Loeng 1: Observability](paev1-observability.md) loetud, Linux CLI põhitõed, võrgunduse alused
+**Versioonid laboris:** Prometheus 3.x (LTS, november 2024+), Grafana 11.x, Alertmanager 0.27+
+**Viited:** [prometheus.io/docs](https://prometheus.io/docs/) · [OpenMetrics spec](https://openmetrics.io/) · [Grafana docs](https://grafana.com/docs/grafana/latest/)
 
 ---
 
 ## Õpiväljundid
 
-Pärast seda loengut:
+Pärast selle materjali läbitöötamist osaleja:
 
-- Mõistad, miks Prometheus loodi ja milliseid probleeme see lahendab
-- Oskad selgitada, kuidas Prometheus erineb traditsioonilistest seiretööriistadest
-- Tead, millal Prometheus sobib ja millal mitte
-- Mõistad aegrea andmemudelit ja label'ite tähtsust
-- Oskad lugeda lihtsamaid PromQL päringuid
-- Tead, kuidas hoiatused töötavad
-- Mõistad Grafana rolli ja põhimõisteid (data source, dashboard, panel, variables)
-
----
-
-## Sissejuhatus: Miks Me Seda Vajame?
-
-Alustame küsimusega: miks me üldse vajame Prometheust? Kas pole Nagios, Zabbix ja teised tööriistad juba olemas?
-
-### Mikroteenuste probleem
-
-2010. aastatel hakkas toimuma suur muutus: monoliitrakendustest mikroteenustesse. Äkki pole teil enam 10 serverit, vaid 100 konteinerit. Need konteinerid tulevad ja lähevad automaatselt. Kubernetes skaleerib neid vastavalt koormusele.
-
-Vana seire ei sobinud enam:
-- Nagios: käsitsi konfigureerid iga serveri
-- Zabbix: agendid peavad olema eelnevalt seadistatud
-- Mõlemad: ei tea konteinerite dünaamilisest elust midagi
-
-SoundCloud seisis 2012. aastal sama probleemi ees. Neil oli sadu mikroteenuseid, mis muutusid pidevalt. Julius Volz ja tema meeskond otsustasid luua midagi uut — Prometheus sündis. 2016. aastal liitus Prometheus CNCF-iga teise projektina pärast Kubernetes-t, ja 2018. aastal sai sellest teine CNCF-ist graduate'inud projekt. Täna kasutavad Prometheust Bolt, Wise, Pipedrive, Uber ja tuhanded teised.
-
-Kursuse jaoks oluline: **kasutame Prometheus 3.x**, mis tuli välja novembris 2024 — esimene suur versioon 7 aasta jooksul. Mitmed võrgus leiduvad juhendid viitavad veel v2.x süntaksile; erinevused on olemas, aga põhikontseptsioonid (pull-mudel, label'id, PromQL) pole muutunud.
+1. **Selgitab** Prometheuse pull-mudeli põhjuseid ja piire (sh kasutusjuhud, kus see ei sobi)
+2. **Tõlgendab** aegrea andmemudelit, sealhulgas label'ite rolli ja kardinaalsuse mõju salvestuskulule
+3. **Eristab** nelja mõõdikutüüpi (counter, gauge, histogram, summary) ning teab, millal kumba valida
+4. **Loeb ja kirjutab** PromQL instant- ja range-vektori päringuid, rakendab `rate()`, agregeerimist ja vektorite ühildamist
+5. **Konfigureerib** alert-reeglid `for:`-väljaga ja selgitab olekute `Inactive → Pending → Firing` semantikat
+6. **Kavandab** Grafana dashboardi Prometheus andmeallikaga, kasutades muutujaid (variables) ja thresholds
+7. **Põhjendab** millal kasutada Prometheus-e föderatsiooni, `remote_write`-i või Thanos/Mimir ökosüsteemi
 
 ---
 
-## 1. Mis on Prometheus põhimõtteliselt?
+## 1. Kontekst: miks Prometheus tekkis ja mida see lahendab
 
-Prometheus on avatud lähtekoodiga süsteemide seire ja hoiatuste tööriistakomplekt. Kolm asja teevad selle eriliseks.
+### 1.1 Tehniline kontekst
 
-### Prometheus KÜSIB ise — pull mudel
+2012. aasta paiku seisis SoundCloud silmitsi skaleerumisprobleemiga. Monoliitrakendustelt liikumine mikroteenustesse lõi olukorra, kus senised seiretööriistad (Nagios, Munin, Ganglia) enam ei sobinud:
 
-Traditsiooniline seire saadab andmeid serverile. Prometheus teeb vastupidi — küsib ise regulaarselt igast sihtmärgist.
+- **Konfiguratsioon oli staatiline** — igast sihtmärgist tuli manuaalselt teada anda
+- **Push-mudel varjas vigu** — kui agent vaikis, polnud selge, kas probleem oli agentides, võrgus või rakenduses
+- **Dimensionaalsus puudus** — mõõdikud olid nimede tasandil (`server1.cpu.idle`), mitte label'ite kaupa
+- **Päringukeeled olid jäigad** — agregeerimine ja dimensionaalne analüüs olid kas puudu või aeglased
 
-```mermaid
-flowchart LR
-    subgraph PUSH["PUSH mudel (Zabbix, Nagios)"]
-        A1[Agent] -->|saadab| S1[Server]
-        A2[Agent] -->|saadab| S1
-        A3[Agent] -->|saadab| S1
-    end
+Julius Volz ja Matt T. Proud disainisid süsteemi, mis võttis vastu Google'i sisemise seiretööriista (Borgmon) põhimõtteid. 2015. aastal avaldati 1.0, 2016. aastal liitus projekt CNCF-iga Kubernetese järel teise graduated projektina, 2024. aasta novembris ilmus versioon 3.0 — esimene suur väljalase seitsme aasta jooksul.
 
-    subgraph PULL["PULL mudel (Prometheus)"]
-        P1[Prometheus] -->|küsib| T1[Target]
-        P1 -->|küsib| T2[Target]
-        P1 -->|küsib| T3[Target]
-    end
-```
+**Meie laboris: Prometheus 3.x.** Olulised erinevused versioonist 2.x:
 
-**Miks pull on parem dünaamilises keskkonnas?** Kui agent vaikib push-mudelis, ei tea sa miks — kas agent on katki, võrk on maas, või pole lihtsalt midagi saata? Pull-mudelis küsib Prometheus ise iga 15 sekundi järel. Kui sihtmärk ei vasta — Prometheus näeb seda kohe, sisemine `up` mõõdik läheb nulli ja alert käivitub. Lisaks saad sihtmärgi `/metrics` lehe brauseris avada ja näed täpselt seda, mida Prometheus näeks — debug on triviaalne.
+- UTF-8 tugi mõõdikunimedes ja label'ite väärtustes (mõjutab rahvusvahelisi deploy'e)
+- Stabiilne [natiivsete histogrammide](https://prometheus.io/docs/specs/native_histograms/) tugi (v3.8 alates)
+- Täiustatud OTLP (OpenTelemetry Protocol) vastuvõtt
+- Mitmed PromQL paranevused vektormatchingus
 
-### Kõik on aegread
+### 1.2 Kus Prometheus **ei sobi**
 
-Iga mõõdik on aegrida — väärtuste jada ajas. Mitte lihtsalt "CPU on 45%", vaid "CPU oli 43%, siis 45%, siis 47%..." See võimaldab näha trende, ennustada probleeme, mõista mustreid.
+Ootuste kalibreerimine hoiab ära hilisemad pettumused. Prometheus ei ole:
 
-### Võimas päringukeel PromQL
+| Mida vajad | Mida kasutada |
+|------------|---------------|
+| Pikaajaline (aastad) mõõdikute säilitus | Thanos, Mimir, Cortex, VictoriaMetrics |
+| Logihaldus ja täistekstiotsing | Loki, ELK, OpenSearch, Splunk |
+| Distribueeritud jälgimine (traces) | Tempo, Jaeger, Zipkin + OpenTelemetry |
+| 100% täpsusega arvestus / arveldus | Eraldi transaktsioonisüsteem (event log + OLAP) |
+| Sündmuste audit (kes, mida, millal) | Auditlogimine eraldi süsteemis |
+| Reaalajas (alla sekundilise latentsuse) mõõtmised | Streaming-süsteem (Kafka + Flink/Spark) |
 
-Sa ei küsi "mis on CPU kasutus?". Sa küsid "kui palju on CPU kasutus kasvanud viimase 5 minuti jooksul, grupeerituna serveri järgi?" — ja saad vastuse sekunditega.
-
----
-
-## 2. Mis Prometheus EI OLE
-
-Enne sügavamale minekut — ootuste haldamine hoiab ära hilisemad pettumused.
-
-**Prometheus ei ole pikaajaline salvestus.** Ta hoiab mõõdikuid vaikimisi 15 päeva (seadistatav `--storage.tsdb.retention.time` parameetriga). Aastate trendide jaoks vajad Thanos-t, Mimir-it või Cortex-i.
-
-**Prometheus ei ole logihaldussüsteem.** Ta on ainult mõõdikute jaoks. Logide analüüsiks kasuta Loki-t või ELK Stack-i — mõlemad tulevad järgmistel nädalatel.
-
-**Prometheus ei ole distributed tracing.** Jaeger ja Tempo näitavad päringu teekonda läbi mikroteenuste. Prometheus näitab kui kiiresti need teenused töötavad — aga mitte päringute teed. Tracing tuleb kursuse lõpus.
-
-**Prometheus ei sobi 100% täpsust nõudvale arveldusele.** Pull-mudelis võib üksikud mõõtmised vahele jääda, kui target on hetkeliselt maas. Arveldusele kasuta eraldi süsteemi.
+Sellest tulenevalt kasutavad reaalsed tootmiskeskkonnad **mitut tööriista koos**. Selle kursuse viie päeva jooksul näed kõiki neid klasse.
 
 ---
 
-## 3. Arhitektuur — kuidas see töötab
+## 2. Arhitektuur
 
-Prometheus ei ole üks programm — see on tööriistakomplekt mitmest komponendist.
+Prometheus ei ole monoliitne rakendus — see on komponentide kogum, millest igaüks lahendab ühe ülesande.
 
 ```mermaid
 flowchart TB
     subgraph Targets["Mõõdikute allikad"]
-        APP1[Rakendus<br>/metrics]
-        APP2[Rakendus<br>/metrics]
+        APP1[Instrumenteeritud<br>rakendus<br>/metrics]
         NODE[Node Exporter<br>:9100/metrics]
+        EXP[Blackbox / MySQL /<br>Nginx exporter]
         BATCH[Batch job] -.->|push| PG[Pushgateway<br>:9091]
     end
 
     PROM[Prometheus Server<br>:9090]
-    TSDB[(TSDB<br>15 päeva)]
+    TSDB[(TSDB<br>lokaalne, 15 päeva)]
+    REMOTE[(Remote storage:<br>Thanos / Mimir)]
     AM[AlertManager<br>:9093]
     GRAF[Grafana<br>:3000]
-    NOTIF[Email / Slack /<br>PagerDuty]
+    NOTIF[Email / Slack /<br>PagerDuty / OpsGenie]
 
     APP1 -->|scrape| PROM
-    APP2 -->|scrape| PROM
     NODE -->|scrape| PROM
+    EXP -->|scrape| PROM
     PG -->|scrape| PROM
 
-    PROM <--> TSDB
+    PROM <-->|read/write| TSDB
+    PROM -.->|remote_write| REMOTE
     PROM -->|alerts| AM
     AM --> NOTIF
     GRAF -->|PromQL| PROM
+    GRAF -.->|PromQL| REMOTE
 ```
 
-### Komponendid
+### 2.1 Komponendid ja nende vastutusalad
 
-**Prometheus Server** on süda. Ta kogub mõõdikuid HTTP GET päringuga `/metrics` endpoint'ilt, salvestab need aegrea andmebaasi (TSDB) ja hindab hoiatuste reegleid.
+**Prometheus Server** on kesksüda. Ta täidab nelja funktsiooni:
 
-**Exporterid** on tõlkijad. Linux server ei tea mis on Prometheus. Nginx ei tea. MySQL ei tea. Exporter on väike programm, mis loeb süsteemi statistikat (näiteks Linuxi `/proc` ja `/sys` kataloogidest) ja pakub seda Prometheus-e formaadis `/metrics` endpoint'il. Node Exporter teeb seda Linuxi serveri jaoks — CPU, mälu, ketas, võrk.
+1. **Service discovery** — leiab, milliseid sihtmärke scrape'ida (staatiline konfiguratsioon, Kubernetes, Consul, EC2, file-based jne)
+2. **Scraping** — saadab HTTP GET päringuid `/metrics` endpointile
+3. **Storage** — salvestab andmed kohalikku TSDB-sse (ja/või remote storage-sse)
+4. **Evaluation** — hindab alert- ja recording-reegleid regulaarselt
 
-**Pushgateway** on erijuht — **ainult** lühiajaliste batch job'ide jaoks. Cronjob, mis töötab 30 sekundit ja lõpeb, ei jõua Prometheus-e scrape'imist oodata. Ta saadab mõõdikud Pushgateway'le, Prometheus loeb sealt.
+Vaikimisi scrape interval on 15 sekundit, alert evaluation interval sama. Need on **sõltumatud** — scrape võib toimuda sagedamini kui alert evaluation.
 
-> ⚠️ **Levinud viga:** Pushgateway ei ole lahendus firewall-probleemidele ega üldine "ma tahan push-i" tööriist. Ametlik dok ([When to use the Pushgateway](https://prometheus.io/docs/practices/pushing/)) ütleb otse — enamikus juhtumites on Pushgateway anti-pattern. Kasuta seda ainult service-level batch job'ide jaoks.
+**Exporter-id** on tõlkijad. Süsteem (Linux kernel, MySQL, Redis) ei räägi Prometheuse keelt. Exporter on väike deemon, mis loeb süsteemi statistikat selle natiivsest liidesest (`/proc`, SNMP, SQL query, HTTP API) ja pakub seda Prometheuse tekstiformaadis `/metrics` endpointis.
 
-**AlertManager** on intelligentne teavitaja. Prometheus tuvastab probleemi, AlertManager otsustab mida teha: grupeerib sarnased hoiatused üheks emailiks, suunab andmebaasi alertid DBA meeskonnale, summutab hoiatused plaanilise hoolduse ajal.
+Levinuimad exporterid:
 
-**Grafana** on visualiseerimisplatvorm (eraldi projekt Grafana Labs-ilt). Prometheus-el on oma minimaalne UI, aga reaalses töös kasutatakse alati Grafana-t.
+| Exporter | Otstarve | Port |
+|----------|----------|------|
+| **node_exporter** | Linuxi host mõõdikud (CPU, mälu, ketas, võrk) | 9100 |
+| **windows_exporter** | Windows-i ekvivalent | 9182 |
+| **blackbox_exporter** | Välised (black-box) testid: HTTP, ICMP, TCP, DNS | 9115 |
+| **mysqld_exporter** | MySQL / MariaDB | 9104 |
+| **postgres_exporter** | PostgreSQL | 9187 |
+| **nginx-prometheus-exporter** | Nginx stub_status | 9113 |
+| **cadvisor** | Docker konteinerite mõõdikud | 8080 |
+| **kube-state-metrics** | Kubernetese objektide olek | 8080 |
 
-### Ametlik arhitektuuri diagramm
+**Pushgateway** on erijuhtum — ainult lühiajaliste batch-tööde jaoks. Cronjob, mis käivitub 30 sekundiks ja lõpeb, ei jõua Prometheuse scrape'i oodata. Batch-töö saadab oma mõõdikud Pushgateway'le, Prometheus loeb neid sealt. Tähtis: **see ei ole üldine push-API** — Pushgateway hoiab viimast talle saadetud väärtust tähtajatult, kuni keegi ei kustuta.
 
-Allpool on Prometheus-e ametlikust dokumentatsioonist pärit arhitektuuri joonis, mis näitab kogu ökosüsteemi:
+> **Ametlik hoiatus ([When to use the Pushgateway](https://prometheus.io/docs/practices/pushing/)):** enamikus olukordades on Pushgateway anti-muster. Kui sul on pikaajaline teenus — lisa sinna `/metrics` endpoint ja lase Prometheusel seda scrape'ida.
 
-![Prometheus ametlik arhitektuur](https://prometheus.io/assets/docs/architecture.svg)
+**AlertManager** tegeleb **kõigega pärast** alerti tuvastamist:
 
-*Allikas: [prometheus.io/docs/introduction/overview](https://prometheus.io/docs/introduction/overview/) — CC-BY-4.0*
+- **Deduplikatsioon** — sama alert mitmest Prometheuse instantsist → üks teavitus
+- **Grupeerimine** — kümme seotud alerti → üks kokkuvõttev teade
+- **Marsruutimine** — andmebaasialertid DBA meeskonnale, võrgu omad võrgumeeskonnale
+- **Summutamine (silencing)** — planeeritud hooldus → ignoreerida X tundi
+- **Inhibeerimine** — kui DC on maas, ära saada iga üksiku teenuse alertit
+
+**Grafana** on eraldiseisev projekt (Grafana Labs), mitte osa Prometheuse ökosüsteemist. Prometheusel on oma minimalistlik UI, aga tootmises kasutatakse peaaegu alati Grafanat.
+
+### 2.2 Pull-mudel: disainivalik ja selle tagajärjed
+
+Küsimus "kumb on parem — pull või push?" ei ole ühene. Prometheus valib pull-i ja see valik kannab konkreetseid tagajärgi.
+
+| Aspekt | Pull (Prometheus) | Push (Zabbix agent, Graphite) |
+|--------|-------------------|------------------------------|
+| **Sihtmärkide registreerimine** | Tsentraalne (scrape_configs või SD) | Iga agent teab serveri aadressi |
+| **"Kas mu agent töötab?"** | `up == 0` kohe nähtav | Võib jääda märkamatuks |
+| **Debug** | `curl /metrics` annab sama pildi mida Prometheus näeks | Vaja uurida agendi logisid |
+| **Firewall** | Prometheus peab sihtmärgini jõudma | Agent peab serverini jõudma |
+| **NAT-i taga sihtmärgid** | Problemaatiline (vaja reverse proxy) | Töötab otse |
+| **Üürike batch-töö** | Vaja Pushgateway'd | Loomulik sobivus |
+| **Kardinaalsuse kontroll** | Server määrab sagedust ja sihtmärke | Iga agent võib kaos tekitada |
+
+**Operatiivne tagajärg:** pull-mudel teeb `up` mõõdiku esimeseks diagnostikatööriistaks. Kui `up == 0`, tead kohe, et Prometheus ei suutnud sihtmärgiga kontakti saada. See `up` ei pärine sihtmärgist endast — Prometheus genereerib selle ise iga scrape-i tulemusena.
 
 ---
 
-## 4. Aegrea andmemudel
+## 3. Aegrea andmemudel
 
-Kuidas Prometheus andmeid salvestab? See on kogu süsteemi võtmekontseptsioon.
-
-Tavalises andmebaasis on read: kasutaja nimi, email, vanus. Prometheus-es on aegread — sama väärtus erinevatel aegadel:
+Iga **aegrida** (time series) Prometheuses on unikaalselt identifitseeritud mõõdiku nime ja label'ite kombinatsiooni poolt.
 
 ```
-cpu_usage 10:00 → 45%
-cpu_usage 10:01 → 47%
-cpu_usage 10:02 → 43%
-cpu_usage 10:03 → 50%
+http_requests_total{method="POST", handler="/api/users", status="201"} 1543 @1713436800
+│                  │                                                     │     │
+└── mõõdiku nimi   └── label'id (key-value)                               │     └── ajatempel (Unix ms)
+                                                                          └── väärtus (float64)
 ```
 
-Meid huvitab muutus ajas — kas CPU tõuseb? Kui kiiresti? Mis hetkel täpselt hakkas tõusma?
-
-### Andmemudeli struktuur
-
-Iga aegrida koosneb kolmest osast — mõõdiku nimest, label'itest ja väärtusest koos ajatempliga:
+Oluline: **erinev label'ite kombinatsioon loob uue aegrea.** Kaks järgmist rida on erinevad aegread:
 
 ```
-http_requests_total{method="GET", path="/api/users", status="200"} 1234 @14:23:45
-│                   │                                               │     │
-└── mõõdiku nimi    └── label'id                                     │     └── ajatempel
-                                                                     └── väärtus
+http_requests_total{method="GET",  status="200"}   — aegrida A
+http_requests_total{method="POST", status="200"}   — aegrida B
 ```
 
-### Label'id — miks need on võimsad
+### 3.1 Label'id — jõud ja oht
 
-Ilma label'iteta vajaksid eraldi mõõdiku iga kombinatsiooni jaoks: `server1_api_users_get_requests`, `server1_api_users_post_requests`... 3 serverit × 2 endpoint'i × 2 meetodit = 12 erinevat mõõdikut.
-
-Label'itega on üks mõõdik `http_requests_total` ja iga unikaalne kombinatsioon label'e moodustab omaette aegrea:
+Label'id võimaldavad ühe mõõdiku all esitada tuhandeid dimensioonilisi variante:
 
 ```
 http_requests_total
          │
-         ├── {method="GET",  status="200"}  ─── aegrida #1:  100 → 110 → 125 → 140 ...
-         ├── {method="GET",  status="500"}  ─── aegrida #2:    2 →   3 →   5 →   4 ...
-         ├── {method="POST", status="201"}  ─── aegrida #3:   50 →  55 →  60 →  58 ...
-         └── {method="POST", status="500"}  ─── aegrida #4:    1 →   1 →   2 →   1 ...
+         ├── {method="GET",  status="200"}  ─── aegrida #1
+         ├── {method="GET",  status="500"}  ─── aegrida #2
+         ├── {method="POST", status="201"}  ─── aegrida #3
+         └── {method="POST", status="500"}  ─── aegrida #4
 ```
 
-Filtreerid PromQL-is täpselt vajalikku kombinatsiooni:
+**Kardinaalsus** (cardinality) = unikaalsete aegridade arv ühe mõõdiku kohta. See on Prometheuse produktsioonis peamine probleem #1.
 
-```promql
-http_requests_total{method="GET", status="500"}   # Ainult GET vead
-http_requests_total{status=~"5.."}                # Kõik 5xx vead (regex)
+**Reegel:** iga label peab olema madala kardinaalsusega ja piiratud väärtuste hulgaga.
+
+| ✅ Sobivad label'id | ❌ Ei tohi label'iks panna |
+|--------------------|---------------------------|
+| `method` (GET, POST, ...) — ~5 väärtust | `user_id` — miljonid |
+| `status_code` — ~40 võimalikku | `email`, `ip_address` |
+| `environment` (prod, staging, dev) | `request_id`, `trace_id` |
+| `region` (eu-north-1, ...) | Täielik URL (teekonna parameetritega) |
+| `service` (auth, billing, ...) | Ajatempel / kellaaeg |
+
+**Ressursikulu ligikaudu:** iga aegrida tarbib ~3 kB RAM-i (aktiivses olekus) ja ~1-3 baiti mõõtmise kohta (kokkupakituna kettal). Kui üks mõõdik on 100 000 aegrida × 15 sekundi interval × 24h = palju. Prometheus 2.x default [sample_limit](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) on piiramatu — vaja on käsitsi seada, et kaitsta serverit kardinaalsuse plahvatuse eest.
+
+### 3.2 Hea label'i disaini reegleid
+
+1. **Ära kasuta label'eid üksiku üksuse identifitseerimiseks.** Unikaalsed ID-d kuuluvad logidesse.
+2. **Konstantne aja jooksul.** Kui label väärtus muutub tihti (nt versiooni string rakenduse iga deploy-ga), tekib aegridade plahvatus.
+3. **Äriloogika kuulub mõõdiku sisse, mitte label'ite nime.** `requests_total{type="login"}`, mitte `login_requests_total`.
+4. **Piira kardinaalsust sihtmärgi poolel.** Rakenduste instrumentaalne kood peab teadma, millised label-väärtused on lubatud.
+
+---
+
+## 4. Mõõdikutüübid
+
+Prometheus toetab nelja põhitüüpi. Valik mõjutab nii salvestust kui ka seda, milliseid PromQL operatsioone saab rakendada.
+
+### 4.1 Counter — ainult kasvav
+
+Näited: `http_requests_total`, `node_cpu_seconds_total`, `process_cpu_seconds_total`.
+
+Counter nullistub ainult protsessi taaskäivitamisel. PromQL-i funktsioonid (`rate()`, `increase()`) tuvastavad selle automaatselt ja käsitlevad õigesti.
+
+**Konventsioon:** counter'i nimi lõpeb tavaliselt `_total`-iga. OpenMetrics spec ([openmetrics.io](https://openmetrics.io/)) formaliseerib selle.
+
+### 4.2 Gauge — vabalt liikuv
+
+Näited: `node_memory_MemAvailable_bytes`, `node_filesystem_free_bytes`, `go_goroutines`, temperatuur, kasutajate arv.
+
+Gauge'iga kasutad väärtust otse — ei mingit `rate()`. Agregeerimisel (nt `avg`, `sum`) tuleb ise aru saada, kas see on semantiliselt õige.
+
+### 4.3 Histogram — jaotus bucket'ites
+
+Histogram mõõdab **jaotust**, mitte ühte väärtust. Tüüpiline kasutus: vastamisaeg, päringu suurus.
+
+Histogram exposes kolme aegrida perekonda:
+
+```
+http_request_duration_seconds_bucket{le="0.1"}   — mitu päringut alla 100ms
+http_request_duration_seconds_bucket{le="0.5"}   — mitu alla 500ms
+http_request_duration_seconds_bucket{le="1.0"}   — mitu alla 1s
+http_request_duration_seconds_bucket{le="+Inf"}  — kõik (sama mis _count)
+http_request_duration_seconds_count              — päringute arv kokku
+http_request_duration_seconds_sum                — kõikide kestuste summa
 ```
 
-### Kardinaalsuse ohumärk
+`le` = less than or equal, bucket'i ülemine piir.
 
-**Ära kasuta label'ina midagi, millel on tuhandeid unikaalseid väärtusi** — `user_id`, `email`, `session_id`, täielik URL path parameetritega. 3 serverit × 10 000 kasutajat = 30 000 aegrida. Kui iga aegrida võtab ~3 KB RAM-i, on see 90 MB ainult ühest mõõdikust. Suured label-plahvatused on Prometheus-e tapjaks #1.
-
-Label'id peavad olema madala kardinaalsusega:
-- ✅ `method` (GET, POST, PUT, DELETE, PATCH) — 5 väärtust
-- ✅ `status` (2xx, 3xx, 4xx, 5xx kombinatsioonid) — ~10-20 väärtust
-- ✅ `service` (nimi) — kümneid
-- ❌ `user_id` — tuhandeid või miljoneid
-- ❌ `timestamp` — lõpmatu
-
-### Neli mõõdikutüüpi
-
-**Counter** ainult kasvab — päringute arv, vigade arv, töödeldud baidid. Nullistub ainult teenuse taaskäivitusel. Kasuta alati koos `rate()` funktsiooniga.
-
-```
-COUNTER (ainult kasvab)           GAUGE (tõuseb ja langeb)
-
-  │                                 │
-  │         ▁▂▅█                    │   ▅▇█▇▅▃▂▃▅▇█▇▅
-  │      ▁▂▄                        │
-  │   ▁▂▃                           │
-  └─────────────▶ aeg                └─────────────▶ aeg
-  päringute arv kokku                CPU kasutus (%)
-```
-
-**Gauge** tõuseb ja langeb vabalt — CPU kasutus, mälu hulk, aktiivsete ühenduste arv, temperatuur. Kasuta otse, ilma `rate()`-ta.
-
-**Histogram** mõõdab jaotust bucket'ites — vastuse ajad, päringu suurused. Kasuta `histogram_quantile()` funktsiooniga p95, p99 arvutamiseks:
+**Protsentiilid arvutad serveri pool agregeeritud andmetest:**
 
 ```promql
 histogram_quantile(0.95,
-  sum by(le) (rate(http_request_duration_seconds_bucket[5m]))
+  sum by(le, service) (rate(http_request_duration_seconds_bucket[5m]))
 )
 ```
 
-`le` label on eriline — see tähendab "less than or equal", bucket'i ülemine piir. `sum by(le)` agregeerib bucket'eid üle serverite.
+**Eelis:** histogrammid on **agregeeritavad üle instanside**. Kui sul on 10 serverit, saad kõigi koondp95 välja arvutada.
 
-**Summary** arvutab protsentiilid kliendi poolel — täpsem aga **ei ole agregeeritav** üle instantside. Kui sul on 5 serverit, ei saa Summary-ga globaalset p95-t arvutada. Histogram saab. **Reegel:** eelista Histogram-i.
+**Bucket'ite valik on kriitiline.** Vaikimisi Prometheus'e klient-teekides on [`0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10`] sekundit. Kui su teenus vastab 50-200 ms-ga, pole enamik neist bucket'eist kasutatavad. Kohanda vastavalt SLO-le.
 
-> 💡 **Tulevikumärk:** Prometheus 3.8 (november 2025) tegi stabiilseks **native histograms** — efektiivsem alternatiiv klassikalistele histogrammidele ilma eelnevalt määratud bucket-piirideta. Klassikaline histogram on praegu veel standard, aga 3-5 aasta perspektiivis native histograms võtab üle. Vaata [ametlikku spetsifikatsiooni](https://prometheus.io/docs/specs/native_histograms/).
+### 4.4 Summary — kliendipoolsed protsentiilid
+
+Summary arvutab protsentiilid **klient-rakenduses endas**:
+
+```
+rpc_duration_seconds{quantile="0.5"}   0.012
+rpc_duration_seconds{quantile="0.95"}  0.089
+rpc_duration_seconds{quantile="0.99"}  0.234
+rpc_duration_seconds_count             14521
+rpc_duration_seconds_sum               78.3
+```
+
+**Piirang:** summary **ei ole agregeeritav üle instanside.** Kahe serveri p95 keskmine ≠ koondp95.
+
+**Reegel:** eelista histogrammi, välja arvatud siis, kui vajad kõrget protsentiilide täpsust ja kõik päringud käivad ühe instansi kaudu.
+
+### 4.5 Natiivsed histogrammid (Prometheus 3.x)
+
+Klassikalise histogrammi puudus on **bucket'ite staatilisus** — valid valed piirid ja su andmed on kasutud. Natiivne histogramm (Prometheus 3.8+ stabiilne) lahendab selle: bucket'ite piirid tuletatakse automaatselt eksponentsiaalse skaala järgi.
+
+```promql
+histogram_quantile(0.95, sum(rate(http_request_duration_seconds[5m])))
+```
+
+Märka: `_bucket` sufiks puudub. Native histogrammid on tulevik, aga ökosüsteem (klient-teegid, dashboard template'id) on veel mõlemaga ühilduv. Vaata [spetsifikatsiooni](https://prometheus.io/docs/specs/native_histograms/).
 
 ---
 
-## 5. Mõõdikute formaat `/metrics` endpoint'il
+## 5. `/metrics` endpoint ja exposition format
 
-Prometheus kasutab lihtsat tekstiformaati — inimloetav, lihtne parsida:
+Prometheus ei räägi oma protokolli — ta loeb lihtsat tekstiformaati HTTP kaudu.
 
 ```
-# HELP http_requests_total The total number of HTTP requests.
+# HELP http_requests_total Kõik vastu võetud HTTP päringud.
 # TYPE http_requests_total counter
-http_requests_total{method="GET",path="/api/users",status="200"} 1234
-http_requests_total{method="POST",path="/api/users",status="201"} 567
+http_requests_total{method="GET",handler="/api/users",status="200"} 1543
+http_requests_total{method="POST",handler="/api/users",status="201"} 217
 
 # HELP node_memory_MemAvailable_bytes Memory information field MemAvailable.
 # TYPE node_memory_MemAvailable_bytes gauge
-node_memory_MemAvailable_bytes 2147483648
+node_memory_MemAvailable_bytes 4.147483648e+09
 ```
 
-`# HELP` rida on inimestele — kirjeldab mida mõõdik tähendab. `# TYPE` rida on Prometheus-ele — ütleb kas tegemist on counter, gauge, histogram või summary-ga.
+Metadata read:
 
-Sa saad seda ise kontrollida:
+- `# HELP <nimi> <kirjeldus>` — inimloetav selgitus
+- `# TYPE <nimi> <tüüp>` — üks neljast tüübist
+
+Formaat on spetsifitseeritud OpenMetrics-is ([openmetrics.io](https://openmetrics.io/)), mis on CNCF-i projekt. Ajalooliselt oli see Prometheuse-spetsiifiline; nüüd on see laiem standard, mida järgivad ka teised süsteemid (OpenTelemetry).
+
+Kontrolli sihtmärki käsurealt:
+
 ```bash
-curl http://localhost:9100/metrics | head -20
+curl -s http://localhost:9100/metrics | head -30
 ```
 
-See on täpselt see, mida Prometheus iga 15 sekundi järel sihtmärkidelt saab.
+See annab täpselt sama pildi, mida Prometheus scrape-imisel näeks.
 
 ---
 
-## 6. PromQL — päringukeel lühidalt
+## 6. PromQL — päringukeel
 
-PromQL on spetsiaalselt aegrea andmete jaoks loodud keel. Erineb SQL-ist fundamentaalselt.
+PromQL on deklaratiivne keel aegrea andmete päringuteks. Erineb SQL-ist fundamentaalselt — töötab vektoritega, mitte ridadega.
 
-### Filtreerimine label'ite järgi
+### 6.1 Instant vs range vektor
+
+**Instant vektor** — väärtused **ühel ajahetkel** (praegu või `@` operaatoriga ajaloo hetkel):
 
 ```promql
-# Kõik HTTP päringud
-http_requests_total
-
-# Ainult GET päringud
-http_requests_total{method="GET"}
-
-# Kõik peale GET
-http_requests_total{method!="GET"}
-
-# Regex — kõik 5xx vastused
-http_requests_total{status=~"5.."}
+node_cpu_seconds_total{mode="idle"}
 ```
 
-### `rate()` — kõige olulisem funktsioon
+Tagastab n-aegrida × üks väärtus = vektor.
 
-Counter väärtus ise ei ütle midagi kasulikku — 1 234 567 päringut alates käivitusest. `rate()` arvutab **keskmise kasvu sekundis** antud ajaakna jooksul:
+**Range vektor** — väärtused **ajavahemiku kohta**, iga aegrea jaoks rida väärtusi:
 
 ```promql
-# VALE — absoluutarv, kasvab pidevalt
-http_requests_total
+node_cpu_seconds_total{mode="idle"}[5m]
+```
 
-# ÕIGE — keskmine päringute arv sekundis viimase 5 minuti jooksul
+Tagastab n-aegrida × m-väärtust akna kohta.
+
+**Funktsioonid nagu `rate()` võtavad range vektori ja tagastavad instant vektori.**
+
+### 6.2 Filtreerimine label'ite järgi
+
+```promql
+http_requests_total{status="500"}              # täpne vaste
+http_requests_total{status!="200"}             # mitte võrdne
+http_requests_total{status=~"5.."}             # regex — kõik 5xx
+http_requests_total{status!~"2..|3.."}         # mitte 2xx/3xx
+```
+
+Erijuhud:
+
+- `{}` ilma label'iteta ei ole lubatud (peab olema vähemalt üks matcher)
+- Mõõdiku nimi on tegelikult sisemine label `__name__`. Seega `http_requests_total{}` = `{__name__="http_requests_total"}`
+
+### 6.3 `rate()` — counter'i kasvukiirus
+
+Counter'i absoluutväärtus (nt 1 543 892) ei ütle midagi kasulikku. `rate()` arvutab **keskmise muutuse sekundis** ajaakna jooksul:
+
+```promql
+# Päringuid sekundis, keskmine viimase 5 minuti jooksul
 rate(http_requests_total[5m])
 ```
 
-### Aken ja scrape interval — kriitiline reegel
+**Reegel:** aja-aken peab olema **vähemalt 4× scrape interval**. 15-sekundilise scrape-iga `[1m]` on minimaalselt toimiv (4 mõõtmist), `[5m]` annab silutud graafiku. Liiga kitsas aken → tühi tulemus või mürarikas graafik.
 
-`[5m]` on ajavahemik, mida Prometheus vaatab. Aga aken peab olema **vähemalt 4× scrape interval**, muidu saad tühja tulemuse:
+**`rate()` vs `irate()` vs `increase()`:**
 
-```
-scrape iga 15s:    │──│──│──│──│──│──│──│──│──│──│──│──│──│──│──│──│
-                   ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲  ▲
+| Funktsioon | Mida teeb | Millal kasutada |
+|------------|-----------|-----------------|
+| `rate(x[5m])` | Keskmine / sek üle 5 min | Dashboardid, alert-id, üldine trend |
+| `irate(x[5m])` | Kiirus viimase kahe mõõtmise vahel | Kitsa resolutsiooniga graafikud, spike'ide tuvastus — aga mürarikkam |
+| `increase(x[5m])` | Kogukasv 5 min jooksul (sek-i asemel) | "Mitu päringut viimase 5 minutiga tuli?" |
 
-rate(x[1m]):       └──────┘     ← 4 scrape'i ✓ minimaalne
-rate(x[5m]):       └──────────────────────────────────┘  ← 20 scrape'i ✓ silutud
-rate(x[15s]):      └──┘                        ← 1 scrape ✗ TÜHI TULEMUS!
-```
-
-Mida laiem aken, seda silutum graafik — aga ka aeglasem reaktsioon. Tavaline valik: `[5m]` dashboardidele, `[1m]` alert'idele.
-
-### Agregeerimine
+### 6.4 Agregeerimine
 
 ```promql
-# Kõigi serverite päringud kokku
+# Kõigi instanside summa
 sum(rate(http_requests_total[5m]))
 
-# Grupeeritud meetodi järgi
-sum by(method) (rate(http_requests_total[5m]))
+# Grupeeritud status-koodi järgi (by säilitab ainult nimetatud label'id)
+sum by(status) (rate(http_requests_total[5m]))
 
-# CPU kasutus % per server
-100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+# Grupeeritud, välja arvatud instance (without eemaldab nimetatud label'id)
+sum without(instance) (rate(http_requests_total[5m]))
 ```
+
+Agregeerimisoperatorid: `sum`, `min`, `max`, `avg`, `stddev`, `stdvar`, `count`, `count_values`, `bottomk`, `topk`, `quantile`, `group`.
+
+**Top 5 kõige koormatum endpoint:**
+
+```promql
+topk(5, sum by(handler) (rate(http_requests_total[5m])))
+```
+
+### 6.5 Binaarsed operaatorid ja vektor-matching
+
+Kahe vektori kombineerimine vajab **matching reegleid**. Vaikimisi ühildatakse kõikide label'ite järgi, mis mõlemal pool on.
+
+```promql
+# Näide: veaprotsent = vead / koguarv
+sum by(service) (rate(http_requests_total{status=~"5.."}[5m]))
+/
+sum by(service) (rate(http_requests_total[5m]))
+```
+
+Mõlemas vektor-väljendis on sama label `service` — need ühildatakse automaatselt.
+
+**Kui label'id erinevad**, kasuta `on(...)` või `ignoring(...)`:
+
+```promql
+instance_cpu_cores * on(instance) group_left node_load1
+```
+
+`group_left` / `group_right` võimaldavad ühildada n-to-1 (üks pool on "paljudega" pool). See on PromQL-i rikkalikum osa — detailid dokus: [Vector matching](https://prometheus.io/docs/prometheus/latest/querying/operators/#vector-matching).
+
+### 6.6 CPU kasutuse klassikaline päring
+
+```promql
+100 - (
+  avg by(instance) (
+    rate(node_cpu_seconds_total{mode="idle"}[5m])
+  ) * 100
+)
+```
+
+Lugemine samm-sammult:
+
+1. `node_cpu_seconds_total{mode="idle"}` — counter iga (instance, cpu) jaoks, ainult idle-aeg
+2. `[5m]` — range vektor
+3. `rate(... [5m])` — keskmine idle-sekundit sekundis (0-1 vahel)
+4. `avg by(instance) (...)` — keskmine üle kõigi CPU-de ühe masina kohta
+5. `* 100` — protsent idle
+6. `100 - ...` — protsent kasutuses
+
+### 6.7 Histogram päringud
+
+P95 latentsus iga teenuse kohta:
+
+```promql
+histogram_quantile(0.95,
+  sum by(service, le) (
+    rate(http_request_duration_seconds_bucket[5m])
+  )
+)
+```
+
+Kriitiline: `le` peab säilima `by` klauslis, muidu `histogram_quantile` ei saa bucketteid õigesti töödelda.
+
+### 6.8 Recording rules — eelarvutus
+
+Keerulised päringud on aeglased. Recording rule arvutab tulemuse regulaarselt ja salvestab selle uue aegreana:
+
+```yaml
+# recording.rules.yml
+groups:
+  - name: recording_examples
+    interval: 30s
+    rules:
+      - record: instance:node_cpu_utilization:ratio
+        expr: 1 - avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))
+
+      - record: service:http_error_rate:ratio
+        expr: |
+          sum by(service) (rate(http_requests_total{status=~"5.."}[5m]))
+          /
+          sum by(service) (rate(http_requests_total[5m]))
+```
+
+**Konventsioon nimetuses** (Prometheus doc-ist): `level:metric:operation` — `instance:node_cpu_utilization:ratio` tähendab "per-instance näitaja, CPU kasutus, suhe 0-1".
+
+Kasu: Grafana dashboard, mis päringut korduvalt teeb, saab tuhandeid kordi kiiremini kasutada eelarvutatud mõõdikut.
 
 ---
 
-## 7. Hoiatused — automaatne reaktsioon
+## 7. Alerting
 
-Prometheus hindab reegleid regulaarselt. Kui tingimus kehtib, käivitub hoiatus:
+### 7.1 Alert-reegli anatoomia
 
 ```yaml
-- alert: HighCPUUsage
-  expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
-  for: 2m
-  labels:
-    severity: warning
-  annotations:
-    summary: "Kõrge CPU: {{ $labels.instance }}"
+groups:
+  - name: node_health
+    interval: 30s
+    rules:
+      - alert: HighCpuUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 2m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "Kõrge CPU: {{ $labels.instance }} ({{ $value | printf \"%.0f\" }}%)"
+          runbook_url: "https://wiki.example.com/runbooks/high-cpu"
 ```
 
-`for: 2m` on kriitiline — tingimus peab kehtima katkematult 2 minutit enne hoiatuse saatmist. See väldib valehoiatusi mööduvate spike'ide peale.
+**Väljade selgitus:**
 
-### Alert'i elutsükkel
+- `alert` — unikaalne nimi
+- `expr` — PromQL-väljend; kui tagastab tühja vektori, tingimus ei kehti; kui tagastab vähemalt ühe rea, iga sellest rea label'ite kombinatsioon on eraldi aktiivne alert
+- `for` — kestus, mille jooksul `expr` peab katkematult tõene olema enne Firing oleku algust
+- `labels` — staatilised label'id, mis lisatakse alertile (AlertManager kasutab neid marsruutimiseks)
+- `annotations` — inimloetavad väljad; `{{ $labels.X }}` ja `{{ $value }}` on Go template süntaks
+
+### 7.2 Oleku üleminekud
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Inactive: Reegel loodud
-    Inactive --> Pending: expr = true
+    [*] --> Inactive: reegel aktiivne
+    Inactive --> Pending: expr kehtib
     Pending --> Firing: for aeg täis
-    Pending --> Inactive: expr = false<br>(enne for aega)
-    Firing --> Inactive: expr = false
-    Firing --> [*]: Reegel eemaldatud
+    Pending --> Inactive: expr ei kehti<br>(enne for aega)
+    Firing --> Inactive: expr ei kehti
+    Firing --> [*]: reegel eemaldatud
 ```
 
-AlertManager võtab firing hoiatused vastu ja otsustab mida teha:
-- **Grupeerib** — 10 serverit on maas → 1 teade, mitte 10
-- **Suunab** — andmebaasi alertid DBA meeskonnale, kriitilised kõigile
-- **Summutab** — planeeritud hooldus, 2 tundi vaikust
-- **Inhibeerib** — kui terve data center on maas, ära saada iga üksiku teenuse alertit eraldi
+**`for:` on kriitiline valehäirete vältimiseks.** Ilma `for:`-ta saadab Prometheus alerti iga 15-sekundilise spike peale. Praktikas: `for: 1m` minimaalne, `for: 5m-10m` tüüpiline.
+
+### 7.3 Alert-design parimad praktikad
+
+1. **Iga alert peab olema actionable.** Kui sa ei tea, mida teha, kui alert saabub — see on vale alert.
+2. **Symptom-based, not cause-based.** Kasutaja probleem (kõrge vastamisaeg) on parem alert kui süsteemi detail (CPU 90%).
+3. **Severity hierarhia** — `critical` (äratab öösel), `warning` (hommikuks Slack), `info` (dashboard).
+4. **Runbook igal alertil.** `annotations.runbook_url` viitab wikile, kus on sammud lahendamiseks.
+5. **Alert fatigue on reaalne.** Kui alert on regulaarne "müra", meeskond lakkab vastamast **kõigile** alert-itele.
+
+[Google SRE raamat, peatükk 6](https://sre.google/sre-book/monitoring-distributed-systems/) on selles vallas viidatuim allikas.
 
 ---
 
-## 8. Grafana — visualiseerimise platvorm
+## 8. AlertManager
 
-Prometheus-el on oma lihtne UI päringute tegemiseks. Aga see on arendaja tööriist — ei sobi tootmis-dashboardideks ega juhtkonnale näitamiseks.
+AlertManager on eraldi protsess. Prometheus saadab alertid HTTP POST-iga AlertManagerile, kes teeb ülejäänu.
 
-Grafana on visualiseerimisplatvorm, mis ühendab erinevaid andmeallikaid. Oluline: **Grafana ise ei kogu andmeid** — ta küsib neid Prometheus-elt (või Loki-lt, Elasticsearch-ist, InfluxDB-st jne) ja kuvab graafikutena.
+### 8.1 Marsruutimispuu
 
-See tähendab, et ühel Grafana dashboardil saad näidata mõõdikuid Prometheus-est, logisid Loki-st ja trace-e Tempo-st — kõik koos, täielik observability pilt.
+```yaml
+route:
+  receiver: 'default'
+  group_by: ['alertname', 'cluster']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - match:
+        severity: critical
+      receiver: 'pager'
+      continue: true
+    - match:
+        team: database
+      receiver: 'dba-slack'
+    - match_re:
+        service: ^(frontend|cdn)$
+      receiver: 'web-team'
 
-### Grafana andmevoog
-
-```mermaid
-flowchart LR
-    subgraph Sources["Andmeallikad"]
-        P[Prometheus]
-        L[Loki]
-        E[Elasticsearch]
-        I[InfluxDB]
-    end
-
-    subgraph Grafana["Grafana Server"]
-        DS[Data Source<br>plugin]
-        Q[Query]
-        T[Transform]
-        PAN[Panel]
-    end
-
-    U[Kasutaja<br>brauser]
-
-    P --> DS
-    L --> DS
-    E --> DS
-    I --> DS
-    DS --> Q --> T --> PAN --> U
+receivers:
+  - name: 'default'
+    email_configs:
+      - to: 'devops@example.com'
+  - name: 'pager'
+    pagerduty_configs:
+      - service_key: '<key>'
+  - name: 'dba-slack'
+    slack_configs:
+      - channel: '#db-alerts'
+        api_url: '<webhook>'
 ```
 
-### Põhimõisted
+**Mõisted:**
 
-**Data Source** on ühendus välise andmebaasiga. Igal andmeallika tüübil on oma plugin, mis teab kuidas suhelda selle teenusega ja millist päringukeelt kasutada (PromQL Prometheuse jaoks, LogQL Loki jaoks, SQL MySQL-i jaoks).
+- **`group_by`** — kogub samasse gruppi alertid, millel on need label'id võrdsed
+- **`group_wait`** — esimene teavitus saadetakse pärast seda ooteaega (et grupp jõuaks täituda)
+- **`group_interval`** — uue alerti lisamine olemasolevasse gruppi ootab vähemalt nii kaua
+- **`repeat_interval`** — kui alert pole lahendatud, korda teavitust iga `repeat_interval` tagant
 
-**Dashboard** on konteiner paneelide jaoks. Sisaldab:
-- Paneele (graafikud, tabelid, näitud)
-- Variables (dünaamilised filtrid)
-- Time range (globaalne ajavahemik kõigile paneelidele)
-- Annotations (sündmuste märkimine — deploy, incident)
+### 8.2 Silencing ja inhibition
 
-**Panel** on üks visualiseering dashboardil. Kolm osa, mida Grafana ametlik [dashboards-overview](https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/) nimetab "kolmeks väravaks":
+**Silencing** — ajutine alert-i ignoreerimine. UI kaudu või API-ga. Kasutus: planeeritud hooldus, teadaolev probleem.
 
-```
-Andmeallikas → [Query] → [Transform] → [Panel/Visualization]
-                  │           │                │
-                  ▼           ▼                ▼
-              Päring      Kombineeri       Graafik,
-              (PromQL)    andmed enne      tabel, gauge
-                          renderdust        (valik 25+ tüübist)
-```
+**Inhibition** — kui üks alert on aktiivne, summuta teised sõltuvad alertid automaatselt.
 
-**Variables** teevad dashboardi dünaamiliseks. Näiteks `$server` variable täitub automaatselt PromQL päringust:
-
-```promql
-label_values(node_cpu_seconds_total, instance)
+```yaml
+inhibit_rules:
+  - source_match:
+      severity: critical
+      alertname: DatacenterDown
+    target_match:
+      severity: warning
+    equal: ['datacenter']
 ```
 
-Kasutaja valib dropdown-ist serveri ja **kõik paneelid uuenevad automaatselt**, sest iga paneeli päringus on `{instance="$server"}`.
+Lugemine: "Kui `DatacenterDown` (critical) on aktiivne, summuta kõik `warning`-alertid samast datacentrist."
 
-### Visualiseerimistüübid
+---
 
-Grafana pakub 25+ visualiseeringut. Tavakasutuses:
+## 9. Grafana
+
+Prometheus ise pakub minimalistliku UI päringuteks (`/graph` endpoint), aga see on tööriist arendusele, mitte dashboard'iks. Grafana on visualiseerimiskiht, mis ühendab **mitut andmeallikat samas dashboardis** — Prometheus mõõdikud, Loki logid, Tempo trace-id, ärimõõdikud SQL-andmebaasist.
+
+### 9.1 Põhimõisted
+
+**Data source** — ühendus välise andmesüsteemiga. Igal tüübil on oma plugin, mis teab protokolli ja päringukeelt (PromQL Prometheusele, LogQL Lokile, SQL andmebaasile).
+
+**Dashboard** — konteiner paneelide ja muutujate jaoks. JSON-fail, mida saab Git-iga versioneerida.
+
+**Panel** — üks visualiseering. Kolm etappi ([Grafana dashboards overview](https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/)):
+
+```
+[Andmeallikas] → [Query] → [Transform] → [Visualization]
+   (plugin)      PromQL    kombineerimine  graafik, tabel,
+                                           gauge, stat...
+```
+
+**Variable** — muudab dashboardi dünaamiliseks. Nt `$instance` muutuja täitub päringust `label_values(up, instance)`; kasutaja valib dropdownist, kõik paneelid filtreeruvad automaatselt.
+
+**Annotation** — ajaline märge. Näiteks deploy sündmused, intsidentide algus — kuvatakse kõigil paneelidel vertikaaljoontena.
+
+### 9.2 Visualiseeringute valik
 
 | Tüüp | Millal kasutada |
 |------|----------------|
-| **Time series** | Trendid ajas — CPU, mälu, võrguliiklus, latentsus |
-| **Stat** | Üks hetkenumber — aktiivsete kasutajate arv |
-| **Gauge** | Protsent poolringina — ketta täituvus, SLA |
-| **Bar gauge** | Võrdlus kategooriate vahel — top 5 aeglasem endpoint |
-| **Table** | Detailne pilt paljude dimensioonidega |
+| **Time series** | Trendid ajas — CPU, mälu, latentsus, päringusagedus |
+| **Stat** | Üks hetkenumber — aktiivsed kasutajad, SLO staatus |
+| **Gauge** | Protsent piiri lähenemisega — ketta täituvus |
+| **Bar gauge** | Võrdlus kategooriate vahel — top-k ressursitarbijad |
+| **Table** | Mitmedimensiooniline detail — kõikide instanside olek |
 | **Heatmap** | Jaotus ajas — latentsuse histogramm |
-| **Logs** | Logide otsing (Loki data source) |
-| **Trace** | Distributed tracing (Tempo/Jaeger data source) |
+| **Logs** | Loki logid koos metrics-paneeliga |
+| **Trace** | Tempo / Jaeger trace-id |
 
-### Thresholds ja alert'id Grafanas
+### 9.3 Dashboard-as-Code
 
-**Thresholds** värvivad väärtused automaatselt: alla 70% roheline, 70-90% kollane, üle 90% punane. Visuaalne abiline, ei saada hoiatusi.
+Grafana dashboard on JSON. Head praktikad:
 
-**Grafana unified alerting** (v8+) võimaldab dashboard-ist otse alerte teha — erinevalt Prometheus-e AlertManager-ist, mis töötab tekstipõhiste reeglitega. Kumba kasutada?
+1. **Versioneeri dashboardid Git-is.** Iga muudatus läbib code review.
+2. **Kasuta provisioning'ut.** `provisioning/dashboards/*.yaml` laeb käivitusel automaatselt.
+3. **Abstraheeri datasource.** Dashboard kasutab muutujat `${DS_PROMETHEUS}`, mitte kõvakodeeritud UID-d — sama dashboard töötab dev/staging/prod.
+4. **Grafonnet / Jsonnet** keerukate dashboardide jaoks. Aga algajale piisab JSON-failist.
 
-- **Prometheus alert rules + AlertManager** — kui su alert'id on versioneeritud Git-is koos Prometheus konfiga, soovid infrastructure-as-code lähenemist
-- **Grafana alerting** — kui meeskond töötab peamiselt Grafana UI-s, soovib kiiret iteratsiooni
+### 9.4 Alerting Grafanas vs Prometheuses
 
-Tootmises kasutatakse sageli mõlemat — Prometheus kriitilised süsteemialertid, Grafana ärianalüütika ja dashboard-põhised.
+Grafana 8+ toob unified alerting — saad defineerida alerti otse dashboardist. Kumba eelistada?
 
-### Dashboard kui kood
+| Kriteerium | Prometheus + AlertManager | Grafana alerting |
+|------------|---------------------------|------------------|
+| Infrastructure-as-code | Loomulik — YAML Git-is | Võimalik, aga vähem verbose |
+| Dashbord-põhine iteratsioon | Vaja eraldi faili muuta | Kõik UI-s |
+| Mitmikallika alertid | Ei saa (ainult PromQL) | Jah (PromQL + SQL + Loki kombineeritud) |
+| Ökosüsteem (awesome-prometheus-alerts jne) | Suur | Väiksem |
+| Tootmissüsteemi standard | Domineeriv | Kasvab |
 
-Dashboardid on JSON-failid. Saad need eksportida, commit-ida Git-i ja **provisioning** mehhanismi kaudu automaatselt laadida. See tähendab:
-- Versioneerimine (kes muutis mida, millal)
-- Code review dashboard-muudatustele
-- Sama dashboard dev/staging/prod keskkondades
-- Grafana.com on tuhandeid valmis dashboarde — [Node Exporter Full (ID 1860)](https://grafana.com/grafana/dashboards/1860/) on klassika
-
----
-
-## Kokkuvõte
-
-Prometheus lahendab dünaamiliste keskkondade monitooringu probleemi pull-mudeliga, aegrea andmebaasiga ja võimsa PromQL päringkeelega. Grafana lisab visualiseerimiskihi ja ühendab mõõdikud teiste andmeallikatega. AlertManager tegeleb intelligentse teavitamisega.
-
-**Meeles pidada:**
-- Counter vajab `rate()` — ilma selleta on arv kasutu
-- Label'id on võimsad aga hoia kardinaalsus madalal
-- `rate()` aken peab olema vähemalt 4× scrape interval
-- `for:` alertireeglites väldib valehoiatusi
-- Pushgateway ainult lühiajaliste batch job'ide jaoks
-- Grafana ei kogu andmeid — ta ainult küsib neid
-- Eelista Histogram-it Summary asemel (agregeeritav)
-
-Laboris ehitad Prometheus 3.x + Grafana 11.x + AlertManager stacki ja näed kõiki neid kontseptsioone praktikas.
+Praktikas kasutatakse sageli mõlemat — kriitilised süsteemialertid Prometheus-es (versioneeritud), ärianalüütika-alertid Grafanas.
 
 ---
 
-## Allikad
+## 10. Skaleerimine ja säilitus
+
+### 10.1 Kohaliku TSDB piirangud
+
+Prometheus TSDB on optimeeritud kirjutamiseks ja hiljutiseks päringuteks. Piirangud:
+
+- **Retention vaikimisi 15 päeva** (seadistatav `--storage.tsdb.retention.time=1y`)
+- **Üks Prometheus = üks kirjutushetk** — skaleerub vertikaalselt, aga mitte horisontaalselt
+- **Ei replikeeri** — kui serveri ketas lendab, andmed kaovad
+- **Päring läheb aeglaseks** kui aegridu on miljoneid
+
+### 10.2 Skaleerimismustrid
+
+**Föderatsioon** — väiksem Prometheus scrape-ib suuremat:
+
+```yaml
+scrape_configs:
+  - job_name: 'federate'
+    scrape_interval: 15s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{job="critical-service"}'
+    static_configs:
+      - targets: ['prod-prom-1:9090']
+```
+
+Klassikaline kasutus: iga datacentri Prometheus scrape-ib kohalikku, tsentraalne Prometheus scrape-ib datacentrite Prometheus-eid (ainult agregeeritud mõõdikuid).
+
+**`remote_write`** — Prometheus kirjutab ka eksternsesse salvestusse (Thanos, Mimir, Cortex, VictoriaMetrics):
+
+```yaml
+remote_write:
+  - url: "https://mimir.example.com/api/v1/push"
+    basic_auth:
+      username: "user"
+      password_file: "/etc/secrets/mimir-password"
+```
+
+**Thanos / Mimir / Cortex** — horisontaalselt skaleeruvad lahendused, mis kasutavad object storage-t (S3, GCS) pikaajaliseks säilitamiseks.
+
+| Lahendus | Päritolu | Iseloomulik |
+|----------|----------|-------------|
+| **Thanos** | Improbable, CNCF | Sidecar-põhine, integreerub olemasoleva Prometheus-ega |
+| **Mimir** | Grafana Labs | Cortex'i hark; pull-põhine nagu Prometheus ise |
+| **Cortex** | Algne CNCF | Mimir'i alus; multi-tenant |
+| **VictoriaMetrics** | VictoriaMetrics Inc | Mitte-CNCF; fookuses on jõudlus ja ressursitõhusus |
+
+### 10.3 Praktiline orientatsioon
+
+- **Kuni ~1M aktiivset aegrida, retention 15 päeva** → üks Prometheus piisab
+- **1M–10M aegrida, retention kuni 1 aasta** → Prometheus + `remote_write` Thanos/Mimir'isse
+- **>10M aegrida, multi-tenancy vajalik** → natiivne Mimir/Cortex
+
+---
+
+## 11. Kokkuvõte
+
+**Peamised mõisted, mida peab meeles pidama:**
+
+- **Pull-mudel ja `up` mõõdik** — esimene diagnostikatööriist, kui midagi ei tööta
+- **Label'id ja kardinaalsus** — võimsus, mis muutub kiiresti koormaks; hoia label'ite hulka <10
+- **Counter vajab `rate()`** — ilma selleta on absoluutarv kasutu
+- **`rate([5m])` aken** peab olema ≥4× scrape interval
+- **Histogram > Summary** — agregeeritav üle instanside
+- **`for:` alert-reeglites** — väldib valehäireid mööduvate spike'ide korral
+- **Recording rules** — keeruliste päringute eelarvutus, kriitiline dashboardide jõudluse jaoks
+- **Grafana ei salvestata andmeid** — ta ainult küsib neid andmeallikatelt
+
+**Järgmine samm:** [Päev 1 labor](../../labs/01_prometheus_grafana/lab.md) — ehita töötav stack, kirjuta esimesed PromQL päringud, seadista alert mis käivitub.
+
+---
+
+## Enesekontrolli küsimused
+
+1. Milline on pull-mudeli peamine operatiivne eelis push-mudeli ees?
+2. Miks on `user_id` halb label? Mis juhtuks kui selle lisaksid?
+3. Kirjuta PromQL päring, mis näitab veaprotsendi (5xx/kogusumma) iga teenuse kohta viimase 5 minuti jooksul.
+4. Mis on erinevus `rate()` ja `irate()` vahel? Millal kumba eelistad?
+5. Mida teeb `for: 5m` alert-reeglis ja miks see kriitiline on?
+6. Kui sul on 10 serverit, iga väljastab summary-d `rpc_duration_seconds{quantile="0.95"}`. Kas saad arvutada koond-p95? Miks / miks mitte?
+7. Millal eelistad föderatsiooni ja millal `remote_write`-i?
+
+---
+
+## Viited ja süvendatud lugemine
 
 ### Ametlik dokumentatsioon
 
 | Allikas | Miks lugeda |
 |---------|-------------|
-| [Prometheus Overview](https://prometheus.io/docs/introduction/overview/) | Ametlik sissejuhatus — arhitektuuri diagramm, komponendid |
-| [Prometheus Data model](https://prometheus.io/docs/concepts/data_model/) | Kuidas aegrea andmed struktureeritud on |
-| [Metric types](https://prometheus.io/docs/concepts/metric_types/) | Counter, Gauge, Histogram, Summary — ametlik seletus |
-| [PromQL basics](https://prometheus.io/docs/prometheus/latest/querying/basics/) | Päringukeele ametlik õpetus |
-| [Best practices — Histograms and summaries](https://prometheus.io/docs/practices/histograms/) | Miks Histogram > Summary enamikus juhtudes |
-| [When to use the Pushgateway](https://prometheus.io/docs/practices/pushing/) | Pushgateway anti-pattern'i hoiatused |
-| [AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) | Routing, grouping, silencing, inhibition |
-| [Prometheus 3.0 release notes](https://prometheus.io/blog/2024/11/14/prometheus-3-0/) | Mis on uut v3-s võrreldes v2-ga |
-| [Native Histograms spec](https://prometheus.io/docs/specs/native_histograms/) | Tuleviku histogrammi mudel |
+| [Prometheus Docs — Introduction](https://prometheus.io/docs/introduction/overview/) | Lähtepunkt kõigele |
+| [Data Model](https://prometheus.io/docs/concepts/data_model/) | Label'ite ja aegrea sügavam selgitus |
+| [Metric Types](https://prometheus.io/docs/concepts/metric_types/) | Counter, gauge, histogram, summary ametlikult |
+| [PromQL basics](https://prometheus.io/docs/prometheus/latest/querying/basics/) | Keele formaalne määratlus |
+| [PromQL operators](https://prometheus.io/docs/prometheus/latest/querying/operators/) | Vector matching, group_left/right |
+| [Best practices — Histograms](https://prometheus.io/docs/practices/histograms/) | Miks Histogram > Summary |
+| [When to use the Pushgateway](https://prometheus.io/docs/practices/pushing/) | Pushgateway anti-muster |
+| [AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) | Routing, grouping, silencing |
+| [Prometheus 3.0 release](https://prometheus.io/blog/2024/11/14/prometheus-3-0/) | V2 → V3 migratsioon |
+| [Native Histograms](https://prometheus.io/docs/specs/native_histograms/) | Tuleviku histogrammi spetsifikatsioon |
+| [OpenMetrics spec](https://openmetrics.io/) | Exposition formaadi standard |
 
-### Grafana ametlik
+### Grafana
 
 | Allikas | Miks lugeda |
 |---------|-------------|
-| [Grafana dashboards overview](https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/) | "Kolm väravat" — plugin, query, transform |
-| [Panels and visualizations](https://grafana.com/docs/grafana/latest/panels-visualizations/) | Kõik visualiseerimistüübid ühes kohas |
-| [Build your first dashboard](https://grafana.com/docs/grafana/latest/fundamentals/getting-started/first-dashboards/) | Ametlik samm-sammult juhend |
+| [Dashboards overview](https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/) | Kolm etappi: plugin → query → transform |
+| [Panels and visualizations](https://grafana.com/docs/grafana/latest/panels-visualizations/) | Kõik visualiseeringutüübid |
 | [Variables](https://grafana.com/docs/grafana/latest/dashboards/variables/) | Dünaamilised dashboardid |
-| [Grafana alerting](https://grafana.com/docs/grafana/latest/alerting/) | Unified alerting dokumentatsioon |
+| [Grafana alerting](https://grafana.com/docs/grafana/latest/alerting/) | Unified alerting |
+| [Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) | Dashboard-as-Code |
 
-### Kogukond ja õppematerjalid
+### Tootmiskogemus
 
 | Allikas | Miks lugeda |
 |---------|-------------|
-| [PromLabs Training](https://training.promlabs.com/) | Julius Volz (Prometheus looja) tasuta kursused |
-| [PromQL Cheat Sheet](https://promlabs.com/promql-cheat-sheet/) | Prindi välja, hoia laua peal |
-| [Awesome Prometheus alerts](https://samber.github.io/awesome-prometheus-alerts/) | Valmis alertireeglid tootmiseks |
-| [Node Exporter Full (ID 1860)](https://grafana.com/grafana/dashboards/1860) | Professionaalne dashboard näide — kasutatakse laboris |
-| [Google SRE raamat — peatükk 6](https://sre.google/sre-book/monitoring-distributed-systems/) | Four Golden Signals, tööstusstandard |
-| [Grafana Labs blog](https://grafana.com/blog/) | Uued funktsioonid ja parimad praktikad |
-
-### Prometheus + OpenTelemetry
-
-Tänase päeva arengusuund — Prometheus 3.x toetab natiivselt OpenTelemetry mõõdikute vastuvõtmist. Kui labis töötame klassikalise pull-mudeli ja exporterite-ga, siis tööturul kohtad järjest enam OTLP (OpenTelemetry Protocol) sissetulevaid mõõdikuid.
-
-- [OpenTelemetry + Prometheus guide](https://prometheus.io/docs/guides/opentelemetry/) — ametlik integratsioonijuhend
+| [Google SRE raamat — peatükk 6](https://sre.google/sre-book/monitoring-distributed-systems/) | Four Golden Signals, alert-disaini filosoofia |
+| [Awesome Prometheus alerts](https://samber.github.io/awesome-prometheus-alerts/) | Production-valmis alert-reeglid |
+| [Node Exporter Full (ID 1860)](https://grafana.com/grafana/dashboards/1860) | Kõige kasutatum referents-dashboard |
+| [PromLabs training](https://training.promlabs.com/) | Julius Volz (Prometheus looja) kursused |
+| [PromQL cheat sheet](https://promlabs.com/promql-cheat-sheet/) | Prindi välja, hoia laua peal |
+| [Cortex, Mimir, Thanos compared](https://grafana.com/blog/2022/04/19/cortex-vs-mimir-vs-thanos-why-grafana-mimir/) | Otsuspuu skaleerimisel |

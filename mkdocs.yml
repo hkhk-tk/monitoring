@@ -1,9 +1,11 @@
 site_name: "Monitooring ja Jälgitavus — Täienduskoolitus"
 site_url: https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/
+site_description: "Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026"
+site_author: "Maria Talvik"
+
 theme:
   name: material
   features:
-    - mermaid
     - navigation.tabs
     - navigation.top
     - navigation.expand
@@ -12,23 +14,50 @@ theme:
     - navigation.tracking
     - navigation.instant
     - toc.follow
-    - toc.sticky
+    - toc.integrate
     - search.suggest
     - search.highlight
     - content.tabs.link
     - content.code.copy
+    - content.code.annotate
   language: et
   palette:
-    - scheme: default
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: deep purple
       accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Tume teema
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Hele teema
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
 
 markdown_extensions:
   - toc:
       permalink: true
+      permalink_title: "Lingi sektsioonile"
   - attr_list
   - md_in_html
   - admonition
+  - footnotes
+  - tables
+  - def_list
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -45,38 +74,45 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.keys
   - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji ""
       emoji_generator: !!python/name:material.extensions.emoji.to_svg ""
 
 plugins:
-  - search
+  - search:
+      lang: et
   - git-revision-date-localized:
       fallback_to_build_date: true
-
-extra_javascript:
-  - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
+      type: date
+      locale: et
 
 nav:
   - Avaleht: index.md
 
   - "Päev 1 — Prometheus + Grafana":
-      - Labor: labs/01_prometheus_grafana/lab.md
-      - Loeng: materials/lectures/paev1-loeng.md
+      - "Kava": materials/paev1-kava.md
+      - "Loeng 1: Observability": materials/lectures/paev1-observability.md
+      - "Loeng 2: Prometheus + Grafana": materials/lectures/paev1-loeng.md
+      - "Labor": labs/01_prometheus_grafana/lab.md
 
   - "Päev 2 — Zabbix + Loki":
-      - Zabbix labor: labs/02_zabbix_loki/zabbix_lab.md
-      - Loki labor: labs/02_zabbix_loki/loki_lab.md
+      - "Zabbix labor": labs/02_zabbix_loki/zabbix_lab.md
+      - "Loki labor": labs/02_zabbix_loki/loki_lab.md
 
   - "Päev 3 — ELK Stack":
-      - Labor: labs/03_elk_stack/lab.md
+      - "Labor": labs/03_elk_stack/lab.md
 
   - "Päev 4 — TICK + Kesksed logimissüsteemid":
-      - TICK labor: labs/04_tick_keskne_logimine/tick_lab.md
-      - Ülevaade: labs/04_tick_keskne_logimine/keskne_logimine.md
+      - "TICK labor": labs/04_tick_keskne_logimine/tick_lab.md
+      - "Ülevaade": labs/04_tick_keskne_logimine/keskne_logimine.md
 
   - "Päev 5 — Tempo + OTel + Kokkuvõte":
-      - Labor: labs/05_tempo_otel/lab.md
+      - "Labor": labs/05_tempo_otel/lab.md
       - "Trendid 2026": labs/05_tempo_otel/trendid.md
 
   - Ressursid:
