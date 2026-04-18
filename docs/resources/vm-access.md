@@ -6,69 +6,54 @@ Igal osalejal on oma isiklik VM Proxmoxi peal. VM-il on **kaks IP-aadressi** —
 
 | Võrk | Prefiks | Millal kasutada |
 |------|---------|-----------------|
-| Klassiruum | `192.168.35.0/24` | Kui oled koolis, ühendatud klassi Wi-Fisse või võrku |
-| Haldus / VPN | `192.168.100.0/24` | Kui töötad kodust, VPN peab olema aktiivne |
+| Klassiruum | `192.168.35.0/24` | Kui oled koolis, ühendatud klassi võrku |
+| Haldus / VPN | `192.168.100.0/24` | Kui töötad kodust — VPN peab aktiivne olema |
 
-**Sama VM, samad sisu — ainult IP erineb.** Vali endale sobivam ja hoia sellega.
+**Sama VM, sama sisu — ainult IP erineb.** Vali endale sobivam ja hoia sellega.
 
-## Sinu VM
+## Sinu kasutajanimi ja IP
 
-| Osaleja | Kasutajanimi | Klassis (35.x) | VPNiga (100.x) |
-|---------|--------------|----------------|----------------|
-| Kaarel | kaarel | 192.168.35.121 | 192.168.100.121 |
-| Siim | siim | 192.168.35.122 | 192.168.100.122 |
-| Margus | margus | 192.168.35.123 | 192.168.100.123 |
-| Heini | heini | 192.168.35.124 | 192.168.100.124 |
-| Allar | allar | 192.168.35.125 | 192.168.100.125 |
-| Marko | marko | 192.168.35.126 | 192.168.100.126 |
-| Kuido | kuido | 192.168.35.127 | 192.168.100.127 |
-| Andres | andres | 192.168.35.128 | 192.168.100.128 |
-| Andrus | andrus | 192.168.35.129 | 192.168.100.129 |
-| Mailis | mailis | 192.168.35.130 | 192.168.100.130 |
-| Ahti | ahti | 192.168.35.131 | 192.168.100.131 |
+**Kasutajanimi, VM-i number ja paroolid jagatakse Google Classroomis eraldi.**
 
-**SSH:**
+Sinu VM-i IP on kujul:
+
+- Klassis: `192.168.35.12X`
+- VPNiga: `192.168.100.12X`
+
+…kus `X` asendub sinu isikliku numbriga (näidatud Classroomis).
+
+## SSH
 
 ```bash
 ssh <kasutajanimi>@<sinu-ip>
 ```
 
-Näide Kaarelile klassis:
-
-```bash
-ssh kaarel@192.168.35.121
-```
-
-Parool jagatakse kohapeal (küsi koolitajalt kui vaja).
-
 ## Brauserist ligipääs
 
-Asenda `<sinu-ip>` oma VM-i IP-ga — kas `192.168.35.12X` (klassis) või `192.168.100.12X` (VPNiga).
+Asenda `<sinu-ip>` oma VM-i aadressiga.
 
 | Teenus | URL | Märkused |
 |--------|-----|----------|
 | Prometheus | `http://<sinu-ip>:9090` | PromQL päringud, targets, alerts |
-| Grafana | `http://<sinu-ip>:3000` | admin / `monitoring2026` |
+| Grafana | `http://<sinu-ip>:3000` | Login andmed Classroomis |
 | Alertmanager | `http://<sinu-ip>:9093` | Alertide ülevaade |
 | Node Exporter | `http://<sinu-ip>:9100/metrics` | Toormetrikad |
 
 ## Target-masinad (jagatud)
 
-Need on jagatud — kõik osalejad monitoorivad samu masinaid. Target-masinatel on ka kaks IP-d, kasuta sedasama võrku, mis su VM-ile pääsemisel.
+Kõik osalejad monitoorivad samu masinaid. Target-masinatel on ka kaks IP-d; kasuta sedasama võrku, mis su VM-ile pääsemisel. Täpsed IP-d leiad iga labori juhendist.
 
-| Masin | Klassis | VPNiga | Teenused |
-|-------|---------|--------|----------|
-| mon-target | 192.168.35.140 | 192.168.100.140 | node_exporter (:9100), zabbix-agent (:10050), logi-generaator (`/var/log/app.log`) |
-| mon-target-web | 192.168.35.141 | 192.168.100.141 | nginx (:80), stub_status (:8080), node_exporter (:9100), zabbix-agent (:10050) |
-
-> **Labori juhendis näete IP-d `192.168.100.140` / `.141`** — see töötab alati (VPN + klassis). Kui eelistad klassivõrku, asenda `100` → `35` päringutes.
+| Masin | Teenused |
+|-------|----------|
+| mon-target | node_exporter (:9100), zabbix-agent (:10050), logi-generaator (`/var/log/app.log`) |
+| mon-target-web | nginx (:80), stub_status (:8080), node_exporter (:9100), zabbix-agent (:10050) |
 
 ## Kasulikud käsud
 
 ```bash
 docker compose up -d        # Käivita stack
-docker compose ps            # Staatuse kontroll
-docker compose logs -f       # Logide jälgimine
-docker compose down -v       # Peata ja kustuta kõik
-docker compose restart       # Taaskäivita
+docker compose ps           # Staatuse kontroll
+docker compose logs -f      # Logide jälgimine
+docker compose down -v      # Peata ja kustuta kõik
+docker compose restart      # Taaskäivita
 ```
