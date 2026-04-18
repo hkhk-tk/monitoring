@@ -1212,10 +1212,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sinu-vm" class="md-nav__link">
+  <a href="#sinu-kasutajanimi-ja-ip" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sinu VM
+        Sinu kasutajanimi ja IP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH
       
     </span>
   </a>
@@ -1331,104 +1342,29 @@
 <tr>
 <td>Klassiruum</td>
 <td><code>192.168.35.0/24</code></td>
-<td>Kui oled koolis, ühendatud klassi Wi-Fisse või võrku</td>
+<td>Kui oled koolis, ühendatud klassi võrku</td>
 </tr>
 <tr>
 <td>Haldus / VPN</td>
 <td><code>192.168.100.0/24</code></td>
-<td>Kui töötad kodust, VPN peab olema aktiivne</td>
+<td>Kui töötad kodust — VPN peab aktiivne olema</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Sama VM, samad sisu — ainult IP erineb.</strong> Vali endale sobivam ja hoia sellega.</p>
-<h2 id="sinu-vm">Sinu VM<a class="headerlink" href="#sinu-vm" title="Lingi sektsioonile">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Osaleja</th>
-<th>Kasutajanimi</th>
-<th>Klassis (35.x)</th>
-<th>VPNiga (100.x)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Kaarel</td>
-<td>kaarel</td>
-<td>192.168.35.121</td>
-<td>192.168.100.121</td>
-</tr>
-<tr>
-<td>Siim</td>
-<td>siim</td>
-<td>192.168.35.122</td>
-<td>192.168.100.122</td>
-</tr>
-<tr>
-<td>Margus</td>
-<td>margus</td>
-<td>192.168.35.123</td>
-<td>192.168.100.123</td>
-</tr>
-<tr>
-<td>Heini</td>
-<td>heini</td>
-<td>192.168.35.124</td>
-<td>192.168.100.124</td>
-</tr>
-<tr>
-<td>Allar</td>
-<td>allar</td>
-<td>192.168.35.125</td>
-<td>192.168.100.125</td>
-</tr>
-<tr>
-<td>Marko</td>
-<td>marko</td>
-<td>192.168.35.126</td>
-<td>192.168.100.126</td>
-</tr>
-<tr>
-<td>Kuido</td>
-<td>kuido</td>
-<td>192.168.35.127</td>
-<td>192.168.100.127</td>
-</tr>
-<tr>
-<td>Andres</td>
-<td>andres</td>
-<td>192.168.35.128</td>
-<td>192.168.100.128</td>
-</tr>
-<tr>
-<td>Andrus</td>
-<td>andrus</td>
-<td>192.168.35.129</td>
-<td>192.168.100.129</td>
-</tr>
-<tr>
-<td>Mailis</td>
-<td>mailis</td>
-<td>192.168.35.130</td>
-<td>192.168.100.130</td>
-</tr>
-<tr>
-<td>Ahti</td>
-<td>ahti</td>
-<td>192.168.35.131</td>
-<td>192.168.100.131</td>
-</tr>
-</tbody>
-</table>
-<p><strong>SSH:</strong></p>
+<p><strong>Sama VM, sama sisu — ainult IP erineb.</strong> Vali endale sobivam ja hoia sellega.</p>
+<h2 id="sinu-kasutajanimi-ja-ip">Sinu kasutajanimi ja IP<a class="headerlink" href="#sinu-kasutajanimi-ja-ip" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Kasutajanimi, VM-i number ja paroolid jagatakse Google Classroomis eraldi.</strong></p>
+<p>Sinu VM-i IP on kujul:</p>
+<ul>
+<li>Klassis: <code>192.168.35.12X</code></li>
+<li>VPNiga: <code>192.168.100.12X</code></li>
+</ul>
+<p>…kus <code>X</code> asendub sinu isikliku numbriga (näidatud Classroomis).</p>
+<h2 id="ssh">SSH<a class="headerlink" href="#ssh" title="Lingi sektsioonile">&para;</a></h2>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ssh<span class="w"> </span>&lt;kasutajanimi&gt;@&lt;sinu-ip&gt;
 </span></code></pre></div>
-<p>Näide Kaarelile klassis:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ssh<span class="w"> </span>kaarel@192.168.35.121
-</span></code></pre></div>
-<p>Parool jagatakse kohapeal (küsi koolitajalt kui vaja).</p>
 <h2 id="brauserist-ligipaas">Brauserist ligipääs<a class="headerlink" href="#brauserist-ligipaas" title="Lingi sektsioonile">&para;</a></h2>
-<p>Asenda <code>&lt;sinu-ip&gt;</code> oma VM-i IP-ga — kas <code>192.168.35.12X</code> (klassis) või <code>192.168.100.12X</code> (VPNiga).</p>
+<p>Asenda <code>&lt;sinu-ip&gt;</code> oma VM-i aadressiga.</p>
 <table>
 <thead>
 <tr>
@@ -1446,7 +1382,7 @@
 <tr>
 <td>Grafana</td>
 <td><code>http://&lt;sinu-ip&gt;:3000</code></td>
-<td>admin / <code>monitoring2026</code></td>
+<td>Login andmed Classroomis</td>
 </tr>
 <tr>
 <td>Alertmanager</td>
@@ -1461,40 +1397,31 @@
 </tbody>
 </table>
 <h2 id="target-masinad-jagatud">Target-masinad (jagatud)<a class="headerlink" href="#target-masinad-jagatud" title="Lingi sektsioonile">&para;</a></h2>
-<p>Need on jagatud — kõik osalejad monitoorivad samu masinaid. Target-masinatel on ka kaks IP-d, kasuta sedasama võrku, mis su VM-ile pääsemisel.</p>
+<p>Kõik osalejad monitoorivad samu masinaid. Target-masinatel on ka kaks IP-d; kasuta sedasama võrku, mis su VM-ile pääsemisel. Täpsed IP-d leiad iga labori juhendist.</p>
 <table>
 <thead>
 <tr>
 <th>Masin</th>
-<th>Klassis</th>
-<th>VPNiga</th>
 <th>Teenused</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>mon-target</td>
-<td>192.168.35.140</td>
-<td>192.168.100.140</td>
 <td>node_exporter (:9100), zabbix-agent (:10050), logi-generaator (<code>/var/log/app.log</code>)</td>
 </tr>
 <tr>
 <td>mon-target-web</td>
-<td>192.168.35.141</td>
-<td>192.168.100.141</td>
 <td>nginx (:80), stub_status (:8080), node_exporter (:9100), zabbix-agent (:10050)</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Labori juhendis näete IP-d <code>192.168.100.140</code> / <code>.141</code></strong> — see töötab alati (VPN + klassis). Kui eelistad klassivõrku, asenda <code>100</code> → <code>35</code> päringutes.</p>
-</blockquote>
 <h2 id="kasulikud-kasud">Kasulikud käsud<a class="headerlink" href="#kasulikud-kasud" title="Lingi sektsioonile">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w">        </span><span class="c1"># Käivita stack</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w">            </span><span class="c1"># Staatuse kontroll</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w">       </span><span class="c1"># Logide jälgimine</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v<span class="w">       </span><span class="c1"># Peata ja kustuta kõik</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w">       </span><span class="c1"># Taaskäivita</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w">        </span><span class="c1"># Käivita stack</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w">           </span><span class="c1"># Staatuse kontroll</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w">      </span><span class="c1"># Logide jälgimine</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v<span class="w">      </span><span class="c1"># Peata ja kustuta kõik</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w">      </span><span class="c1"># Taaskäivita</span>
 </span></code></pre></div>
 
 
@@ -1516,7 +1443,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="18. aprill 2026 05:19:58 UTC">18. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="18. aprill 2026 13:14:02 UTC">18. aprill 2026</span>
   </span>
 
     

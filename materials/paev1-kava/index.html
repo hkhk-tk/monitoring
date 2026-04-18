@@ -560,10 +560,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#paeva-ulesehitus" class="md-nav__link">
+  <a href="#paevakava" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Päeva ülesehitus
+        Päevakava
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meetod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meetod
       
     </span>
   </a>
@@ -1317,105 +1328,140 @@
 
 
 <h1 id="paev-1-kava-ja-ettevalmistus">Päev 1 — Kava ja ettevalmistus<a class="headerlink" href="#paev-1-kava-ja-ettevalmistus" title="Lingi sektsioonile">&para;</a></h1>
-<p><strong>18. aprill 2026 · 10:00–14:30 · Haapsalu KHK</strong></p>
-<h2 id="paeva-ulesehitus">Päeva ülesehitus<a class="headerlink" href="#paeva-ulesehitus" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>18. aprill 2026 · 10:00–14:30 · Haapsalu KHK</strong>
+<strong>Teema:</strong> Monitooringu alused + Prometheus + Grafana</p>
+<hr />
+<h2 id="paevakava">Päevakava<a class="headerlink" href="#paevakava" title="Lingi sektsioonile">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Kell</th>
-<th>Kestus</th>
-<th>Mida teeme</th>
+<th>Min</th>
+<th>Tegevus</th>
 <th>Kus</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>10:00–10:15</td>
-<td>15 min</td>
-<td>Tutvumine, ülevaade kursusest, tehnilised kontrollid</td>
+<td>10:00–10:05</td>
+<td>5</td>
+<td>Sissejuhatus — tutvumisring</td>
 <td>Klass</td>
 </tr>
 <tr>
-<td>10:15–10:45</td>
-<td>30 min</td>
-<td><strong>Loeng 1</strong> — monitooring, logimine, observability</td>
+<td>10:05–10:20</td>
+<td>15</td>
+<td><strong>Miks monitooring?</strong> — avaarutelu</td>
 <td>Klass</td>
 </tr>
 <tr>
-<td>10:45–11:30</td>
-<td>45 min</td>
-<td><strong>Loeng 2</strong> — Prometheus arhitektuur, pull-mudel, andmemudel</td>
+<td>10:20–10:35</td>
+<td>15</td>
+<td><strong>Kolm sammast</strong> — metrics, logs, traces tahvlil</td>
 <td>Klass</td>
 </tr>
 <tr>
-<td>11:30–11:45</td>
-<td>15 min</td>
-<td><strong>Paus</strong></td>
+<td>10:35–11:05</td>
+<td>30</td>
+<td><strong>Prometheus + Node Exporter</strong> — Docker Compose üles</td>
+<td>Oma VM</td>
+</tr>
+<tr>
+<td>11:05–11:15</td>
+<td>10</td>
+<td>Mini-teooria — pull-mudel, TSDB, scrape interval</td>
+<td>Klass</td>
+</tr>
+<tr>
+<td>11:15–11:30</td>
+<td>15</td>
+<td><strong>PromQL baas</strong> — esimesed päringud ise</td>
+<td>Oma VM</td>
+</tr>
+<tr>
+<td>11:30–11:40</td>
+<td>10</td>
+<td>☕ Paus</td>
 <td>—</td>
 </tr>
 <tr>
-<td>11:45–12:30</td>
-<td>45 min</td>
-<td><strong>Labor osa 1</strong> — Docker Compose stack üles</td>
+<td>11:40–12:10</td>
+<td>30</td>
+<td><strong>Grafana install + data source</strong> — esimene paneel</td>
 <td>Oma VM</td>
 </tr>
 <tr>
-<td>12:30–13:00</td>
-<td>30 min</td>
-<td><strong>Lõunapaus</strong></td>
+<td>12:10–12:40</td>
+<td>30</td>
+<td>🍽️ Lõuna</td>
 <td>—</td>
 </tr>
 <tr>
-<td>13:00–13:30</td>
-<td>30 min</td>
-<td><strong>Labor osa 2</strong> — PromQL harjutused</td>
+<td>12:40–13:15</td>
+<td>35</td>
+<td><strong>Grafana süvitsi</strong> — variables, row'd, oma stsenaarium</td>
 <td>Oma VM</td>
 </tr>
 <tr>
-<td>13:30–14:05</td>
-<td>35 min</td>
-<td><strong>Labor osa 3</strong> — Grafana dashboard USE meetodiga</td>
+<td>13:15–13:25</td>
+<td>10</td>
+<td>☕ Paus</td>
+<td>—</td>
+</tr>
+<tr>
+<td>13:25–13:50</td>
+<td>25</td>
+<td><strong>Alertmanager</strong> — alert rules, routing, esimene alert</td>
 <td>Oma VM</td>
 </tr>
 <tr>
-<td>14:05–14:25</td>
-<td>20 min</td>
-<td><strong>Labor osa 4</strong> — Alerting + kaose test</td>
-<td>Oma VM</td>
-</tr>
-<tr>
-<td>14:25–14:30</td>
-<td>5 min</td>
-<td>Kokkuvõte, järgmise päeva eelvaade</td>
+<td>13:50–14:05</td>
+<td>15</td>
+<td><strong>Kokkuvõte + reflektsioon</strong></td>
 <td>Klass</td>
+</tr>
+<tr>
+<td>14:05–14:30</td>
+<td>25</td>
+<td>Puhver / lisaharjutused</td>
+<td>Oma VM</td>
 </tr>
 </tbody>
 </table>
+<h2 id="meetod">Meetod<a class="headerlink" href="#meetod" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päev järgib <strong>Kolbi õppimistsüklit</strong>: kogemus → reflektsioon → teooria → katsetamine. See tähendab praktikas:</p>
+<ul>
+<li><strong>Teooria tuleb pärast kogemust</strong> — Prometheus läheb käima enne, kui seletame pull-mudelit</li>
+<li><strong>Sa kirjutad ise</strong> — iga PromQL päring, iga paneel, iga alert tehakse omal masinal, mitte vaadatakse ekraanilt</li>
+<li><strong>Diferentseeritud stsenaariumid</strong> — Grafana dashboard ehitatakse sinu enda töökonteksti põhjal (võrguseadmed, süsteemide tervis, rakenduse jõudlus vms)</li>
+<li><strong>Reflektsioon on formaalne etapp</strong> — 15 min lõpus, kus arutame mida kasutad tööl</li>
+</ul>
 <h2 id="enne-klassi">Enne klassi<a class="headerlink" href="#enne-klassi" title="Lingi sektsioonile">&para;</a></h2>
-<p><strong>Lugemine (ligikaudu 75 min kokku):</strong></p>
+<p><strong>Lugemine (~75 min kokku):</strong></p>
 <ol>
-<li><a href="../lectures/paev1-observability/">Loeng 1: Monitooring, logimine, vaatlus</a> — ~30 min</li>
-<li><a href="../lectures/paev1-loeng/">Loeng 2: Prometheus ja Grafana</a> — ~45 min</li>
+<li><a href="../lectures/paev1-observability/">Loeng 1 — monitooring, logimine, observability</a> — 35 min</li>
+<li><a href="../lectures/paev1-loeng/">Loeng 2 — Prometheus ja Grafana</a> — 50 min</li>
 </ol>
+<p>Need on <strong>eelduslikud</strong>. Klassiajal teeme, ei loe — aeg on väärtuslik praktikaks.</p>
 <p><strong>Tehniline kontroll:</strong></p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SSH ligipääs VM-ile töötab (<a href="../../resources/vm-access/">vm-access</a>)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Kas VPN töötab (kui töötad kodust)?</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> VPN ühendub (kui töötad kodust)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Terminal ja brauser käepärast</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Docker ja <code>docker compose</code> VM-il (eelinstallitud)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker</code> ja <code>docker compose</code> VM-il töötavad (eelinstallitud)</li>
 </ul>
 <h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
 <p>Päeva lõpuks osaleja:</p>
 <ul>
-<li><strong>Eristab</strong> logimise, seire ja observability kontseptsioone, seostab need sellega, milliseid küsimusi iga sammas vastab</li>
+<li><strong>Eristab</strong> logimise, seire ja observability kontseptsioone</li>
 <li><strong>Rakendab</strong> USE ja RED meetodeid konkreetse süsteemi jälgitavuse kavandamisel</li>
-<li><strong>Ehitab</strong> töötava Prometheus + Grafana + Alertmanager stacki Docker Compose'iga</li>
-<li><strong>Kirjutab</strong> PromQL päringuid kolmele erinevale mõõdikutüübile (counter, gauge, histogram)</li>
-<li><strong>Kavandab</strong> Grafana dashboardi USE raamistiku järgi, sealhulgas dünaamilised muutujad</li>
-<li><strong>Konfigureerib</strong> alertireegli ja demonstreerib olekumuutust Pending → Firing</li>
+<li><strong>Ehitab</strong> töötava Prometheus + Node Exporter + Grafana + Alertmanager stacki Docker Compose'iga</li>
+<li><strong>Kirjutab</strong> PromQL päringuid counter, gauge ja histogram mõõdikutele</li>
+<li><strong>Kavandab</strong> Grafana dashboardi oma töökonteksti põhjal (variables, paneelid, organiseeritud row'des)</li>
+<li><strong>Konfigureerib</strong> alertireegli + Alertmanager routing'i, demonstreerib oleku ülemineku <code>Pending → Firing</code></li>
 </ul>
 <h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Lingi sektsioonile">&para;</a></h2>
-<p>Iga osaleja: oma VM (4 GB RAM, 2 CPU, Docker eelinstallitud) + jagatud <code>mon-target</code> ja <code>mon-target-web</code> masinad.</p>
+<p>Iga osaleja: oma VM (4 GB RAM, 2 CPU, Docker eelinstallitud) + jagatud target-masinad.</p>
 <table>
 <thead>
 <tr>
@@ -1428,7 +1474,7 @@
 <tr>
 <td>Prometheus</td>
 <td>9090</td>
-<td>Andmekogumine ja PromQL</td>
+<td>Andmekogumine, PromQL</td>
 </tr>
 <tr>
 <td>Grafana</td>
@@ -1443,19 +1489,19 @@
 <tr>
 <td>node_exporter</td>
 <td>9100</td>
-<td>Süsteemi mõõdikud (VM-il endal)</td>
+<td>Süsteemi mõõdikud</td>
 </tr>
 </tbody>
 </table>
-<p>Täpsemad IP-d ja sisselogimisandmed: <a href="../../resources/vm-access/">VM ligipääs</a>.</p>
+<p>Täpsed IP-d, kasutajanimed, paroolid: <a href="../../resources/vm-access/">VM ligipääs</a>.</p>
 <h2 id="jargmine-kord-2504">Järgmine kord (25.04)<a class="headerlink" href="#jargmine-kord-2504" title="Lingi sektsioonile">&para;</a></h2>
-<p>Teisel päeval vaatleme agent-põhist monitooringut (<strong>Zabbix</strong>) ja Grafana ökosüsteemi logimislahendust (<strong>Loki</strong> + Promtail). Õpid kuidas:</p>
+<p>Teisel päeval vaatleme <strong>Zabbix</strong> (agent-põhine monitooring, võrdlus Prometheus pull-mudeliga) ja <strong>Loki</strong> + Promtail (Grafana ökosüsteemi logimislahendus). Õpid:</p>
 <ul>
-<li>Zabbix-agent erineb Prometheus pull-mudelist ja millal kumba eelistada</li>
-<li>Loki indekseerib logisid label'ite järgi (mitte täissisu kaupa nagu ELK)</li>
-<li>Dashboard ühendab mõõdikud ja logid ühele vaatele (LogQL + PromQL koos)</li>
+<li>Zabbix-agendi erinevus Prometheus exporter'ist ja millal kumba eelistada</li>
+<li>Loki label-indeks vs ELK täisindeks — millal kumba</li>
+<li>Ühendatud dashboard, kus mõõdikud ja logid koos (LogQL + PromQL)</li>
 </ul>
-<p>Eeltöö enne 25.04: päev 1 labori kodutöö esitatud.</p>
+<p>Eeltöö: päeva 1 labori kodutöö esitatud.</p>
 
 
 
@@ -1476,7 +1522,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="18. aprill 2026 05:19:58 UTC">18. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="18. aprill 2026 13:14:02 UTC">18. aprill 2026</span>
   </span>
 
     
