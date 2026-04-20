@@ -1,0 +1,77 @@
+services:
+  loki:
+    image: grafana/loki:3.2.1
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./config/loki-config.yml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:3.2.1
+    container_name: promtail
+    volumes:
+      - ./config/promtail-config.yml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - app-logs:/var/log/app:ro
+      - nginx-logs:/var/log/nginx:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=monitoring2026
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+  log-generator:
+    image: busybox:latest
+    container_name: log-generator
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /var/log/app /var/log/nginx
+        SERVICES="payment auth api database cache"
+        LEVELS="INFO INFO INFO INFO INFO WARN ERROR"
+        METHODS="GET GET GET POST PUT DELETE"
+        PATHS="/api/users /api/orders /api/products /health /login"
+        STATUSES="200 200 200 200 200 301 400 404 500 503"
+        while true; do
+          # App log
+          S=$$(echo $$SERVICES | tr " " "\n" | shuf -n1)
+          L=$$(echo $$LEVELS | tr " " "\n" | shuf -n1)
+          LATENCY=$$((RANDOM % 500))
+          echo "$$(date -Iseconds) [$$L] [$$S] duration=$${LATENCY}ms trace_id=$$RANDOM" >> /var/log/app/app.log
+
+          # Nginx accesslog
+          M=$$(echo $$METHODS | tr " " "\n" | shuf -n1)
+          P=$$(echo $$PATHS | tr " " "\n" | shuf -n1)
+          ST=$$(echo $$STATUSES | tr " " "\n" | shuf -n1)
+          BYTES=$$((RANDOM % 10000))
+          echo "192.168.35.$$((RANDOM % 254 + 1)) - - [$$(date +%d/%b/%Y:%H:%M:%S)] \"$$M $$P HTTP/1.1\" $$ST $$BYTES \"-\" \"curl/7.68.0\" rt=0.$$((RANDOM % 1000))" >> /var/log/nginx/access.log
+
+          sleep 1
+        done
+    volumes:
+      - app-logs:/var/log/app
+      - nginx-logs:/var/log/nginx
+    restart: unless-stopped
+
+volumes:
+  loki-data:
+  grafana-data:
+  app-logs:
+  nginx-logs:

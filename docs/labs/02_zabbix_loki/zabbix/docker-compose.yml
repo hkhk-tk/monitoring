@@ -1,0 +1,100 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: zabbix_pwd
+      MYSQL_ROOT_PASSWORD: root_pwd
+      TZ: Europe/Tallinn
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_bin
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-uroot", "-proot_pwd"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:ubuntu-7.0.6
+    container_name: zabbix-server
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_SERVER_HOST: mysql
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: zabbix_pwd
+      TZ: Europe/Tallinn
+    ports:
+      - "10051:10051"
+    restart: unless-stopped
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-7.0.6
+    container_name: zabbix-web
+    depends_on:
+      mysql:
+        condition: service_healthy
+      zabbix-server:
+        condition: service_started
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      DB_SERVER_HOST: mysql
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: zabbix_pwd
+      PHP_TZ: Europe/Tallinn
+      TZ: Europe/Tallinn
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  zabbix-agent:
+    image: zabbix/zabbix-agent:ubuntu-7.0.6
+    container_name: zabbix-agent
+    depends_on:
+      - zabbix-server
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: docker-agent
+      TZ: Europe/Tallinn
+    volumes:
+      - ./config/applog.conf:/etc/zabbix/zabbix_agentd.d/applog.conf:ro
+      - ./config/discover-services.sh:/usr/local/bin/discover-services.sh:ro
+      - app-logs:/var/log/app:ro
+    restart: unless-stopped
+
+  log-generator:
+    image: busybox:latest
+    container_name: log-generator
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /var/log/app
+        SERVICES="payment auth api database cache"
+        LEVELS="INFO INFO INFO INFO INFO WARN ERROR"
+        MSGS="Request_OK User_login Cache_miss DB_slow_query Payment_failed Connection_retry"
+        while true; do
+          S=$$(echo $$SERVICES | tr " " "\n" | shuf -n1)
+          L=$$(echo $$LEVELS | tr " " "\n" | shuf -n1)
+          M=$$(echo $$MSGS | tr " " "\n" | shuf -n1)
+          echo "$$(date -Iseconds) [$$L] [$$S] $$M" >> /var/log/app/app.log
+          sleep 2
+        done
+    volumes:
+      - app-logs:/var/log/app
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  app-logs:
