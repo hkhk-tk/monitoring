@@ -122,6 +122,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.enable-lifecycle'
     extra_hosts:
+      - "host.docker.internal:host-gateway"
       - "mon-target:192.168.100.140"
       - "mon-target-web:192.168.100.141"
     restart: unless-stopped
@@ -154,9 +155,11 @@ volumes:
 
 Salvesta: `Ctrl+O` → `Enter` → `Ctrl+X`
 
-> **Kaks asja mida märkida:**
-> - `extra_hosts` — ütleb Prometheuse konteinerile et `mon-target` = `192.168.100.140`. Ilma selleta ei teaks konteiner seda nime.
-> - `web.enable-lifecycle` — lubab Prometheuse konfiguratsiooni uuendada HTTP kaudu (ilma restartita).
+> **Kolm rida `extra_hosts` all:**
+> - `host.docker.internal:host-gateway` — Docker asendab selle VM-i hosti IP-ga. Vajame, et konteiner saaks rääkida VM-il jooksva node_exporteriga.
+> - `mon-target` ja `mon-target-web` — staatiliselt fikseeritud nimed jagatud sihtmärkide jaoks. Ilma selleta ei teaks konteiner neid nimesid.
+>
+> `web.enable-lifecycle` lubab Prometheuse konfiguratsiooni uuendada HTTP kaudu (ilma restartita).
 
 ---
 
@@ -186,7 +189,7 @@ scrape_configs:
 
   - job_name: 'local'
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: ['host.docker.internal:9100']
         labels:
           host: 'minu-vm'
 
@@ -207,11 +210,11 @@ scrape_configs:
 > - `rule_files` — kust leida alertireegleid
 > - `scrape_configs` — **keda** jälgida. Iga `job_name` on grupp sihtmärke. `labels` lisab metainfot — näiteks `role: webserver` ütleb hiljem Grafanas et see on veebiserver.
 
-**Mõtlemisküsimus:** Miks kasutame `localhost:9100` mitte `node-exporter:9100`?
+**Mõtlemisküsimus:** Miks kasutame `host.docker.internal:9100` mitte `localhost:9100`?
 
 <details>
 <summary>Vastus</summary>
-Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile süsteemiteenusena. Prometheus konteiner näeb VM-i `localhost`-i tänu sellele, et port 9090 on avatud host-võrku. Seega `localhost:9100` viitab VM-i node_exporterile, mitte mõnele konteinerile.
+Node Exporter ei jookse Docker konteinerina — see on installitud otse VM-ile süsteemiteenusena. Aga Prometheus ise jookseb Docker konteineris, ja konteineri sees `localhost` tähendab konteinerit ennast, mitte VM-i hosti. `host.docker.internal` on erinimi, mille Docker tõlgib hosti IP-ks — ja see toimib tänu `extra_hosts: ["host.docker.internal:host-gateway"]` reale `docker-compose.yml`-is.
 </details>
 
 ---

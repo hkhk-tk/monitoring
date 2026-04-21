@@ -17,6 +17,7 @@ services:
       - '--web.enable-lifecycle'
     restart: unless-stopped
     extra_hosts:
+      - "host.docker.internal:host-gateway"
       - "mon-target:192.168.100.140"
       - "mon-target-web:192.168.100.141"
 
