@@ -2,7 +2,7 @@
 
 **Kestus:** 4 tundi
 **Tase:** Keskaste
-**VM:** sinu isiklik VM (nt `ssh kaarel@192.168.35.121`)
+**VM:** sinu isiklik VM (nt `ssh maria@192.168.35.120`)
 
 ---
 

@@ -1,123 +1,159 @@
-# Päev 2 osa 1: Zabbix — Labor
+# Päev 2 · Zabbix Labor
 
-**Kestus:** 4 tundi
-**Tase:** Keskaste
-**VM:** sinu isiklik VM (nt `ssh kaarel@192.168.35.121`)
+Eeldused: päev 1 (Docker, pull-mudel, trigger-olekud).
 
----
+7 osa, raskus kasvab. Klassis jõuad enamuse, ülejäänu kodus.
 
-## 🎯 Õpiväljundid
+1. Stack üles
+2. Host + template + trigger
+3. User macros
+4. HTTP Agent + Dependent items
+5. UserParameter
+6. LLD + oma template
+7. Discord
 
-Pärast selle labi läbimist õpilane:
-
-**Teadmised:**
-
-1. Selgitab Zabbixi arhitektuuri — MySQL, Server, Web, Agent — ja iga komponendi rolli
-2. Eristab Zabbixi pull-mudelit Prometheuse pull-mudelist (agent passive vs exporter)
-3. Kirjeldab Item → Trigger → Action voogu
-4. Eristab sisseehitatud template'i ja kohandatud monitooringu (UserParameter, LLD) rolli
-
-**Oskused:**
-
-5. Ehitab Zabbix stacki Docker Compose-iga ja lisab esimese monitooritava hosti
-6. Loob trigger'i mõõdikule ja näeb seda läbi Pending → Firing → Resolved tsükli
-7. **Kirjutab oma custom monitooringumõõdiku** UserParameter'ina ja testib `zabbix_get`-iga
-8. **Loob Low-Level Discovery reegli** mis avastab ise mitu monitooritavat objekti ühest allikast
-9. Seadistab Action'i, mis saadab trigger'i käivitumisel teavituse
-
----
-
-## Meie keskkond
-
-> **Loengust:** Zabbix pull-mudel küsib agentidelt andmeid, aga suudab ka passiivselt võtta vastu (Trapper). Täna teeme klassikalise pull-variandi — server küsib, agent vastab.
-
-Sinu infrastruktuur on sama mis päev 1. Kolm masinat on üleval, sinu VM saab Zabbix stacki.
-
-| Masin | IP | Mis seal jookseb |
-|-------|-----|------------------|
-| **Sinu VM** | 192.168.35.12X | Docker — Zabbix stack (sina ehitad täna) |
-| **mon-target** | 192.168.35.140 | node_exporter :9100, zabbix-agent :10050, logi-generaator |
-| **mon-target-web** | 192.168.35.141 | Nginx :80, stub_status :8080, zabbix-agent :10050 |
-
-**Kirjuta oma VM IP siia:** `__________________`
-
----
-
-## Eeltöö — puhasta eelmine stack
-
-Päev 1 Prometheus stack koormab RAM-i. Peata see enne kui Zabbix üles lükkad:
+Päev 1 stack maha enne alustamist:
 
 ```bash
-cd ~/paev1
-docker compose down -v
-cd ~
+cd ~/paev1 && docker compose down && cd ~
 ```
 
-⚡ **Kiirkontroll:**
+mon-target ja mon-target-web peale on `zabbix-agent` juba paigaldatud. Kontrolli:
+
 ```bash
-docker ps
+nc -zv 192.168.35.140 10050 && nc -zv 192.168.35.141 10050
 ```
-Peab olema tühi (või ainult süsteemi konteinerid).
+
+Mõlemad `succeeded`. Kui ei ole, ütle koolitajale.
 
 ---
 
-## Osa 1: Stack üles (30 min)
+## Osa 1 · Stack üles
 
-> **Loengust:** Zabbix ei ole üks binary — ta on neljast tükist kokku pandud süsteem. Andmebaas hoiab konfi ja ajalugu, server töötleb, web on liides, agent mõõdab. Ilma ühetagi ei tööta.
+Zabbix on neli komponenti: **MySQL** hoiab konfi ja ajalugu, **Server** teeb päringuid ja arvutab trigger'id, **Web** on UI, **Agent** kogub sinu VM-ist mõõdikuid (demo-jaoks — päris agent'id on mon-target ja mon-target-web peal).
 
-### 1.1 Töökaust ja failid
+Ehitame neid ükshaaval ja testime iga sammu eraldi. Kui midagi kukub, tead **täpselt** kus.
 
 ```bash
-mkdir -p ~/paev2/zabbix/config
-cd ~/paev2
+mkdir -p ~/paev2/zabbix/config && cd ~/paev2
 ```
 
-### 1.2 docker-compose.yml
+### 1.1 Baas
 
-Loome terve stacki ühe kompositsiooni faili sisse. Sisaldab nelja tavapärast Zabbixi komponenti **pluss** kaks tööriista mida hiljem vajame — `log-generator` (tekitab logisid `/var/log/app/app.log`-i) ja mount'id mis lubavad meil pärast oma skripte agendile üles laadida.
+Loo `docker-compose.yml` järgmise sisuga — teenuseid lisame järgmistes alaosades.
 
-```bash
-cat > docker-compose.yml << 'EOF'
+```yaml
 services:
+  # teenused lisanduvad siia
+
+volumes:
+  mysql-data:
+```
+
+Paneme `mysql-data` volume kohe alguses — ilma selleta kaotaks `docker compose down` kogu Zabbix konfi.
+
+### 1.2 MySQL
+
+Zabbix Server ei käivitu ilma andmebaasita. Alustame sellest.
+
+Lisa `services:` alla:
+
+```yaml
   mysql:
     image: mysql:8.0
     container_name: mysql
     environment:
-      MYSQL_DATABASE: zabbix
+      MYSQL_DATABASE: zabbix          # DB nimi — Server ootab täpselt seda
       MYSQL_USER: zabbix
       MYSQL_PASSWORD: zabbix_pwd
       MYSQL_ROOT_PASSWORD: root_pwd
-      TZ: Europe/Tallinn
+      TZ: Europe/Tallinn              # muidu logid UTC-s, segav
     command:
       - mysqld
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_bin
+      - --character-set-server=utf8mb4    # Zabbix 7 nõue — utf8mb4
+      - --collation-server=utf8mb4_bin    # täpne string-võrdlus (hoia tabelite nime)
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql     # ilma selleta down = kogu DB maha
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-uroot", "-proot_pwd"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 60s
+      start_period: 60s               # esmakäivitus loob skeemi, võtab ~60s
     restart: unless-stopped
+```
 
+Testi ainult MySQL:
+
+```bash
+docker compose up -d mysql
+docker compose ps
+```
+
+Oota kuni status on `Up (healthy)` — esmakäivitusel ~60s. Kontroll:
+
+```bash
+docker exec mysql mysql -uzabbix -pzabbix_pwd -e 'SHOW DATABASES;'
+```
+
+Pead nägema rida `zabbix`. Kui ei, vaata `docker compose logs mysql`.
+
+### 1.3 Zabbix Server
+
+Server on monitooringu süda — küsib agent'idelt andmeid, arvutab trigger'id, salvestab MySQL-i.
+
+Lisa `services:` alla MySQL-i järele:
+
+```yaml
   zabbix-server:
     image: zabbix/zabbix-server-mysql:ubuntu-7.0.6
     container_name: zabbix-server
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_healthy    # oota MySQL healthcheck rohelisena
     environment:
-      DB_SERVER_HOST: mysql
+      DB_SERVER_HOST: mysql           # DNS-nimi Docker võrgus (= konteineri nimi)
       MYSQL_DATABASE: zabbix
       MYSQL_USER: zabbix
       MYSQL_PASSWORD: zabbix_pwd
       TZ: Europe/Tallinn
     ports:
-      - "10051:10051"
+      - "10051:10051"                 # agent'id saadavad active-andmeid siia
     restart: unless-stopped
+```
 
+`DB_SERVER_HOST: mysql` — **DNS-nimi, mitte IP**. Docker bridge-võrgus iga konteiner saab teistele viidata nende container_name kaudu. IP muutub restart'iga, nimi ei muutu.
+
+`depends_on.condition: service_healthy` — ilma selleta käivituks Server enne kui MySQL valmis ja restartuks paar korda.
+
+Testi Server:
+
+```bash
+docker compose up -d zabbix-server
+docker compose logs -f zabbix-server
+```
+
+Oota rida:
+
+```
+Zabbix Server started. Zabbix 7.0.6 (revision xxxxxx).
+```
+
+Ctrl+C logidest välja. Kontrolli kas skeem ehitati:
+
+```bash
+docker exec mysql mysql -uzabbix -pzabbix_pwd zabbix -e 'SHOW TABLES;' | wc -l
+```
+
+Tabeleid umbes **170**. Server lõi need ise esmakäivitusel — ilma sinu abita.
+
+### 1.4 Zabbix Web
+
+Web on PHP + Nginx UI. Vajab **kahte** andmeallikat: MySQL-i konfi jaoks (host'id, trigger'id), Server-it live-andmete jaoks (hetkeväärtused, graafikud).
+
+Lisa:
+
+```yaml
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql:ubuntu-7.0.6
     container_name: zabbix-web
@@ -127,400 +163,322 @@ services:
       zabbix-server:
         condition: service_started
     environment:
-      ZBX_SERVER_HOST: zabbix-server
-      DB_SERVER_HOST: mysql
+      ZBX_SERVER_HOST: zabbix-server  # live-andmed siit
+      DB_SERVER_HOST: mysql           # config siit
       MYSQL_DATABASE: zabbix
       MYSQL_USER: zabbix
       MYSQL_PASSWORD: zabbix_pwd
-      PHP_TZ: Europe/Tallinn
+      PHP_TZ: Europe/Tallinn          # PHP ajatsoon — graafikud õige ajaga
       TZ: Europe/Tallinn
     ports:
       - "8080:8080"
     restart: unless-stopped
+```
 
+Testi:
+
+```bash
+docker compose up -d zabbix-web
+```
+
+Brauseris `http://192.168.35.12X:8080`. Login: `Admin` / `zabbix` (vaheta kohe: ülal parempoolne ikoon → Users → Admin → Change password → `Monitor2026!`).
+
+Kui leht ei lae:
+
+```bash
+docker compose logs zabbix-web | tail -30
+```
+
+Tavaline viga — "Database is not available" — tähendab et MySQL pole veel healthy. Oota 30s ja proovi uuesti.
+
+### 1.5 Zabbix Agent
+
+Selle labori jaoks käivitame demo-agent'i meie enda Compose stack'is. Päris agent'id jooksevad juba mon-target ja mon-target-web peal.
+
+Lisa:
+
+```yaml
   zabbix-agent:
     image: zabbix/zabbix-agent:ubuntu-7.0.6
     container_name: zabbix-agent
     depends_on:
       - zabbix-server
     environment:
-      ZBX_SERVER_HOST: zabbix-server
-      ZBX_HOSTNAME: docker-agent
+      ZBX_SERVER_HOST: zabbix-server  # kellel on luba küsida (passive)
+      ZBX_HOSTNAME: docker-agent      # agent'i identifikaator
       TZ: Europe/Tallinn
     volumes:
-      - ./zabbix/config/applog.conf:/etc/zabbix/zabbix_agentd.d/applog.conf:ro
-      - ./zabbix/config/discover-services.sh:/usr/local/bin/discover-services.sh:ro
-      - app-logs:/var/log/app:ro
+      - ./zabbix/config:/etc/zabbix/zabbix_agentd.d:ro  # UserParameter'id osa 5
     restart: unless-stopped
-
-  log-generator:
-    image: busybox:latest
-    container_name: log-generator
-    command:
-      - sh
-      - -c
-      - |
-        mkdir -p /var/log/app
-        SERVICES="payment auth api database cache"
-        LEVELS="INFO INFO INFO INFO INFO WARN ERROR"
-        MSGS="Request_OK User_login Cache_miss DB_slow_query Payment_failed Connection_retry"
-        while true; do
-          S=$$(echo $$SERVICES | tr " " "\n" | shuf -n1)
-          L=$$(echo $$LEVELS | tr " " "\n" | shuf -n1)
-          M=$$(echo $$MSGS | tr " " "\n" | shuf -n1)
-          echo "$$(date -Iseconds) [$$L] [$$S] $$M" >> /var/log/app/app.log
-          sleep 2
-        done
-    volumes:
-      - app-logs:/var/log/app
-    restart: unless-stopped
-
-volumes:
-  mysql-data:
-  app-logs:
-EOF
 ```
 
-### 1.3 Loome tühjad failid mida agent vajab
+`ZBX_HOSTNAME` **peab** ühtima sellega, mida kasutad UI-s host-i loomisel (osa 2). Agent saadab seda nime koos andmetega — kui ei vasta host-i nimele, Server viskab andmed ära.
 
-Agent ootab neid kahte faili — praegu on tühjad, osad 6-8 jooksul täidame:
+`./zabbix/config` mount — siia tuleb `test.conf`, `applog.conf` jm osa 5 ja 6-s. Agent loeb neid automaatselt restart'i peale.
+
+Testi:
 
 ```bash
-touch zabbix/config/applog.conf
-cat > zabbix/config/discover-services.sh << 'EOF'
-#!/bin/sh
-echo "[]"
-EOF
-chmod +x zabbix/config/discover-services.sh
+docker compose up -d zabbix-agent
+docker exec zabbix-server zabbix_get -s zabbix-agent -k agent.ping
 ```
 
-### 1.4 Käivita
+Peab tagastama `1`. `zabbix_get` on debug-tööriist — küsib agent'ilt ühe mõõdiku, ei salvesta kuhugi. Kasutame seda läbi kogu labori enne kui vormistame item'i UI-s.
 
-```bash
-docker compose up -d
-```
-
-⏱️ **Oota ~60 sek** — Zabbix server loob esimesel käivitumisel ~140 tabelit andmebaasi.
+### 1.6 Kokkuvõte
 
 ```bash
 docker compose ps
 ```
 
-Kõik viis konteinerit peavad olema `Up`. MySQL peab olema `Up (healthy)`.
-
-💡 **Miks healthcheck?** Ilma selleta läheb zabbix-server käima enne kui MySQL on valmis, ja kukub kokku. `depends_on: service_healthy` ootab healthcheck'i rohelist tulemust.
-
-### 1.5 Login
-
-Ava brauseris: `http://192.168.35.12X:8080`
-
-| Väli | Väärtus |
-|------|---------|
-| Username | `Admin` |
-| Password | `zabbix` |
-
-**Vaheta parool kohe:**
-
-1. Ülemine parem nurk → kasutaja ikoon → *Users* → *Admin*
-2. *Password* → *Change password*
-3. Uus parool: `Monitor2026!` (sama mis VM parool, et meelde jääks)
-4. *Update*
-
-⚡ **Kiirkontroll:** Sa näed Dashboard'i. Kusagil keskel on viide "Zabbix server" hostile — see on Zabbix server ise, monitoorib iseennast. Seda ei puuduta.
+Neli teenust `Up`, MySQL `(healthy)`. Kõik portid hallatud: Server 10051, Web 8080. Oled valmis host'e lisama.
 
 ---
 
-## Osa 2: Esimene host + template (25 min)
+## Osa 2 · Esimene host, template, trigger
 
-> **Loengust:** Host on Zabbixis loogiline mõõtmisobjekt. Item on üks mõõdik hostilt. Template on item'ite, trigger'ite ja graafikute pakett mis saab host'ile külge panna ühe klikiga.
+**Mõisted:** Host = objekt mida jälgid. Interface = ligipääsumoodus (Agent, SNMP, IPMI, JMX). Template = item'ite + trigger'ite pakk mida host'ile kinnitad. Item = üks mõõdik. [Zabbix docs / hosts](https://www.zabbix.com/documentation/7.0/en/manual/config/hosts).
 
-Meil on kaks agenti üleval — `zabbix-agent` container sinu stacki sees ja `mon-target` 192.168.35.140 peal. Alustame sisemisest (container).
+### 2.1 docker-agent (localhost Docker võrgus)
 
-### 2.1 Loo host
+*Data collection → Hosts → Create host*:
 
-1. Vasakus menüüs: *Data collection* → *Hosts*
-2. Paremal üleval: *Create host*
-3. Täida:
+- Host name: `docker-agent`
+- Host groups: `Linux servers`
+- Interfaces → Add → Agent → DNS name `zabbix-agent`, Connect to **DNS**, port `10050`
+- Templates → Select → `Linux by Zabbix agent`
 
-| Väli | Väärtus |
-|------|---------|
-| Host name | `docker-agent` |
-| Visible name | (jäta tühjaks) |
-| Host groups | Otsi ja vali `Linux servers` |
-| Interfaces → Add → Agent | |
-| ↳ DNS name | `zabbix-agent` |
-| ↳ Connect to | **DNS** (mitte IP!) |
-| ↳ Port | `10050` |
+Add. Oota 60s. *Hosts* lehel peab olema roheline ZBX.
 
-💡 **Miks DNS, mitte IP?** Docker network'is pole IP stabiilne — container restart → uus IP. DNS nimi `zabbix-agent` jääb samaks alati.
+Miks DNS mitte IP? Docker võrgu konteineri IP muutub restart'iga. DNS-nimi (= container name) jääb.
 
-### 2.2 Lisa template
+### 2.2 mon-target (päris server)
 
-Sama host'i lehel, **Templates** tab:
+Loo teine host samamoodi, aga Interface on IP, mitte DNS:
 
-1. *Select* nupp
-2. Otsi: `Linux by Zabbix agent`
-3. *Select*
-4. All alumine **Add** nupp
+- Host name: `mon-target`
+- Interface → Agent → IP `192.168.35.140`, Connect to **IP**, port `10050`
+- Templates → `Linux by Zabbix agent`
 
-### 2.3 Vaata et ühendus töötab
-
-*Data collection* → *Hosts*
-
-Sinu uus `docker-agent` host. **Availability** veerus peaks olema roheline **ZBX**.
-
-⏱️ **Oota ~60 sek** esimese kontrolli jaoks.
-
-💡 **Kui ZBX on punane:** Agent ei vasta. Kiirkontroll: `docker logs zabbix-agent | tail -20`. Kõige sagedasem põhjus — `ZBX_SERVER_HOST` vale (peab olema `zabbix-server`, mitte localhost).
-
-### 2.4 Vaata päriselu mõõdikuid
-
-*Monitoring* → *Latest data*
-
-Filter:
-- Hosts: `docker-agent`
-- *Apply*
-
-Näed ~200 mõõdikut — CPU, RAM, disk, network, protsessid. Kõik, mida `Linux by Zabbix agent` template on valmis seadistanud.
-
-Kliki mõne mõõdiku juures **Graph** ikoonile → näed graafikut.
-
-⚡ **Kiirkontroll — vasta:**
-
-- Mitu CPU tuuma sinu VM-il on? (Filter: `CPU` → `System: Number of CPUs`)
-- Mis on vaba mälu MB-des? (`Available memory in %` või `Available memory`)
-
----
-
-## Osa 3: Esimene trigger (25 min)
-
-> **Loengust:** Trigger on tingimus mis kaitseb sind. Item kogub andmeid, trigger ütleb millal on midagi valesti.
-
-### 3.1 Vaata template triggereid
-
-Template `Linux by Zabbix agent` tuli juba ~30 trigger'iga. Vaata neid:
-
-*Data collection* → *Hosts* → `docker-agent` real kliki **Triggers** lingile (number nt "30").
-
-Paneb tähele — iga trigger on seotud item'iga.
-
-### 3.2 Tekita CPU koormus
-
-Ava eraldi terminal, SSH oma VM-i:
-
-```bash
-docker exec zabbix-agent sh -c 'dd if=/dev/zero of=/dev/null & dd if=/dev/zero of=/dev/null & dd if=/dev/zero of=/dev/null & dd if=/dev/zero of=/dev/null &'
-```
-
-See käivitab 4 paralleelset `dd` protsessi mis söövad CPU-d 100%.
-
-### 3.3 Vaata kuidas trigger käivitub
-
-*Monitoring* → *Problems*
-
-⏱️ **Oota 1-2 min.** Peab ilmuma punane rida:
-
-> **High CPU utilization** on docker-agent
-
-Trigger läbib kolm olekut:
-1. 🟢 **OK** — kõik hästi (enne stress-testi)
-2. 🟡 **Pending** — tingimus kehtib, aga `for:` aeg pole möödas (ei ilmu UI-sse)
-3. 🔴 **Firing** — alert käivitunud → Problems UI-s
-
-### 3.4 Peata koormus
-
-```bash
-docker exec zabbix-agent pkill dd
-```
-
-⏱️ **Oota 1-2 min.** Problem kaob automaatselt — Zabbix tuvastas et tingimus enam ei kehti.
-
-💡 **Võrdlus päev 1 Prometheus'iga:** Prometheus'is oli alert rule YAML-failis, Zabbixis on trigger UI-s (või template'ist). Idee sama — mõlemas on `for:` aeg enne kui alert on päriselt "elus".
-
----
-
-## Osa 4: mon-target üle võrgu (25 min)
-
-Nüüd lisame teise hosti mis pole meie stacki sees, vaid eraldi serveris. `mon-target` peal jookseb Zabbix agent juba — vaata.
-
-### 4.1 Kontrolli et agent vastab
+Kui availability jääb punaseks, testi:
 
 ```bash
 docker exec zabbix-server zabbix_get -s 192.168.35.140 -k agent.ping
 ```
 
-**Oodatud vastus:** `1`
+Peab tagastama `1`.
 
-Kui saad `1` — agent vastab ja server näeb teda. Kui saad vea → küsi koolitajalt.
+### 2.3 Trigger Firing → OK
 
-### 4.2 Lisa host
+`Linux by Zabbix agent` template sisaldab juba CPU triggerit. SSH mon-target'ile:
 
-*Data collection* → *Hosts* → *Create host*
+```bash
+ssh maria@192.168.35.140
+sudo stress-ng --cpu 4 --timeout 180s &
+```
 
-| Väli | Väärtus |
-|------|---------|
-| Host name | `mon-target` |
-| Host groups | `Linux servers` |
-| Interfaces → Add → Agent | |
-| ↳ IP address | `192.168.35.140` |
-| ↳ Connect to | **IP** |
-| ↳ Port | `10050` |
-
-**Templates** tab:
-- *Select* → `Linux by Zabbix agent` → *Add*
-
-### 4.3 Kontrolli ja vaata
-
-*Data collection* → *Hosts* — mon-target availability peaks ~60 sek jooksul minema roheliseks.
-
-*Monitoring* → *Latest data* → filter: `mon-target` — näed kõiki 200 mõõdikut.
-
-⚡ **Kiirkontroll — võrdle kahte hosti:**
-
-Ava *Latest data*, filtreeri mõlemat hosti korraga (jäta Hosts tühjaks, vali 2 hosti). Vaata `System: System uptime`.
-
-- Kumb süsteem on kauem üleval — sinu VM (kui ta on) või mon-target?
-- Miks? (Viga päev 1 reboot, või mon-target ise reboot)
+*Monitoring → Problems* — 1-2 min pärast ilmub `High CPU utilization`. Peata koormus (`sudo pkill stress-ng`) → trigger läheb Resolved ise. Sama loogika kui Prometheus alert'idel — tingimus kehtib → käivitub, ei kehti enam → kaob.
 
 ---
 
-## Osa 5: UserParameter — kirjuta oma mõõdik (60 min)
+## Osa 3 · User macros
 
-> **Loengust:** Template'id katavad 80% igapäevast vajadust. Aga iga ettevõte kirjutab varem või hiljem **oma mõõdikuid**. Zabbixis on see UserParameter — agenti sisse kleebitud käsk, mille server saab käivitada.
+Zabbix item-konfis kirjutad tihti asju mida ei tohiks seal olla: URL'id, tokenid, paroole. Lahendus on **user macro** — `{$NIMI}` süntaksiga viide, väärtus hoitud eraldi (host- või template-tasandil). Audit-log näitab ainult macro nime.
 
-Meil on `log-generator` container mis kirjutab ridu failis `/var/log/app/app.log`, formaadis:
+*Data collection → Hosts → `docker-agent` → Macros* tab → *Add*:
+
+| Macro | Value | Type |
+|-------|-------|------|
+| `{$APP.ENV}` | `production` | Text |
+| `{$APP.LOG.PATH}` | `/var/log/app/app.log` | Text |
+| `{$APP.DB.PASSWORD}` | `secret_123` | **Secret text** |
+
+Update.
+
+**Secret text** tüüp peidab väärtuse UI-s ja audit-logis. Tavalist Text näeb iga operaator.
+
+Miks host-level? Host'i näeb vähem inimesi kui globaalset konfi. Kui token leki, ühe host'i tasand on väiksem kahju kui kogu Zabbix.
+
+Tööstuses kasutatakse ka [Vault macro](https://www.zabbix.com/documentation/7.0/en/manual/config/macros/secret_macros#vault-macros) — Zabbix loeb macro väärtust otse HashiCorp Vault'ist, siis pole isegi Zabbix DB-s.
+
+Kasutame macro'sid päriselt osa 5-s UserParameter'i parameetrites.
+
+---
+
+## Osa 4 · HTTP Agent + Dependent items
+
+### Mõisted
+
+**HTTP Agent item** — Server teeb HTTP päringu otse URL'ile. Agent'i ei vaja. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/http).
+
+**Dependent item** — tuletatud item master'i tulemusest. Üks HTTP päring → N mõõdikut. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/dependent_items).
+
+**Preprocessing** — teisendus enne salvestamist: regex, JSONPath, Prometheus parser, jne. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/config/items/preprocessing).
+
+Päev 1 Prometheuses sama tulemus saavutati `nginx-prometheus-exporter` konteineriga. Zabbix teeb selle exporter'ita — HTTP Agent kutsub endpoint'i otse.
+
+### 4.1 Host ilma agent'ita
+
+Loo `nginx-web` host. Host group: loo uus `Applications`. **Interface'i ära lisa** — HTTP Agent kasutab URL'i otse.
+
+### 4.2 Master item
+
+Sama host'i *Items → Create*:
+
+- Name: `Nginx status raw`
+- Type: **HTTP agent**
+- Key: `nginx.status.raw`
+- URL: `http://192.168.35.141:8080/stub_status`
+- Type of information: **Text**
+- Update interval: `30s`
+
+Add. Minut hiljem *Latest data* näitab:
 
 ```
-2026-04-25T10:23:41+03:00 [ERROR] [payment] Payment_failed
+Active connections: 1
+server accepts handled requests
+ 47 47 89
+Reading: 0 Writing: 1 Waiting: 0
 ```
 
-Tahame teada: **mitu ERROR-rida on viimase 1000 rea seas iga teenuse kohta?**
+See on [Nginx stub_status formaat](https://nginx.org/en/docs/http/ngx_http_stub_status_module.html) — viis numbrit ühel request'il.
 
-### 5.1 Vaata logi
+### 4.3 Dependent item
+
+*Items → Create*:
+
+- Name: `Active connections`
+- Type: **Dependent item**
+- Master item: `nginx-web: Nginx status raw`
+- Key: `nginx.connections.active`
+- Type of information: **Numeric (unsigned)**
+- Preprocessing → Add → Regular expression: pattern `Active connections: (\d+)`, output `\1`
+
+Add. Tekita liiklust:
 
 ```bash
-docker exec zabbix-agent tail -n 5 /var/log/app/app.log
+for i in {1..20}; do curl -s http://192.168.35.141:8080/ > /dev/null & done; wait
 ```
 
-Peaks nägema 5 rida ajatempliga, tasemega, teenusega ja sõnumiga.
+Graafikul peaks olema spike.
 
-### 5.2 Kirjuta UserParameter
+### 4.4 Lisa veel üks ise
 
-Avame faili mis on juba Docker'i sisse mount'itud — kirjutame sinna UserParameter'i defineerinud rea:
+Tee dependent item `Requests total` mis võtab middle number'i `47 47 89` reast (see on "handled"). Regex: `requests\s+\d+\s+(\d+)\s+\d+`.
 
-```bash
-cat > zabbix/config/applog.conf << 'EOF'
-# Loendab viimase 1000 rea seas ERROR ridu antud teenuse kohta
-UserParameter=applog.errors[*], tail -n 1000 /var/log/app/app.log | grep -c "\[ERROR\] \[$1\]"
+Üks HTTP päring annab meile kolm mõõdikut. Viis päringut oleks sama info = viiekordne koormus Nginx'ile. Oluline kui jälgid asja mida ei tohi koormata.
 
-# Loendab viimase 1000 rea seas ridu antud taseme ja teenuse kohta
-UserParameter=applog.count[*], tail -n 1000 /var/log/app/app.log | grep -c "\[$1\] \[$2\]"
+---
 
-# Kasutatakse LLD jaoks osa 6-s
-UserParameter=applog.discovery, /usr/local/bin/discover-services.sh
-EOF
-```
+## Osa 5 · UserParameter
 
-### 5.3 Restart agent
+UserParameter on shell-käsk mida agent käivitab, kui server küsib võtmega. See on Zabbix'i kõige võimsam feature — üks rida ja sul on uus mõõdik. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters).
 
-UserParameter luetakse ainult käivitumisel sisse — kui muudad faili, agent peab uuesti käivituma.
+### 5.1 Kiire proov
+
+Su VM-is Compose faili agent mount'ib `~/paev2/zabbix/config`.
 
 ```bash
+echo 'UserParameter=minu.test, echo 42' > ~/paev2/zabbix/config/test.conf
 docker restart zabbix-agent
+sleep 5
+docker exec zabbix-server zabbix_get -s zabbix-agent -k minu.test
 ```
 
-⏱️ **Oota 10 sek.**
+Vastus: `42`.
 
-### 5.4 Testi `zabbix_get`-iga
+`zabbix_get` küsib ühe väärtuse agent'i käest, ei salvesta kuhugi. See on debug-tööriist.
 
-`zabbix_get` on tööriist millega server küsib agendilt **ühte** mõõdikut otse, ilma et midagi salvestuks. Ideaalne debug'iks.
+### 5.2 Parameetrid
 
 ```bash
-docker exec zabbix-server zabbix_get -s zabbix-agent -k "applog.errors[payment]"
+cat > ~/paev2/zabbix/config/test.conf <<'EOF'
+UserParameter=minu.topelt[*], echo $(($1 * 2))
+EOF
+docker restart zabbix-agent
+sleep 5
 ```
-
-Peaksid saama numbri — nt `15` või midagi taolist.
-
-Proovi veel:
 
 ```bash
-docker exec zabbix-server zabbix_get -s zabbix-agent -k "applog.count[WARN,auth]"
-docker exec zabbix-server zabbix_get -s zabbix-agent -k "applog.errors[database]"
+docker exec zabbix-server zabbix_get -s zabbix-agent -k "minu.topelt[5]"
+docker exec zabbix-server zabbix_get -s zabbix-agent -k "minu.topelt[100]"
 ```
 
-💡 **Kui saad `ZBX_NOTSUPPORTED`:** UserParameter faili sisse sattus trükiviga, või `grep` süntaks läks valeks. Kontrolli: `docker exec zabbix-agent cat /etc/zabbix/zabbix_agentd.d/applog.conf`.
+`[*]` võtme lõpus → parameetrid lubatud. `$1`, `$2` viitavad neile.
 
-### 5.5 Loo item Zabbixis
+### 5.3 Päris mõõdik
 
-*Data collection* → *Hosts* → `docker-agent` → *Items* → *Create item*
+mon-target'il kirjutab log-generator `/var/log/app/app.log`:
 
-| Väli | Väärtus |
-|------|---------|
-| Name | `Payment errors (last 1000 lines)` |
-| Type | `Zabbix agent` |
-| Key | `applog.errors[payment]` |
-| Type of information | `Numeric (unsigned)` |
-| Update interval | `30s` |
+```
+2026-04-25T10:23:41 [ERROR] [payment] Payment failed
+```
 
-*Add*.
-
-⏱️ **Oota 2 min.**
-
-*Monitoring* → *Latest data* → filtreeri `docker-agent` + `Payment` → näed numbri.
-
-### 5.6 Loo trigger
-
-Sama host'i *Triggers* tab → *Create trigger*
-
-| Väli | Väärtus |
-|------|---------|
-| Name | `Too many payment errors` |
-| Severity | `Warning` |
-| Expression | `last(/docker-agent/applog.errors[payment])>10` |
-
-*Add*.
-
-### 5.7 Stress-test — tekita error-torm
-
-Sunnime `log-generator`-i iga rea ERROR tasemega kirjutama:
+Kirjuta UserParameter mis loeb error'id teenuse järgi. SSH mon-target:
 
 ```bash
-docker exec log-generator sh -c '
-for i in $(seq 1 100); do
-  echo "$(date -Iseconds) [ERROR] [payment] Payment_failed_spam_$i" >> /var/log/app/app.log
-done'
+ssh maria@192.168.35.140
+sudo tee /etc/zabbix/zabbix_agentd.d/applog.conf <<'EOF'
+UserParameter=applog.errors[*], tail -n 1000 /var/log/app/app.log | grep -c "\[ERROR\] \[$1\]"
+UserParameter=applog.count[*], tail -n 1000 /var/log/app/app.log | grep -c "\[$1\] \[$2\]"
+EOF
+sudo systemctl restart zabbix-agent
+exit
 ```
 
-⏱️ **Oota 30-60 sek** järgmise kontrolli jaoks.
+Tagasi oma VM-is testi:
 
-*Monitoring* → *Problems* — peab ilmuma:
+```bash
+docker exec zabbix-server zabbix_get -s 192.168.35.140 -k "applog.errors[payment]"
+docker exec zabbix-server zabbix_get -s 192.168.35.140 -k "applog.count[WARN,auth]"
+```
 
-> **Too many payment errors** on docker-agent
+Numbrid. Kui `ZBX_NOTSUPPORTED`, süntaksiviga — vaata `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf`.
 
-🎉 **Sa kirjutasid oma esimese custom mõõdiku.** Tavaline template ei teadnud midagi sinu rakenduse logidest. Sina defineerisid mida mõõta, kuidas mõõta ja millal alarm.
+### 5.4 Item + trigger UI-s
+
+mon-target host → *Items → Create*:
+
+- Name: `Payment errors (last 1000 lines)`
+- Type: Zabbix agent
+- Key: `applog.errors[payment]`
+- Type of information: Numeric (unsigned)
+- Update interval: `30s`
+
+*Triggers → Create*:
+
+- Name: `Too many payment errors on {HOST.NAME}`
+- Severity: Warning
+- Expression: `last(/mon-target/applog.errors[payment])>10`
+
+### 5.5 Torm
+
+```bash
+ssh maria@192.168.35.140 \
+  'for i in $(seq 1 100); do echo "$(date -Iseconds) [ERROR] [payment] Spam_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
+```
+
+1 min → *Problems* → trigger Firing.
 
 ---
 
-## Osa 6: Low-Level Discovery — autodiscovery (60 min)
+## Osa 6 · LLD + oma template
 
-> **Loengust:** Käsitsi 5 item'i loomine on OK. 50-ga juba mitte. LLD lubab Zabbixil **ise avastada mida monitoorida**: loeb skriptilt JSON-i, loob item'id ja trigger'id prototüüpide järgi.
+Osa 5 tegid `applog.errors[payment]` käsitsi. Aga teenuseid on 5 (payment, auth, api, database, cache), tasemeid 3 (INFO, WARN, ERROR) → 15 kombinatsiooni. Käsitsi pole mõistlik.
 
-Osa 5-s tegime `applog.errors[payment]`. Aga teenuseid on 5 (payment, auth, api, database, cache) ja tasemeid 3 (INFO, WARN, ERROR). See on 15 kombinatsiooni. Ja homme võib tulla juurde kuues teenus.
+LLD = Zabbix küsib agent'ilt JSON-i, iga kirje = üks uus item. Kirjutad **ühe mustri**, Zabbix rakendab seda igale avastatud objektile. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/discovery/low_level_discovery).
 
-**LLD lahendab selle:** kirjutad ühe reegli, saad 15 item'i automaatselt.
+Panema selle oma **template'isse**, et saaks korduvkasutada.
 
-### 6.1 Kirjuta discovery skript
+### 6.1 Discovery skript
 
-Skript mille agent käivitab. Tagastab JSON massiivi millest Zabbix saab macro'd `{#SEVERITY}` ja `{#SERVICE}`.
+mon-target'ile:
 
 ```bash
-cat > zabbix/config/discover-services.sh << 'EOF'
-#!/bin/sh
-# Avastab [SEVERITY] [SERVICE] kombinatsioonid viimase 5000 rea seast
-
-LOG=/var/log/app/app.log
-
-tail -n 5000 "$LOG" 2>/dev/null \
+ssh maria@192.168.35.140
+sudo tee /usr/local/bin/applog-discovery.sh <<'EOF'
+#!/bin/bash
+tail -n 5000 /var/log/app/app.log 2>/dev/null \
   | grep -oE '\[(INFO|WARN|ERROR)\] \[[a-z]+\]' \
   | sort -u \
   | awk '
@@ -528,283 +486,259 @@ tail -n 5000 "$LOG" 2>/dev/null \
     NR > 1 { printf "," }
     {
       sev = $1; svc = $2
-      gsub(/[\[\]]/, "", sev)
-      gsub(/[\[\]]/, "", svc)
+      gsub(/[\[\]]/, "", sev); gsub(/[\[\]]/, "", svc)
       printf "{\"{#SEVERITY}\":\"%s\",\"{#SERVICE}\":\"%s\"}", sev, svc
     }
     END { print "]" }
   '
 EOF
-chmod +x zabbix/config/discover-services.sh
+sudo chmod +x /usr/local/bin/applog-discovery.sh
+
+sudo tee -a /etc/zabbix/zabbix_agentd.d/applog.conf <<'EOF'
+UserParameter=applog.discovery, /usr/local/bin/applog-discovery.sh
+EOF
+sudo systemctl restart zabbix-agent
+exit
 ```
 
-### 6.2 Restart agent ja testi
+Testi:
 
 ```bash
-docker restart zabbix-agent
-sleep 10
-docker exec zabbix-server zabbix_get -s zabbix-agent -k applog.discovery
+docker exec zabbix-server zabbix_get -s 192.168.35.140 -k applog.discovery
 ```
 
-**Oodatud vastus:** JSON, mis näeb välja umbes nii:
+Valid JSON:
 
 ```json
-[{"{#SEVERITY}":"ERROR","{#SERVICE}":"auth"},{"{#SEVERITY}":"ERROR","{#SERVICE}":"payment"},{"{#SEVERITY}":"INFO","{#SERVICE}":"api"},...]
+[{"{#SEVERITY}":"ERROR","{#SERVICE}":"auth"},{"{#SEVERITY}":"ERROR","{#SERVICE}":"payment"},...]
 ```
 
-15 objekti ümber, sõltuvalt sellest palju log on kasvanud.
+`{#SEVERITY}` ja `{#SERVICE}` on LLD macros — Zabbix asendab need avastatud väärtustega iga item'i loomisel.
 
-💡 **Selles on LLD võlu:** Zabbix näeb selle JSON-i ja saab aru "aa, meil on 15 asja, teeme 15 item'i".
+### 6.2 Oma template
 
-### 6.3 Loo Discovery Rule
+*Data collection → Templates → Create template*:
 
-*Data collection* → *Hosts* → `docker-agent` → *Discovery rules* → *Create discovery rule*
+- Template name: `App Log Monitoring`
+- Template groups: loo uus `Templates/Applications`
 
-| Väli | Väärtus |
-|------|---------|
-| Name | `Log services discovery` |
-| Type | `Zabbix agent` |
-| Key | `applog.discovery` |
-| Update interval | `2m` |
+Kliki loodud template'il:
 
-*Add*.
+**Discovery rules → Create discovery rule**:
 
-### 6.4 Loo Item Prototype
+- Name: `Log services discovery`
+- Type: Zabbix agent
+- Key: `applog.discovery`
+- Update interval: `2m`
 
-Sama reegli sees, *Item prototypes* tab → *Create item prototype*
+Avab discovery rule'i:
 
-| Väli | Väärtus |
-|------|---------|
-| Name | `{#SEVERITY} count for {#SERVICE}` |
-| Type | `Zabbix agent` |
-| Key | `applog.count[{#SEVERITY},{#SERVICE}]` |
-| Type of information | `Numeric (unsigned)` |
-| Update interval | `30s` |
+**Item prototypes → Create**:
 
-*Add*.
+- Name: `{#SEVERITY} count for {#SERVICE}`
+- Type: Zabbix agent
+- Key: `applog.count[{#SEVERITY},{#SERVICE}]`
+- Type of information: Numeric (unsigned)
+- Update interval: `30s`
 
-💡 **Mis just juhtus:** sa andsid Zabbixile **malli**. Iga avastatud `{#SEVERITY}`+`{#SERVICE}` paari kohta loob Zabbix ise item'i. 15 paari → 15 item'i.
+**Trigger prototypes → Create**:
 
-### 6.5 Loo Trigger Prototype
+- Name: `Too many {#SEVERITY} in {#SERVICE} on {HOST.NAME} (>20)`
+- Severity: Warning
+- Expression: `last(/App Log Monitoring/applog.count[{#SEVERITY},{#SERVICE}])>20`
 
-Sama reegli sees, *Trigger prototypes* tab → *Create trigger prototype*
+### 6.3 Filter — INFO välja
 
-| Väli | Väärtus |
-|------|---------|
-| Name | `Too many {#SEVERITY} in {#SERVICE} (>20)` |
-| Severity | `Warning` |
-| Expression | `last(/docker-agent/applog.count[{#SEVERITY},{#SERVICE}])>20` |
+INFO'sid tekib pidevalt — trigger iga INFO peal = alert fatigue. Discovery rule → **Filters** tab:
 
-*Add*.
+| Macro | Regex | Match |
+|-------|-------|-------|
+| `{#SEVERITY}` | `ERROR\|WARN` | Matches |
 
-### 6.6 Oota ja vaata võlu
+### 6.4 Template host'ile
 
-⏱️ **Oota 2-3 min.**
+*Hosts → mon-target → Templates* tab → Select → `App Log Monitoring` → Update.
 
-*Data collection* → *Hosts* → `docker-agent` → *Items* → scrolli lõppu.
+2-3 min → mon-target Items all on ~10 uut item'it (5 teenust × 2 severity taset).
 
-Peaksid nägema umbes 15 uut item'i automaatselt loodud:
+### 6.5 Dünaamilisuse proov
 
-- `ERROR count for payment`
-- `ERROR count for auth`
-- `WARN count for payment`
-- `INFO count for api`
-- ...
-
-*Monitoring* → *Latest data* → filter `docker-agent` → scroll. Iga teenus-tase paari kohta on andmed.
-
-### 6.7 Testi — lisa uus teenus
-
-Nüüd tõestame et LLD on dünaamiline. Lisa logisse uus teenus, mida varem ei olnud:
+Lisa uus teenus:
 
 ```bash
-docker exec log-generator sh -c '
-for i in $(seq 1 50); do
-  echo "$(date -Iseconds) [ERROR] [shipping] Package_lost_$i" >> /var/log/app/app.log
-done'
+ssh maria@192.168.35.140 \
+  'for i in $(seq 1 50); do echo "$(date -Iseconds) [ERROR] [shipping] Package_lost_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
 ```
 
-⏱️ **Oota 2-3 min** (discovery interval + processing delay).
+2-3 min pärast (discovery interval + processing) → `ERROR count for shipping` item ilmub ise. Trigger samuti.
 
-*Items* listis peaks ilmuma:
-
-- `ERROR count for shipping`
-
-Zabbix avastas ise. Sa ei teinud midagi.
-
-🎉 **See on LLD:** ühe reegliga katsid tänase ja homse kasvu. Päris elus — kui täna on 5 mikroteenust ja järgmisel aastal 50, sinu monitooring ei vaja ühtegi muudatust.
+20 serverile sama monitooringu lisamiseks: *Hosts → vali kõik → Mass update → Link templates*. Üks klikk.
 
 ---
 
-## Osa 7: Action + teavitus (30 min)
+## Osa 7 · Discord webhook
 
-> **Loengust:** Trigger tuvastab, Action reageerib. Ilma Action'ita istub probleem UI-s — keegi peab ekraani vaatama. Action saadab e-kirja, Slack-sõnumi, loeb piletisüsteemis, käivitab skripti.
+Trigger tuvastab, **Action** reageerib. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/config/notifications/action). Komponente neli:
 
-Teeme Slack webhook teavituse.
+1. Media type — kuidas (Discord, email, script)
+2. User media — kasutaja seaded (mis kanalisse, mis severity-st alates)
+3. Action — millal käivitada
+4. Webhook URL — kuhu saata
 
-### 7.1 Slack webhook URL
+### 7.1 Discord webhook URL
 
-**Koolitaja annab:** klassi jaoks on loodud Slack workspace ja kanal `#alerts-<sinu-nimi>`. Webhook URL on kujul:
+Discord'is: Server Settings (hammasratas) → Integrations → Webhooks → **New Webhook** → kanal → **Copy Webhook URL**. Vorm:
 
 ```
-https://hooks.slack.com/services/XXX/YYY/ZZZ
+https://discord.com/api/webhooks/1234567890/abcdefghij...
 ```
 
-Kirjuta oma URL siia: `__________________`
+[Discord dokumentatsioon](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
 
-(Kui Slack pole saadaval, koolitaja annab emaili SMTP seadistuse juhised. Samm-sammult loogika sama.)
+### 7.2 Zabbix Media type
 
-### 7.2 Seadista Media Type
+Zabbix 7-l on Discord juba sees. *Alerts → Media types* → `Discord` → kliki.
 
-*Alerts* → *Media types* → otsi `Slack`.
+**Parameters** tab → `discord_endpoint` lahtrisse kleebi webhook URL. Update. Ülal **Enabled**.
 
-Zabbix 7.0-l on Slack media type sisseehitatud. Kliki nimel → *Parameters*:
+### 7.3 User media
 
-| Parameter | Value |
-|-----------|-------|
-| `bot_token` | (jäta, me kasutame webhook'i) |
-| `slack_mode` | `alarm` |
-| `channel` | `#alerts-<sinu-nimi>` |
+*Users → Users → Admin → Media* → Add:
 
-**Võimalik alternatiiv (lihtsam):** loo uus media type tüübiga *Webhook*, script lükkab JSON-payload'i webhook URL-ile. Vt `zabbix/config/slack-webhook.js` (kui koolitaja on selle ettevalmis pannud).
+- Type: Discord
+- Send to: `#alerts` (kanali nimi — webhook suunab juba õigesse, see on ainult visuaalne)
+- Severity: kõik linnutatud
 
-*Update*. Ülemisel ribal vali **Enabled**.
+Update.
 
-### 7.3 Lisa teavitus oma kasutajale
+### 7.4 Action
 
-*Users* → *Users* → `Admin` → *Media* tab → *Add*
-
-| Väli | Väärtus |
-|------|---------|
-| Type | `Slack` |
-| Send to | `#alerts-<sinu-nimi>` |
-| When active | `1-7,00:00-24:00` |
-| Use if severity | märgi kõik |
-
-*Add* → *Update*.
-
-### 7.4 Loo Action
-
-*Alerts* → *Actions* → *Trigger actions* → *Create action*
+*Alerts → Actions → Trigger actions → Create action*:
 
 **Action** tab:
-- Name: `Send Slack on any trigger`
-- Conditions: (tühjaks — rakendub kõikidele trigger'itele) VÕI lisa `Severity >= Warning` kui tahad ainult kõrge severity
+- Name: `Send Discord notifications`
+- Conditions → Add → Trigger severity → ≥ Warning
 
 **Operations** tab:
-- Operations → *Add*
-- Send to users: `Admin`
-- Send only to: `Slack`
-- *Add*
+- Add → Send to users: Admin → Send only to: Discord
 
 **Recovery operations** tab:
-- *Add* sama konfiguratsiooniga — see saadab ka resolved teate
+- Add → sama (muidu recovery-sõnum ei tule)
 
-*Add* (all all).
+Add.
 
-### 7.5 Testi
-
-Tekita error-torm nagu osa 5-s:
+### 7.5 Proov
 
 ```bash
-docker exec log-generator sh -c '
-for i in $(seq 1 100); do
-  echo "$(date -Iseconds) [ERROR] [payment] Spam_$i" >> /var/log/app/app.log
-done'
+ssh maria@192.168.35.140 \
+  'for i in $(seq 1 100); do echo "$(date -Iseconds) [ERROR] [payment] Spam_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
 ```
 
-⏱️ **Oota 1-2 min.**
+1-2 min → Discord kanalis sõnum. Peatus:
 
-Slack kanalis peaks ilmuma sõnum. Täpne formaat sõltub media type template'ist.
+```bash
+ssh maria@192.168.35.140 'sudo truncate -s 0 /var/log/app/app.log'
+```
 
-🎉 **Pipeline on nüüd täis:** `log-generator` kirjutab → UserParameter loeb → item salvestab → trigger tuvastab → action saadab → inimene saab teada. See on **päris monitoring**.
+Recovery-sõnum 2-3 min pärast.
 
 ---
 
-## ✅ Lõpukontroll
+## Kontrolli enne lõpetamist
 
-Enne lõpetamist veendu:
-
-- [ ] `docker compose ps` — 5 konteinerit Up
-- [ ] Zabbix UI töötab `http://192.168.35.12X:8080`, parool vahetatud
-- [ ] `docker-agent` host roheline, Latest data täis
-- [ ] `mon-target` host roheline, Latest data täis
-- [ ] `applog.errors[payment]` item olemas, graafikul andmed
-- [ ] Custom trigger `Too many payment errors` on nähtud Firing olekus
-- [ ] Discovery rule lõi vähemalt 10 item'i automaatselt
-- [ ] Slack sõnum jõudis kohale (või email)
+- [ ] `docker compose ps` — 4 konteinerit Up
+- [ ] docker-agent ja mon-target host'id availability roheline
+- [ ] User macros on docker-agent peal (Secret text tüüp töötab)
+- [ ] nginx-web HTTP Agent item tagastab stub_status teksti, dependent item Active connections numbri
+- [ ] `zabbix_get -k "applog.errors[payment]"` tagastab numbri
+- [ ] Trigger Too many payment errors läks Firing ja lahenes
+- [ ] Oma template App Log Monitoring olemas
+- [ ] LLD lõi ≥ 10 item'it ise, uue teenuse lisandumisel tekkis veel
+- [ ] Discord kanalis alert-sõnum
 
 ---
 
-## 🚀 Lisaülesanded
+## Edasijõudnu — kui aega või kodus
 
-### HTTP Agent — monitoori ilma agendita
+### zabbix_sender (aktiivne mudel)
 
-`mon-target-web` peal on Nginx stub_status `:8080`. Loome Zabbixis item mis küsib HTTP-ga ilma agendita.
-
-1. *Create host* `nginx-web`, **ei lisa** interface'i (HTTP Agent ei vaja)
-2. *Items* → *Create item*:
-   - Type: `HTTP agent`
-   - Key: `nginx.stub_status`
-   - URL: `http://192.168.35.141:8080/stub_status`
-   - Type of info: `Text`
-3. *Preprocessing* tab → *Add*:
-   - Type: `Regular expression`
-   - Parameters: `Active connections: (\d+)` / `\1`
-4. Change item type of info to `Numeric (unsigned)`
-5. Oota → näed active connections numbrit
-
-### Multi-severity trigger
-
-Muuda osa 6 trigger prototype'i nii, et severity sõltub `{#SEVERITY}`-st:
-
-- Kui avastati `ERROR` → trigger severity `High`
-- Kui `WARN` → `Warning`
-- Kui `INFO` → ära loo trigger'it
-
-Vihje: LLD filter + mitu trigger prototype'i.
-
-### Grafana datasource
-
-Installi Grafana-Zabbix plugin oma päev 1 Grafanasse. Ühine dashboard, mis näitab Prometheuse ja Zabbixi andmeid korraga.
+Siiani: server küsib agent'ilt (passive). Teine muster: **saadad ise** serverile.
 
 ```bash
-# Vaata päev 1 Grafana
-docker exec -it <päev1-grafana> grafana-cli plugins install alexanderzobnin-zabbix-app
+ssh maria@192.168.35.140
+echo "mon-target deployment.version 7.0.6" > /tmp/deploy.txt
+zabbix_sender -z 192.168.35.120 -p 10051 -i /tmp/deploy.txt
 ```
+
+UI-s loo item tüübiga **Zabbix trapper** (mitte Agent). See item lihtsalt ootab — kui zabbix_sender saadab, salvestab.
+
+Päriselus: CI/CD pipeline saadab deployment'i fakti, batch-job saadab "valmis" sõnumi, skript välises süsteemis saadab oma andmeid. [zabbix_sender docs](https://www.zabbix.com/documentation/7.0/en/manpages/zabbix_sender).
+
+### Trigger hysteresis
+
+Trigger `last(...) > 10` läheb Firing > 10, OK ≤ 10. Kui väärtus kõikleb piiri ümber (9-10-11-9-12), saad 5 üleminekut 10 minutiga = alert spam.
+
+Hysteresis:
+
+- Problem expression: `last(/host/key) > 10`
+- OK event generation mode: **Recovery expression**
+- Recovery expression: `last(/host/key) < 5`
+
+Firing > 10, OK ainult kui < 5. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/config/triggers/expression#problem-severity-and-hysteresis).
+
+### Kohandatud sõnum
+
+Action → Operations → Message:
+
+```
+🔴 {TRIGGER.SEVERITY}: {TRIGGER.NAME}
+
+Host: {HOST.NAME} ({HOST.IP})
+Item: {ITEM.NAME}
+Value: {ITEM.VALUE}
+
+Time: {EVENT.DATE} {EVENT.TIME}
+Event ID: {EVENT.ID}
+```
+
+Recovery:
+
+```
+✅ RESOLVED: {TRIGGER.NAME}
+Host: {HOST.NAME}
+Duration: {EVENT.DURATION}
+```
+
+Kõik macros: [docs](https://www.zabbix.com/documentation/7.0/en/manual/appendix/macros/supported_by_location).
+
+### Zabbix API + Ansible
+
+[Zabbix JSON-RPC API](https://www.zabbix.com/documentation/7.0/en/manual/api) võimaldab host'e, template'eid, trigger'id skriptiga hallata. [Community Ansible collection](https://galaxy.ansible.com/ui/repo/published/community/zabbix/).
 
 ---
 
 ## Veaotsing
 
-| Probleem | Lahendus |
-|----------|----------|
-| Zabbix web ei lae | Oota MySQL healthcheck valmis — `docker compose logs mysql` |
-| Host ZBX punane | `docker logs zabbix-agent`, kontrolli `ZBX_SERVER_HOST` |
-| `zabbix_get` timeout | Port 10050 kinni, või agent alla (`docker ps`) |
-| `ZBX_NOTSUPPORTED` | UserParameter'is süntaksi viga, vaata `docker exec zabbix-agent cat /etc/zabbix/zabbix_agentd.d/applog.conf` |
-| Discovery ei loo item'eid | Oota 2x discovery interval. `grep -i "discover" /var/log/zabbix/zabbix_server.log` pole meil, vaata `docker logs zabbix-server` |
-| Trigger ei käivitu | Oota `for:` aeg. Kontrolli expression Latest data väärtuse vastu. |
-| Slack ei saabu | *Reports* → *Audit log* → kas Action käivitus? Media type → *Test* |
-| Log fail tühi | `docker ps` — kas log-generator jookseb? `docker logs log-generator` |
-| Stack jookseb aeglaselt | RAM (`free -h`) — kui < 500MB vaba, peata päev 1 Grafana |
+| Probleem | Esimene kontroll |
+|----------|------------------|
+| zabbix-web restartub | `docker compose logs zabbix-web` — MySQL healthcheck'i oota |
+| mon-target availability punane | `docker exec zabbix-server zabbix_get -s 192.168.35.140 -k agent.ping` |
+| ZBX_NOTSUPPORTED UserParameter'iga | `ssh mon-target 'sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf'` |
+| applog.discovery annab `[]` | Log-generator pole kõiki kombinatsioone genereerinud, oota 2-3 min |
+| LLD ei loo item'eid | `docker logs zabbix-server 2>&1 \| grep -i discovery`, oota 2× discovery interval |
+| Trigger ei Firing | Latest data väärtus — kas tingimus tegelikult kehtib? |
+| HTTP Agent 403 / timeout | `curl -v http://192.168.35.141:8080/stub_status` otse |
+| Discord sõnum ei tule | *Reports → Audit log* — Action käivitus? Media type *Test* nupp |
 
 ---
 
-## 📚 Allikad
+## Allikad
 
-| Allikas | URL |
-|---------|-----|
-| Zabbix 7.0 dokumentatsioon | https://www.zabbix.com/documentation/7.0/en/ |
-| UserParameter juhend | https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters |
-| Low-Level Discovery | https://www.zabbix.com/documentation/7.0/en/manual/discovery/low_level_discovery |
-| Zabbix Docker images | https://hub.docker.com/u/zabbix |
-| Zabbix 7.0 → Grafana plugin | https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/ |
-| `zabbix_get` juhend | https://www.zabbix.com/documentation/7.0/en/manpages/zabbix_get |
-| Custom LLD näited | https://sbcode.net/zabbix/custom-lld/ |
+- [Zabbix 7.0 manuaal](https://www.zabbix.com/documentation/7.0/en/manual)
+- [UserParameters](https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters)
+- [Low-Level Discovery](https://www.zabbix.com/documentation/7.0/en/manual/discovery/low_level_discovery)
+- [HTTP Agent](https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/http)
+- [Discord integration](https://www.zabbix.com/integrations/discord)
+- [Community templates](https://github.com/zabbix/community-templates)
 
-**Versioonid (testitud, aprill 2026):**
-
-- Zabbix: `7.0.6` (LTS)
-- MySQL: `8.0`
-- Docker Compose: v2.x
+Versioonid: Zabbix 7.0.6 LTS, MySQL 8.0, Docker Compose v2.
