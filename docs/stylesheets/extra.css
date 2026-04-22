@@ -3,12 +3,12 @@
 
 /* --- Põhitekst: tihedam reavahe --- */
 .md-typeset {
-  line-height: 1.55;
-  font-size: 0.78rem;
+  line-height: 1.45;
+  font-size: 0.76rem;
 }
 
 .md-typeset p {
-  margin: 0.5em 0;
+  margin: 0.35em 0;
 }
 
 /* --- Pealkirjad: väiksem vertikaalne ruum --- */
@@ -36,16 +36,16 @@
 /* --- Listid: tihedamalt --- */
 .md-typeset ul,
 .md-typeset ol {
-  margin: 0.4em 0;
+  margin: 0.25em 0;
   padding-left: 1.4em;
 }
 
 .md-typeset li {
-  margin: 0.2em 0;
+  margin: 0.1em 0;
 }
 
 .md-typeset li > p {
-  margin: 0.2em 0;
+  margin: 0.1em 0;
 }
 
 /* --- Tabelid: kompaktsed ja loetavad --- */
@@ -77,9 +77,13 @@
 }
 
 .md-typeset pre > code {
-  line-height: 1.4;
-  padding: 0.8em 1em;
-  font-size: 0.75rem;
+  line-height: 1.35;
+  padding: 0.6em 0.9em;
+  font-size: 0.74rem;
+}
+
+.md-typeset .highlight {
+  margin: 0.5em 0;
 }
 
 /* --- Admonition ("!!! note"): kompaktsem --- */
@@ -136,8 +140,34 @@
 
 /* --- Horisontaaljoon: peenem --- */
 .md-typeset hr {
-  margin: 1.2em 0;
+  margin: 0.9em 0;
   border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* --- Paremservas sisukord (TOC): alati nähtav pikematel lehtedel --- */
+.md-sidebar--secondary {
+  display: block !important;
+}
+
+.md-nav--secondary .md-nav__title {
+  display: block;
+  font-size: 0.72rem;
+  padding: 0.5em 0.6rem;
+}
+
+.md-nav--secondary .md-nav__link {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  margin: 0.15em 0;
+}
+
+/* Pealkirjade ülemised vahed natuke suuremad, et TOC-i klikkides oleks selge kuhu jõudsid */
+.md-typeset h2:target,
+.md-typeset h3:target {
+  background: var(--md-accent-fg-color--transparent);
+  padding-left: 0.5em;
+  margin-left: -0.5em;
+  border-radius: 3px;
 }
 
 /* --- Mermaid diagrammid: ümbritseva raami eemaldus --- */

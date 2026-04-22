@@ -14,7 +14,6 @@ theme:
     - navigation.tracking
     - navigation.instant
     - toc.follow
-    - toc.integrate
     - search.suggest
     - search.highlight
     - content.tabs.link
