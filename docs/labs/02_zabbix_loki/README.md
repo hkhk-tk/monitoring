@@ -2,19 +2,21 @@
 
 **25. aprill 2026 · 10:00–14:30**
 
-Täna tuleb kaks suurt teemat ühe päeva sisse. Mõlema idee: agent-põhine monitooring (Zabbix) ja logide käsitlemine (Loki).
+Kaks teemat: agent-põhine monitooring (Zabbix) ja logide käsitlemine (Loki). Klassis jõuame põhiosad, ülejäänu lõpetad kodus — labijuhend kannab ise.
 
 ---
 
 ## Päeva kava
 
-| Aeg | Tegevus | Materjal |
-|-----|---------|----------|
-| 10:00 – 14:00 | Zabbix lab (4 tundi) | [zabbix_lab.md](zabbix_lab.md) |
-| 14:00 – 14:30 | Paus + arutelu | — |
-| 14:30 – 18:30 | Loki lab (4 tundi) | [loki_lab.md](loki_lab.md) |
+| Aeg | Kestus | Tegevus | Materjal |
+|-----|--------|---------|----------|
+| 10:00–10:15 | 15 min | Avamine, päev 1 kordamine | — |
+| 10:15–12:15 | 2h | Zabbix lab (Osad 1–5) | [zabbix_lab.md](zabbix_lab.md) |
+| 12:15–12:45 | 30 min | Paus | — |
+| 12:45–14:15 | 1h 30min | Loki lab (Osad 1–5) | [loki_lab.md](loki_lab.md) |
+| 14:15–14:30 | 15 min | Kokkuvõte + kodutöö juhised | — |
 
-Labis lõpetamata jäänud osad saad kodus iseseisvalt lõpetada — juhend ise kannab.
+**Kodutöö:** Zabbix Osad 6–7 (LLD + Discord) ja Loki Osad 6–8 (Nginx RED, alerting, correlation).
 
 ---
 
@@ -58,7 +60,7 @@ Pärast päev 2 osaleja oskab:
 Osa infrastruktuurist peab enne labi olema valmis (koolitaja poolel):
 
 - [ ] `mon-target` peal peab töötama Zabbix agent pordil 10050. Kontrollida: `docker exec zabbix-server zabbix_get -s 192.168.35.140 -k agent.ping` peab tagastama `1`.
-- [ ] Slack workspace ja kanalid `#alerts-<nimi>` iga osaleja kohta, webhook URL-id listis.
+- [ ] Discord server ja kanal `#alerts`, webhook URL valmis.
 - [ ] Testi, et kogu stack käivitub `mon-maria` masinal 4GB RAM piires — esimene VM on sinu testkoht.
 
 Kõik osalejad puhastavad päev 1 stack'i enne laupäeva: `cd ~/paev1 && docker compose down -v`.

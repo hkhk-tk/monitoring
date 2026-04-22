@@ -2,7 +2,7 @@
 
 **Kestus:** 4 tundi
 **Tase:** Keskaste
-**VM:** sinu isiklik VM (nt `ssh maria@192.168.35.120`)
+**VM:** sinu isiklik VM (nt `ssh <eesnimi>@192.168.35.12X`)
 
 ---
 
@@ -239,7 +239,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:11.1.0
+    image: grafana/grafana:11.1.0    # NB: uuem kui päev 1 (10.4) — Loki Explore ja Unified Alerting vajavad 11.x
     container_name: grafana
     ports:
       - "3000:3000"
@@ -522,15 +522,6 @@ Nüüd ühendame labelid + metrika. Mitu ERROR rida sekundis **iga teenuse kohta
 
 ```logql
 sum by (service) (
-  rate({job="applog"} [5m])
-    |> pattern `<_> [<_>] [<service>] <_>`
-)
-```
-
-Hmm, see süntaks pole päris — `|>` pole Loki's. Õige süntaks on:
-
-```logql
-sum by (service) (
   rate(
     {job="applog"}
       | pattern `<_> [<level>] [<service>] <_>`
@@ -711,17 +702,17 @@ Alert ilma kontaktita ei tee midagi. Lisa üks.
 
 | Väli | Väärtus |
 |------|---------|
-| Name | `My Slack` |
-| Integration | `Slack` |
+| Name | `My Discord` |
+| Integration | `Discord` |
 | Webhook URL | (koolitaja annab, sama mis Zabbix osa 7) |
 
 *Save contact point* → *Test*.
 
 ### 7.4 Ühenda alert contact'iga
 
-*Alerting* → *Notification policies* → *New policy* → Labels `severity = warning` → Contact point `My Slack`.
+*Alerting* → *Notification policies* → *New policy* → Labels `severity = warning` → Contact point `My Discord`.
 
-🎉 **Alert pipeline lõpetatud:** logirida → parsing → rate → threshold → Slack. Ilma Prometheus'eta, ainult teksti põhjal.
+🎉 **Alert pipeline lõpetatud:** logirida → parsing → rate → threshold → Discord. Ilma Prometheus'eta, ainult teksti põhjal.
 
 ---
 
@@ -770,7 +761,7 @@ Päev 5-s kasutame seda `trace_id`-d, et logidest hüppada trace'i sisse ja vast
 - [ ] Oled parsinud app.log pattern parseriga ja näinud labeleid (level, service)
 - [ ] Dashboard `App monitoring` on salvestatud, vähemalt 2 paneeli
 - [ ] Alert `Payment error rate too high` nähtud Firing olekus
-- [ ] Slack sõnum jõudis kohale
+- [ ] Discord sõnum jõudis kohale
 - [ ] Oled kasutanud data link'i dashboardilt Explore'i
 
 ---

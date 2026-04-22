@@ -1,5 +1,29 @@
 # Päev 2 · Zabbix Labor
 
+**Kestus:** 4 tundi (klassis ~2h, ülejäänu kodus)
+**Tase:** Keskaste
+**VM:** sinu isiklik VM (nt `ssh <eesnimi>@192.168.35.12X`)
+
+---
+
+## 🎯 Õpiväljundid
+
+Pärast selle labi läbimist osaleja:
+
+**Teadmised:**
+1. Eristab Zabbixi push-mudelit Prometheuse pull-mudelist ja teab millal kumbagi kasutada
+2. Kirjeldab Zabbixi andmemudelit: host → template → item → trigger → action
+3. Selgitab UserParameter ja Low-Level Discovery kontseptsioone
+
+**Oskused:**
+4. Ehitab töötava Zabbix stacki Docker Compose’iga (server + web + mysql + agent)
+5. Lisab hosti, rakendab template’i ja jälgib trigger fire/resolve tsüklit
+6. Loob HTTP Agent + Dependent item konfiguratsiooni
+7. Kirjutab UserParameter’i (honeypot, applog) ja LLD discovery-skripti
+8. Seadistab Discord teavituse läbi Zabbixi Media type + Action
+
+---
+
 Eeldused: päev 1 (Docker, pull-mudel, trigger-olekud).
 
 7 osa, raskus kasvab. Klassis jõuad enamuse, ülejäänu kodus.
@@ -273,11 +297,26 @@ Peab tagastama `1`.
 `Linux by Zabbix agent` template sisaldab juba CPU triggerit. SSH mon-target'ile:
 
 ```bash
-ssh maria@192.168.35.140
+ssh <eesnimi>@192.168.35.140
 sudo stress-ng --cpu 4 --timeout 180s &
 ```
 
 *Monitoring → Problems* — 1-2 min pärast ilmub `High CPU utilization`. Peata koormus (`sudo pkill stress-ng`) → trigger läheb Resolved ise. Sama loogika kui Prometheus alert'idel — tingimus kehtib → käivitub, ei kehti enam → kaob.
+
+### 2.4 Dashboard — mis tuli template'iga kaasa
+
+*Monitoring → Dashboards → Global view*
+
+See dashboard on juba olemas — `Linux by Zabbix agent` template tõi selle kaasa automaatselt. Näed CPU, mälu, ketta ja võrgu graafikuid oma host'i kohta.
+
+Kliki läbi:
+- **System performance** — CPU utilization, load, memory
+- **Network traffic** — bytes in/out per NIC
+- **Disk space** — filesystem usage
+
+Võrdle Grafana dashboardiga päevast 1. Zabbix dashboard on template'iga seotud — uue host'i lisamisel tulevad graafikud automaatselt. Grafanas pidid ise PromQL päringud kirjutama.
+
+⚡ **Kiirkontroll:** Kas näed mon-target CPU spike'i dashboardil (kui stress-ng veel töötab)?
 
 ---
 
@@ -319,7 +358,7 @@ Päev 1 Prometheuses sama tulemus saavutati `nginx-prometheus-exporter` konteine
 
 ### 4.1 Host ilma agent'ita
 
-Loo `nginx-web` host. Host group: loo uus `Applications`. **Interface'i ära lisa** — HTTP Agent kasutab URL'i otse.
+Loo `nginx-web` host. Host group: loo uus `Applications`. **Interface'i ära lisa** — HTTP Agent item teeb päringu otse URL-ile, mitte agent'i kaudu, seega host ei vaja interface'i.
 
 ### 4.2 Master item
 
@@ -417,7 +456,7 @@ mon-target'il kirjutab log-generator `/var/log/app/app.log`:
 Kirjuta UserParameter mis loeb error'id teenuse järgi. SSH mon-target:
 
 ```bash
-ssh maria@192.168.35.140
+ssh <eesnimi>@192.168.35.140
 sudo tee /etc/zabbix/zabbix_agentd.d/applog.conf <<'EOF'
 UserParameter=applog.errors[*], tail -n 1000 /var/log/app/app.log | grep -c "\[ERROR\] \[$1\]"
 UserParameter=applog.count[*], tail -n 1000 /var/log/app/app.log | grep -c "\[$1\] \[$2\]"
@@ -445,7 +484,7 @@ mon-target host → *Items → Create*:
 - Type of information: Numeric (unsigned)
 - Update interval: `30s`
 
-*Triggers → Create*:
+*Data collection → Hosts → kliki `mon-target` real **Triggers** lingil (mitte host nimel!) → Create trigger*:
 
 - Name: `Too many payment errors on {HOST.NAME}`
 - Severity: Warning
@@ -454,11 +493,61 @@ mon-target host → *Items → Create*:
 ### 5.5 Torm
 
 ```bash
-ssh maria@192.168.35.140 \
+ssh <eesnimi>@192.168.35.140 \
   'for i in $(seq 1 100); do echo "$(date -Iseconds) [ERROR] [payment] Spam_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
 ```
 
 1 min → *Problems* → trigger Firing.
+
+### 5.6 Honeypot — turvamonitooringu näide
+
+UserParameter ei pea olema ainult jõudluse jaoks. Lihtne honeypot: ava port kuhu keegi ei peaks ühenduma.
+
+mon-target'il:
+
+```bash
+ssh <eesnimi>@192.168.35.140
+sudo tee /usr/local/bin/honeypot-listen.sh <<'EOF'
+#!/bin/bash
+# Kuulab port 2222 ja logib ühendused
+while true; do
+  nc -lnp 2222 < /dev/null 2>/dev/null && echo "$(date -Iseconds) HIT" >> /var/log/honeypot.log
+done
+EOF
+sudo chmod +x /usr/local/bin/honeypot-listen.sh
+sudo touch /var/log/honeypot.log
+nohup sudo /usr/local/bin/honeypot-listen.sh &
+```
+
+Lisa UserParameter:
+
+```bash
+sudo tee -a /etc/zabbix/zabbix_agentd.d/applog.conf <<'EOF'
+UserParameter=honeypot.hits, wc -l < /var/log/honeypot.log
+EOF
+sudo systemctl restart zabbix-agent
+exit
+```
+
+Testi:
+
+```bash
+docker exec zabbix-server zabbix_get -s 192.168.35.140 -k honeypot.hits
+```
+
+Loo item (`honeypot.hits`, Numeric unsigned, 15s) ja trigger:
+
+- Name: `Honeypot hit detected on {HOST.NAME}`
+- Severity: **High**
+- Expression: `last(/mon-target/honeypot.hits)>0`
+
+Nüüd palud naabril:
+
+```bash
+nc -zv 192.168.35.140 2222
+```
+
+1 min → trigger **Firing**. Keegi koputas uksele kuhu keegi ei peaks tulema. Päriselus sama lõks töötab SSH, RDP, andmebaasi portidel.
 
 ---
 
@@ -475,7 +564,7 @@ Panema selle oma **template'isse**, et saaks korduvkasutada.
 mon-target'ile:
 
 ```bash
-ssh maria@192.168.35.140
+ssh <eesnimi>@192.168.35.140
 sudo tee /usr/local/bin/applog-discovery.sh <<'EOF'
 #!/bin/bash
 tail -n 5000 /var/log/app/app.log 2>/dev/null \
@@ -566,7 +655,7 @@ INFO'sid tekib pidevalt — trigger iga INFO peal = alert fatigue. Discovery rul
 Lisa uus teenus:
 
 ```bash
-ssh maria@192.168.35.140 \
+ssh <eesnimi>@192.168.35.140 \
   'for i in $(seq 1 50); do echo "$(date -Iseconds) [ERROR] [shipping] Package_lost_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
 ```
 
@@ -630,14 +719,14 @@ Add.
 ### 7.5 Proov
 
 ```bash
-ssh maria@192.168.35.140 \
+ssh <eesnimi>@192.168.35.140 \
   'for i in $(seq 1 100); do echo "$(date -Iseconds) [ERROR] [payment] Spam_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
 ```
 
 1-2 min → Discord kanalis sõnum. Peatus:
 
 ```bash
-ssh maria@192.168.35.140 'sudo truncate -s 0 /var/log/app/app.log'
+ssh <eesnimi>@192.168.35.140 'sudo truncate -s 0 /var/log/app/app.log'
 ```
 
 Recovery-sõnum 2-3 min pärast.
@@ -652,6 +741,7 @@ Recovery-sõnum 2-3 min pärast.
 - [ ] nginx-web HTTP Agent item tagastab stub_status teksti, dependent item Active connections numbri
 - [ ] `zabbix_get -k "applog.errors[payment]"` tagastab numbri
 - [ ] Trigger Too many payment errors läks Firing ja lahenes
+- [ ] Honeypot trigger Firing kui keegi ühendus port 2222-le
 - [ ] Oma template App Log Monitoring olemas
 - [ ] LLD lõi ≥ 10 item'it ise, uue teenuse lisandumisel tekkis veel
 - [ ] Discord kanalis alert-sõnum
@@ -665,7 +755,7 @@ Recovery-sõnum 2-3 min pärast.
 Siiani: server küsib agent'ilt (passive). Teine muster: **saadad ise** serverile.
 
 ```bash
-ssh maria@192.168.35.140
+ssh <eesnimi>@192.168.35.140
 echo "mon-target deployment.version 7.0.6" > /tmp/deploy.txt
 zabbix_sender -z 192.168.35.120 -p 10051 -i /tmp/deploy.txt
 ```
