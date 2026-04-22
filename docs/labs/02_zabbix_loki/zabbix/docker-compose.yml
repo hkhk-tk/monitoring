@@ -68,33 +68,8 @@ services:
       ZBX_HOSTNAME: docker-agent
       TZ: Europe/Tallinn
     volumes:
-      - ./config/applog.conf:/etc/zabbix/zabbix_agentd.d/applog.conf:ro
-      - ./config/discover-services.sh:/usr/local/bin/discover-services.sh:ro
-      - app-logs:/var/log/app:ro
-    restart: unless-stopped
-
-  log-generator:
-    image: busybox:latest
-    container_name: log-generator
-    command:
-      - sh
-      - -c
-      - |
-        mkdir -p /var/log/app
-        SERVICES="payment auth api database cache"
-        LEVELS="INFO INFO INFO INFO INFO WARN ERROR"
-        MSGS="Request_OK User_login Cache_miss DB_slow_query Payment_failed Connection_retry"
-        while true; do
-          S=$$(echo $$SERVICES | tr " " "\n" | shuf -n1)
-          L=$$(echo $$LEVELS | tr " " "\n" | shuf -n1)
-          M=$$(echo $$MSGS | tr " " "\n" | shuf -n1)
-          echo "$$(date -Iseconds) [$$L] [$$S] $$M" >> /var/log/app/app.log
-          sleep 2
-        done
-    volumes:
-      - app-logs:/var/log/app
+      - ./config:/etc/zabbix/zabbix_agentd.d:ro
     restart: unless-stopped
 
 volumes:
   mysql-data:
-  app-logs:

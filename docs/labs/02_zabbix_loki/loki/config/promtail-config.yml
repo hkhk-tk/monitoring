@@ -9,16 +9,6 @@ clients:
   - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
-  # Kõigi Docker konteinerite logid — jobina 'docker'
-  - job_name: docker
-    static_configs:
-      - targets:
-          - localhost
-        labels:
-          job: docker
-          __path__: /var/lib/docker/containers/*/*-json.log
-
-  # App logi (log-generator → /var/log/app/app.log)
   - job_name: applog
     static_configs:
       - targets:
@@ -26,12 +16,3 @@ scrape_configs:
         labels:
           job: applog
           __path__: /var/log/app/*.log
-
-  # Nginx-stiilis accesslog (log-generator → /var/log/nginx/access.log)
-  - job_name: nginx
-    static_configs:
-      - targets:
-          - localhost
-        labels:
-          job: nginx
-          __path__: /var/log/nginx/access.log
