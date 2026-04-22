@@ -1,5 +1,5 @@
 site_name: "Monitooring ja Jälgitavus — Täienduskoolitus"
-site_url: https://haapsalu-kutsehariduskeskus.github.io/monitoring-taienduskoolitus/
+site_url: https://hkhk-tk.github.io/monitoring/
 site_description: "Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026"
 site_author: "Maria Talvik"
 
@@ -100,7 +100,7 @@ nav:
       - "Labor": labs/01_prometheus_grafana/lab.md
 
   - "Päev 2 — Zabbix + Loki":
-      - "Loeng: Zabbix": materials/lectures/paev2-zabbix-loeng.md
+      - "Loeng: Zabbix": materials/lectures/paev2-loeng.md
       - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
       - "Labor": labs/02_zabbix_loki/lab.md
 
