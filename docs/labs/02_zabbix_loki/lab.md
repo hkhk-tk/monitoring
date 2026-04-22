@@ -45,6 +45,51 @@ Mõlemad `succeeded`. Kui ei ole, ütle koolitajale.
 
 ---
 
+## Meie stack täna — ülevaade
+
+Ehitame kaks eraldi Docker Compose stacki, mis mõlemad monitoorivad sama käitumisala. Üks meetrikatega (Zabbix), teine logidega (Loki).
+
+```
+Sinu VM (192.168.100.12X)
+┌───────────────────────────────────────────────────────┐
+│                                                            │
+│  ZABBIX stack (~/paev2/zabbix/)                           │
+│  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  ┌─────────┐  │
+│  │    MySQL    │◀─│ zabbix-     │◀─│ zabbix-web │  │ agent   │  │
+│  │   :3306    │  │  server     │  │   :8080    │  │ :10050  │  │
+│  └─────────────┘  └─────┬───────┘  └────────────┘  └───┬─────┘  │
+│                         │                              │        │
+│                         │ küsib meetrikaid             │        │
+│                         │                              │        │
+│  LOKI stack (~/paev2/loki/)                               │        │
+│  ┌─────────────┐  ┌─────────────┐  ┌────────────┐           │
+│  │   Loki     │◀─│  Promtail   │◀─│log-      │           │
+│  │   :3100    │  │ (loeb logi) │  │generator │           │
+│  └────┬──────┘  └─────────────┘  └────────────┘           │
+│       │                                                   │
+│       ▼                                                   │
+│  ┌─────────────┐                                          │
+│  │  Grafana   │  (Päev 2 Grafana — eraldi Päev 1 omast)   │
+│  │   :3001    │                                           │
+│  └─────────────┘                                          │
+└──────────────────────────────────────────────────────────┘
+                              │ zabbix-server küsib
+                              ▼
+     mon-target (.140) ←─── agendiga Linux server,
+                            kirjutab /var/log/app/app.log
+     mon-target-web (.141) ← agendiga Nginx, stub_status endpoint
+```
+
+**Mis millega seotud:**
+
+- **Zabbix Server** küsib meetrikaid agentidelt (`zabbix-agent` sinu konteineris, `mon-target`, `mon-target-web`) ja HTTP päringuid (Nginx stub_status)
+- **Promtail** loeb faili `/var/log/app/app.log` konteinerist ja saadab logiread Lokile
+- **Loki** indekseerib labelid (`job`, `level`, `service`) aga **ei indekseeri sisu** — see on mõtte erinevus Elasticsearch'ist
+- **Grafana (port 3001)** on teie teine Grafana instants (Päev 1 Grafana port 3000 jääb tööle), võtab Lokist logid sisse
+- **Zabbix ja Loki on eraldi** — nad ei räägi omavahel, aga **sa näed mõlemas sama intsidenti** (finaali demos)
+
+---
+
 # ZABBIX
 
 Zabbix on neli komponenti: **MySQL** hoiab konfi ja ajalugu, **Server** töötleb ja arvutab trigger'id, **Web** on UI, **Agent** kogub mõõdikuid. Erinevalt Prometheusest (üks binaar) on Zabbix modulaarne — iga komponent eraldi konteineris.
