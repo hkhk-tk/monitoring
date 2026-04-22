@@ -103,8 +103,7 @@ nav:
   - "Päev 2 — Zabbix + Loki":
       - "Loeng: Zabbix": materials/lectures/paev2-zabbix-loeng.md
       - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
-      - "Zabbix labor": labs/02_zabbix_loki/zabbix_lab.md
-      - "Loki labor": labs/02_zabbix_loki/loki_lab.md
+      - "Labor": labs/02_zabbix_loki/lab.md
 
   - "Päev 3 — ELK Stack":
       - "Labor": labs/03_elk_stack/lab.md
