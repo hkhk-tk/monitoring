@@ -35,9 +35,16 @@ Asenda `<sinu-ip>` oma VM-i aadressiga.
 | Teenus | URL | Märkused |
 |--------|-----|----------|
 | Prometheus | `http://<sinu-ip>:9090` | PromQL päringud, targets, alerts |
-| Grafana | `http://<sinu-ip>:3000` | Login andmed Classroomis |
+| Grafana | `http://<sinu-ip>:3000` | admin / `monitoring2026` |
 | Alertmanager | `http://<sinu-ip>:9093` | Alertide ülevaade |
 | Node Exporter | `http://<sinu-ip>:9100/metrics` | Toormetrikad |
+
+## Lab status dashboard
+
+Kontrollib kas kõigi osalejate stack töötab. Ava brauseris (port 80, ei vaja porti URL-is):
+
+- Klassis: <http://192.168.35.142>
+- VPNiga: <http://192.168.100.142>
 
 ## Target-masinad (jagatud)
 

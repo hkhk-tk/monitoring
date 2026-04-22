@@ -1,0 +1,60 @@
+services:
+  loki:
+    image: grafana/loki:3.2.1
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./config/loki-config.yml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+
+  log-generator:
+    image: busybox:latest
+    container_name: log-generator
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /var/log/app /var/log/nginx
+        SERVICES="payment auth api database cache"
+        LEVELS="INFO INFO INFO INFO INFO WARN ERROR"
+        while true; do
+          S=$$(echo $$SERVICES | tr " " "\n" | shuf -n1)
+          L=$$(echo $$LEVELS | tr " " "\n" | shuf -n1)
+          LATENCY=$$((RANDOM % 500))
+          echo "$$(date -Iseconds) [$$L] [$$S] duration=$${LATENCY}ms trace_id=$$RANDOM" >> /var/log/app/app.log
+          sleep 1
+        done
+    volumes:
+      - app-logs:/var/log/app
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:3.2.1
+    container_name: promtail
+    volumes:
+      - ./config/promtail-config.yml:/etc/promtail/config.yml
+      - app-logs:/var/log/app:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: grafana-loki
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=monitoring2026
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  loki-data:
+  grafana-data:
+  app-logs:
+  nginx-logs:

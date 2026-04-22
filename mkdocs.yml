@@ -14,7 +14,6 @@ theme:
     - navigation.tracking
     - navigation.instant
     - toc.follow
-    - toc.integrate
     - search.suggest
     - search.highlight
     - content.tabs.link
@@ -101,8 +100,9 @@ nav:
       - "Labor": labs/01_prometheus_grafana/lab.md
 
   - "Päev 2 — Zabbix + Loki":
-      - "Zabbix labor": labs/02_zabbix_loki/zabbix_lab.md
-      - "Loki labor": labs/02_zabbix_loki/loki_lab.md
+      - "Loeng: Zabbix": materials/lectures/paev2-zabbix-loeng.md
+      - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
+      - "Labor": labs/02_zabbix_loki/lab.md
 
   - "Päev 3 — ELK Stack":
       - "Labor": labs/03_elk_stack/lab.md
