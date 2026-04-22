@@ -90,7 +90,7 @@ Sinu VM (192.168.100.12X)
 
 ---
 
-# ZABBIX
+## ZABBIX
 
 Zabbix on neli komponenti: **MySQL** hoiab konfi ja ajalugu, **Server** töötleb ja arvutab trigger'id, **Web** on UI, **Agent** kogub mõõdikuid. Erinevalt Prometheusest (üks binaar) on Zabbix modulaarne — iga komponent eraldi konteineris.
 
@@ -581,7 +581,7 @@ Enne kui edasi — üks tähtis küsimus: Osa 5.3 konfis olid paroolid ja teed k
 
 ---
 
-# LOKI
+## LOKI
 
 Zabbix ütles "trigger Firing" — on probleem. Aga **mida** täpselt? Logid vastavad sellele. Lokiga tood logid Grafanasse — SSH + grep asemel LogQL päringud brauseris.
 
