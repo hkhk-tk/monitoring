@@ -3,22 +3,27 @@ site_url: https://hkhk-tk.github.io/monitoring/
 site_description: "Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026"
 site_author: "Maria Talvik"
 
+repo_name: hkhk-tk/monitoring
+repo_url: https://github.com/hkhk-tk/monitoring
+edit_uri: edit/main/docs/
+
 theme:
   name: material
+  language: et
   features:
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.top
     - navigation.expand
-    - navigation.sections
     - navigation.indexes
     - navigation.tracking
     - navigation.instant
+    - toc.follow
     - search.suggest
     - search.highlight
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
-  language: et
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -101,7 +106,8 @@ nav:
   - "Päev 2 — Zabbix + Loki":
       - "Loeng: Zabbix": materials/lectures/paev2-loeng.md
       - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
-      - "Labor": labs/02_zabbix_loki/lab.md
+      - "Labor: Zabbix": labs/02_zabbix_loki/zabbix_lab.md
+      - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 
   - "Päev 3 — ELK Stack":
       - "Labor": labs/03_elk_stack/lab.md
@@ -117,3 +123,6 @@ nav:
   - Ressursid:
       - "VM ligipääs": resources/vm-access.md
       - "Docker Compose cheatsheet": resources/docker-cheatsheet.md
+
+copyright: >
+  © 2026 Maria Talvik · Haapsalu Kutsehariduskeskus
