@@ -35,11 +35,9 @@ Eile vaatasime Prometheust — cloud-native maailma meetrikakogujat: pull-mudel,
 
 Zabbix sündis 1998. aastal Läti Ülikoolis (Alexei Vladišev’i diplomitöö) ja esimene avalik versioon ilmus 2001. See on 25+ aastat “tootmiskarastust” — mitte aegumine, vaid kogemus.
 
-Zabbix on klassikaline *kõikehõlmav* seireplatvorm:
-- agendid
-- SNMP / IPMI / JMX / VMware
-- SQL / ICMP / SSH / Telnet / HTTP
-- templated + dashboardid + alertimine
+Zabbix on klassikaline *kõikehõlmav* seireplatvorm — selle tugevus on laius. Ühes ja samas süsteemis saad jälgida nii servereid kui võrguseadmeid ning teha sellest kohe ka alertid ja dashboardid.
+
+Praktikas tähendab see, et Zabbix saab andmeid väga erinevatest kohtadest: agentidelt, SNMP-st, IPMI-st, HTTP endpointidest, JMX-ist, VMware-st, jne. Sa ei pea “iga asja jaoks” eraldi tööriista võtma.
 
 Mõte: **ühest kohast** konfigureerid suure osa ettevõtte infra “vaatluse baasist”.
 
@@ -57,9 +55,10 @@ Eestis on Zabbix laialt kasutuses. Telia, Swedbank, maksu- ja tolliamet, enamus 
 | HA | Alates 6.0 natiivne | Föderatsioon + Thanos/Mimir |
 | Agendid | Kõik-ühes paketid | Per-teenus exporterid |
 
-Reaalses maailmas kasutatakse sageli **mõlemaid**:
-- **Zabbix**: traditsiooniline IT-infra (võrk, virtualisatsioon, fileserverid, UPS-id, printerid, “legacy”)
-- **Prometheus**: konteinerplatvormid ja dünaamiline keskkond
+Reaalses maailmas kasutatakse sageli **mõlemaid**. Lihtsustatud (aga kasulik) jaotus on selline:
+
+- **Zabbix** sobib eriti hästi traditsioonilise IT-infra jaoks: võrk, virtualisatsioon, failiserverid, UPS-id, printerid ja muu “legacy”.
+- **Prometheus** sobib eriti hästi konteinerplatvormidele ja dünaamilisse keskkonda (service discovery, cloud-native mustrid).
 
 Mõlemad võivad voolata Grafanasse — ja keegi ei pea “üht ainsat” valima.
 
