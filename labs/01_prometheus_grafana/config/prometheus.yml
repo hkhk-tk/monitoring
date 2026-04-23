@@ -1,0 +1,42 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - alert.rules.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+scrape_configs:
+  # Prometheus ise
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Sinu enda VM (node_exporter VM-il, mitte Dockeris)
+  - job_name: 'local'
+    static_configs:
+      - targets: ['host.docker.internal:9100']
+        labels:
+          host: 'minu-vm'
+
+  # Jagatud target-masinad
+  - job_name: 'targets'
+    static_configs:
+      - targets: ['mon-target:9100']
+        labels:
+          host: 'target-linux'
+          role: 'server'
+      - targets: ['mon-target-web:9100']
+        labels:
+          host: 'target-web'
+          role: 'webserver'
+
+  # Nginx stub_status (mon-target-web)
+  # Kommenteeri sisse kui nginx-exporter on lisatud
+  # - job_name: 'nginx'
+  #   static_configs:
+  #     - targets: ['mon-target-web:9113']

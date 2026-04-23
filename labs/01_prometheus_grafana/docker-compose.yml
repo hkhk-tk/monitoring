@@ -1,0 +1,47 @@
+# Päev 1: Prometheus + Grafana + Alertmanager
+# Käivita: docker compose up -d
+# Peata:   docker compose down -v
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: prometheus
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/alert.rules.yml:/etc/prometheus/alert.rules.yml
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "mon-target:192.168.100.140"
+      - "mon-target-web:192.168.100.141"
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=monitoring2026
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./config/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    container_name: alertmanager
+    volumes:
+      - ./config/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+  grafana-data:

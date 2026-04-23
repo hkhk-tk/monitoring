@@ -1,0 +1,2848 @@
+
+<!doctype html>
+<html lang="et" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026">
+      
+      
+        <meta name="author" content="Maria Talvik">
+      
+      
+        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/labs/02_zabbix_loki/loki_lab/">
+      
+      
+        <link rel="prev" href="../zabbix_lab/">
+      
+      
+        <link rel="next" href="../../03_elk_stack/lab/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Labor: Loki - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#paev-2-labor-loki" class="md-skip">
+          Keri sisuni
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Päis">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Monitooring ja Jälgitavus — Täienduskoolitus
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Labor: Loki
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Tume teema"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Tume teema" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Hele teema"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Hele teema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Otsi" placeholder="Otsi" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Otsing">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Lähtesta" aria-label="Lähtesta" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Otsingu lähtestamine
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hkhk-tk/monitoring" title="Ava repositooriumis" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hkhk-tk/monitoring
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Vaheleht" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Avaleht
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../materials/paev1-kava/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 1 — Prometheus + Grafana
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../materials/lectures/paev2-loeng/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 2 — Zabbix + Loki
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03_elk_stack/lab/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 3 — ELK Stack
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04_tick_keskne_logimine/tick_lab/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 4 — TICK + Kesksed logimissüsteemid
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05_tempo_otel/lab/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 5 — Tempo + OTel + Kokkuvõte
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../resources/vm-access/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Ressursid
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Monitooring ja Jälgitavus — Täienduskoolitus
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hkhk-tk/monitoring" title="Ava repositooriumis" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hkhk-tk/monitoring
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Avaleht
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 1 — Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 1 — Prometheus + Grafana
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/paev1-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev1-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 1: Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev1-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 2: Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/esitlused/paev1-loeng1-esitlus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slaidid: Loeng 1 (Marp)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/esitlused/paev1-loeng2-esitlus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slaidid: Loeng 2 (Marp)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_prometheus_grafana/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Koolitaja juhend (viide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 2 — Zabbix + Loki
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 2 — Zabbix + Loki
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev2-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Zabbix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev2-loki-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Loki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zabbix_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor: Zabbix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor: Loki
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor: Loki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eeltoo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eeltöö
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-6-logql-brauseris-ja-pariselt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 6 · LogQL — brauseris ja päriselt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 6 · LogQL — brauseris ja päriselt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-simulator-taisteksti-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Simulator — täisteksti filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-ekstraheeri-labelid-logfmt-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Ekstraheeri labelid (logfmt parser)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pattern-parser-struktureerimata-tekst" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Pattern parser (struktureerimata tekst)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-json-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 JSON parser
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-7-loki-alloy-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 7 · Loki + Alloy stack
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 7 · Loki + Alloy stack">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-loki-konfiguratsioon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Loki konfiguratsioon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-loki-teenus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Loki teenus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-log-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Log-generator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-alloy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Alloy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-esimesed-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Esimesed read
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-8-pattern-parser-rate-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 8 · Pattern parser → rate() → dashboard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 8 · Pattern parser → rate() → dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-pattern-struktuuri-lisamine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Pattern — struktuuri lisamine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-filtreeri-patterni-tulemusi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Filtreeri pattern'i tulemusi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-label-disain-mis-on-label-mis-on-sisu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Label disain — mis on label, mis on sisu?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-rate-logist-metrika" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 rate() — logist metrika
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-finaal-sama-sundmus-kaks-vaatenurka" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 FINAAL — sama sündmus, kaks vaatenurka
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lopukontroll-loki-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Lõpukontroll (Loki pool)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lisaulesanded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Lisaülesanded
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Lisaülesanded">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#loki-nginx-accesslog-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loki: Nginx accesslog + RED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-based-alert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log-based alert
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#correlation-metric-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correlation — metric → log
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-source-alloy-uks-agent-kaks-allikat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-source Alloy — üks agent, kaks allikat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enterprise-lisateemad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏢 Enterprise lisateemad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#veaotsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Veaotsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Allikad
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 3 — ELK Stack
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 3 — ELK Stack
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03_elk_stack/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 4 — TICK + Kesksed logimissüsteemid
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 4 — TICK + Kesksed logimissüsteemid
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TICK labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ülevaade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 5 — Tempo + OTel + Kokkuvõte
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 5 — Tempo + OTel + Kokkuvõte
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_tempo_otel/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_tempo_otel/trendid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trendid 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ressursid
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ressursid
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/vm-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VM ligipääs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eeltoo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eeltöö
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-6-logql-brauseris-ja-pariselt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 6 · LogQL — brauseris ja päriselt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 6 · LogQL — brauseris ja päriselt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-simulator-taisteksti-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Simulator — täisteksti filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-ekstraheeri-labelid-logfmt-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Ekstraheeri labelid (logfmt parser)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pattern-parser-struktureerimata-tekst" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Pattern parser (struktureerimata tekst)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-json-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 JSON parser
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-7-loki-alloy-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 7 · Loki + Alloy stack
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 7 · Loki + Alloy stack">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-loki-konfiguratsioon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Loki konfiguratsioon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-loki-teenus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Loki teenus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-log-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Log-generator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-alloy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Alloy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-esimesed-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Esimesed read
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-8-pattern-parser-rate-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 8 · Pattern parser → rate() → dashboard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 8 · Pattern parser → rate() → dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-pattern-struktuuri-lisamine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Pattern — struktuuri lisamine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-filtreeri-patterni-tulemusi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Filtreeri pattern'i tulemusi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-label-disain-mis-on-label-mis-on-sisu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Label disain — mis on label, mis on sisu?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-rate-logist-metrika" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 rate() — logist metrika
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-finaal-sama-sundmus-kaks-vaatenurka" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 FINAAL — sama sündmus, kaks vaatenurka
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lopukontroll-loki-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Lõpukontroll (Loki pool)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lisaulesanded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Lisaülesanded
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Lisaülesanded">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#loki-nginx-accesslog-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loki: Nginx accesslog + RED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-based-alert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log-based alert
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#correlation-metric-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correlation — metric → log
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-source-alloy-uks-agent-kaks-allikat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-source Alloy — üks agent, kaks allikat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enterprise-lisateemad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏢 Enterprise lisateemad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#veaotsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Veaotsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Allikad
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="paev-2-labor-loki">Päev 2 · Labor: Loki<a class="headerlink" href="#paev-2-labor-loki" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>Kestus:</strong> ~2 tundi (pool päev 2 laborist)<br />
+<strong>Tase:</strong> Keskaste<br />
+<strong>VM:</strong> Sama VM nagu Zabbix laboris (<code>ssh &lt;eesnimi&gt;@192.168.35.12X</code>)<br />
+<strong>Eeldused:</strong> <a href="../zabbix_lab/">Labor: Zabbix</a> läbitud (Zabbix stack, mon-target host, payment errors trigger). <a href="../../../materials/lectures/paev2-loki-loeng/">Päev 2: Loki loeng</a> loetud.</p>
+<p>Labor jätkab sealt, kus Zabbix osa lõppes — Zabbix stack jääb taustale, Loki stack lisandub kõrvale.</p>
+<hr />
+<h2 id="opivaljundid">🎯 Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Teadmised:</strong></p>
+<ol>
+<li>Selgitab Loki rolli LGTM stackis ja labelite vs sisu indekseerimise erinevust</li>
+<li>Eristab LogQL parserite kasutusolukordi (pattern, json, logfmt, regexp)</li>
+<li>Põhjendab label-disaini reegleid kardinaalsuse piiri kontekstis</li>
+</ol>
+<p><strong>Oskused:</strong></p>
+<ol>
+<li>Ehitab Loki + Alloy + Grafana stack'i Docker Compose'iga</li>
+<li>Kirjutab LogQL päringuid ja parsib struktureerimata logi</li>
+<li>Teisendab logi metrikaks (<code>rate()</code>, <code>count_over_time</code>) ja ehitab dashboard'i</li>
+<li>Vaatab sama sündmust kahest vaatenurgast — Zabbix trigger + Loki graafik</li>
+</ol>
+<hr />
+<h2 id="eeltoo">Eeltöö<a class="headerlink" href="#eeltoo" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kontrolli et Zabbix stack on eelmisest osast üleval:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>~/paev2/zabbix<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>ps
+</span></code></pre></div>
+<p>Neli konteinerit <code>Up</code>. Kui ei, <a href="../zabbix_lab/">mine tagasi Zabbix labi juurde</a>.</p>
+<hr />
+<p>Zabbix ütles "trigger Firing" — on probleem. Aga <strong>mida</strong> täpselt? Logid vastavad sellele. Lokiga tood logid Grafanasse — SSH + grep asemel LogQL päringud brauseris.</p>
+<hr />
+<h2 id="osa-6-logql-brauseris-ja-pariselt">Osa 6 · LogQL — brauseris ja päriselt<a class="headerlink" href="#osa-6-logql-brauseris-ja-pariselt" title="Lingi sektsioonile">&para;</a></h2>
+<p>Enne oma stacki ehitamist prooviks LogQL-i Grafana ametlikul simulatoril. Eelis: tulemused on kohesed, ei pea ootama Loki käivitust. Harjutame 4 parserit (logfmt, pattern, json + filter <code>|=</code>) üksteise järel.</p>
+<h3 id="61-simulator-taisteksti-filter">6.1 Simulator — täisteksti filter<a class="headerlink" href="#61-simulator-taisteksti-filter" title="Lingi sektsioonile">&para;</a></h3>
+<p>Ava brauseris: <a href="https://grafana.com/docs/loki/latest/query/analyzer/">https://grafana.com/docs/loki/latest/query/analyzer/</a></p>
+<p>Vali <strong>logfmt</strong> formaat. Kirjuta:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>{job=&quot;analyze&quot;} |= &quot;error&quot;
+</span></code></pre></div>
+<p>Run query. Rohelised read sobivad, hallid ei sobi.</p>
+<p><strong>Mis juhtus:</strong> <code>{job="analyze"}</code> valib voog ja <code>|=</code> on täistekstifilter — sarnane <code>grep -i "error"</code>-iga. Lihtne ja kiire, aga <strong>ei eristu</strong> INFO-tasemega reast, kus sisus on sõna "error". Iga rida, kus esineb tähistring "error", võidab.</p>
+<h3 id="62-ekstraheeri-labelid-logfmt-parser">6.2 Ekstraheeri labelid (logfmt parser)<a class="headerlink" href="#62-ekstraheeri-labelid-logfmt-parser" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>{job=&quot;analyze&quot;} | logfmt | level = &quot;error&quot;
+</span></code></pre></div>
+<p>Erinevus — nüüd <strong>parsisid</strong> logi ja filtreerisid <strong>labeli</strong> järgi, mitte tekstiotsingu järgi.</p>
+<p><strong>Miks see parem:</strong> logfmt on vorming <code>level=error service=auth duration=42ms</code>. Parser teeb <code>level</code> järgi filtri semantiliselt — üle jääb ainult INFO-rida, kus sisus kogemata sõna "error". Filter on täpsem.</p>
+<h3 id="63-pattern-parser-struktureerimata-tekst">6.3 Pattern parser (struktureerimata tekst)<a class="headerlink" href="#63-pattern-parser-struktureerimata-tekst" title="Lingi sektsioonile">&para;</a></h3>
+<p>Vali <strong>unstructured</strong> formaat:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>{job=&quot;analyze&quot;} | pattern `&lt;_&gt; &lt;user&gt; &lt;_&gt;` | user =~ &quot;kling.*&quot;
+</span></code></pre></div>
+<p><code>&lt;_&gt;</code> ignoreerib, <code>&lt;user&gt;</code> püüab labeli.</p>
+<p><strong>Miks pattern oluline:</strong> mitmed tootmises olevad logid <strong>ei ole</strong> logfmt ega JSON kujul. Apache access log, Nginx error log, Tomcat catalina.out — kõik vabas vormis. Pattern ütleb "selles kohas oota sõna, selles kohas ignore" ja teeb labelid struktureerimata stringist.</p>
+<h3 id="64-json-parser">6.4 JSON parser<a class="headerlink" href="#64-json-parser" title="Lingi sektsioonile">&para;</a></h3>
+<p>Vali <strong>json</strong> formaat:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>{job=&quot;analyze&quot;} | json | status_code = &quot;500&quot;
+</span></code></pre></div>
+<p><strong>Miks parser valida sobiv logiformaadiga:</strong> kui logi on JSON, parseri <code>| json</code> paneb iga välja otse labeliks — nested <code>.user.id</code> kuulub <code>user_id</code> labelina. Vale parser (<code>logfmt</code> JSON-iga) ei suuda struktureerida — tulemus on pettumus.</p>
+<p>Neli parserit — <code>json</code>, <code>logfmt</code>, <code>pattern</code>, <code>regexp</code>. <code>pattern</code> on enim kasutatav kuna enamik logisid on vabatekst. <code>regexp</code> on viimane samuraide valik — töötab alati, aga on aeglasem ja veaohtlikum kui pattern.</p>
+<p>💭 <strong>Mõtle:</strong> Sinu töö logid — mis formaadis need on? Millist parserit kasutaksid?</p>
+<hr />
+<h2 id="osa-7-loki-alloy-stack">Osa 7 · Loki + Alloy stack<a class="headerlink" href="#osa-7-loki-alloy-stack" title="Lingi sektsioonile">&para;</a></h2>
+<p>Nüüd ehitame oma stacki. Sama lähenemine mis Zabbix labis — kiht-kihi haaval, iga kiht testitud eraldi enne järgmise lisamist. Stack koosneb 4 komponendist: <strong>Loki</strong> (kirjutab ja otsib logisid), <strong>log-generator</strong> (tekitab test-logi), <strong>Alloy</strong> (loeb logifaili ja saadab Lokisse), <strong>Grafana</strong> (UI).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/paev2/loki/config<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/paev2/loki
+</span></code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Agent valik — Alloy</p>
+<p>Kasutame tänavust ametlikku soovitust — <strong>Grafana Alloy</strong>. Promtail, mis Loki pärinud 2018 aastast, on tänaseks <strong>feature-freeze</strong> olekus (vt Loki loeng §10). Alloy on universaalne telemeetria-kollektor: sama agent saab koguda logid (Lokile), mõõdikud (Prometheusele/Mimirile), traces (Tempo'le) ja OpenTelemetry-ühilduvatele backendidele. Selle laboris hoiame selle lihtsa kujul — ainult logide osa.</p>
+</div>
+<h3 id="71-loki-konfiguratsioon">7.1 Loki konfiguratsioon<a class="headerlink" href="#71-loki-konfiguratsioon" title="Lingi sektsioonile">&para;</a></h3>
+<p>Esmalt kirjutame Loki enda konfi. Loki vajab teadmisi: kuhu salvestada (filesystem, S3), millise skeemi versiooniga (v13 on praegune), kas autentimine on olemas. Laboris kasutame kõige lihtsamat varianti — lokaalne filesystem, auth väljas, single-node.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>config/loki-config.yml<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">auth_enabled: false</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s">server:</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s">  http_listen_port: 3100</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s">common:</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s">  instance_addr: 127.0.0.1</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s">  path_prefix: /loki</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s">  storage:</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s">    filesystem:</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="s">      chunks_directory: /loki/chunks</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="s">      rules_directory: /loki/rules</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="s">  replication_factor: 1</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="s">  ring:</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="s">    kvstore:</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="s">      store: inmemory</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="s">schema_config:</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="s">  configs:</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="s">    - from: 2024-01-01</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="s">      store: tsdb</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="s">      object_store: filesystem</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="s">      schema: v13</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="s">      index:</span>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="s">        prefix: index_</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="s">        period: 24h</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="s">limits_config:</span>
+</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="s">  allow_structured_metadata: true</span>
+</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a><span class="s">EOF</span>
+</span></code></pre></div>
+<p><strong>Mida see konfig ütleb:</strong>
+- <code>auth_enabled: false</code> — single-tenant, kogu Loki on üks "nimi"
+- <code>common.storage.filesystem</code> — logi-trükid (chunks) salvestatakse <code>/loki/chunks</code> kausta, mis on konteineri volume
+- <code>schema v13</code> — praegune stabiilne skeem (aprill 2026). Vanemates tutorialides näed <code>v11</code> või <code>boltdb-shipper</code> — need on vananenud
+- <code>allow_structured_metadata: true</code> — Loki 3.x feature (structured metadata), lubatud tootmises.</p>
+<p>Tootmises oleks S3 asemel filesystem, auth sisse lülitatud, replikatsioonifaktor &gt;1.</p>
+<h3 id="72-loki-teenus">7.2 Loki teenus<a class="headerlink" href="#72-loki-teenus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loo <code>docker-compose.yml</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">loki</span><span class="p">:</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/loki:3.3.0</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loki</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3100:3100&quot;</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./config/loki-config.yml:/etc/loki/local-config.yaml</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loki-data:/loki</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-config.file=/etc/loki/local-config.yaml</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">  </span><span class="nt">loki-data</span><span class="p">:</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span><span class="nt">grafana-data</span><span class="p">:</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">  </span><span class="nt">app-logs</span><span class="p">:</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span><span class="nt">nginx-logs</span><span class="p">:</span>
+</span></code></pre></div>
+<p><strong>Miks nimelised volumes, mitte bind mounts:</strong> <code>loki-data</code> on Docker volume — need elavad Dockeri hallatavas asukohas ja säilivad <code>docker compose down</code> järel. Kui kasutaksid <code>./data:/loki</code>, satuksid logid sinu paev2 kausta, mis võib kasvada mahuliselt ja juhuslikult saada git'i pandud.</p>
+<p>Käivita ja testi:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>loki
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sleep<span class="w"> </span><span class="m">10</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:3100/ready
+</span></code></pre></div>
+<p>Vastus <code>ready</code>. Kui ei — <code>docker compose logs loki</code>. Loki tagastab <code>ready</code> alles siis, kui sisemine initsialiseerimine on läbi (TSDB indeksid, ring konsensus ka single-node puhul). Tavaliselt 5-10s.</p>
+<h3 id="73-log-generator">7.3 Log-generator<a class="headerlink" href="#73-log-generator" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loki töötab, aga meil pole logisid. Lisame sisupakkuja — konteiner, mis 1x sekundis kirjutab juhusliku logirea applog-faili. Faili jälgib hiljem Alloy.</p>
+<p>Lisa <code>services:</code> alla:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">  </span><span class="nt">log-generator</span><span class="p">:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">busybox:latest</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">log-generator</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sh</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-c</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">        </span><span class="no">mkdir -p /var/log/app /var/log/nginx</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">        </span><span class="no">SERVICES=&quot;payment auth api database cache&quot;</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="no">LEVELS=&quot;INFO INFO INFO INFO INFO WARN ERROR&quot;</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">        </span><span class="no">while true; do</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">          </span><span class="no">S=$(echo $SERVICES | tr &quot; &quot; &quot;\n&quot; | shuf -n1)</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">          </span><span class="no">L=$(echo $LEVELS | tr &quot; &quot; &quot;\n&quot; | shuf -n1)</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">          </span><span class="no">LATENCY=$((RANDOM % 500))</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">          </span><span class="no">echo &quot;$(date -Iseconds) [$L] [$S] duration=${LATENCY}ms trace_id=$RANDOM&quot; &gt;&gt; /var/log/app/app.log</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">          </span><span class="no">sleep 1</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">        </span><span class="no">done</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-logs:/var/log/app</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+</span></code></pre></div>
+<p><strong>Miks LEVELS nii:</strong> <code>INFO INFO INFO INFO INFO WARN ERROR</code> — 5 INFO, 1 WARN, 1 ERROR. See simuleerib reaalset distributsiooni: enamik logisid on informatiivsed, WARN'ureid vähem, ERROR'eid kriitiliselt vähe. Iga sekundi <code>shuf -n1</code> valib tõenäosusega 5/7 INFO.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>log-generator
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sleep<span class="w"> </span><span class="m">5</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>log-generator<span class="w"> </span>tail<span class="w"> </span>-3<span class="w"> </span>/var/log/app/app.log
+</span></code></pre></div>
+<p>Näed ridu nagu <code>2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345</code>.</p>
+<h3 id="74-alloy">7.4 Alloy<a class="headerlink" href="#74-alloy" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loki ja logid on valmis, aga keegi peab logid Lokisse saatma. <strong>Alloy</strong> on see "keegi" — agent, mis jookseb logide peremees-masinal, loeb logifaile (sarnaselt <code>tail -f</code>-ile) ja saadab ridade Loki HTTP API-sse.</p>
+<p>Alloy konfig on <strong>HCL-sarnane</strong> (Terraform-stiilis plokid), mitte YAML. See on Grafana Labs'i valik — plokki saab kirjutada iga komponendi jaoks ja siduda neid <code>forward_to</code> viidetega.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>config/config.alloy<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="s">local.file_match &quot;applog&quot; {</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="s">  path_targets = [</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s">    {</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s">      __path__ = &quot;/var/log/app/*.log&quot;,</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="s">      job      = &quot;applog&quot;,</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="s">    },</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s">  ]</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s">}</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="s">loki.source.file &quot;applog&quot; {</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="s">  targets    = local.file_match.applog.targets</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="s">  forward_to = [loki.write.default.receiver]</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="s">}</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="s">loki.write &quot;default&quot; {</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="s">  endpoint {</span>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="s">    url = &quot;http://loki:3100/loki/api/v1/push&quot;</span>
+</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="s">  }</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="s">}</span>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="s">EOF</span>
+</span></code></pre></div>
+<p><strong>Konfiguratsiooni plokid ("components"):</strong></p>
+<ul>
+<li><code>local.file_match "applog"</code> — määrab glob-mustri failidele (<code>/var/log/app/*.log</code>) ja staatilised labelid (<code>job="applog"</code>). Sisuline vaste Promtail'i <code>scrape_configs.static_configs</code>-le.</li>
+<li><code>loki.source.file "applog"</code> — komponent, mis tegelikult faile <strong>loeb</strong>. Kõik hallatakse iseseisvalt: positsiooni-mälu (et restart'i korral õigest kohast jätkata), failide rotatsiooni tuvastus, uute failide avastamine.</li>
+<li><code>loki.write "default"</code> — kuhu read saadetakse. Sisuline vaste Promtail'i <code>clients.url</code>-le.</li>
+<li><code>forward_to</code> — sidumine: <code>loki.source.file.applog</code> järgnev on <code>loki.write.default.receiver</code>. Nii saab ühest allikast suunata mitmele backendile paralleelselt.</li>
+</ul>
+<p><strong>Miks see on parem kui Promtail'i YAML:</strong> plokid on <strong>komponeeritavad</strong>. Saad lisada logi-modifikaatori (nt JSON-parsimise) kesk teed, lisada teise <code>loki.write</code> alternatiivsele Lokile, saata sama logid ka OpenTelemetry collector'ile — ilma et peaks kogu konfi ümber kirjutama. Promtail'i <code>pipeline_stages</code> on järjestikune nagu konveier; Alloy on graaf.</p>
+<p>Lisa <code>services:</code> alla:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="w">  </span><span class="nt">alloy</span><span class="p">:</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/alloy:v1.5.0</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alloy</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./config/config.alloy:/etc/alloy/config.alloy</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-logs:/var/log/app:ro</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/alloy/config.alloy</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--server.http.listen-addr=0.0.0.0:12345</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;12345:12345&quot;</span>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loki</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+</span></code></pre></div>
+<p><strong>Miks <code>app-logs:/var/log/app:ro</code>:</strong> Alloy jagab log-generator'i volume'i, aga <strong>read-only</strong> (<code>:ro</code>). Alloy peab ainult lugema faili, mitte muutma. Kui kogemata kirjutaks, läheb positsioonide-andmestik sassi.</p>
+<p><strong>Port 12345</strong> on Alloy enda UI ja debug endpoint. Brauseris <code>http://192.168.35.12X:12345</code> näeb komponentide graafi, aktiivseid voolusid, vigade logi. See on Alloy oluline eelis — konfi silumine on visuaalne.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>alloy
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sleep<span class="w"> </span><span class="m">10</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>alloy<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-5
+</span></code></pre></div>
+<p>Alloy logis peab olema <code>component "loki.source.file.applog" started</code> ja mitte ühtki <code>error</code> rida.</p>
+<p>💡 <strong>Kui "connection refused" Loki'sse:</strong> Loki pole veel ready. Oota 15s, <code>docker restart alloy</code>. Alloy on sallivam kui Promtail — jätkab oma komponentide käivitamist ja proovib hiljem Loki'le saata.</p>
+<h3 id="75-grafana">7.5 Grafana<a class="headerlink" href="#75-grafana" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lõpuks UI. Grafana, tuttav päev 1-st, aga seekord <strong>uus instants</strong> pordil 3001 (päev 1 Grafana on 3000-l). Kui päev 1 stack on veel üleval, hoiame need eraldi pordil, et konflikti ei tekiks.</p>
+<p>Lisa <code>services:</code> alla:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:11.4.0</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana-loki</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3001:3000&quot;</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_PASSWORD=monitoring2026</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana-data:/var/lib/grafana</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+</span></code></pre></div>
+<p><strong>Miks <code>3001:3000</code>:</strong> host'i port 3001 → konteineri port 3000. Konteineris on Grafana ikka 3000 (vaikimisi), aga host'is näeme teda 3001-l, et mitte segada päev 1 Grafanat.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>grafana-loki
+</span></code></pre></div>
+<p>Brauseris <code>http://192.168.35.12X:3001</code> (admin / <code>monitoring2026</code>).</p>
+<p><em>Connections → Data sources → Add → Loki</em> → URL: <code>http://loki:3100</code> → <em>Save &amp; test</em> → roheline ✅.</p>
+<p><strong>Miks URL on <code>http://loki:3100</code>, mitte <code>localhost:3100</code>:</strong> Grafana jookseb konteineris. Konteineri jaoks <code>localhost</code> on Grafana ise. Loki on eraldi konteiner — jõuame Docker-võrgu DNS-nimega <code>loki</code>. See on <strong>levinuim esimene eksitus</strong> Loki datasource'i seadistamisel.</p>
+<h3 id="76-esimesed-read">7.6 Esimesed read<a class="headerlink" href="#76-esimesed-read" title="Lingi sektsioonile">&para;</a></h3>
+<p><em>Explore</em> → datasource: Loki → Code view:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>{job=&quot;applog&quot;}
+</span></code></pre></div>
+<p>Run query. Näed ridu tekkima.</p>
+<p><strong>Mis just juhtus ahelas:</strong> log-generator kirjutas rea applog-faili → Alloy märkas (positsioonide-andmestik) → Alloy saatis rea HTTP POST-iga Lokisse → Loki salvestas chunk'i + indeksi <code>job="applog"</code> → Grafana küsis LogQL-iga seda voogu → sa näed tulemust. Kogu teekond on 1-3 sekundit.</p>
+<p>💡 <strong>Nõuanne:</strong> nüüd on hea hetk avada Alloy debug UI (<code>http://192.168.35.12X:12345</code>) ja vaadata komponentide graafi — näed kõiki kolme plokki omavahel seotuna. See aitab hiljem tootmises silumisel.</p>
+<p>💭 <strong>Mõtle:</strong> Alloy loeb faili nagu <code>tail -f</code>. Mis juhtub kui fail roteeritakse? Mis on positsioonide-andmestiku roll?</p>
+<hr />
+<h2 id="osa-8-pattern-parser-rate-dashboard">Osa 8 · Pattern parser → rate() → dashboard<a class="headerlink" href="#osa-8-pattern-parser-rate-dashboard" title="Lingi sektsioonile">&para;</a></h2>
+<p>Nüüd kui stack on üleval ja LogQL alus on olemas, teeme üht päris kasulikku asja — teisendame logid metrikaks, et saaks graafikul jooksu jälgida. See on Loki võtmehetk: ilma Lokita oleks sul vaja <strong>kahte</strong> süsteemi (logi + metrika); Lokiga saad ühe logi-andmest teha metrika lennult.</p>
+<h3 id="81-pattern-struktuuri-lisamine">8.1 Pattern — struktuuri lisamine<a class="headerlink" href="#81-pattern-struktuuri-lisamine" title="Lingi sektsioonile">&para;</a></h3>
+<p>Meie logirida: <code>2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345</code></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>{job=&quot;applog&quot;} | pattern `&lt;_&gt; [&lt;level&gt;] [&lt;service&gt;] duration=&lt;duration&gt;ms trace_id=&lt;_&gt;`
+</span></code></pre></div>
+<p>Kliki rea peal — näed labeleid <code>level</code>, <code>service</code>, <code>duration</code>.</p>
+<p><strong>Mis just juhtus:</strong> Loki polnud enne teadnud, et <code>[ERROR]</code> on midagi erilist — see oli lihtsalt osa sõnelisest sisust. Pattern parser määras struktuuri: esimene vaba väljend on aeg (<code>&lt;_&gt;</code> = ignoreeri), kaks nurksulu sees on level ja service, <code>duration=Xms</code> osa annab numbrilise kestuse. Pärast seda päringut võid neid väärtusi filtrisse panna ja agregeerida.</p>
+<h3 id="82-filtreeri-patterni-tulemusi">8.2 Filtreeri pattern'i tulemusi<a class="headerlink" href="#82-filtreeri-patterni-tulemusi" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>{job=&quot;applog&quot;} | pattern `&lt;_&gt; [&lt;level&gt;] [&lt;service&gt;] duration=&lt;duration&gt;ms trace_id=&lt;_&gt;` | level=&quot;ERROR&quot; | service=&quot;payment&quot;
+</span></code></pre></div>
+<p>Ainult payment error'id. Lisafiltrit saab lihtsalt täiendada — <code>| duration &gt; 300</code> annab aeglased. Proovi ise: näita <code>api</code> teenuse logisid kus <code>duration &gt; 300</code>.</p>
+<p><strong>Märka:</strong> enne <code>| pattern</code> filtreeris Loki <strong>tekstisõnu</strong>. Pärast <code>| pattern</code> filtreerib <strong>struktureeritud väärtusi</strong>. See on sama hetk, mis päev 1 Prometheus'es oli "eraldi label'id per dimensioon" — üleminek tekstist andmestruktuurile.</p>
+<h3 id="83-label-disain-mis-on-label-mis-on-sisu">8.3 Label disain — mis on label, mis on sisu?<a class="headerlink" href="#83-label-disain-mis-on-label-mis-on-sisu" title="Lingi sektsioonile">&para;</a></h3>
+<p>Meie logis on: <code>level</code>, <code>service</code>, <code>duration</code>, <code>trace_id</code>. Pattern parser tegi neist kõigist labelid. Aga kas kõik peaksid olema labelid?</p>
+<p>Mõtle:</p>
+<table>
+<thead>
+<tr>
+<th>Väli</th>
+<th>Unikaalseid väärtusi</th>
+<th>Label?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>level</code></td>
+<td>3 (INFO, WARN, ERROR)</td>
+<td>✅ Jah</td>
+</tr>
+<tr>
+<td><code>service</code></td>
+<td>5 (payment, auth, api, database, cache)</td>
+<td>✅ Jah</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>~500 erinevat numbrit</td>
+<td>❌ Ei — liiga palju</td>
+</tr>
+<tr>
+<td><code>trace_id</code></td>
+<td>unikaalne iga rea kohta</td>
+<td>❌ Kindlasti ei</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reegel:</strong> label'iks ainult asjad millest on kuni ~100 unikaalset väärtust. Kõik muu jääb sisusse ja otsitakse <code>|=</code> või parseri abil.</p>
+<p><strong>Miks reegel nii range on:</strong> iga unikaalne label'ite kombinatsioon tekitab Lokis <strong>eraldi voogu (stream)</strong>. 3 level × 5 service = 15 voogu — normaalne. 3 level × 5 service × 10 000 trace_id = 150 000 voogu — kardinaalsuse plahvatus. Loki indeks kasvab, päringud muutuvad aeglasemaks, Loki võib keelduda uusi logisid vastu võtma. Loeng §6 selgitab seda sügavamalt.</p>
+<p>Mis juhtub kui teed <code>trace_id</code> label'iks? Proovi:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>{job=&quot;applog&quot;} | pattern `&lt;_&gt; [&lt;_&gt;] [&lt;_&gt;] &lt;_&gt; trace_id=&lt;trace_id&gt;`
+</span></code></pre></div>
+<p>Loki töötab — aga kujuta ette 10 000 unikaalset trace_id'd. See on 10 000 eraldi voogu. Loki indeks paisub, päringud aeglustuvad. Tootmises = raha ja aeg.</p>
+<details>
+<summary>🔧 Edasijõudnule: Alloy `stage.regex` ja `stage.labels` komponendid</summary>
+
+Tootmises ei parsi alati runtime'is LogQL'is. Alloy saab logisid **enne Loki saatmist** töödelda `loki.process` komponendis:
+
+<div class="language-hcl highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nv">loki.source.file</span><span class="w"> </span><span class="s2">&quot;applog&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="na">targets</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">local.file_match.applog.targets</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="na">forward_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nv">loki.process.applog.receiver</span><span class="p">]</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="p">}</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="nv">loki.process</span><span class="w"> </span><span class="s2">&quot;applog&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="na">forward_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nv">loki.write.default.receiver</span><span class="p">]</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">  </span><span class="nv">stage.regex</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="w">    </span><span class="na">expression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">`\</span><span class="p">[(?</span><span class="err">P&lt;level&gt;\w+</span><span class="p">)</span><span class="err">\</span><span class="p">]</span><span class="w"> </span><span class="err">\</span><span class="p">[(?</span><span class="err">P&lt;service&gt;\w+</span><span class="p">)</span><span class="err">\</span><span class="p">]</span><span class="err">`</span>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="w">  </span><span class="nv">stage.labels</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="w">    </span><span class="nb">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-15"><a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="w">      </span><span class="na">level</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="__span-20-16"><a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a><span class="w">      </span><span class="na">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="__span-20-17"><a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-20-18"><a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-20-19"><a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a><span class="p">}</span>
+</span></code></pre></div>
+
+Käguke: `loki.source.file` edastab `loki.process`-ile, see omakorda `loki.write`-ile. Regex leiab level ja service, labels-stage paneb need Loki labeliteks.
+
+Nüüd `level` ja `service` on **püsivad labelid** Lokis — filter `{level="ERROR"}` kasutab indeksit, mitte brute-force skaneerimist. `duration` ja `trace_id` jäävad sisusse.
+
+See on tootmise vs labi erinevus. Labis parsime runtime'is (lihtsam setup), tootmises Alloy `loki.process`-is (kiiremad päringud).
+
+</details>
+
+<h3 id="84-rate-logist-metrika">8.4 rate() — logist metrika<a class="headerlink" href="#84-rate-logist-metrika" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siiamaani vaatasime logisid kui ridu (vaatlus). Nüüd teisendame nad <strong>numbriks ajas</strong> — logist saab metrika, nagu Prometheus annaks.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>sum by (service) (
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>  rate(
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>    {job=&quot;applog&quot;}
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>      | pattern `&lt;_&gt; [&lt;level&gt;] [&lt;service&gt;] &lt;_&gt;`
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>      | level=&quot;ERROR&quot;
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>      [5m]
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>  )
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>)
+</span></code></pre></div>
+<p>Vaheta Time series view — näed graafikut. Logist sai number — sama kontseptsioon mis PromQL <code>rate()</code>, aga allikas on tekst.</p>
+<p><strong>Mis täpselt toimub:</strong></p>
+<ol>
+<li><code>{job="applog"}</code> — valib kõik applog voogud</li>
+<li><code>| pattern ...</code> — parsib read, teeb <code>level</code>, <code>service</code> labeleiks</li>
+<li><code>| level="ERROR"</code> — filtreerib ainult ERROR read</li>
+<li><code>[5m]</code> — "viimase 5 minuti" aken (range vector)</li>
+<li><code>rate(...)</code> — loendab read sekundis selles aknas</li>
+<li><code>sum by (service)</code> — grupeerib teenuste kaupa</li>
+</ol>
+<p><strong>Miks see võimas:</strong> sama loogika kui Prometheus'e <code>rate(http_requests_total[5m])</code> — aga allikas on <strong>logirida</strong>, mitte counter. Kui rakendus ei eksporteeri mõõdikut, aga logib "FAILED transaction" rida, saad Loki'ga sellest ikka trendi teha. See on palju vaheteenuseid (legacy rakendused), mida ei saa instrumenteerida.</p>
+<h3 id="85-dashboard">8.5 Dashboard<a class="headerlink" href="#85-dashboard" title="Lingi sektsioonile">&para;</a></h3>
+<p>Nüüd kui üks päring töötab, paneme ta dashboardile. Grafanas on muster alati sama: <em>loo dashboard → lisa paneel → päring → vali visualiseering</em>.</p>
+<p><em>Dashboards → New → Add visualization</em> → Loki datasource:</p>
+<p><strong>Paneel 1:</strong> <code>ERRORs per service</code> — eelmine päring, Time series.</p>
+<p><strong>Paneel 2:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>sum by (level) (count_over_time({job=&quot;applog&quot;} | pattern `&lt;_&gt; [&lt;level&gt;] [&lt;_&gt;] &lt;_&gt;` [1m]))
+</span></code></pre></div>
+Bar chart — logimaht taseme järgi.</p>
+<p><strong>Erinevus <code>rate()</code> ja <code>count_over_time()</code> vahel:</strong>
+- <code>rate()</code> — ridu sekundis (keskmistatud sujuvaks graafikuks)
+- <code>count_over_time()</code> — ridude <strong>koguarv</strong> aknas (kasulik bar chart'ile, mis näitab "mitu ERROR-rida oli viimase minutiga")</p>
+<p>Salvesta: <code>App monitoring</code>.</p>
+<h3 id="86-finaal-sama-sundmus-kaks-vaatenurka">8.6 FINAAL — sama sündmus, kaks vaatenurka<a class="headerlink" href="#86-finaal-sama-sundmus-kaks-vaatenurka" title="Lingi sektsioonile">&para;</a></h3>
+<p>Nüüd on mõlemad stackid üleval. Tekita error-torm mon-target'il:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ssh<span class="w"> </span>&lt;eesnimi&gt;@192.168.35.140<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="s1">&#39;for i in $(seq 1 200); do echo &quot;$(date -Iseconds) [ERROR] [payment] Spam_$i&quot; | sudo tee -a /var/log/app/app.log &gt; /dev/null; done&#39;</span>
+</span></code></pre></div>
+<p>Ava kaks brauseri tabi:</p>
+<ol>
+<li><strong>Zabbix:</strong> <code>http://192.168.35.12X:8080</code> → <em>Monitoring → Problems</em> → <code>Too many payment errors</code> trigger <strong>Firing</strong> (see oli <a href="../zabbix_lab/#54-item-trigger">Zabbix labori osa 5.4</a>)</li>
+<li><strong>Loki Grafana:</strong> <code>http://192.168.35.12X:3001</code> → Dashboard <code>App monitoring</code> → payment error spike graafikul</li>
+</ol>
+<p>Sama sündmus, kaks perspektiivi. Zabbix ütleb <strong>"on probleem"</strong> (trigger). Loki näitab <strong>"mis juhtus"</strong> (logid + rate).</p>
+<p>💭 <strong>Lõpureflektsioon:</strong> Sul on nüüd kolm tööriista — Prometheus (metrikad, pull), Zabbix (agent, push), Loki (logid). Millist probleemi oma tööst lahendaksid nendega esimesena? Kas näed olukorda kus kaks neist töötaksid kõrvuti?</p>
+<hr />
+<h2 id="lopukontroll-loki-pool">✅ Lõpukontroll (Loki pool)<a class="headerlink" href="#lopukontroll-loki-pool" title="Lingi sektsioonile">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker compose ps</code> (<code>~/paev2/loki/</code>) — 4 konteinerit Up (loki, log-generator, alloy, grafana-loki)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Grafana Loki datasource roheline</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explore näitab <code>{job="applog"}</code> logisid</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Alloy debug UI (<code>http://192.168.35.12X:12345</code>) näitab <code>loki.source.file.applog</code> → <code>loki.write.default</code> graafi</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Pattern parser ekstraheerib level, service, duration</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Dashboard <code>App monitoring</code> salvestatud, vähemalt 2 paneeli</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>FINAAL:</strong> error-torm nähtav Zabbixi Problems lehel JA Loki graafikul</li>
+</ul>
+<hr />
+<h2 id="lisaulesanded">🚀 Lisaülesanded<a class="headerlink" href="#lisaulesanded" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="loki-nginx-accesslog-red">Loki: Nginx accesslog + RED<a class="headerlink" href="#loki-nginx-accesslog-red" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lisa <code>log-generator</code> konteinerisse nginx-stiilis accesslog genereerimine. Lisa teine <code>local.file_match</code> ja <code>loki.source.file</code> komponent Alloy konfi <code>job="nginx"</code> jaoks. Ehita RED dashboard:</p>
+<ul>
+<li><code>rate()</code> — päringuid sekundis</li>
+<li><code>status =~ "5.."</code> — error rate</li>
+<li><code>sum by (path)</code> — per path</li>
+</ul>
+<h3 id="log-based-alert">Log-based alert<a class="headerlink" href="#log-based-alert" title="Lingi sektsioonile">&para;</a></h3>
+<p>Grafana → <em>Alerting → Alert rules → New</em> → Loki query <code>rate({job="applog"} | pattern ... | level="ERROR" | service="payment" [2m])</code> → threshold &gt; 0.1 → Contact point: Discord.</p>
+<h3 id="correlation-metric-log">Correlation — metric → log<a class="headerlink" href="#correlation-metric-log" title="Lingi sektsioonile">&para;</a></h3>
+<p>Dashboard paneelis <em>Data links → Add link</em> mis viib Explore vaatesse sama teenuse Loki logidele. Ühe klikiga graafikult logidesse.</p>
+<h3 id="multi-source-alloy-uks-agent-kaks-allikat">Multi-source Alloy — üks agent, kaks allikat<a class="headerlink" href="#multi-source-alloy-uks-agent-kaks-allikat" title="Lingi sektsioonile">&para;</a></h3>
+<p>Alloy võimas pool tuleb välja, kui lisada <strong>teine</strong> logiallikas üldse ilma uut konteinerit käivitamata. Loo teine <code>local.file_match</code> komponent (nt nginx accesslog jaoks) ja suuna see samale <code>loki.write.default</code>-ile, kui ka eraldi <code>loki.write.nginx</code>-ile. Üks konfifail, kaks logi-voolu, võimalus mitut backend'i paralleelselt toita.</p>
+<hr />
+<h2 id="enterprise-lisateemad">🏢 Enterprise lisateemad<a class="headerlink" href="#enterprise-lisateemad" title="Lingi sektsioonile">&para;</a></h2>
+<details class="note">
+<summary>Loki: retention, multi-tenancy ja S3 storage</summary>
+<p>Tootmises ei hoia logisid lõputult kohalikul kettal.</p>
+<p><strong>Retention (logide eluiga):</strong></p>
+<p><code>loki-config.yml</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">limits_config</span><span class="p">:</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">retention_period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">168h</span><span class="w">    </span><span class="c1"># 7 päeva</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="nt">compactor</span><span class="p">:</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">  </span><span class="nt">working_directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/loki/compactor</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span><span class="nt">retention_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span><span class="nt">delete_request_store</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filesystem</span>
+</span></code></pre></div>
+<p><strong>Multi-tenancy (mitme meeskonna logid eraldi):</strong></p>
+<p><code>loki-config.yml</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">auth_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+<p>Alloy saadab <code>X-Scope-OrgID</code> header'i <code>loki.write</code> komponendis:</p>
+<div class="language-hcl highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nv">loki.write</span><span class="w"> </span><span class="s2">&quot;team_backend&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">  </span><span class="nb">endpoint</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://loki:3100/loki/api/v1/push&quot;</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">    </span><span class="nb">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">      </span><span class="s2">&quot;X-Scope-OrgID&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;team-backend&quot;</span><span class="p">,</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Grafana datasource'is: HTTP Headers → <code>X-Scope-OrgID: team-backend</code>.</p>
+<p>Iga meeskond näeb ainult oma logisid.</p>
+<p><strong>S3/MinIO storage (tootmises):</strong></p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nt">common</span><span class="p">:</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span><span class="nt">storage</span><span class="p">:</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">    </span><span class="nt">s3</span><span class="p">:</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio:9000</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">      </span><span class="nt">bucketnames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loki-chunks</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">      </span><span class="nt">access_key_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minioadmin</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">      </span><span class="nt">secret_access_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minioadmin</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">      </span><span class="nt">insecure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="w">      </span><span class="nt">s3forcepathstyle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+<p><strong>Loe edasi:</strong></p>
+<ul>
+<li><a href="https://grafana.com/docs/loki/latest/operations/storage/retention/">Loki retention</a></li>
+<li><a href="https://grafana.com/docs/loki/latest/operations/multi-tenancy/">Multi-tenancy</a></li>
+<li><a href="https://grafana.com/docs/loki/latest/storage/">S3 storage</a></li>
+</ul>
+</details>
+<details class="note">
+<summary>Alloy: OpenTelemetry, traces ja mõõdikud samas agendis</summary>
+<p>Laboris kasutasime Alloy'd ainult logide jaoks. Alloy oskab kolme sammast (logid, mõõdikud, traces) korraga. Näited:</p>
+<p><strong>Mõõdikud Prometheusele (Prometheus asendaja):</strong></p>
+<div class="language-hcl highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nv">prometheus.scrape</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">  </span><span class="na">targets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="p">{</span><span class="na">__address__</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mon-target:9100&quot;</span><span class="p">},</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">  </span><span class="na">forward_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nv">prometheus.remote_write.default.receiver</span><span class="p">]</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="p">}</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="nv">prometheus.remote_write</span><span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">  </span><span class="nb">endpoint</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://prometheus:9090/api/v1/write&quot;</span>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>OTel traces vastuvõtt ja Tempo suunamine:</strong></p>
+<div class="language-hcl highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nv">otelcol.receiver.otlp</span><span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">  </span><span class="nb">grpc</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.0.0.0:4317&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">  </span><span class="nb">http</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.0.0.0:4318&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">  </span><span class="nb">output</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">    </span><span class="na">traces</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nv">otelcol.exporter.otlp.tempo.input</span><span class="p">]</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="p">}</span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="nv">otelcol.exporter.otlp</span><span class="w"> </span><span class="s2">&quot;tempo&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="w">  </span><span class="nb">client</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-12"><a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="w">    </span><span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tempo:4317&quot;</span>
+</span><span id="__span-29-13"><a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="w">    </span><span class="nb">tls</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">insecure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-29-14"><a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-29-15"><a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Üks agent ehitab kogu LGTM pinu kirjutuspoole. Kolm eraldi agenti (Promtail + node_exporter + otel-collector) asendunud ühe Alloy konteineriga.</p>
+<p><strong>Loe edasi:</strong></p>
+<ul>
+<li><a href="https://grafana.com/docs/alloy/latest/reference/components/">Alloy kõik komponendid</a></li>
+<li><a href="https://grafana.com/docs/alloy/latest/collect/opentelemetry-to-lgtm-stack/">OpenTelemetry Alloy's</a></li>
+<li><a href="https://grafana.com/docs/alloy/latest/tasks/migrate/from-promtail/">Migration from Promtail</a></li>
+</ul>
+</details>
+<hr />
+<h2 id="veaotsing">Veaotsing<a class="headerlink" href="#veaotsing" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Probleem</th>
+<th>Esimene kontroll</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Loki "no labels found"</td>
+<td><code>{job="applog"}</code> — peab vastama Alloy config'ile</td>
+</tr>
+<tr>
+<td>Loki "too many streams"</td>
+<td>Label on liiga unikaalne (trace_id). Eemalda.</td>
+</tr>
+<tr>
+<td>Alloy "connection refused"</td>
+<td>Loki pole ready — <code>docker restart alloy</code></td>
+</tr>
+<tr>
+<td>Alloy komponendid "unhealthy"</td>
+<td>Ava debug UI port 12345 — komponendi võib näidata veateksti</td>
+</tr>
+<tr>
+<td>Grafana Loki datasource punane</td>
+<td>URL peab olema <code>http://loki:3100</code>, mitte <code>localhost</code></td>
+</tr>
+<tr>
+<td>rate() tagastab 0</td>
+<td>Time range liiga kitsas — vaheta "Last 15 min"</td>
+</tr>
+<tr>
+<td>Mõlemad stackid aeglased</td>
+<td><code>free -h</code> — 4GB piir. Peata üks ajutiselt kui vaja.</td>
+</tr>
+<tr>
+<td>Alloy ei loe logifaile</td>
+<td><code>docker logs alloy</code> — permission? <code>app-logs:/var/log/app:ro</code> mount OK?</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="allikad">📚 Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Allikas</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Loki dokumentatsioon</td>
+<td><a href="https://grafana.com/docs/loki/latest/">grafana.com/docs/loki</a></td>
+</tr>
+<tr>
+<td>LogQL spetsifikatsioon</td>
+<td><a href="https://grafana.com/docs/loki/latest/query/">grafana.com/.../query</a></td>
+</tr>
+<tr>
+<td>Pattern parser</td>
+<td><a href="https://grafana.com/docs/loki/latest/query/log_queries/#pattern">grafana.com/.../pattern</a></td>
+</tr>
+<tr>
+<td>LogQL simulator</td>
+<td><a href="https://grafana.com/docs/loki/latest/query/analyzer/">grafana.com/.../analyzer</a></td>
+</tr>
+<tr>
+<td>Grafana Alloy</td>
+<td><a href="https://grafana.com/docs/alloy/latest/">grafana.com/docs/alloy</a></td>
+</tr>
+<tr>
+<td>Siltide parimad tavad</td>
+<td><a href="https://grafana.com/docs/loki/latest/get-started/labels/">grafana.com/.../labels</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Versioonid:</strong> Loki 3.3.0, Alloy 1.5.0, Grafana 11.4.0.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Viimane uuendus">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 08:12:06 UTC">23. aprill 2026</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Üles
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 Maria Talvik · Haapsalu Kutsehariduskeskus
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

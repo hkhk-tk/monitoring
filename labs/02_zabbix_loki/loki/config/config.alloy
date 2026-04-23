@@ -1,0 +1,26 @@
+// Grafana Alloy konfiguratsioon — Päev 2 Labor
+//
+// Alloy on universaalne telemeetria-kollektor (Promtail järglane).
+// Siin kasutame teda ainult logide saatmiseks Lokile.
+//
+// Debug UI: http://<VM-IP>:12345
+
+local.file_match "applog" {
+  path_targets = [
+    {
+      __path__ = "/var/log/app/*.log",
+      job      = "applog",
+    },
+  ]
+}
+
+loki.source.file "applog" {
+  targets    = local.file_match.applog.targets
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
