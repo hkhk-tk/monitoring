@@ -1272,28 +1272,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#veaotsing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Veaotsing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📚 Allikad
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1662,6 +1640,8 @@
       
         
       
+        
+      
     
     
     
@@ -1752,6 +1732,34 @@
     
   
     Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/material-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materjalide stiilijuhend
   
 
     
@@ -2124,28 +2132,6 @@
     <span class="md-ellipsis">
       
         🏢 Enterprise lisateemad
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#veaotsing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Veaotsing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📚 Allikad
       
     </span>
   </a>
@@ -2673,86 +2659,36 @@ Bar chart — logimaht taseme järgi.</p>
 </ul>
 </details>
 <hr />
-<h2 id="veaotsing">Veaotsing<a class="headerlink" href="#veaotsing" title="Lingi sektsioonile">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Probleem</th>
-<th>Esimene kontroll</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Loki "no labels found"</td>
-<td><code>{job="applog"}</code> — peab vastama Alloy config'ile</td>
-</tr>
-<tr>
-<td>Loki "too many streams"</td>
-<td>Label on liiga unikaalne (trace_id). Eemalda.</td>
-</tr>
-<tr>
-<td>Alloy "connection refused"</td>
-<td>Loki pole ready — <code>docker restart alloy</code></td>
-</tr>
-<tr>
-<td>Alloy komponendid "unhealthy"</td>
-<td>Ava debug UI port 12345 — komponendi võib näidata veateksti</td>
-</tr>
-<tr>
-<td>Grafana Loki datasource punane</td>
-<td>URL peab olema <code>http://loki:3100</code>, mitte <code>localhost</code></td>
-</tr>
-<tr>
-<td>rate() tagastab 0</td>
-<td>Time range liiga kitsas — vaheta "Last 15 min"</td>
-</tr>
-<tr>
-<td>Mõlemad stackid aeglased</td>
-<td><code>free -h</code> — 4GB piir. Peata üks ajutiselt kui vaja.</td>
-</tr>
-<tr>
-<td>Alloy ei loe logifaile</td>
-<td><code>docker logs alloy</code> — permission? <code>app-logs:/var/log/app:ro</code> mount OK?</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="allikad">📚 Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>URL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Loki dokumentatsioon</td>
-<td><a href="https://grafana.com/docs/loki/latest/">grafana.com/docs/loki</a></td>
-</tr>
-<tr>
-<td>LogQL spetsifikatsioon</td>
-<td><a href="https://grafana.com/docs/loki/latest/query/">grafana.com/.../query</a></td>
-</tr>
-<tr>
-<td>Pattern parser</td>
-<td><a href="https://grafana.com/docs/loki/latest/query/log_queries/#pattern">grafana.com/.../pattern</a></td>
-</tr>
-<tr>
-<td>LogQL simulator</td>
-<td><a href="https://grafana.com/docs/loki/latest/query/analyzer/">grafana.com/.../analyzer</a></td>
-</tr>
-<tr>
-<td>Grafana Alloy</td>
-<td><a href="https://grafana.com/docs/alloy/latest/">grafana.com/docs/alloy</a></td>
-</tr>
-<tr>
-<td>Siltide parimad tavad</td>
-<td><a href="https://grafana.com/docs/loki/latest/get-started/labels/">grafana.com/.../labels</a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Versioonid:</strong> Loki 3.3.0, Alloy 1.5.0, Grafana 11.4.0.</p>
+<details>
+<summary><strong>Veaotsing + allikad (peida/ava)</strong></summary>
+
+## Veaotsing
+
+| Probleem | Esimene kontroll |
+|----------|------------------|
+| Loki "no labels found" | `{job="applog"}` — peab vastama Alloy config'ile |
+| Loki "too many streams" | Label on liiga unikaalne (trace_id). Eemalda. |
+| Alloy "connection refused" | Loki pole ready — `docker restart alloy` |
+| Alloy komponendid "unhealthy" | Ava debug UI port 12345 — komponendi võib näidata veateksti |
+| Grafana Loki datasource punane | URL peab olema `http://loki:3100`, mitte `localhost` |
+| rate() tagastab 0 | Time range liiga kitsas — vaheta "Last 15 min" |
+| Mõlemad stackid aeglased | `free -h` — 4GB piir. Peata üks ajutiselt kui vaja. |
+| Alloy ei loe logifaile | `docker logs alloy` — permission? `app-logs:/var/log/app:ro` mount OK? |
+
+## 📚 Allikad
+
+| Allikas | URL |
+|---------|-----|
+| Loki dokumentatsioon | [grafana.com/docs/loki](https://grafana.com/docs/loki/latest/) |
+| LogQL spetsifikatsioon | [grafana.com/.../query](https://grafana.com/docs/loki/latest/query/) |
+| Pattern parser | [grafana.com/.../pattern](https://grafana.com/docs/loki/latest/query/log_queries/#pattern) |
+| LogQL simulator | [grafana.com/.../analyzer](https://grafana.com/docs/loki/latest/query/analyzer/) |
+| Grafana Alloy | [grafana.com/docs/alloy](https://grafana.com/docs/alloy/latest/) |
+| Siltide parimad tavad | [grafana.com/.../labels](https://grafana.com/docs/loki/latest/get-started/labels/) |
+
+**Versioonid:** Loki 3.3.0, Alloy 1.5.0, Grafana 11.4.0.
+
+</details>
 
 
 
@@ -2773,7 +2709,7 @@ Bar chart — logimaht taseme järgi.</p>
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 08:12:06 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
   </span>
 
     

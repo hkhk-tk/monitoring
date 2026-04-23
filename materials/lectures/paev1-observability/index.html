@@ -1902,6 +1902,8 @@
       
         
       
+        
+      
     
     
     
@@ -1992,6 +1994,34 @@
     
   
     Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/material-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materjalide stiilijuhend
   
 
     
@@ -3189,26 +3219,35 @@ Piirang: vaid Linuxi (mitte Windows / macOS), vajab õige sügavaid kerneli tead
 <p><strong>Järgmine samm:</strong> <a href="../paev1-loeng/">Loeng 2 — Prometheus ja Grafana</a> — kuidas metrics-sammas praktikas töötab.</p>
 <hr />
 <h2 id="enesekontrolli-kusimused">Enesekontrolli küsimused<a class="headerlink" href="#enesekontrolli-kusimused" title="Lingi sektsioonile">&para;</a></h2>
-<ol>
-<li>Mis on MTTD ja MTTR? Kuidas observability mõjutab kumbagi?</li>
-<li>Selgita tehnilist erinevust logimise ja seire vahel. Mis andmetüüpi kumbki kasutab?</li>
-<li>Millal kasutad USE meetodit ja millal RED meetodit? Too konkreetne näide mõlemast.</li>
-<li>Mis on error budget? Kuidas see mõjutab arendusprotsessi?</li>
-<li>Miks peaksid alert-id olema symptom-based, mitte cause-based? Too näide halvast ja heast alert-ist.</li>
-<li>Kasutaja kaebab aeglast lehte. Millises järjekorras vaatled kolme sammast? Miks just selles järjekorras?</li>
-<li>Millal eelistad Lokit ELK-le? Millal vastupidi?</li>
-<li>Mida toob OpenTelemetry juurde võrreldes traditsioonilise instrumentatsiooniga?</li>
-</ol>
-<details class="note">
-<summary>Vastused (peida/ava)</summary>
-<p>1) <strong>MTTD</strong> = aeg avastamiseni, <strong>MTTR</strong> = aeg lahenduseni. Hea observability vähendab mõlemat (eriti MTTD-d).</p>
-<p>2) <strong>Logid</strong> on sündmused (tekst/JSON), <strong>seire</strong> on aegread (numbrid ajas). Päringud ja säilitusloogika on erinevad.</p>
-<p>3) <strong>USE</strong> sobib infrastruktuurile (CPU/mälu/ketas/võrk). <strong>RED</strong> sobib teenustele (rate/errors/duration). Näited: ketta I/O saturation (USE) vs API p95 latency + error rate (RED).</p>
-<p>4) Error budget on “lubatud ebaõnnestumise eelarve” SLO raames; kui eelarve on otsas, peatad riskantsed release’id ja fookus läheb stabiilsusele.</p>
-<p>5) Symptom-based alert mõõdab kasutajamõju (latentsus, error rate), mitte impl. detaili (CPU 90%). Halb: “CPU &gt; 90%”; parem: “p95 latency &gt; 2s”.</p>
-<p>6) Tüüpiline järjekord: metrics (kas on süsteemne anomaalia) → logs (mis juhtus) → traces (kus täpselt viibib ja miks).</p>
-<p>7) Loki: operatiivne debug ja odavam logikiht. ELK: täisteksti/forensika ja keerukamad otsingud.</p>
-<p>8) OTel ühtlustab instrumentatsiooni (metrics/logs/traces) vendor‑neutraalse standardina.</p>
+<details>
+<summary><strong>Küsimused + vastused (peida/ava)</strong></summary>
+
+1. Mis on MTTD ja MTTR? Kuidas observability mõjutab kumbagi?
+2. Selgita tehnilist erinevust logimise ja seire vahel. Mis andmetüüpi kumbki kasutab?
+3. Millal kasutad USE meetodit ja millal RED meetodit? Too konkreetne näide mõlemast.
+4. Mis on error budget? Kuidas see mõjutab arendusprotsessi?
+5. Miks peaksid alert-id olema symptom-based, mitte cause-based? Too näide halvast ja heast alert-ist.
+6. Kasutaja kaebab aeglast lehte. Millises järjekorras vaatled kolme sammast? Miks just selles järjekorras?
+7. Millal eelistad Lokit ELK-le? Millal vastupidi?
+8. Mida toob OpenTelemetry juurde võrreldes traditsioonilise instrumentatsiooniga?
+
+??? note "Vastused (peida/ava)"
+    1) **MTTD** = aeg avastamiseni, **MTTR** = aeg lahenduseni. Hea observability vähendab mõlemat (eriti MTTD-d).
+
+    2) **Logid** on sündmused (tekst/JSON), **seire** on aegread (numbrid ajas). Päringud ja säilitusloogika on erinevad.
+
+    3) **USE** sobib infrastruktuurile (CPU/mälu/ketas/võrk). **RED** sobib teenustele (rate/errors/duration). Näited: ketta I/O saturation (USE) vs API p95 latency + error rate (RED).
+
+    4) Error budget on “lubatud ebaõnnestumise eelarve” SLO raames; kui eelarve on otsas, peatad riskantsed release’id ja fookus läheb stabiilsusele.
+
+    5) Symptom-based alert mõõdab kasutajamõju (latentsus, error rate), mitte impl. detaili (CPU 90%). Halb: “CPU > 90%”; parem: “p95 latency > 2s”.
+
+    6) Tüüpiline järjekord: metrics (kas on süsteemne anomaalia) → logs (mis juhtus) → traces (kus täpselt viibib ja miks).
+
+    7) Loki: operatiivne debug ja odavam logikiht. ELK: täisteksti/forensika ja keerukamad otsingud.
+
+    8) OTel ühtlustab instrumentatsiooni (metrics/logs/traces) vendor‑neutraalse standardina.
+
 </details>
 <hr />
 <h2 id="viited-ja-suvendatud-lugemine">Viited ja süvendatud lugemine<a class="headerlink" href="#viited-ja-suvendatud-lugemine" title="Lingi sektsioonile">&para;</a></h2>
@@ -3277,7 +3316,7 @@ Mitmed Eesti ettevõtted on avalikult rääkinud oma observability praktikatest 
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:48:12 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
   </span>
 
     

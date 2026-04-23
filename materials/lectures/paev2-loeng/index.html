@@ -1707,6 +1707,8 @@
       
         
       
+        
+      
     
     
     
@@ -1797,6 +1799,34 @@
     
   
     Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/material-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materjalide stiilijuhend
   
 
     
@@ -2269,12 +2299,12 @@
 <strong>Kiirlingid:</strong> <a href="https://www.zabbix.com/documentation/current/en/manual">Zabbix docs</a> · <a href="https://www.zabbix.com/roadmap">Roadmap</a> · <a href="https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning">Performance tuning</a></p>
 <div class="admonition abstract">
 <p class="admonition-title">TL;DR (kui sul on 5 min)</p>
+<p><strong>4 asja, mis tasub päriselt meelde jätta:</strong></p>
 <ul>
-<li><strong>Zabbix = “kõik ühes”</strong>: agentid, SNMP, HTTP, templated, dashboardid, alerting — eriti hea traditsioonilises infrastruktuuris.</li>
-<li><strong>Andmemudel</strong>: Host → Item → Trigger → Action (Template on “korrutaja”, mis teeb halduse võimalikuks).</li>
-<li><strong>Kõige ohtlikum viga</strong>: <code>History=0</code> → <strong>triggerid ei tööta</strong> (sa kogud andmeid, aga süsteem ei hoiata).</li>
-<li><strong>Jõudlus = DB</strong>: SSD + RAM + (suures mahus) partitsioneerimine.</li>
-<li><strong>Skaleerimine</strong>: proksid jagavad koormust, HA annab rikkekindluse; proxy groupid (7.0+) on mugavad, aga piirangutega.</li>
+<li><strong>Zabbix mõtleb nii:</strong> Host → Item → Trigger → Action (ja <strong>Template</strong> teeb selle skaleeritavaks).</li>
+<li><strong>Kui Zabbix on aeglane, vaata DB-d:</strong> SSD + piisav RAM + (suures mahus) partitsioneerimine.</li>
+<li><strong>Ära tee <code>History=0</code>:</strong> muidu triggerid ei tööta ja saad “ilusad graafikud, null häiret”.</li>
+<li><strong>Kui võrk on keeruline, kasuta proksisid:</strong> proxy/HA lahendavad päriselus 80% “kuidas ma üldse kogun andmeid?” probleemist.</li>
 </ul>
 </div>
 <hr />
@@ -2750,27 +2780,36 @@ võrguühendus Cloudi (agendid/proksid peavad jõudma), andmete asukoht/complian
 <p>Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (agent + template + trigger + action), aga tootmises on suur jõud <strong>template’ides</strong>, <strong>discovery’s</strong> ja <strong>preprocessing’u</strong> mustrites.</p>
 <hr />
 <h2 id="enesekontrolli-kusimused">Enesekontrolli küsimused<a class="headerlink" href="#enesekontrolli-kusimused" title="Lingi sektsioonile">&para;</a></h2>
-<ol>
-<li>Mis vahe on Zabbixi push- ja pull-mudelil? Millal millist eelistada?</li>
-<li>Miks on history=0 triggerite jaoks kriitiline viga? Mida süsteem kogub ja mida ei kogu?</li>
-<li>Arvuta: 5000 itemi, iga uueneb 30 sekundi järel. Mis on NVPS? Kui palju ruumi vajab 30 päeva history numbriliste andmete jaoks?</li>
-<li>Mis on housekeeperi põhiprobleem suurtes keskkondades? Kuidas partitsioneerimine selle lahendab?</li>
-<li>Milles on Zabbix 7.0 proxy groupide piirangud? Nimeta vähemalt kaks.</li>
-<li>Kui su rakendus logib JSON-formaadis ja tahad trace id'de põhjal otsida — miks Zabbix ei sobi ja mis sobib paremini?</li>
-<li>Zabbix 8 toob OpenTelemetry natiivse toe. Mida see praktiliselt tähendab keskkonnas, kus on juba Prometheus?</li>
-</ol>
-<details class="note">
-<summary>Vastused (peida/ava)</summary>
-<p>1) <strong>Push vs pull</strong>: Zabbixis on mõlemad mustrid olemas — passiivne agent (server küsib) ja aktiivne agent (agent saadab). Valik sõltub võrgu/tulemüüri reaalsusest ja skaleerimisest (palju hoste → aktiivne/proksid).</p>
-<p>2) <strong><code>History=0</code></strong>: triggeri funktsioonid töötavad History peal. Kui History puudub, võib süsteem küll “koguda”, aga <strong>ei hinda triggereid</strong> nii, nagu ootad.</p>
-<p>3) <strong>NVPS</strong>: (5000/30 \approx 166{,}7).<br />
-<strong>Maht 30 päeva</strong> (numbrid, ~90 baiti/punkt):<br />
-   (166{,}7 \times 3600 \times 24 \times 30 \times 90 \approx 39 \text{GB}) (+ indeksid/overhead).</p>
-<p>4) <strong>Housekeeper</strong> kustutab rida‑realt (kallis). Partitsioneerimine laseb vanad andmed eemaldada partitsiooni kaupa (kiire, ei koorma).</p>
-<p>5) <strong>Proxy group piirangud</strong>: SNMP trapid, agentiversioonid (aktiivses režiimis 7.0+), tulemüür (agent peab jõudma <em>kõigi</em> proksideni), skriptide sünkroon, VMware päringukoormus.</p>
-<p>6) <strong>Trace‑ID / logiotsing</strong>: Zabbix pole logi‑otsingu tööriist. Sobivamad on Loki (logid) ja Tempo/Jaeger (traces) + OTel.</p>
-<p>7) <strong>OTel tugi</strong>: lihtsustab standardset instrumentatsiooni ja korrelatsiooni modernses stackis; Prometheus jääb metrics‑kihis tugevaks, Zabbix püüab osa observability mustreid enda maailma tuua.</p>
+<details>
+<summary><strong>Küsimused + vastused (peida/ava)</strong></summary>
+
+1. Mis vahe on Zabbixi push- ja pull-mudelil? Millal millist eelistada?
+2. Miks on history=0 triggerite jaoks kriitiline viga? Mida süsteem kogub ja mida ei kogu?
+3. Arvuta: 5000 itemi, iga uueneb 30 sekundi järel. Mis on NVPS? Kui palju ruumi vajab 30 päeva history numbriliste andmete jaoks?
+4. Mis on housekeeperi põhiprobleem suurtes keskkondades? Kuidas partitsioneerimine selle lahendab?
+5. Milles on Zabbix 7.0 proxy groupide piirangud? Nimeta vähemalt kaks.
+6. Kui su rakendus logib JSON-formaadis ja tahad trace id'de põhjal otsida — miks Zabbix ei sobi ja mis sobib paremini?
+7. Zabbix 8 toob OpenTelemetry natiivse toe. Mida see praktiliselt tähendab keskkonnas, kus on juba Prometheus?
+
+??? note "Vastused (peida/ava)"
+    1) **Push vs pull**: Zabbixis on mõlemad mustrid olemas — passiivne agent (server küsib) ja aktiivne agent (agent saadab). Valik sõltub võrgu/tulemüüri reaalsusest ja skaleerimisest (palju hoste → aktiivne/proksid).
+
+    2) **`History=0`**: triggeri funktsioonid töötavad History peal. Kui History puudub, võib süsteem küll “koguda”, aga **ei hinda triggereid** nii, nagu ootad.
+
+    3) **NVPS**: \(5000/30 \approx 166{,}7\).  
+       **Maht 30 päeva** (numbrid, ~90 baiti/punkt):  
+       \(166{,}7 \times 3600 \times 24 \times 30 \times 90 \approx 39\ \text{GB}\) (+ indeksid/overhead).
+
+    4) **Housekeeper** kustutab rida‑realt (kallis). Partitsioneerimine laseb vanad andmed eemaldada partitsiooni kaupa (kiire, ei koorma).
+
+    5) **Proxy group piirangud**: SNMP trapid, agentiversioonid (aktiivses režiimis 7.0+), tulemüür (agent peab jõudma *kõigi* proksideni), skriptide sünkroon, VMware päringukoormus.
+
+    6) **Trace‑ID / logiotsing**: Zabbix pole logi‑otsingu tööriist. Sobivamad on Loki (logid) ja Tempo/Jaeger (traces) + OTel.
+
+    7) **OTel tugi**: lihtsustab standardset instrumentatsiooni ja korrelatsiooni modernses stackis; Prometheus jääb metrics‑kihis tugevaks, Zabbix püüab osa observability mustreid enda maailma tuua.
+
 </details>
+
 <hr />
 <h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
 <details class="note">
@@ -2814,7 +2853,7 @@ võrguühendus Cloudi (agendid/proksid peavad jõudma), andmete asukoht/complian
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:44:44 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
   </span>
 
     

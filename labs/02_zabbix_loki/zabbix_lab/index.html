@@ -1322,28 +1322,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#veaotsing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Veaotsing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📚 Allikad
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1740,6 +1718,8 @@
       
         
       
+        
+      
     
     
     
@@ -1830,6 +1810,34 @@
     
   
     Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/material-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materjalide stiilijuhend
   
 
     
@@ -2280,28 +2288,6 @@
     <span class="md-ellipsis">
       
         🏢 Enterprise lisateemad
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#veaotsing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Veaotsing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📚 Allikad
       
     </span>
   </a>
@@ -3042,74 +3028,33 @@ See on rohkem turvameeskonnale — aga näitab kui laiendatav UserParameter on.
 </ul>
 </details>
 <hr />
-<h2 id="veaotsing">Veaotsing<a class="headerlink" href="#veaotsing" title="Lingi sektsioonile">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Probleem</th>
-<th>Esimene kontroll</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>MySQL unhealthy</td>
-<td><code>free -h</code> — kas RAM piisab? <code>docker compose logs mysql</code></td>
-</tr>
-<tr>
-<td>ZBX availability punane</td>
-<td>Host name peab = <code>ZBX_HOSTNAME</code>. DNS vs IP — kontrolli</td>
-</tr>
-<tr>
-<td>zabbix-web restartub</td>
-<td>MySQL pole veel healthy — oota</td>
-</tr>
-<tr>
-<td>ZBX_NOTSUPPORTED</td>
-<td>UserParameter süntaksiviga — <code>sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf</code></td>
-</tr>
-<tr>
-<td>Trigger ei Firing</td>
-<td>Latest data — kas väärtus tegelikult ületab künnise?</td>
-</tr>
-<tr>
-<td>HTTP Agent timeout</td>
-<td><code>curl -v http://192.168.35.141:8080/stub_status</code> otse</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="allikad">📚 Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>URL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Zabbix 7.0 manuaal</td>
-<td><a href="https://www.zabbix.com/documentation/7.0/en/manual">zabbix.com/documentation/7.0</a></td>
-</tr>
-<tr>
-<td>UserParameters</td>
-<td><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters">zabbix.com/.../userparameters</a></td>
-</tr>
-<tr>
-<td>Low-Level Discovery</td>
-<td><a href="https://www.zabbix.com/documentation/7.0/en/manual/discovery/low_level_discovery">zabbix.com/.../low_level_discovery</a></td>
-</tr>
-<tr>
-<td>HTTP Agent</td>
-<td><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/http">zabbix.com/.../http</a></td>
-</tr>
-<tr>
-<td>Discord integration</td>
-<td><a href="https://www.zabbix.com/integrations/discord">zabbix.com/integrations/discord</a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Versioonid:</strong> Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+).</p>
+<details>
+<summary><strong>Veaotsing + allikad (peida/ava)</strong></summary>
+
+## Veaotsing
+
+| Probleem | Esimene kontroll |
+|----------|------------------|
+| MySQL unhealthy | `free -h` — kas RAM piisab? `docker compose logs mysql` |
+| ZBX availability punane | Host name peab = `ZBX_HOSTNAME`. DNS vs IP — kontrolli |
+| zabbix-web restartub | MySQL pole veel healthy — oota |
+| ZBX_NOTSUPPORTED | UserParameter süntaksiviga — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` |
+| Trigger ei Firing | Latest data — kas väärtus tegelikult ületab künnise? |
+| HTTP Agent timeout | `curl -v http://192.168.35.141:8080/stub_status` otse |
+
+## 📚 Allikad
+
+| Allikas | URL |
+|---------|-----|
+| Zabbix 7.0 manuaal | [zabbix.com/documentation/7.0](https://www.zabbix.com/documentation/7.0/en/manual) |
+| UserParameters | [zabbix.com/.../userparameters](https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters) |
+| Low-Level Discovery | [zabbix.com/.../low_level_discovery](https://www.zabbix.com/documentation/7.0/en/manual/discovery/low_level_discovery) |
+| HTTP Agent | [zabbix.com/.../http](https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/http) |
+| Discord integration | [zabbix.com/integrations/discord](https://www.zabbix.com/integrations/discord) |
+
+**Versioonid:** Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+).
+
+</details>
 
 
 
@@ -3130,7 +3075,7 @@ See on rohkem turvameeskonnale — aga näitab kui laiendatav UserParameter on.
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 09:41:55 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
   </span>
 
     

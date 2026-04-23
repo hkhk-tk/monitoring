@@ -1857,6 +1857,8 @@
       
         
       
+        
+      
     
     
     
@@ -1947,6 +1949,34 @@
     
   
     Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/material-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materjalide stiilijuhend
   
 
     
@@ -3327,26 +3357,35 @@
 <p><strong>Järgmine samm:</strong> <a href="../../../labs/01_prometheus_grafana/lab/">Päev 1 labor</a> — ehita töötav stack, kirjuta esimesed PromQL päringud, seadista alert mis käivitub.</p>
 <hr />
 <h2 id="enesekontrolli-kusimused">Enesekontrolli küsimused<a class="headerlink" href="#enesekontrolli-kusimused" title="Lingi sektsioonile">&para;</a></h2>
-<ol>
-<li>Milline on pull-mudeli peamine operatiivne eelis push-mudeli ees?</li>
-<li>Miks on <code>user_id</code> halb label? Mis juhtuks kui selle lisaksid?</li>
-<li>Kirjuta PromQL päring, mis näitab veaprotsendi (5xx/kogusumma) iga teenuse kohta viimase 5 minuti jooksul.</li>
-<li>Mis on erinevus <code>rate()</code> ja <code>irate()</code> vahel? Millal kumba eelistad?</li>
-<li>Mida teeb <code>for: 5m</code> alert-reeglis ja miks see kriitiline on?</li>
-<li>Kui sul on 10 serverit, iga väljastab summary-d <code>rpc_duration_seconds{quantile="0.95"}</code>. Kas saad arvutada koond-p95? Miks / miks mitte?</li>
-<li>Millal eelistad föderatsiooni ja millal <code>remote_write</code>-i?</li>
-</ol>
-<details class="note">
-<summary>Vastused (peida/ava)</summary>
-<p>1) Pull-mudelis on “sihtmärk vaikib” kohe nähtav (<code>up==0</code>) ja debug on lihtne (<code>curl /metrics</code> = mida Prometheus näeb).</p>
-<p>2) <code>user_id</code> tekitab kardinaalsusplahvatuse (miljonid väärtused) → RAM ja TSDB koormus kasvavad kiiresti.</p>
-<p>3) Näide:
-   \n<code>promql\nsum by(service) (rate(http_requests_total{status=~\"5..\"}[5m]))\n/\nsum by(service) (rate(http_requests_total[5m]))\n</code></p>
-<p>4) <code>rate()</code> silub aknas, <code>irate()</code> kasutab viimaseid punkte (spikid). <code>irate()</code> sobib lühikese hetkekäitumise jaoks, <code>rate()</code> üldiselt dashboardidele.</p>
-<p>5) <code>for: 5m</code> nõuab, et tingimus kestaks 5 min katkematult → vähendab valehäireid.</p>
-<p>6) Summary protsentiilid ei ole instantside vahel agregeeritavad; koond-p95 jaoks kasuta histogramme.</p>
-<p>7) Föderatsioon hierarhiliseks koondamiseks; <code>remote_write</code> pikaajaliseks säilituseks ja horisontaalseks skaleerimiseks (Thanos/Mimir/VictoriaMetrics).</p>
+<details>
+<summary><strong>Küsimused + vastused (peida/ava)</strong></summary>
+
+1. Milline on pull-mudeli peamine operatiivne eelis push-mudeli ees?
+2. Miks on `user_id` halb label? Mis juhtuks kui selle lisaksid?
+3. Kirjuta PromQL päring, mis näitab veaprotsendi (5xx/kogusumma) iga teenuse kohta viimase 5 minuti jooksul.
+4. Mis on erinevus `rate()` ja `irate()` vahel? Millal kumba eelistad?
+5. Mida teeb `for: 5m` alert-reeglis ja miks see kriitiline on?
+6. Kui sul on 10 serverit, iga väljastab summary-d `rpc_duration_seconds{quantile="0.95"}`. Kas saad arvutada koond-p95? Miks / miks mitte?
+7. Millal eelistad föderatsiooni ja millal `remote_write`-i?
+
+??? note "Vastused (peida/ava)"
+    1) Pull-mudelis on “sihtmärk vaikib” kohe nähtav (`up==0`) ja debug on lihtne (`curl /metrics` = mida Prometheus näeb).
+
+    2) `user_id` tekitab kardinaalsusplahvatuse (miljonid väärtused) → RAM ja TSDB koormus kasvavad kiiresti.
+
+    3) Näide:
+       \n```promql\nsum by(service) (rate(http_requests_total{status=~\"5..\"}[5m]))\n/\nsum by(service) (rate(http_requests_total[5m]))\n```
+
+    4) `rate()` silub aknas, `irate()` kasutab viimaseid punkte (spikid). `irate()` sobib lühikese hetkekäitumise jaoks, `rate()` üldiselt dashboardidele.
+
+    5) `for: 5m` nõuab, et tingimus kestaks 5 min katkematult → vähendab valehäireid.
+
+    6) Summary protsentiilid ei ole instantside vahel agregeeritavad; koond-p95 jaoks kasuta histogramme.
+
+    7) Föderatsioon hierarhiliseks koondamiseks; `remote_write` pikaajaliseks säilituseks ja horisontaalseks skaleerimiseks (Thanos/Mimir/VictoriaMetrics).
+
 </details>
+
 <hr />
 <h2 id="viited-ja-suvendatud-lugemine">Viited ja süvendatud lugemine<a class="headerlink" href="#viited-ja-suvendatud-lugemine" title="Lingi sektsioonile">&para;</a></h2>
 <details>
@@ -3410,7 +3449,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:48:12 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
   </span>
 
     
