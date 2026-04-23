@@ -380,6 +380,9 @@ Täna kasutad Zabbix 7.0 LTS-i, mis ilmus juunis 2024. Aga tasub teada, mis tule
 
 **Zabbix 8 filosoofia** on üleminek monitooringult → täielikule vaatlusele (observability). Alexei Vladišev: *liikumine reaktiivselt seirelt proaktiivsele mõistmisele*. See seob Zabbixi otseselt samasse maailma, kus on Prometheus + Grafana + Tempo + Loki — kogu kursuse teine pool.
 
+!!! tip "Cloud-native observability — taustateadmine"
+    Kui kursuse teine pool (Grafana, Loki, Tempo) hakkab järgmistel päevadel kokku jooksma, vaata [Grafana Stack — LGTM ülevaade](../../resources/grafana-stack.md). See reader seletab, millisesse ruumi Zabbix 8 OTel-iga siseneb ja miks see pole juhuslik suund.
+
 **Kolm suunda, mis 2026 sind päriselt mõjutavad:**
 
 1. **OpenTelemetry (OTel) tugi** — telemeetria standardiks liigub OTel, eriti mikroteenuste ja pilvega. Zabbix lisab natiivse toe.

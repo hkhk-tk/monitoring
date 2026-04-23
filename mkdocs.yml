@@ -108,10 +108,11 @@ nav:
   - "Loeng 1: Observability": materials/lectures/paev1-observability.md
   - "Loeng 2: Prometheus + Grafana": materials/lectures/paev1-loeng.md
   - "Labor": labs/01_prometheus_grafana/lab.md
+  - "Koolitaja juhend": labs/01_prometheus_grafana/koolitaja-juhend.md
 
 - "Päev 2 — Zabbix + Loki":
-  - "Loeng: Zabbix": materials/lectures/paev2-loeng.md
-  - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
+  - "Loeng: Zabbix": materials/lectures/paev2-zabbix-v2.md
+  - "Loeng: Loki": materials/lectures/paev2-loki-v2.md
   - "Labor: Zabbix": labs/02_zabbix_loki/zabbix_lab.md
   - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 
@@ -127,8 +128,10 @@ nav:
   - "Trendid 2026": labs/05_tempo_otel/trendid.md
 
 - Ressursid:
-  - "Docker Compose cheatsheet": resources/docker-cheatsheet.md
+  - "VM ligipääs": resources/vm-access.md
   - "Grafana Stack — LGTM ülevaade": resources/grafana-stack.md
+  - "Docker Compose cheatsheet": resources/docker-cheatsheet.md
+  - "Materjalide stiilijuhend": resources/material-style.md
 
 copyright: >
   © 2026 Maria Talvik · Haapsalu Kutsehariduskeskus

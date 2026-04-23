@@ -45,6 +45,9 @@ Enne kui Loki juurde sukeldume, väärib üks kontseptsioon äramainimist. **Ope
 
 Grafana Labs tegi siin targa valiku. Nende uus agent, millest §7 räägib, toetab OTel-i natiivselt. See tähendab, et sina sysadminina saad valida tööriistad, ilma et seoksid end aastakümneks ühe tarnijaga. Kui OTel-ühilduv tööriist on valida, vali alati see. See on sinu kindlustuspoliis tuleviku vastu.
 
+!!! tip "LGTM stack — täielik ülevaade"
+    Käesolev loeng puudutab LGTM pinu Loki perspektiivist. Kui tahad näha kõiki nelja komponenti (Loki, Grafana, Tempo, Mimir) + Alloy agenti kõrvuti võrreldavana, koos andmevoo-diagrammiga ning pordi- ja protokolli-tabeliga, loe [Grafana Stack — LGTM ülevaade](../../resources/grafana-stack.md). Sealt leiad ka võrdluse teiste kursuse stackidega (Prometheus, Zabbix, ELK, TICK).
+
 ---
 
 ## 3. Loki kui "Prometheus logide jaoks"
