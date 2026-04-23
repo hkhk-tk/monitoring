@@ -267,6 +267,7 @@ RAM-i osas: DB server vajab piisavalt mälu, et indeksid ja kuumandmed mahuks si
 
 !!! tip "Kiire kontroll: kas DB on pudelikael?"
     Kui “Zabbix on aeglane”, alusta 3 küsimusest:
+
     - kas `zabbix[queue]` on 0 või kasvab?
     - kas mõni `zabbix[process,<tüüp>,avg,busy]` on püsivalt >75%?
     - kas DB masinal on I/O latency kõrge (ja kas ketas on SSD/NVMe)?
