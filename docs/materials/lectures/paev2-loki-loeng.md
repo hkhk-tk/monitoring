@@ -2,8 +2,17 @@
 
 **Kestus:** ~45 minutit iseseisvat lugemist  
 **Eeldused:** [Päev 2: Zabbix](paev2-loeng.md) loetud, Prometheus ja Grafana põhitõed ([Päev 1](paev1-loeng.md))  
-**Versioonid laboris:** Loki 3.3.0, Grafana 11.4.0, Alloy 1.5.0  
+**Versioonid laboris:** Loki 3.7.1, Grafana 12.4.3, Alloy 1.15.1  
 **Viited:** [grafana.com/docs/loki](https://grafana.com/docs/loki/latest/) · [Grafana Alloy](https://grafana.com/docs/alloy/latest/) · [LogQL](https://grafana.com/docs/loki/latest/query/)
+
+!!! abstract "TL;DR (kui sul on 5 minutit)"
+    **5 asja, mis tasub päriselt meelde jätta:**
+
+    - **LGTM = Logs (Loki) + Grafana + Traces (Tempo) + Metrics (Mimir)** — sama meeskonna 4 tööriista, tugevus integratsioonis.
+    - **Loki indekseerib ainult silte, mitte logi sisu** — salvestus S3-l, 35–50% odavam kui ELK.
+    - **Kardinaalsus on vaenlane** — ära kunagi pane trace_id'd, user_id'd ega IP-d sildiks. Kasuta Structured Metadata'd (Loki 3.0+).
+    - **Monolithic ≤20 GB/päevas, Microservices 1 TB+.** SSD režiim on aegumas — ära alusta sellega.
+    - **Agent: Alloy, mitte Promtail.** Helm-chart: `grafana/loki`, mitte `loki-stack` ega `loki-distributed`.
 
 ---
 
@@ -11,10 +20,10 @@
 
 Pärast selle materjali läbitöötamist osaleja:
 
-1. **Selgitab**, kuidas Grafana on arenenud visualiseerimistööriistast täielikuks vaadeldavuse platvormiks (LGTM)
+1. **Selgitab** LGTM-pinu komponentide rolli ja korrelatsiooni kolmikut (mõõdik → logi → jälg)
 2. **Kirjeldab** Loki põhifilosoofiat — miks indekseeritakse ainult sildid, mitte sisu
-3. **Eristab** Loki paigaldusrežiime (Monolithic, SSD, Microservices) ja teab, milline on tänaseks soovitatud
-4. **Mõistab** kardinaalsuse mõistet ja mõju Loki jõudlusele
+3. **Mõistab** kardinaalsuse mõju jõudlusele ja oskab hoida silte madala kardinaalsusega
+4. **Eristab** Loki paigaldusrežiime (Monolithic, Microservices) ja teab, milline on tänaseks soovitatud
 5. **Nimetab** Loki peamised komponendid kirjutus- ja lugemisteel
 6. **Põhjendab**, millal valida Loki ja millal ELK Stack
 7. **Loeb** põhilisi LogQL päringuid ja eristab nelja parserit (pattern, json, logfmt, regexp)
@@ -23,17 +32,17 @@ Pärast selle materjali läbitöötamist osaleja:
 
 ## 1. Kust me pooleli jäime
 
-Hommikul rääkisime Zabbixist — vanast heast tööhobusest, mis on olnud IT-maastikul ligi 25 aastat. Zabbix on monoliit: üks server, üks andmebaas, kõik ühes kastis. Töötab hästi seadmete ja nende oleku jälgimiseks.
+Hommikul rääkisime Zabbixist — IT-maastiku vanast tööhobusest, mis on olnud tootmises 25+ aastat. Zabbix on arhitektuuriliselt monoliit: üks server, üks andmebaas, kõik ühes kastis. Töötab hästi **seadmete ja nende oleku** jälgimiseks.
 
-Esimesel päeval nägime ka Grafanat, aga ainult kui "visualiseerimiskihti" — tööriistana, mis küsib andmeid Prometheuselt ja joonistab graafikuid. Mainisin põgusalt akronüümi **LGTM**: neli Grafana Labs'i projekti, mis moodustavad terve vaadeldavuse platvormi. Pärastlõunal kaevume sellest sügavamale ja ehitame töösse selle pere logihaldustööriista — **Loki**.
+Aga pilvepõhises maailmas — Kubernetes, mikroteenused, efemeersed konteinerid — see mudel murdub. Kui su pod elab 30 sekundit ja paiskab sel ajal välja 50 MB logisid, on vaja teistsugust lähenemist.
 
-Miks see oluline on? Sest pilvepõhises maailmas — Kubernetes, mikroteenused, efemeersed konteinerid — Zabbixi monoliitne mudel murdub. Kui su pod elab 30 sekundit ja surub sel ajal välja 50 MB logisid, on vaja teistsugust lähenemist.
+Päev 1-s nägime ka Grafanat, aga ainult kui **visualiseerimiskihti** — tööriista, mis küsib andmeid Prometheuselt ja joonistab graafikuid. Mainisin akronüümi **LGTM** ainult möödaminnes. Pärastlõunal kaevume sügavamale ja ehitame laboris selle pere logihaldustööriista — **Loki**.
 
 ---
 
-## 2. LGTM-pinu — kogu perekond
+## 2. LGTM-pinu — mis see on
 
-Päev 1 loengus mainisin akronüümi möödaminnes. Paneme kirja, mis see täpselt tähendab:
+**LGTM** tähistab neli Grafana Labsi projekti:
 
 ```text
 L — Loki    — logid
@@ -42,120 +51,74 @@ T — Tempo   — jäljed (traces), hajutatud jälgimine  → Päev 5
 M — Mimir   — meetrikad, mastaapne Prometheus-ühilduv TSDB
 ```
 
-Need neli on ehitanud sama meeskond (Grafana Labs, eesotsas CTO Tom Wilkie'ga) sama filosoofiaga: indekseeri vähem, salvesta odavalt, skaleeri horisontaalselt. Nende tugevus tuleb integratsioonist — sellepärast ongi akronüüm "pinu", mitte "neli tööriista".
+Need neli on sama meeskonna toode sama filosoofiaga: **indekseeri vähem, salvesta odavalt, skaleeri horisontaalselt**. Tugevus tuleb integratsioonist — sellepärast ongi akronüüm "pinu", mitte "neli tööriista".
 
-### 2.1 Unified Observability — korrelatsiooni lugu
+### 2.1 Korrelatsiooni kolmik — miks LGTM on rohkem kui neli tööriista
 
-Meenuta päev 1 stsenaariumi: kell 18:00, Black Friday, süsteem katki. Traditsiooniline sysadmin teeb seda tihti nii:
+Klassikaline tõrkeotsing traditsioonilises infras käib nii: Zabbix näitab CPU 100%, SSH-id masinasse, teed `tail -f /var/log/...`, leiad veateateid aga ei tea, kas need on põhjus või tagajärg, helistad arendajale, tema otsib trace-ID'd eraldi logiaggregaatorist. Tund hiljem saad aru, mis juhtus.
 
-1. Zabbixis näeb, et mingi server on halb — CPU 100%.
-2. SSH-b sinna ja hakkab `tail -f /var/log/...` jooksutama.
-3. Leiab ridade kaupa veateateid, aga ei tea, kas need on põhjus või tagajärg.
-4. Helistab arendajale, kes süveneb koodi, otsib trace-ID logist ja üritab seda logiaggregaatorist üles leida.
-5. Tund hiljem saab keegi lõpuks aru, mis juhtus.
+LGTM-pinu lubab teistsugust töövoogu:
 
-LGTM-pinu lubab teistsugust töövoogu: Grafanas vaatad dashboardi, näed anomaaliat meetrikute graafikul (Mimir), klõpsad ajavahemikul → hüppad samasse aega logidesse (Loki) → näed veateadet, millel on trace-ID → klõpsad sellel → avaneb jälituse vaade (Tempo), mis näitab, millises mikroteenuses päring seiskus.
+1. **Grafana** — vaatad dashboardi, näed anomaaliat mõõdikute graafikul (Mimir/Prometheus)
+2. **Klõpsad ajavahemikul** → hüppad samasse aega **logidesse** (Loki) — näed veateadet koos trace-ID-ga
+3. **Klõpsad trace-ID-l** → avaneb **jälituse vaade** (Tempo) — näed, millises mikroteenuses päring seiskus
 
-See on **korrelatsiooni kolmik** — mõõdikult logisse, logist jälitusse. Kõik ühes UI-s, ilma tabivahetuseta. Inseneride keeles: **MTTR** (mean time to recovery) langeb oluliselt, sest pole enam tarvis kolmel tööriistal vahet teha.
+Kõik ühes UI-s, ilma tabivahetuseta. **MTTR** (mean time to recovery) langeb oluliselt, sest sa ei pea kolmel tööriistal vahet tegema. See on LGTM-pinu päris väärtus — üksikud komponendid on vaid pooled sellest loost.
 
-Ilma selle integratsioonita ei erineks LGTM midagi neljast eraldi tööriistast. Just see, kuidas Grafana räägib Loki'ga ja Loki räägib Tempo'ga, ongi see, millest räägime tegelikult, kui ütleme "LGTM-pinu".
+### 2.2 Mis on iga komponendi töö
 
-### 2.2 Mis on iga komponendi töö?
+**Loki** on logide salvestus ja otsing. Indekseerib ainult silte, mitte sisu. Salvestab S3-sse. **Täna põhiteema.**
 
-**Loki — logid.** Täna põhiteema. Indekseerib ainult silte, mitte sisu. Salvestab S3-tüüpi objektisalvestusse. 35–50% odavam kui ELK enamikes kasutuslugudes.
+**Grafana** on UI ja päringukeskus. Päev 1-st mäletad — ta ei salvesta ise andmeid, vaid kogub neid datasource'idest. LGTM-kontekstis on ta **ainus koht, kust kasutaja midagi näeb**.
 
-**Grafana — UI ja päringukeskus.** Juba tuttav. Päev 1-st mäletad — ei salvesta ise andmeid, vaid kogub neid andmeallikatest (datasource’idest). LGTM-kontekstis on ta **ainus koht, kust kasutaja midagi näeb**. See on oluline arhitektuuriline valik — kõik muud komponendid on "päringuallikad".
+**Tempo** on jälitussüsteem. Kui sinu süsteem on 20 mikroteenust, mis räägivad omavahel, võib üks kasutaja-päring käia läbi 15 teenuse. Tempo salvestab selle tee. Filosoofia sama nagu Lokil — ei indekseeri sisu, ainult trace-ID-d. **Päev 5.**
 
-**Tempo — jäljed.** Hajutatud jälgimine. Kui sinu süsteem on 20 mikroteenust, mis räägivad omavahel, siis üks kasutaja-päring võib käia läbi 15 teenuse. Tempo salvestab iga sellise päringu tee — kus ta oli, kui kaua, mis juhtus. Filosoofia sama nagu Lokil: ei indekseeri sisu, ainult trace-ID-d. Selle juurde jõuame päeval 5.
+**Mimir** on "Prometheus steroididega". Üks Mimir-klaster hallab miljardeid aktiivseid aegridu, samas kui üksik Prometheus jookseb mõne miljoni peal kokku. Täielikult Prometheuse API-ühilduv — kõik PromQL-päringud töötavad edasi. Enterprise-keskkonnad, kes skaleerivad Prometheust üle mitme klastri, kasutavad Mimirit.
 
-**Mimir — meetrikad.** "Prometheus steroididega." Üks Mimir-klaster suudab hallata **miljardeid aktiivseid aegridu**, samal ajal kui üksik Prometheus jookseb mõne miljoni peal kokku. Täielikult Prometheuse API-ühilduv, ehk kõik PromQL-päringud töötavad edasi. Enterprise-keskkonnad, mis tahavad Prometheust skaleerida üle mitme klastri ja regiooni, kasutavad Mimirit.
+Iga neli saab kasutada **eraldi** — sa võid võtta ainult Loki ja jätta Prometheuse. Või võtta ainult Tempo OpenTelemetry-stack'i. Aga nende tugevus on **perekonnana**.
 
-Iga neli saab kasutada **eraldi** — sa võid võtta ainult Loki ja jätta Mimirist Prometheuse. Või võtta ainult Tempo oma OpenTelemetry-stack'i. Need ei ole lukustatud kokku. Aga **nende tugevus on perekonnana**.
+### 2.3 Self-hosted vs Grafana Cloud
 
-### 2.3 Enterprise-külg — mis sysadmin teadma peab
+Üks otsus, mida iga sysadmin peab kunagi tegema.
 
-See osa on teile otseselt oluline — te tulete tootmiskeskkondadest, kus asjad peavad töötama tuhandele kasutajale, vastama compliance-nõuetele ja mitte kukkuma, kui üks tsoon ära kaob.
+**Self-hosted** (ise Kubernetes-klastris):
+- ✅ Andmed jäävad sinu infrastruktuuri (GDPR, tundlik info)
+- ✅ Kulu kontrolli all — maksad infrastruktuuri eest
+- ✅ Täielik paindlikkus
+- ❌ Operatiivne vastutus on sinul
+- ❌ Vajab kompetentsi (Kubernetes, Helm, storage, networking)
 
-**Multi-tenancy.** LGTM-komponendid toetavad natiivselt mitme üürniku mudelit — sa saad ühes klastris hoida erinevate meeskondade või klientide andmed täielikult eraldi. Tenant-ID käib iga päringuga kaasas, indeks on eraldi, päring ühe tenandi andmetest ei saa eales teise omi näha. Kui haldad teenust, mis teenindab mitut osakonda või klienti, on see kriitiline.
+**Grafana Cloud** (hallatud):
+- ✅ Paigaldus minutites, mitte nädalates
+- ✅ Grafana Labs vastutab uptime'i eest
+- ❌ Andmed nende pilves
+- ❌ Kulu põhineb mahul — võib kiirelt kasvada
 
-**Skaleeritavus ja režiimid.** Tulen selle juurde Loki kontekstis tagasi (§8), aga põhimõte kehtib kogu LGTM-pinule: kuni väikese mahuni (paar GB päevas) töötab monoliitne paigaldus. Keskmise mahu puhul eralda kirjutus- ja lugemistee. Suure mahu puhul (1 TB+ päevas logisid, miljonid meetrikud) — **mikroteenuste režiim**, kus iga komponenti saab eraldi skaleerida. Tootmisstandard suurettevõtetes.
+Eestis kohtad mõlemat. Bolt, Wise on enamasti self-hosted, kuna mastaap on suur. Väiksemad iduettevõtted lähevad sageli Grafana Cloud'iga ("lihtsalt töötab"). **Laboris täna on self-hosted** (Docker Compose), sest see annab arusaamise sellest, mis kapoti all toimub.
 
-**Käideldavus ja SLA.** Grafana Cloud pakub 99.5–99.9% SLA-sid. Self-hosted puhul saad sama, kui ehitad süsteemi **zone-aware replication**-iga — komponendid jaotuvad eri Kubernetes-tsoonidesse, ja kui üks tsoon kukub, teised jätkavad. Replikatsioonifaktor 3 (iga andmeid hoiab 3 koopiat) on soovitus.
+### 2.4 Üks oluline otsus tuleviku pärast — OpenTelemetry
 
-**Compliance.** Grafana Enterprise ja Cloud paketid on **SOC 2 Type II, GDPR, PCI-DSS** sertifitseeritud. Self-hosted puhul on compliance sinu õlgadel, aga võimalused on olemas — krüpteerimine andmete liikumisel ja puhkeolekus, audit-logid, RBAC kasutaja-tasemel.
+**OpenTelemetry (OTel)** on CNCF-i standard, mis defineerib universaalse viisi, kuidas rakendused saadavad logisid, meetrikaid ja jälgi. Põhimõte: instrumenteerid rakenduse OTel-iga, kogutud andmed saad saata **ükskõik kuhu** — Datadog'i, New Relic'usse, Grafana Cloud'i, Lokisse.
 
-**RBAC.** Rollipõhine juurdepääs — kes näeb milliseid dashboard’e, kes saab päringuid teha millistes andmeallikates (datasource’ides), kes saab alerti muuta. Enterprise-versioonis on see palju detailsem kui OSS-is. Kui sinu firmas on auditinõue "iga dashboardi muudatus peab olema jälgitav kasutajani" — Enterprise on sageli praktiliselt ainus valik.
+Grafana Labs tegi targa valiku — nende uus agent **Grafana Alloy** (§10) toetab OTel-i natiivselt. Kui valid täna Grafana Cloud'i, aga aasta pärast otsustad migreerida self-hosted'ile või Datadog'ile, sa ei pea rakendusi muutma — ainult kollektori sihtpunkti.
 
-### 2.4 Self-hosted vs Grafana Cloud — otsustuspuu
-
-See on otsus, mida iga sysadmin peab kunagi tegema.
-
-- **Self-hosted (te ise Kubernetes-klastris hoiate)**
-  - ✅ Andmed jäävad sinu infrastruktuuri. GDPR, tundlik info, sise-eeskirjad — kõik puhas.
-  - ✅ Kulu kontrolli all — maksad ainult infrastruktuuri eest.
-  - ✅ Täielik paindlikkus — saad lugemistee tuunida, lisada pluginaid ja muuta mida tahad.
-  - ❌ Kõik operatiivne vastutus on sinul. Ingester kukub keskööl — sina vastutad.
-  - ❌ Vajab kompetentsi — Kubernetes, Helm, storage, networking.
-
-- **Grafana Cloud (hallatud)**
-  - ✅ Paigalduseni minutid, mitte nädalad.
-  - ✅ Grafana Labs vastutab uptime'i eest.
-  - ✅ AI-lisaväärtus (sellest kohe).
-  - ❌ Andmed lähevad nende pilve — privaatsuskaalutlus.
-  - ❌ Kuluarvestus põhineb logi- ja mõõdikumahul — võib kiirelt kasvada ja olla raskesti ette prognoositav.
-  - ❌ Vendor lock-in risk. Aga see on väiksem kui konkurentidel, sest LGTM-komponendid on avatud lähtekoodiga — saad välja migreerida.
-
-Eestis kohtad mõlemat. Bolt, Wise — enamasti self-hosted, kuna mastaap on suur ja kulu kriitiline. Väiksemad iduettevõtted lähevad sageli Grafana Cloud'iga, sest "lihtsalt töötab". Meie laboris täna — self-hosted (Docker Compose), sest see annab arusaamise sellest, mis kapoti all toimub.
-
-### 2.5 AI ja LGTM — kus see tõesti aitab
-
-Siin tuleb olla aus — 2024–2026 on iga tootja panustanud "AI"-märgi lisamisele oma toodetele. Osa neist on tõeline kasu, osa on pressi-esitlus. Teeme vahet.
-
-**Grafana Assistant** — AI-abiline, mis aitab päringuid kirjutada. LogQL on küll lihtsam kui ElasticSearchi DSL, aga mitte tühi. Kui sa ei mäleta, kas filter on `|=` või `~=`, küsid Assistantilt loomuliku keelega, ta genereerib päringu. Tegelik kasu — on jah, ma proovisin. Eriti algajatele ja harva-kasutajatele.
-
-**Adaptive Telemetry** — see on see, kus AI tõesti raha säästab. Süsteem analüüsib sinu mõõdikuid ja logisid ja tuvastab, mida **keegi kunagi ei vaata**. Pakub välja neid filtreerida. Grafana Labs lubab 35–50% säästu, mis on usutav — enamikus firmades kogutakse palju "igaks juhuks" andmeid, mis võtavad ruumi ja ei anna väärtust.
-
-**Agentic AI / Automaatne RCA** (Root Cause Analysis) — siin ma olen kainem. Idee on, et AI-agendid uurivad intsidenti automaatselt, korreleerivad logisid-meetrikaid-jälgi ja pakuvad välja juurpõhjuse. Turundus lubab 90%+ MTTR vähendust. Praktikas — see on väga rakendusesõltuv. Lihtsate juhtumite puhul (disk täis, OOM-killer tuli) tõepoolest aitab. Keerukate hajutatud süsteemide bug-ide puhul jääb inimene siiski lahendajaks.
-
-**Minu seisukoht sysadminina:** AI on hea **algataja** — saab probleemi üles, pakub hüpoteese, kitsendab ruumi. Inimene teeb lõpliku otsuse. Ära käsita AI-t kui võluvitsa. Käsita seda kui noorempraktikanti, kes on lugenud palju dokumentatsiooni ja suudab kiiresti otsida, aga kellel pole veel tootmiskeskkonna intuitsiooni.
-
-### 2.6 OpenTelemetry ja vendor lock-in
-
-Üks asi, mis enterprise-otsuses alati tuleb lauale, on **vendor lock-in** — kuidas tagada, et me ei jää ühe tarnija lõksu.
-
-**OpenTelemetry (OTel)** on CNCF-i standard, mis defineerib universaalse viisi, kuidas rakendused saadavad logisid, meetrikaid ja jälgi. Põhimõte: rakenduses instrumenteerid OTel-iga, ja siis kogutud andmed saad saata **ükskõik kuhu** — Datadog'i, New Relic'usse, Grafana Cloud'i, Lokisse, kus iganes. Rakenduste poolel pole tarvis midagi muuta, kui tarnijat vahetad.
-
-Grafana Labs tegi targa valiku — nende uus agent **Grafana Alloy** (millest §10 räägib) toetab natiivselt OTel-i. Ehk kui valid täna Grafana Cloud'i, aga aastaga otsustad migreerida self-hosted'ile või isegi Datadog'ile, su rakendusi muutma ei pea — ainult kollektori sihtpunkti.
-
-Sysadminina tähendab see: **vali alati OTel-compatible tööriist**, kui valida on. See on sinu kindlustuspoliis tuleviku vastu.
-
-### 2.7 Bloom-filtrid ja muud värskemad arengud
-
-Enne kui Loki-spetsiifikasse sukeldume, mõned asjad, mis on LGTM-pinu juures viimase 12 kuu jooksul muutunud:
-
-**Loki 3.0 (2024) tõi Bloom-filtrid.** See on andmestruktuur, mis võimaldab kiiresti vastata küsimusele "kas see väärtus on tüki sees?" ilma tüki avamiseta. Praktikas — kui otsid konkreetset trace-ID'd või kasutaja-ID'd, Bloom-filter ütleb ette ära, millistes tükkides seda üldse võiks olla. Skaneeritavate tükkide hulk väheneb drastiliselt. Tänase seisuga (aprill 2026) on see veel eksperimentaalne, aga 2026 lõpuks peaks olema standardne.
-
-**Grafana Beyla (eBPF-põhine auto-instrumenteerimine).** See on eraldi lugu — Beyla kasutab Linux-tuuma eBPF-i, et **ilma koodi muutmata** koguda rakenduste meetrikaid ja jälgi. Installeerid Beyla sisse, pöörad ta rakenduse protsessi külge, ja saad automaatselt HTTP-päringute jälgi. Enterprise-keskkondades, kus rakendusi on sadu ja kõiki käsitsi instrumenteerida on ebarealistlik, see on murranguline.
-
-**Frontend observability (RUM).** Real User Monitoring — sinu veebirakendus saadab brauserist telemeetriat selle kohta, mida päris kasutaja kogeb. LGTM toetab seda Grafana Faro komponendi kaudu. Enterprise-puhul sageli nõutav, sest "meie serverid on 99.9%-lised, aga kasutajad kurdavad ikka" probleemi lahendamiseks vajad sa **päris kasutaja** vaadet, mitte serveri vaadet.
+**Sysadminina tähendab see:** vali alati OTel-ühilduv tööriist, kui valida on. See on kindlustuspoliis tuleviku vastu.
 
 ---
 
 ## 3. Loki — "Prometheus logide jaoks"
 
-Aitab ülevaatest, siseneme nüüd Loki'sse sügavamalt.
-
-2018. aastal KubeConis, San Franciscos, tutvustab Tom Wilkie (Grafana Labs CTO, endine Weaveworks insener) uut projekti. Tema kirjeldus jääb ajalukku:
+2018. aastal KubeConis, San Franciscos, tutvustab Tom Wilkie (Grafana Labs CTO) uut projekti. Tema kirjeldus jääb ajalukku:
 
 > *"Loki: like Prometheus, but for logs."*
 
-See pole turundushüüdlause — see on arhitektuuriline avaldus. Vaatame, mida see praktikas tähendab.
+See pole turundushüüdlause — see on arhitektuuriline avaldus.
 
-**Prometheus** kogub iga sihtmärgi kohta mõõdikuid. Iga mõõdik on määratletud **siltidega** (`job="api"`, `env="prod"`). Sildid on indekseeritud, väärtused on aegrea andmed. Filtreerid siltidega, agregeerid väärtusi.
+**Prometheus** kogub iga sihtmärgi kohta mõõdikuid, mis on määratletud **siltidega** (`job="api"`, `env="prod"`). Sildid on indekseeritud, väärtused on aegread.
 
-**Loki** kogub iga allika kohta logiridu. Iga logi on määratletud samasuguste **siltidega** (`app="nginx"`, `namespace="prod"`). Sildid on indekseeritud, logi sisu on... lihtsalt tekst, kokku pakitud, objektisalvestuses.
+**Loki** kogub iga allika kohta logiridu, mis on määratletud samasuguste **siltidega** (`app="nginx"`, `namespace="prod"`). Sildid on indekseeritud, logi sisu on lihtsalt tekst, kokku pakitud, objektisalvestuses.
 
-Ehk siis — Loki ei indekseeri midagi sellest, mis logireal sees on. Ei kasutajanime, ei IP-aadressi, ei veateksti. Ainult silte.
+Ehk — **Loki ei indekseeri midagi sellest, mis logireal sees on**. Ei kasutajanime, ei IP-d, ei veateksti. Ainult silte.
 
 ---
 
@@ -163,7 +126,7 @@ Ehk siis — Loki ei indekseeri midagi sellest, mis logireal sees on. Ei kasutaj
 
 Traditsiooniline lähenemine (Elasticsearch, Splunk) töötab nii: tuleb logirida sisse → tõkestatud sõnadeks → iga sõna lisatakse pöördindeksisse → indeks kasvab hiiglaslikuks → hoitakse SSD-l → vajab palju RAM-i.
 
-Kui sul on 10 TB logisid päevas, võib Elasticsearchi indeks olla 15 TB — indeks suurem kui andmed ise. Kalliks läheb see kiirete SSD-de, mälu ja shard-tuunimise oskusnõude tõttu.
+Kui sul on 10 TB logisid päevas, on Elasticsearchi indeks **15 TB** — suurem kui andmed ise.
 
 Loki lähenemine:
 
@@ -176,16 +139,16 @@ Sildid lähevad indeksisse (väike — megabaidid, mitte terabaidid)
    ↓
 Logi sisu pakitakse tükiks (~1 MB)
    ↓
-Tükk salvestub S3-sse (~0.01€ per GB/kuus)
+Tükk salvestub S3-sse (~0.01 €/GB/kuus)
 ```
 
-Võrdluseks — salvestuskulu S3-s vs. kiire SSD klaster: erinevus on umbes **20x**. Meeskonnad, kes on ELK-lt Lokile üle läinud, raporteerivad logihalduse kulude langust **35–50%**. See pole väike number, kui sinu eelarvest on monitoorimisele pühendatud 6-kohalist summat.
+Salvestuskulu S3-s vs. kiire SSD klaster: erinevus on umbes **20×**. Meeskonnad, kes on ELK-lt Lokile üle läinud, raporteerivad logihalduse kulude langust **35–50%**. See pole väike number, kui monitoorimiseks on eelarvest 6-kohaline summa.
 
-Aga... kuidas sa siis otsid? Kui logi sisu pole indekseeritud, kuidas leiad "error"-rida?
+Aga kuidas sa siis otsid? Kui logi sisu pole indekseeritud, kuidas leiad "error"-rida?
 
-Loki päringu ajal leiab ta kõigepealt siltide järgi õiged logivood (näiteks `{app="nginx"}`). Siis avab ta nende voogude tükid (mitte kogu logi) ja skannib neid paralleelselt — sama põhimõtte järgi nagu `grep`. Kuna tükke loetakse paralleelselt kümnetest querier-itest, on see kiire. Tingimus: pead teadma siltide põhjal, kust otsida. Kui ütled Lokile "otsi kogu minu 10 TB andmestikust sõna 'timeout'", ta ei rõõmusta.
+Loki leiab päringu ajal kõigepealt **siltide järgi** õiged logivood (`{app="nginx"}`). Siis avab ta nende voogude tükid (mitte kogu logi) ja skannib neid paralleelselt — sama põhimõte nagu `grep`. Kuna tükke loetakse paralleelselt kümnetest querier-itest, on see kiire.
 
-Operatiivse silumise jaoks (sa tead, millise rakenduse logid sind huvitavad) on see ideaalne. Üldine forensika ("otsi kõigest sõna X") paneb Loki kannatama.
+**Tingimus:** pead teadma siltide põhjal, kust otsida. Kui ütled Lokile "otsi 10 TB andmestikust sõna 'timeout'", ta ei rõõmusta. **Operatiivse silumise jaoks** (tead millise rakenduse logid) on see ideaalne. **Üldine forensika** ("otsi kõigest sõna X") paneb Loki kannatama — selleks on ELK parem.
 
 ---
 
@@ -193,31 +156,31 @@ Operatiivse silumise jaoks (sa tead, millise rakenduse logid sind huvitavad) on 
 
 Kui on üks kontseptsioon, mida peab Loki juures õigesti mõistma, siis on see see.
 
-**Logivoog** (log stream) on logiridade rühm, millel on täpselt sama komplekt silte. Iga kord, kui mõni silt erineb, tekib uus voog.
+**Logivoog** (log stream) on logiridade rühm, millel on täpselt sama komplekt silte. Iga kord, kui mõni silt erineb, tekib **uus voog**.
 
 ```text
-{app="frontend", env="dev"}       → voog #1
-{app="frontend", env="prod"}      → voog #2
-{app="backend",  env="prod"}      → voog #3
+{app="frontend", env="dev"}   → voog #1
+{app="frontend", env="prod"}  → voog #2
+{app="backend",  env="prod"}  → voog #3
 ```
 
-Iga voog on Loki jaoks eraldi üksus. Tema kirjutab neid eraldi, pakib eraldi, salvestab eraldi. See toimib, kui voogusid on mõistlikult palju. Aga kui neid on miljoneid, hakkab süsteem kiduma.
+Iga voog on Loki jaoks eraldi üksus. Ta kirjutab neid eraldi, pakib eraldi, salvestab eraldi. See toimib, kui voogusid on mõistlikult palju. Miljonite puhul hakkab süsteem kiduma.
 
-### Kuldreegel: piiratud väärtused
+### Kuldreegel nr 1 — sildid on piiratud hulgast
 
-Kõik sildid, mida kasutad, peavad olema piiratud hulgaga (bounded) — väärtuste arv ette teada ja väike.
+Kõik sildid peavad olema **piiratud väärtuste hulgast** — ette teada ja väike.
 
-| Sildi tüüp | Näide | Unikaalseid väärtusi | Kas sildiks? |
-|-----------|-------|---------------------|--------------|
+| Sildi tüüp | Näide | Unikaalseid väärtusi | Sildiks? |
+|------------|-------|---------------------|----------|
 | Keskkond | `env=dev/staging/prod` | 3 | ✅ jah |
-| Klaster | `cluster=eu-west/us-east/ap-south` | 5–10 | ✅ jah |
+| Klaster | `cluster=eu-west/us-east` | 5–10 | ✅ jah |
 | Rakendus | `app=nginx/api/db/...` | ~20 | ✅ jah |
-| Logitase | `level=info/warn/error` | 3–5 | ⚠️ sõltub (vt all) |
+| Logitase | `level=info/warn/error` | 3–5 | ⚠️ sõltub |
 | IP-aadress | `src_ip=1.2.3.4` | **∞** | ❌ **EI KUNAGI** |
 | Kasutaja ID | `user_id=12345` | **∞** | ❌ **EI KUNAGI** |
 | Trace ID | `trace_id=abc123...` | **∞** | ❌ **EI KUNAGI** |
 
-Kui paned IP-aadressi sildiks, siis iga uus unikaalne IP loob uue logivoo. 10 000 kasutajaga süsteemis on sul 10 000 voogu. 100 000 kasutajaga — 100 000 voogu. Indeks paisub, Loki aeglustub.
+Kui paned IP-aadressi sildiks, tekitab iga unikaalne IP uue voo. 10 000 kasutajat → 10 000 voogu. 100 000 → 100 000. Indeks paisub, Loki aeglustub.
 
 ---
 
@@ -225,38 +188,34 @@ Kui paned IP-aadressi sildiks, siis iga uus unikaalne IP loob uue logivoo. 10 00
 
 **Kardinaalsus** = unikaalsete sildikombinatsioonide arv. See on number, mida Loki administraator peab teadma ja jälgima.
 
-Meenuta eelmisest osast — iga voog salvestatakse eraldi tükkideks. Ideaalne tüki suurus on ~1 MB pakitult (umbes 5–10 MB teksti). Kui Loki tükk täitub, kirjutab ta selle S3-sse ja alustab uut.
+Meenuta §5-st — iga voog salvestatakse eraldi tükkideks. Ideaalne tüki suurus on ~1 MB pakitult. Kui tükk täitub, kirjutab Loki selle S3-sse.
 
-Aga mis juhtub, kui sul on 10 000 voogu, millest igaüks toodab vaid mõne kilobaidi logisid tunnis?
+Mis juhtub, kui sul on 10 000 voogu, millest igaüks toodab vaid mõne kilobaidi logisid tunnis?
 
 ```text
 10 000 voogu × 10 KB/tund → 100 MB/tund
                          → aga 10 000 väikest tükki!
 ```
 
-Iga tükk on eraldi fail S3-s. Iga päring, mis peab neid puudutama, teeb 10 000 HTTP-kutset. Iga tükk võtab ka ingesteri mälu. Süsteem muutub aeglaseks fragmenteerituse tõttu, isegi kui andmete maht on tagasihoidlik.
+Iga tükk on eraldi fail S3-s. Iga päring, mis peab neid puudutama, teeb 10 000 HTTP-kutset. Süsteem muutub aeglaseks fragmenteerituse tõttu, **isegi kui andmete maht on tagasihoidlik**.
 
-### Praktilised piirid
+**Praktilised piirid:**
 
 | Logide maht päevas | Mõistlik voogude arv | Hoiatuslävi |
-|-------------------|---------------------|-------------|
-| Alla 100 GB | Kuni 10 000 | 20 000 |
-| 1 TB | Kuni 10 000 | 50 000 |
-| 10 TB+ | Kuni 100 000 | 200 000 |
+|--------------------|---------------------|-------------|
+| <100 GB | kuni 10 000 | 20 000 |
+| 1 TB | kuni 10 000 | 50 000 |
+| 10 TB+ | kuni 100 000 | 200 000 |
 
-100 000 voogu **ei ole eesmärk** — see on äärmine piir tohutute juurutuste jaoks. Tavaline tootmiskeskkond elab tuhandega-kahega täiesti õnnelikult.
-
-### Kuldreegel nr 2: sildid on 10–15 voo kohta maksimaalselt
-
-Tehniline piirang on 15 silti voo kohta, aga iga lisatud silt mitmekordistab potentsiaalselt voogude arvu. Reaalses tootmises on 5–8 silti piisav.
+**Kuldreegel nr 2:** sildid on 5–8 voo kohta, tehniline piirang on 15. Iga lisasilt mitmekordistab potentsiaalselt voogude arvu.
 
 ---
 
 ## 7. Structured Metadata — Loki 3.0 vastus probleemile
 
-"Aga mina tahan trace_id järgi otsida!" võib öelda arendaja. "Muidu pole kogu OpenTelemetry asja mõtet."
+"Aga mina tahan trace_id järgi otsida!" võib öelda arendaja. "Muidu pole kogu OpenTelemetry mõtet."
 
-Kuni Loki 2.x-ini oli vastus: kasuta filtrit, mitte silti. Sildid oleksid `{app="api"}` ja `trace_id` otsiksid LogQL-filtriga:
+Kuni Loki 2.x-ni oli vastus: kasuta **filtrit, mitte silti**:
 
 ```logql
 {app="api"} |= "trace_id=abc123"
@@ -271,23 +230,23 @@ See töötab, aga on aeglane — peab sisu skannima.
 │ INDEKS (sildid)                                         │
 │ {app="api", env="prod"}                                 │
 ├─────────────────────────────────────────────────────────┤
-│ STRUCTURED METADATA (kiire ligipääs, ei indekseerita)   │
-│ trace_id=abc123, user_id=42, request_id=xyz            │
+│ STRUCTURED METADATA (kiire ligipääs, EI indekseerita)   │
+│ trace_id=abc123, user_id=42, request_id=xyz             │
 ├─────────────────────────────────────────────────────────┤
 │ LOGIREA SISU (pakitud, objektisalvestuses)              │
 │ "2026-04-25 10:23:41 ERROR Payment failed: timeout"     │
 └─────────────────────────────────────────────────────────┘
 ```
 
-Structured Metadata on otsitav ja kiire, aga ei kasva indeksis. See tähendab: **kõrge kardinaalsusega andmed** (trace_id, user_id, request_id) lähevad nüüd siia, mitte siltidesse. Kardinaalsuse plahvatuse oht kaob.
+Structured Metadata on **otsitav ja kiire**, aga ei kasva indeksis. See tähendab: **kõrge kardinaalsusega andmed** (trace_id, user_id, request_id) lähevad nüüd siia, mitte siltidesse. Kardinaalsuse plahvatuse oht kaob.
 
-Kui kavandad Loki juurutust 2026. aastal — **ära kunagi pane trace_id'd sildiks**. Pane Structured Metadatasse.
+**Kui kavandad Loki juurutust 2026. aastal — ära kunagi pane trace_id'd sildiks. Pane Structured Metadatasse.**
 
 ---
 
 ## 8. Paigaldusrežiimid
 
-Loki saab paigaldada kolmel viisil. Üks neist on hetkel aegumas.
+Loki saab paigaldada kolmel viisil. Üks neist on aegumas.
 
 ### Monolithic — kõik ühes protsessis
 
@@ -304,103 +263,77 @@ Loki saab paigaldada kolmel viisil. Üks neist on hetkel aegumas.
         └─────┘
 ```
 
-Üks protsess, kõik komponendid sees. Lihtne käivitada — üks Docker Compose, üks Helm-chart. Sobib **kuni 20 GB päevas**, ehk väike-keskmine keskkond, arendus, testimine, koolitusruum.
+Üks protsess, kõik komponendid sees. Lihtne käivitada — üks Docker Compose, üks Helm-chart. **Sobib kuni 20 GB päevas** — väike-keskmine keskkond, arendus, testimine, koolitusruum.
 
-Meie laboris kasutame täna just seda.
+**Meie laboris täna on just see.**
 
-### Simple Scalable Deployment (SSD) — deprecated
+### Simple Scalable Deployment (SSD) — aegumas
 
-See jagab töö kolmeks rolliks: `read`, `write`, `backend`. Oli mõeldud vahepealseks — suurem kui Monolithic, lihtsam kui täielik Microservices. Sobis keskkondadele mahuga kuni 1 TB päevas.
+Jagas töö kolmeks rolliks: `read`, `write`, `backend`. Oli vahepealne — suurem kui Monolithic, lihtsam kui täielik Microservices. Sobis keskkondadele kuni 1 TB päevas.
 
-**Aga — 2025. märts — Grafana Labs teatas (David Allen):**
+**2025. märts — Grafana Labs teatas** (David Allen): *"SSD režiimi keerukuse ja kasu suhe pole enam paigas. Uutel kasutajatel ei soovitata SSD-ga alustada."*
 
-> *"SSD režiimi keerukuse ja kasu suhe pole enam paigas. Uutel kasutajatel ei soovitata SSD-ga alustada."*
-
-Ametlikult on SSD režiim **aegumas** ja eemaldatakse enne Loki 4.0 versiooni. Kui sa kohtad seda dokumentatsioonis või vanemas tutorialis — hoia eemale. Alusta Monolithicuga, kasva Microservices-iks.
+Ametlikult **eemaldatakse enne Loki 4.0**. Kui kohtad seda dokumentatsioonis või vanemas tutorialis — **hoia eemale**. Alusta Monolithicuga, kasva Microservices-iks.
 
 ### Microservices — tootmiskeskkonna standard
 
-Iga komponent eraldi Kubernetes-deployment. Iga komponenti saab eraldi skaleerida — kui kirjutamiskoormus kasvab, lisad Ingestereid; kui päringuid tuleb rohkem, lisad Querier-eid.
+Iga komponent eraldi Kubernetes-deployment. Iga komponenti saab eraldi skaleerida — kirjutamiskoormus kasvab → lisad Ingestereid; päringuid tuleb rohkem → lisad Querier-eid.
 
-```text
-  ┌──────────┐    ┌──────────┐
-  │Distributor│───│Distributor│─── ×3
-  └────┬──────┘    └────┬─────┘
-       ▼                ▼
-  ┌──────────┐    ┌──────────┐    ┌──────────┐
-  │ Ingester │    │ Ingester │    │ Ingester │ ×N
-  └────┬─────┘    └────┬─────┘    └────┬─────┘
-       │               │               │
-       └───────────────┼───────────────┘
-                       ▼
-                    ┌─────┐
-                    │ S3  │
-                    └─────┘
-                       ▲
-       ┌───────────────┼───────────────┐
-       │               │               │
-  ┌────┴─────┐    ┌────┴─────┐    ┌────┴─────┐
-  │ Querier  │    │ Querier  │    │ Querier  │ ×M
-  └──────────┘    └──────────┘    └──────────┘
-```
+Toetab **tsooniteadlikku replikatsiooni** — ingesterid jaotatakse eri Kubernetes-tsoonidesse, kui terve tsoon kukub, süsteem toimib edasi. Tootmiskriitilise süsteemi nõue.
 
-Toetab **tsooniteadlikku replikatsiooni** (zone-aware replication) — ingesterid jaotatakse eri Kubernetes-tsoonidesse, nii et kui terve tsoon kukub, süsteem toimib edasi. See on tootmiskriitilise süsteemi nõue.
-
-Soovitatud **1 TB+ päevas** keskkondades või mujal, kus käideldavus on kriitiline.
+**Soovitatud 1 TB+ päevas** või mujal, kus käideldavus on kriitiline.
 
 ---
 
 ## 9. Komponendid sügavamalt
 
-Mikroteenuste režiimis näed sa kõiki komponente. Aga ka Monolithic-režiimis töötavad nad sama loogikaga — lihtsalt ühe protsessi sees.
+Mikroteenuste režiimis näed kõiki komponente. Aga ka Monolithic-režiimis töötavad nad sama loogikaga — lihtsalt ühe protsessi sees.
 
-### Kirjutustee (write path)
+### Kirjutustee
 
 ```text
-Agent (Alloy/Promtail) → Gateway (NGINX) → Distributor → Ingester → S3
+Agent (Alloy) → Gateway (NGINX) → Distributor → Ingester → S3
 ```
 
-**Distributor** on värav. Ta võtab vastu, valideerib, teeb rate limiting'ut, kontrollib tenant'it (multi-tenancy jaoks). Seejärel räsib logi sildid ja suunab `Hash Ring`-i järgi õigele Ingesterile.
+**Distributor** on värav. Võtab vastu, valideerib, teeb rate limiting'ut, kontrollib tenant'it. Seejärel räsib logi sildid ja suunab õigele Ingesterile.
 
-**Ingester** on süsteemi süda. Ta puhverdab logid mälus, pakib neid tükkidena kokku, replikeerib teistele Ingesteritele (tavaliselt 3 koopiat). Kui tükk saab valmis (~1 MB, või aeg möödas), kirjutab ta selle S3-sse.
+**Ingester** on süsteemi süda. Puhverdab logid mälus, pakib neid tükkidena kokku, replikeerib teistele Ingesteritele (tavaliselt 3 koopiat). Kui tükk saab valmis (~1 MB või aeg möödas), kirjutab selle S3-sse.
 
-### Lugemistee (read path)
+### Lugemistee
 
 ```text
 Grafana → Gateway → Query Frontend → Query Scheduler → Querier → {Ingester RAM, S3}
 ```
 
-**Query Frontend** tükeldab päringud — kui küsid viimase 24h andmeid, jagatakse see 24-ks tunni-päringuks, mis käivad paralleelselt.
+**Query Frontend** tükeldab päringud — kui küsid viimase 24h andmeid, jagatakse 24-ks tunni-päringuks, mis käivad paralleelselt.
 
-**Query Scheduler** haldab järjekorda. Õiglane planeerimine — üks kasutaja ei saa süsteemi endale võtta.
+**Query Scheduler** haldab järjekorda — õiglane planeerimine, üks kasutaja ei saa süsteemi endale võtta.
 
-**Querier** teeb tegeliku töö. Ta küsib andmeid nii Ingesteritest (viimased andmed, veel mälus) kui S3-st (vanemad tükid), teeb deduplikatsiooni (sest tükid on replikeeritud), täidab LogQL-i päringu.
+**Querier** teeb tegeliku töö. Küsib andmeid nii Ingesteritest (viimased andmed veel mälus) kui S3-st (vanemad tükid), teeb deduplikatsiooni (sest tükid on replikeeritud), täidab LogQL päringu.
 
 ### Taustaprotsessid
 
-**Compactor** on eriti oluline. Ta käib regulaarselt üle — liidab väiksed tükid suurteks, optimeerib indeksit, kustutab vanu andmeid vastavalt säilituspoliitikale (retention). Ilma selleta paisuks S3 täis killustatud faile.
+**Compactor** — käib regulaarselt üle: liidab väiksed tükid suurteks, optimeerib indeksit, kustutab vanu andmeid säilituspoliitika järgi. Ilma selleta paisuks S3 täis killustatud faile.
 
-**Ruler** täidab reegleid — alertimine ja recording rules (nagu Prometheuses). Siin saad kirjutada: *"kui viimase 5 minuti jooksul on rohkem kui 100 `level=error` rida — saada hoiatus."*
-
-**Index Gateway** — vahekiht, mis vastutab indeksi lugemise eest. Vähendab S3-kutsete arvu.
+**Ruler** — täidab alerti- ja recording-reegleid (nagu Prometheuses). Siin saad kirjutada: *"kui viimase 5 minuti jooksul on rohkem kui 100 level=error rida → saada hoiatus."*
 
 ---
 
 ## 10. Agent — Promtail on läinud, tule Alloy
 
-Kuni 2024 oli Loki standardagent **Promtail** — lihtne binaar, mis lõi logifailid üles ja saatis Lokile. See oli aastaid lihtsalt-toimiv lahendus.
+Kuni 2024 oli Loki standardagent **Promtail** — lihtne binaar, mis lõi logifailid üles ja saatis Lokile. Aastaid lihtsalt-toimiv lahendus.
 
-2024 teatas Grafana Labs, et Promtail liigub **feature-freeze** olekusse ja soovitatud on **Grafana Alloy**. Alloy on universaalne telemeetria-kollektor — üks agent kogub logisid, meetrikaid, jälgi. Põhineb OpenTelemetry Collectori komponentidel, aga pakub Grafana maailma poolt testitud konfiguratsiooni.
+2024 teatas Grafana Labs, et **Promtail liigub feature-freeze olekusse** ja soovitatud on **Grafana Alloy**. Alloy on universaalne telemeetria-kollektor — üks agent kogub logisid, meetrikaid, jälgi. Põhineb OpenTelemetry Collectori komponentidel, pakub Grafana maailmas testitud konfiguratsiooni.
 
-Kui ehitad täna uut süsteemi — kasuta **Alloy**. Kui sul on vana Promtail-deployment — töötab edasi, aga planeeri migratsiooni.
+**Kui ehitad täna uut süsteemi — kasuta Alloy.** Kui sul on vana Promtail-deployment — töötab edasi, aga planeeri migratsiooni.
 
-Laboris täna kasutame Alloy'd. See on kerge (u 30 MB RAM), konfiguratsioon sarnane HCL-ile (Terraformi tuttav süntaks).
+Laboris kasutame Alloy'd. Kerge (~30 MB RAM), konfiguratsioon sarnane HCL-ile (Terraformi tuttav süntaks).
 
 ---
 
 ## 11. HOIATUS — Helm-chart'ide džungel
 
-Kui Google'ist otsid *"loki helm chart"*, leiad **kolm** erinevat nime. Ainult üks neist on elus. See on levinud komistuskivi ja põhjus, miks paljud Loki-tutorialid internetis on juba aegunud.
+Kui Google'ist otsid *"loki helm chart"*, leiad **kolm** erinevat nime. **Ainult üks on elus.**
 
 | Chart | Staatus | Kasuta? |
 |-------|---------|---------|
@@ -408,7 +341,7 @@ Kui Google'ist otsid *"loki helm chart"*, leiad **kolm** erinevat nime. Ainult �
 | `grafana/loki-stack` | ⚠️ Deprecated | **Ei** |
 | `grafana/loki-distributed` | ⚠️ Hooldamata, seisab 2.9.0 peal | **Ei** |
 
-Eriline hoiatus: kui kasutad `values.yaml` genereerimiseks LLM-e (nt ChatGPT või Claude) — **kontrolli kriitiliselt**. Mudelite treeningandmed sisaldavad vanu tutoriale ja nad pakuvad sageli `loki-stack`-i näidiseid. Need ei tööta Loki 3.0+ maailmas.
+**Eriline hoiatus:** kui kasutad `values.yaml` genereerimiseks LLM-e (ChatGPT, Claude) — **kontrolli kriitiliselt**. Mudelite treeningandmed sisaldavad vanu tutoriale ja nad pakuvad sageli `loki-stack`-i näidiseid. Need ei tööta Loki 3.0+ maailmas.
 
 ---
 
@@ -417,34 +350,50 @@ Eriline hoiatus: kui kasutad `values.yaml` genereerimiseks LLM-e (nt ChatGPT võ
 LogQL on PromQL-i vend. Kui PromQL oskad, saad LogQL-iga 15 minutiga hakkama.
 
 **Baaspäring — voo valik:**
+
 ```logql
 {app="nginx", env="prod"}
 ```
-See tagastab kõik sellise siltide komplektiga logiread.
+
+Tagastab kõik sellise siltide komplektiga logiread.
 
 **Tekstifilter — grep-stiil:**
+
 ```logql
-{app="nginx"} |= "error"           # sisaldab "error"
-{app="nginx"} != "healthcheck"     # EI sisalda
-{app="nginx"} |~ "5[0-9]{2}"       # regex — HTTP 5xx koodid
+{app="nginx"} |= "error"        # sisaldab "error"
+{app="nginx"} != "healthcheck"  # EI sisalda
+{app="nginx"} |~ "5[0-9]{2}"    # regex — HTTP 5xx koodid
 ```
 
-**Parsimine ja siltide (labelite) ekstraktimine:**
+**Parsimine (4 parserit):**
+
 ```logql
 {app="nginx"} | json | status_code >= 500
+{app="api"}   | logfmt | level = "error"
+{app="java"}  | pattern `<_> [<level>] <_>` | level = "ERROR"
+{app="legacy"} | regexp `level=(?P<lvl>\w+)` | lvl = "ERROR"
 ```
-Siin `| json` parsib JSON-vormingus logiread ja teeb kõigist väljadest kättesaadavad muutujad.
+
+Neli parserit erinevateks logiformaatideks. Tänane laborilabor keskendub `pattern`-ile (vabatekst) ja `json`-ile. Valik:
+
+| Logi välja näeb välja nagu | Parser |
+|----------------------------|--------|
+| `{"level":"error","user":"ann"}` | `json` |
+| `level=error user=ann duration=42ms` | `logfmt` |
+| `2026-04-25 10:23 ERROR user=ann` (vabatekst, stabiilne struktuur) | `pattern` |
+| Täiesti ebastandardne | `regexp` |
 
 **Meetrikud LogQL-ist** — siin läheb huvitavaks:
+
 ```logql
-# Veaolukordade arv minutis
-rate({app="nginx"} |= "error" [1m])
+# Veaolukordade arv sekundis
+rate({app="nginx"} |= "error" [5m])
 
 # Viis suurimat 5xx-allikat viimase tunni jooksul
 topk(5, sum by (app) (rate({env="prod"} |~ "5[0-9]{2}" [1h])))
 ```
 
-Jah — logidest saab teha meetrikuid PromQL-sarnase süntaksiga. Laboris käsitleme seda praktikas.
+Jah — logidest saab teha meetrikuid PromQL-sarnase süntaksiga. **Laboris käsitleme seda praktikas** (§3.4 `rate()` — logist metrika).
 
 ---
 
@@ -453,58 +402,52 @@ Jah — logidest saab teha meetrikuid PromQL-sarnase süntaksiga. Laboris käsit
 Ei ole õiget ja valet tööriista. On sobiv ja sobimatu kontekstis.
 
 | Kriteerium | Loki | ELK Stack |
-|-----------|------|-----------|
-| **Indekseerib** | Ainult silte (~1% mahust) | Kogu teksti (~150% mahust) |
-| **Salvestuskulu** | S3 — odav | SSD — kallis |
-| **RAM-vajadus** | Madal | Kõrge |
-| **Täistekstiotsing** | Aeglane (grep läbi tükkide) | Kiire (indeks on olemas) |
-| **Operatiivne silumine** | Ideaalne | Ülitugev |
-| **Ad-hoc forensika** | Piiratud | Ülitugev |
-| **Turvaanalüüs** | Alajääb | Domineerib (ES-SIEM) |
-| **Kubernetes-integreerumine** | Natiivne | Töötab, vajab häälestust |
-| **TCO** | **35–50% odavam** | Kallis |
+|------------|------|-----------|
+| Indekseerib | Ainult silte (~1% mahust) | Kogu teksti (~150% mahust) |
+| Salvestuskulu | S3 — odav | SSD — kallis |
+| RAM-vajadus | Madal | Kõrge |
+| Täistekstiotsing | Aeglane (grep tükkidest) | Kiire (indeks olemas) |
+| Operatiivne silumine | Ideaalne | Ülitugev |
+| Ad-hoc forensika | Piiratud | Ülitugev |
+| Turvaanalüüs | Alajääb | Domineerib (ES-SIEM) |
+| Kubernetes-integratsioon | Natiivne | Töötab, vajab häälestust |
+| TCO | **35–50% odavam** | Kallim |
 
-### Vali Loki, kui:
+**Vali Loki, kui:**
 
-- Sul on juba Grafana ja/või Prometheus kasutuses — integratsioon on sujuv
-- Sinu peamine kasutusviis on **operatiivne silumine** (tean rakendust, otsin põhjust)
-- Eelarve on piiratud ja logihulk kasvab kiiresti
+- Sul on juba Grafana ja/või Prometheus kasutuses — integratsioon sujuv
+- Peamine kasutusviis on **operatiivne silumine** (tean rakendust, otsin põhjust)
+- Eelarve on piiratud ja logihulk kasvab
 - Kubernetes-keskkond — Loki on sinna sündinud
 
-### Vali ELK, kui:
+**Vali ELK, kui:**
 
 - Teed **turvaforensikat** — vaja otsida suvalisi mustreid kogu andmekogus
-- **Süvaanalüüs** on peamine kasutusviis — agregatsioonid, aggregations, complex queries
-- Vajad **mitte-tehnilist UI-d** (Kibana on selles parem kui Grafana logide jaoks)
+- **Süvaanalüüs** on peamine — agregatsioonid, keerukad päringud
+- Vajad **mitte-tehnilist UI-d** (Kibana on logide jaoks parem kui Grafana)
 - Compliance nõuab täisteksti indekseerimist
 
-Paljudes ettevõtetes leiab mõlemad paralleelselt — Loki igapäevaseks operatiivseks tööks, ELK turvatiimile. See on täiesti mõistlik lähenemine.
+Paljudes ettevõtetes leiab **mõlemad paralleelselt** — Loki igapäevaseks operatiivseks tööks, ELK turvatiimile. Täiesti mõistlik lähenemine.
 
 ---
 
-## 14. Grafana Cloud — lühidalt
+## 14. Kokkuvõte
 
-Kui sa ei taha LGTM-pinu ise Kubernetes-klastris paigaldada ja hallata, siis **Grafana Cloud** pakub sama stack’i hallatud teenusena. Pluss on kiirem start ja väiksem ops-koormus; miinus on see, et andmed lähevad teenusepakkuja pilve ning hind sõltub mahust.
+Enne laborisse minekut jäta meelde viis asja:
 
----
+1. **LGTM = Loki + Grafana + Tempo + Mimir** — sama meeskond, sama filosoofia, tugevus integratsioonis (korrelatsiooni kolmik).
 
-## 15. Kokkuvõte
+2. **Loki indekseerib ainult silte.** Logi sisu läheb objektisalvestusse. See on disainiotsus sügavate tagajärgedega — 35–50% odavam, aga täisteksti forensika on nõrgem.
 
-**LGTM = Logs + Grafana + Tempo + Mimir.** Grafana ei ole enam lihtsalt dashboard — see on platvorm.
+3. **Kardinaalsus on vaenlane.** Ära kunagi pane trace_id'd, user_id'd ega IP-d sildiks. **Structured Metadata** (Loki 3.0+) on õige koht kõrge kardinaalsusega andmetele.
 
-**Loki indekseerib ainult silte.** Logi sisu läheb objektisalvestusse. See on disainiotsus, millel on sügavad tagajärjed.
+4. **Paigaldusrežiimid:** Monolithic ≤20 GB/päevas, Microservices 1 TB+. **SSD on suremas** — ära alusta sellega.
 
-**Kardinaalsus on vaenlane.** Ära kunagi pane IP-d, trace_id'd ega user_id'd sildiks. Kasuta **Structured Metadata** (Loki 3.0+).
+5. **Agent: Alloy, mitte Promtail. Helm-chart: `grafana/loki`, mitte `loki-stack`.**
 
-**Paigaldusrežiimid:** Monolithic kuni 20 GB/päevas, Microservices 1 TB+. **SSD on suremas** — mitte alustada sellega.
+Loki on noor ja areneb kiiresti — Bloom-filtrid (Loki 3.0), Structured Metadata, Alloy asendab Promtail'i. See, mis on täna "best practice", võib aastaga muutuda. **Ametlikud docs >> blogid >> LLM-ide vastused.**
 
-**Helm-chart:** ainult `grafana/loki`. Teised on surnud või suremas.
-
-**Agent:** täna on **Alloy**, mitte Promtail.
-
-**Loki vs ELK:** operatiivne silumine → Loki. Forensika → ELK. Mõistlik kasutada mõlemat erinevate ülesannete jaoks.
-
-**Järgmine samm:** [Labor: Loki](../../labs/02_zabbix_loki/loki_lab.md) — ehitame Loki + Alloy + Grafana stack'i, mis kogub logisid, teeme LogQL-i päringuid ja seome need kokku Zabbix labori tulemustega.
+**Järgmine samm:** [Labor: Loki](../../labs/02_zabbix_loki/loki_lab.md) — ehitame Loki + Alloy + Grafana stacki, teeme LogQL päringuid ja seome kokku Zabbix labori tulemustega.
 
 ---
 
@@ -516,24 +459,23 @@ Kui sa ei taha LGTM-pinu ise Kubernetes-klastris paigaldada ja hallata, siis **G
 1. Kui Loki ei indekseeri logi sisu, kuidas ta siis "error"-rea leiab? Milline on sellise päringu jõudluse piirang?
 2. Selgita, miks `trace_id` ei tohi olla Loki silt. Mis juhtub, kui sa ta siiski sildiks paned?
 3. Mis on erinevus Structured Metadata ja siltide vahel? Millal kumba kasutada?
-4. Sul on käsil uus juurutus: ~50 GB logisid päevas, üks meeskond, Kubernetes keskkond. Millist paigaldusrežiimi valid ja miks?
-5. Miks on SSD paigaldusrežiim aegumas? Millest lähtus Grafana Labsi otsus?
-6. Kirjuta LogQL päring, mis annab Nginx 5xx-vigade määra (error rate) sekundis viimase 5 minuti jooksul, rakenduspõhiste kaupa grupeeritult.
+4. Sul on uus juurutus: ~50 GB logisid päevas, üks meeskond, Kubernetes. Millise paigaldusrežiimi valid?
+5. Miks on SSD paigaldusrežiim aegumas?
+6. Kirjuta LogQL päring: Nginx 5xx-vigade määr sekundis viimase 5 minuti jooksul, rakenduse järgi grupeeritud.
 7. Millal eelistad Loki, millal ELK? Nimeta kaks konkreetset stsenaariumi kummagi jaoks.
 
 ??? note "Vastused (peida/ava)"
-    1) Loki leiab “error” rea kas täisteksti filtriga (`|= "error"`) või parseri + filtri abil. Piirang: kui filtreerid ainult sisu järgi, peab Loki rohkem andmeid “läbi skännima” (aeglasem kui indeksipõhine label-filter).
+    1) Loki leiab "error"-rea kas täisteksti filtriga (`|= "error"`) või parseri + filtri abil. **Piirang:** kui filtreerid ainult sisu järgi, peab Loki rohkem andmeid skaneerima (aeglasem kui indeksipõhine label-filter). Seepärast pead alati esmalt kitsendama siltidega.
 
-    2) `trace_id` on kõrge kardinaalsusega (peaaegu iga rea kohta unikaalne). Kui paned selle sildiks, tekib “stream explosion” → indeks paisub ja päringud/log ingestion muutuvad aeglaseks või Loki hakkab tagasi lükkama.
+    2) `trace_id` on kõrge kardinaalsusega — peaaegu iga rea kohta unikaalne. Kui paned sildiks, tekib "stream explosion" — indeks paisub, päringud aeglustuvad, Loki hakkab uusi logisid tagasi lükkama. Kasuta **Structured Metadata'd** (Loki 3.0+).
 
-    3) Sildid on indekseeritud ja peavad olema madala kardinaalsusega; Structured Metadata võimaldab hoida rohkem infot “struktureeritult” ilma sama kardinaalsusplahvatuseta. Kasuta silte dimensioonideks (service, env), metadata’t detailideks.
+    3) **Sildid** on indekseeritud, peavad olema madala kardinaalsusega, kasutatakse voogude valikuks. **Structured Metadata** on otsitav aga EI indekseeritud, sobib kõrge kardinaalsusega detailiks (trace_id, user_id). Sildid = dimensioonid, metadata = detailid.
 
-    4) ~50 GB/päev, üks meeskond, K8s: tüüpiliselt valid SSD või microservices suuna sõltuvalt skaleerimise vajadusest; praktikas juhindud Grafana doki “deployment modes” soovitustest ja storage/backendi valikust.
+    4) ~50 GB/päev, üks meeskond, K8s: **Monolithic** on piiripealne (~20 GB soovitus), aga 50 GB juures sobib ka Monolithic kui kasv on piiratud. Kui kasv ootuspärane, kavanda kohe Microservices Helm-chart'iga (`grafana/loki`).
 
-    5) SSD režiim on ajaloost tulnud ja muutub vähem soovitatavaks, sest mikroteenused/objektisalvestus teeb skaleerimise ja kulumudeli paremini hallatavaks.
+    5) SSD režiimi keerukus vs kasu pole enam paigas — Monolithic on lihtsam alustamiseks, Microservices skaleerib paremini. SSD vahepealne roll pole enam õigustatud. Grafana Labs soovitab otse ühelt teisele.
 
-    6) Näide (täpne parser sõltub logiformaadist):
-
+    6) 
        ```logql
        sum by (app) (
          rate(
@@ -545,7 +487,7 @@ Kui sa ei taha LGTM-pinu ise Kubernetes-klastris paigaldada ja hallata, siis **G
        )
        ```
 
-    7) Loki: operatiivne debug, odavam logikiht, Grafana integratsioon. ELK: täisteksti/forensika, keerukamad otsingud, turvatiimi workflow.
+    7) **Loki:** operatiivne debug (tean rakendust, otsin põhjust), odavam logikiht, Grafana-integratsioon, Kubernetes. **ELK:** täisteksti/forensika, keerukamad otsingud, turvatiimi workflow, compliance mis nõuab täisteksti indekseerimist.
 
 </details>
 
@@ -555,7 +497,7 @@ Kui sa ei taha LGTM-pinu ise Kubernetes-klastris paigaldada ja hallata, siis **G
 
 ??? note "Allikad (peida/ava)"
     **Ametlik dokumentatsioon**
-    
+
     | Allikas | URL |
     |---------|-----|
     | Grafana Loki dokumentatsioon | https://grafana.com/docs/loki/latest/ |
@@ -566,32 +508,31 @@ Kui sa ei taha LGTM-pinu ise Kubernetes-klastris paigaldada ja hallata, siis **G
     | Structured Metadata | https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/ |
     | Grafana Alloy | https://grafana.com/docs/alloy/latest/ |
     | Helm chart (ametlik) | https://github.com/grafana/loki/tree/main/production/helm/loki |
-    
+
     **Teooria ja kontekst**
-    
+
     | Allikas | URL |
     |---------|-----|
-    | Grafana ajalugu (Torkel Ödegaard) | https://grafana.com/about/team/torkel/ |
     | KubeCon 2018 Loki tutvustus (Tom Wilkie) | https://www.youtube.com/results?search_query=loki+tom+wilkie+kubecon+2018 |
     | Grafana Labs blog — Loki 3.0 | https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/ |
     | "How we designed Loki" (Tom Wilkie) | https://grafana.com/blog/2018/12/12/loki-prometheus-inspired-open-source-logging-for-cloud-natives/ |
     | Promtail → Alloy migratsioon | https://grafana.com/docs/alloy/latest/tasks/migrate/from-promtail/ |
-    
+
     **Praktiline**
-    
+
     | Allikas | URL |
     |---------|-----|
-    | Awesome Loki | https://github.com/grafana/loki/blob/main/docs/sources/community/getting-in-touch.md |
     | LGTM demo (Docker Compose) | https://github.com/grafana/intro-to-mltp |
     | Loki Canary | https://grafana.com/docs/loki/latest/operations/loki-canary/ |
-    
+
     **Versioonid (testitud, aprill 2026):**
-    - Loki: `grafana/loki:3.3.0`
-    - Grafana: `grafana/grafana:11.4.0`
-    - Alloy: `grafana/alloy:v1.5.0`
+
+    - Loki: `grafana/loki:3.7.1`
+    - Grafana: `grafana/grafana:12.4.3`
+    - Alloy: `grafana/alloy:v1.15.1`
 
 ---
 
-*Järgmine: [Labor: Loki](../../labs/02_zabbix_loki/loki_lab.md) — ehitame Loki + Alloy + Grafana stack'i, mis kogub logisid ja teeme LogQL-i päringuid.*
+*Järgmine: [Labor: Loki](../../labs/02_zabbix_loki/loki_lab.md) — ehitame Loki + Alloy + Grafana stacki ja teeme LogQL-i päringuid.*
 
 --8<-- "_snippets/abbr.md"
