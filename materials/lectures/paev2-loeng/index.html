@@ -2379,11 +2379,7 @@
 </tr>
 </tbody>
 </table>
-<p>Reaalses maailmas kasutatakse sageli <strong>mõlemaid</strong>. Lihtsustatud (aga kasulik) jaotus on selline:</p>
-<ul>
-<li><strong>Zabbix</strong> sobib eriti hästi traditsioonilise IT-infra jaoks: võrk, virtualisatsioon, failiserverid, UPS-id, printerid ja muu “legacy”.</li>
-<li><strong>Prometheus</strong> sobib eriti hästi konteinerplatvormidele ja dünaamilisse keskkonda (service discovery, cloud-native mustrid).</li>
-</ul>
+<p>Reaalses maailmas kasutatakse sageli <strong>mõlemaid</strong>. Lihtsustatud (aga kasulik) jaotus on selline: <strong>Zabbix</strong> katab hästi traditsioonilise IT‑infra (võrk, virtualisatsioon, failiserverid, UPS-id, printerid ja muu “legacy”), samas kui <strong>Prometheus</strong> sobib eriti hästi konteinerplatvormidele ja dünaamilisse keskkonda (service discovery, cloud‑native mustrid).</p>
 <p>Mõlemad võivad voolata Grafanasse — ja keegi ei pea “üht ainsat” valima.</p>
 <hr />
 <h2 id="2-arhitektuur-neli-komponenti">2. Arhitektuur — neli komponenti<a class="headerlink" href="#2-arhitektuur-neli-komponenti" title="Lingi sektsioonile">&para;</a></h2>
@@ -2400,8 +2396,7 @@ Tavaliselt MySQL/MariaDB või PostgreSQL. Siin on <strong>kõik</strong>: nii ko
 PHP-põhine veebiliides (Apache/Nginx taga). Räägib <strong>sama DB-ga</strong>, mis server. Kasutaja “klikib” frontendis — seda ei tohi segi ajada serveriga.</p>
 <p><strong>Zabbix Agent</strong> (käed-jalad)<br />
 Jookseb jälgitaval masinal, kogub lokaalsed mõõdikud ja edastab serverile. Kaks peamist haru:
-- <strong>Agent 1</strong> (C) — stabiilne klassika
-- <strong>Agent 2</strong> (Go) — uuem, moodulitega</p>
+<strong>Agent 1</strong> (C, stabiilne klassika) ja <strong>Agent 2</strong> (Go, uuem ja pluginatega).</p>
 <p>Viies komponent — <strong>Zabbix Proxy</strong> — tuleb mängu, kui on vaja jälgida asju kaugvõrgus, piiratud internetiühendusega harukontorites või serverit koormuse alt välja võtta. Proksi kogub andmeid kohapeal, puhverdab neid vajadusel ja saadab serverile edasi. Proksist rohkem peatselt.</p>
 <p>Kriitiline punkt: <strong>Zabbix Server ja DB on tihedalt seotud</strong>. Kui DB jääb hätta, kukub server. Kui server kogub 1000 väärtust sekundis ja DB suudab kirjutada 500 — mahajäämus kasvab, järjekorrad täituvad, andmeid läheb kaduma. Suurem osa Zabbixi häälestamisest ongi tegelikult <em>andmebaasi</em> häälestamine.</p>
 <h3 id="topoloogia-pilt-mida-sa-tana-praktikas-ehitad">Topoloogia pilt (mida sa täna praktikas ehitad)<a class="headerlink" href="#topoloogia-pilt-mida-sa-tana-praktikas-ehitad" title="Lingi sektsioonile">&para;</a></h3>
@@ -2447,21 +2442,11 @@ Kui klikid hosti <em>nimel</em>, jõuad hosti seadistusse, mitte triggerite vaat
 <h2 id="4-agentid-tuubid-pluginad-active-vs-passive">4. Agentid: tüübid, pluginad, active vs passive<a class="headerlink" href="#4-agentid-tuubid-pluginad-active-vs-passive" title="Lingi sektsioonile">&para;</a></h2>
 <p>Zabbixis on “agent” lai mõiste: osa mõõdikuid tuleb Zabbix Agent’ist, osa tuleb <em>ilma agendita</em> (SNMP, HTTP, IPMI, JMX, VMware, …).</p>
 <h3 id="41-zabbix-agent-vs-agent-2">4.1 Zabbix Agent vs Agent 2<a class="headerlink" href="#41-zabbix-agent-vs-agent-2" title="Lingi sektsioonile">&para;</a></h3>
-<ul>
-<li><strong>Zabbix Agent (Agent 1)</strong>: klassikaline, väga levinud, stabiilne.</li>
-<li><strong>Zabbix Agent 2</strong>: uuem agent, mille tugevus on <strong>pluginad</strong> (laiendatavus). Tootmises kohtad mõlemaid.</li>
-</ul>
+<p><strong>Agent 1</strong> on klassikaline ja väga levinud. <strong>Agent 2</strong> on uuem ning selle tugevus on <strong>pluginad</strong> (laiendatavus). Tootmises kohtad tihti mõlemat korraga, sõltuvalt hosti rollist ja ajaloost.</p>
 <p>Praktiline rusikareegel:
-- kui sul on “standard Linux host” ja tahad kiiresti üles saada → mõlemad sobivad
-- kui vajad lisa-integratsioone/pluginasid või tahad tulevikukindlust → Agent 2 on tihti mõistlik valik</p>
+“standard Linux host” puhul sobivad mõlemad, aga kui vajad lisa‑integratsioone või tahad tulevikukindlamat valikut, on Agent 2 sageli mõistlikum.</p>
 <h3 id="42-kuidas-agentita-monitooring-zabbixis-valja-naeb">4.2 Kuidas “agentita” monitooring Zabbixis välja näeb<a class="headerlink" href="#42-kuidas-agentita-monitooring-zabbixis-valja-naeb" title="Lingi sektsioonile">&para;</a></h3>
-<p>Zabbix ei nõua alati hosti peal agenti:
-- <strong>SNMP</strong> (võrguseadmed, UPS-id, printerid, kaamerad)
-- <strong>HTTP Agent</strong> (REST API-d, endpointid, stub_status)
-- <strong>ICMP</strong> (ping, latency)
-- <strong>IPMI</strong> (serveri riistvara)
-- <strong>JMX</strong> (Java)
-- <strong>VMware</strong> (vCenter/ESXi)</p>
+<p>Zabbix ei nõua alati hosti peal agenti. Väga palju asju tuleb “otse”: <strong>SNMP</strong> (võrguseadmed, UPS-id, printerid), <strong>HTTP Agent</strong> (REST API-d/endpointid), <strong>ICMP</strong> (ping/latency), <strong>IPMI</strong> (riistvara), <strong>JMX</strong> (Java), <strong>VMware</strong> (vCenter/ESXi).</p>
 <p>See on põhjus, miks Zabbix on traditsioonilises inframaailmas nii tugev.</p>
 <p>Eile vaatasime pull-mudelit Prometheuse juures. Zabbix agent toetab mõlemat stiili — ja tootmises kasutatakse sageli korraga mõlemat.</p>
 <h3 id="passiivne-agent-server-kusib">Passiivne agent (server küsib)<a class="headerlink" href="#passiivne-agent-server-kusib" title="Lingi sektsioonile">&para;</a></h3>
@@ -2495,18 +2480,33 @@ Kui klikid hosti <em>nimel</em>, jõuad hosti seadistusse, mitte triggerite vaat
 <p>Kui paned <code>History=0</code>, siis <strong>triggerid lõpetavad töötamise</strong>.<br />
 Põhjus: triggeri funktsioonid (<code>last</code>, <code>avg</code>, <code>max</code>, …) töötavad History pealt. Kui History puudub, pole “mille pealt” hinnata.</p>
 </div>
-<p>Tootmises tüüpilised väärtused:
-- <strong>History</strong>: 7-14 päeva (operatiivseks vaatluseks ja triggerite jaoks)
-- <strong>Trends</strong>: 1-5 aastat (mahtude planeerimiseks, SLA-raportiteks, aastaaruanneteks)</p>
+<p>Tootmises tüüpilised väärtused:</p>
+<table>
+<thead>
+<tr>
+<th>Kiht</th>
+<th>Tüüpiline säilitus</th>
+<th>Milleks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>History</strong></td>
+<td>7–14 päeva</td>
+<td>operatiivne vaatlus + triggerid</td>
+</tr>
+<tr>
+<td><strong>Trends</strong></td>
+<td>1–5 aastat</td>
+<td>planeerimine + SLA + aruanded</td>
+</tr>
+</tbody>
+</table>
 <h3 id="uks-konkreetne-nuanss-umardamine">Üks konkreetne nüanss — ümardamine<a class="headerlink" href="#uks-konkreetne-nuanss-umardamine" title="Lingi sektsioonile">&para;</a></h3>
 <p>Trendide keskmise arvutamisel <em>täisarvuliste</em> (unsigned) itemite puhul <strong>ümardatakse tulemus alati allapoole</strong>. Kui tunni jooksul on CPU väärtused 0 ja 1, siis trends-is on keskmine 0, mitte 0,5. Ühelt poolt loogiline (täisarv on täisarv). Teiselt poolt halb üllatus, kui sa seda ei tea ja imestad miks aastaraport näitab, et midagi "ei olnudki". Float-tüüpi itemite puhul seda probleemi pole.</p>
 <h3 id="nvps-ja-andmemahu-planeerimine">NVPS ja andmemahu planeerimine<a class="headerlink" href="#nvps-ja-andmemahu-planeerimine" title="Lingi sektsioonile">&para;</a></h3>
 <p>Tark administraator arvutab DB suuruse ette, mitte ei avasta pärast, et ketas on täis. Näide:</p>
-<ul>
-<li>3000 itemi</li>
-<li>Iga item uueneb iga 60 sekundi järel</li>
-<li><strong>NVPS = 3000 / 60 = 50 väärtust sekundis</strong></li>
-</ul>
+<p>Oletame, et sul on 3000 item’it ja igaüks uueneb iga 60 sekundi järel. Siis on <strong>NVPS = 3000 / 60 = 50 väärtust sekundis</strong>.</p>
 <p>Numbrilise andmetüübi maht on ligikaudu 90 baiti punkti kohta. History 30 päeva jaoks:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>50 × 3600 × 24 × 30 × 90 ≈ 10,9 GB
 </span></code></pre></div>
@@ -2517,8 +2517,7 @@ Põhjus: triggeri funktsioonid (<code>last</code>, <code>avg</code>, <code>max</
 <details class="tip">
 <summary>NVPS kontroll tootmises</summary>
 <p>Kui sul on juba Zabbix püsti, võrdle planeeringut reaalsusega:
-- vaata sisemisi item’eid, mis näitavad tegelikku kirjutusmahtu ja järjekordi
-- kui NVPS on 2× suurem kui arvasid, on tihti põhjus “liiga tihe intervall” või “liiga palju item’eid template’is”</p>
+vaata sisemisi item’eid, mis näitavad tegelikku kirjutusmahtu ja järjekordi. Kui NVPS on 2× suurem kui arvasid, on tihti põhjus “liiga tihe intervall” või “liiga palju item’eid template’is”.</p>
 </details>
 <h3 id="housekeeper-ja-selle-piirid">Housekeeper ja selle piirid<a class="headerlink" href="#housekeeper-ja-selle-piirid" title="Lingi sektsioonile">&para;</a></h3>
 <p>Zabbix server püüab regulaarselt vanu ridu kustutada — seda teeb sisseehitatud <strong>housekeeper</strong>. See jookseb DB-s rida-realt, kustutades ükshaaval.</p>
@@ -2595,12 +2594,32 @@ Põhjus: triggeri funktsioonid (<code>last</code>, <code>avg</code>, <code>max</
 </div>
 <h3 id="mida-andmebaasi-juures-haalestada">Mida andmebaasi juures häälestada<a class="headerlink" href="#mida-andmebaasi-juures-haalestada" title="Lingi sektsioonile">&para;</a></h3>
 <p>Detailid kuuluvad paigalduse juhendisse, aga kontseptuaalselt on kolm-neli asja, mida iga tootmise Zabbixi DB juures peab vaatama:</p>
-<ul>
-<li><strong>Buffer pool</strong> suurus (RAM-i osa, mis hoiab indekseid ja kuumandmeid) — liiga väike tähendab pidevalt kettale pöördumist</li>
-<li><strong>Kirjutamise sünkroniseerimine</strong> — vaikimisi teeb DB iga tehingu kohta ketta-flushi, mis on aeglane. Zabbixi tööle on aktsepteeritav nõrgem garantii (1 sekundi andmekadu crashi puhul) ja 3-5x kiirem kirjutamine</li>
-<li><strong>I/O võimekuse parameeter</strong> — ütleb DB-le, kui palju IOPS-i ta võib eeldada (SSD vs HDD puhul täiesti erinev)</li>
-<li><strong>Logifaili suurus</strong> — peab mahutama vähemalt 1-2 tunni kirjutamisandmed</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Teema</th>
+<th>Miks see loeb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Buffer pool</strong></td>
+<td>liiga väike → DB käib pidevalt kettal</td>
+</tr>
+<tr>
+<td><strong>Kirjutamise sünkroniseerimine</strong></td>
+<td>konservatiivne flush on aeglane; Zabbix talub sageli “natuke leebemat” garantiid (kiirem kirjutus)</td>
+</tr>
+<tr>
+<td><strong>I/O võimekuse eeldus</strong></td>
+<td>DB peab teadma, kas all on SSD/NVMe või HDD</td>
+</tr>
+<tr>
+<td><strong>Logifaili suurus</strong></td>
+<td>peab mahutama vähemalt 1–2 tunni kirjutamisandmed</td>
+</tr>
+</tbody>
+</table>
 <p>Kõik need parameetrid on konkreetsete arvudega laboris ja paigaldusjuhendis. Loengus piisab kontseptsiooni mõistmisest.</p>
 <h3 id="serveri-haalestus">Serveri häälestus<a class="headerlink" href="#serveri-haalestus" title="Lingi sektsioonile">&para;</a></h3>
 <p><code>zabbix_server.conf</code> sisaldab palju konfigureeritavaid protsesse (pollerid, trapperid, history syncerid, pingerid). Üldreegel: <strong>ärge suurendage neid suvaliselt</strong>. Iga lisaprotsess on DB ühendus ja overhead.</p>
@@ -2619,14 +2638,8 @@ Põhjus: triggeri funktsioonid (<code>last</code>, <code>avg</code>, <code>max</
 <p><strong>Koormuse jaotamise loogika</strong> on kahetingimuslik. Zabbix server jaotab hoste ümber ainult siis, kui ühe proksi hostide arv erineb grupi keskmisest vähemalt 10 hosti võrra <strong>JA</strong> faktoriga vähemalt 2x. See topeltlävi on tahtlik — süsteem ei hakka iga väikese muudatuse peale hoste ümber asetama, mis tekitaks tarbetut overheadi.</p>
 <p>Näide: grupi keskmine on 5 hosti proksi kohta, ühel proksil 15 — vahe 10 (täidab tingimuse), 15 on 3x suurem kui 5 (täidab faktori). Jaotatakse ümber. Kui aga keskmine on 50 ja ühel proksil 60 — vahe 10, aga faktor ainult 1,2x. Jätame rahule.</p>
 <p><strong>Failover mehhanism.</strong> Proksid saadavad serverile heartbeat-i regulaarse intervalliga (vaikimisi iga minut). Korrektne peatumine → teavitab serverit → hostid jaotatakse kohe ümber. Ootamatu rike → oodatakse failover-perioodi, seejärel kuulutatakse kättesaamatuks. Põhjalik ümberjagamine käivitub alles pärast 10-kordset failover-perioodi, et lühiajaline võrguhäire ei tekitaks massiivset rapsimist.</p>
-<p><strong>Olulised piirangud proxy groupide kasutamisel:</strong></p>
-<ul>
-<li><strong>SNMP Trappe ei toetata.</strong> Kui keskkond sõltub SNMP trapidest (näiteks võrguseadmete alarmid), jäta need seadmed tavalisele, grupi välisele proksile</li>
-<li><strong>Ainult Zabbix Agent 7.0+</strong> töötab proxy groupidega aktiivses režiimis. Vanad agendid ei suuda dünaamiliselt liikuva proksiga suhelda</li>
-<li><strong>Tulemüür peab lubama agendi → kõik grupi proksid.</strong> Failover-i ajal suunatakse agent teisele proksile. Kui tulemüür ainult ühte ust avab, jääb agent failover-i ajal ripakile</li>
-<li><strong>Välised skriptid</strong> tuleb käsitsi kopeerida kõigile grupi proksidele identselt</li>
-<li><strong>VMware monitooringu juures ettevaatust.</strong> Iga grupi proksi peab puhverdama KOGU vCenter'i andmestiku, mis võib vCenterit päringutega üle koormata</li>
-</ul>
+<p><strong>Olulised piirangud proxy groupide kasutamisel:</strong>
+Proxy groupid ei sobi igasse olukorda. Peamised piirangud on: <strong>SNMP trapid</strong> (ei toeta), <strong>agentiversioonid</strong> (aktiivses režiimis eeldab 7.0+), <strong>tulemüüri reaalsus</strong> (agent peab jõudma <em>kõigi</em> grupi proksideni), ning “päriselus” tuleb <strong>välised skriptid</strong> hoida prokside vahel sünkroonis. VMware puhul tasub olla ettevaatlik, sest vCenter’i päringukoormus võib suureneda.</p>
 <div class="admonition warning">
 <p class="admonition-title">Proxy group praktikas (tüüpiline tootmiskomistus)</p>
 <p>Failover töötab ainult siis, kui:
@@ -2644,11 +2657,28 @@ Muidu läheb proksi rikke ajal “kõik vaikseks” ja sa avastad probleemi liig
 <h2 id="8-sisemine-diagnostika">8. Sisemine diagnostika<a class="headerlink" href="#8-sisemine-diagnostika" title="Lingi sektsioonile">&para;</a></h2>
 <p>Zabbixi oluline omadus: <strong>ta monitoorib iseennast</strong>. On terve hulk sisemisi iteme (internal items), mis näitavad serveri enda olekut reaalajas. Kui Zabbix töötab halvasti, on see esimene koht kust vaatama hakata.</p>
 <p>Kolm kõige tähtsamat:</p>
-<ul>
-<li><strong><code>zabbix[queue]</code></strong> näitab järjekorras ootavate kontrollide arvu. Peaks olema null. Kui see kasvab pidevalt, sul on andmete viivitus</li>
-<li><strong><code>zabbix[process,&lt;tüüp&gt;,avg,busy]</code></strong> näitab konkreetse protsessi (poller, trapper, history syncer) hõivatust protsentides. Üle 75% pidevalt tähendab, et on aeg suurendada</li>
-<li><strong><code>zabbix[wcache,values,all]</code></strong> näitab reaalselt saabuvat NVPS-i — kas see vastab sinu plaanile või on midagi oodatust rohkem/vähem</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Sisemine item</th>
+<th>Mida see ütleb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>zabbix[queue]</code></td>
+<td>kas kontrollid jäävad järjekorda (peaks olema 0)</td>
+</tr>
+<tr>
+<td><code>zabbix[process,&lt;tüüp&gt;,avg,busy]</code></td>
+<td>kas mõni protsess on püsivalt üle koormatud (&gt;75%)</td>
+</tr>
+<tr>
+<td><code>zabbix[wcache,values,all]</code></td>
+<td>milline NVPS tegelikult sisse tuleb</td>
+</tr>
+</tbody>
+</table>
 <p>Tee neist eraldi dashboard — <strong>monitori monitori</strong>. Kui keegi küsib "Zabbix on aeglane", annab see dashboard vastuse 10 sekundiga.</p>
 <details class="note">
 <summary>Miks see õpetlik on (ka väljaspool Zabbixit)</summary>
@@ -2707,13 +2737,9 @@ Need detailid on huvitavad, aga kursuse eesmärgi jaoks on olulisem mõista <str
 <h2 id="11-zabbix-cloud-mida-see-on-ja-millal-valida">11. Zabbix Cloud (mida see on ja millal valida)<a class="headerlink" href="#11-zabbix-cloud-mida-see-on-ja-millal-valida" title="Lingi sektsioonile">&para;</a></h2>
 <p>Zabbix on open-source ja saad seda ise majutada. <strong>Zabbix Cloud</strong> on “managed” variant: Zabbixi tiim hostib ja haldab serveri/DB platvormi osa sinu eest.</p>
 <p>Tüüpiline väärtus:
-- vähem “DB + upgrade + backup” tööd
-- kiire stardikiirus (eriti väiksematel tiimidel)
-- sobib kui tahad Zabbixi funktsionaalsust, aga mitte Zabbixi platvormi opereerimist</p>
+vähem “DB + upgrade + backup” tööd, kiirem stardikiirus (eriti väiksematel tiimidel) ja sobib siis, kui tahad Zabbixi funktsionaalsust, aga mitte Zabbixi platvormi ise opereerida.</p>
 <p>Piirangud/kaalutlused:
-- võrguühendus ja andmete suunamine Cloudi (agendid/proksid peavad jõudma)
-- andmete asukoha ja compliance nõuded (kus andmed paiknevad)
-- kulumudel (subscription)</p>
+võrguühendus Cloudi (agendid/proksid peavad jõudma), andmete asukoht/compliance ning kulumudel (subscription).</p>
 <div class="admonition info">
 <p class="admonition-title">Hinnad</p>
 <p>Zabbixi hinnad sõltuvad paketist/mahu- ja retention-valikutest ning muutuvad ajas. Kasuta ametlikku hinnakirja: <a href="https://www.zabbix.com/cloud">Zabbix Cloud</a></p>
@@ -2721,14 +2747,40 @@ Need detailid on huvitavad, aga kursuse eesmärgi jaoks on olulisem mõista <str
 <hr />
 <h2 id="12-integratsioonid-ja-feature-map-kiire-orientiir">12. Integratsioonid ja “feature map” (kiire orientiir)<a class="headerlink" href="#12-integratsioonid-ja-feature-map-kiire-orientiir" title="Lingi sektsioonile">&para;</a></h2>
 <p>Kui keegi ütleb “Zabbix oskab kõike”, siis tavaliselt mõeldakse neid kategooriaid:</p>
-<ul>
-<li><strong>Andmete kogumine</strong>: Agent/Agent2, SNMP, HTTP, IPMI, JMX, VMware, ICMP</li>
-<li><strong>Modelleerimine</strong>: hostid, host groups, template’id, discovery (LLD)</li>
-<li><strong>Korrigeerimine</strong>: preprocessing (regex, JSONPath, JS), dependent items</li>
-<li><strong>Alerting</strong>: triggerid, event correlation, actions, eskalatsioon, maintenance, silences</li>
-<li><strong>Visualiseerimine</strong>: graafikud, dashboardid, mapid/geomap, (8.0+) scatter plot</li>
-<li><strong>Automatiseerimine</strong>: API, import/export, integratsioonid webhookide kaudu</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Kategooria</th>
+<th>Näited</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Andmete kogumine</strong></td>
+<td>Agent/Agent2, SNMP, HTTP, IPMI, JMX, VMware, ICMP</td>
+</tr>
+<tr>
+<td><strong>Modelleerimine</strong></td>
+<td>hostid, grupid, template’id, discovery (LLD)</td>
+</tr>
+<tr>
+<td><strong>Korrigeerimine</strong></td>
+<td>preprocessing (regex/JSONPath/JS), dependent items</td>
+</tr>
+<tr>
+<td><strong>Alerting</strong></td>
+<td>triggerid, event correlation, actions, maintenance/silences</td>
+</tr>
+<tr>
+<td><strong>Visualiseerimine</strong></td>
+<td>graafikud, dashboardid, mapid/geomap</td>
+</tr>
+<tr>
+<td><strong>Automatiseerimine</strong></td>
+<td>API, import/export, webhook‑integratsioonid</td>
+</tr>
+</tbody>
+</table>
 <p>Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (agent + template + trigger + action), aga tootmises on suur jõud <strong>template’ides</strong>, <strong>discovery’s</strong> ja <strong>preprocessing’u</strong> mustrites.</p>
 <hr />
 <h2 id="enesekontrolli-kusimused">Enesekontrolli küsimused<a class="headerlink" href="#enesekontrolli-kusimused" title="Lingi sektsioonile">&para;</a></h2>
@@ -2783,7 +2835,7 @@ Need detailid on huvitavad, aga kursuse eesmärgi jaoks on olulisem mõista <str
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:41:29 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:43:13 UTC">23. aprill 2026</span>
   </span>
 
     
