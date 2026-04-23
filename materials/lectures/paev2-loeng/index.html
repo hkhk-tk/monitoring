@@ -1253,23 +1253,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Allikad">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#peamised" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Peamised
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -2257,23 +2240,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Allikad">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#peamised" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Peamised
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -2793,17 +2759,30 @@ võrguühendus Cloudi (agendid/proksid peavad jõudma), andmete asukoht/complian
 <li>Kui su rakendus logib JSON-formaadis ja tahad trace id'de põhjal otsida — miks Zabbix ei sobi ja mis sobib paremini?</li>
 <li>Zabbix 8 toob OpenTelemetry natiivse toe. Mida see praktiliselt tähendab keskkonnas, kus on juba Prometheus?</li>
 </ol>
+<details class="note">
+<summary>Vastused (peida/ava)</summary>
+<p>1) <strong>Push vs pull</strong>: Zabbixis on mõlemad mustrid olemas — passiivne agent (server küsib) ja aktiivne agent (agent saadab). Valik sõltub võrgu/tulemüüri reaalsusest ja skaleerimisest (palju hoste → aktiivne/proksid).</p>
+<p>2) <strong><code>History=0</code></strong>: triggeri funktsioonid töötavad History peal. Kui History puudub, võib süsteem küll “koguda”, aga <strong>ei hinda triggereid</strong> nii, nagu ootad.</p>
+<p>3) <strong>NVPS</strong>: (5000/30 \approx 166{,}7).<br />
+<strong>Maht 30 päeva</strong> (numbrid, ~90 baiti/punkt):<br />
+   (166{,}7 \times 3600 \times 24 \times 30 \times 90 \approx 39 \text{GB}) (+ indeksid/overhead).</p>
+<p>4) <strong>Housekeeper</strong> kustutab rida‑realt (kallis). Partitsioneerimine laseb vanad andmed eemaldada partitsiooni kaupa (kiire, ei koorma).</p>
+<p>5) <strong>Proxy group piirangud</strong>: SNMP trapid, agentiversioonid (aktiivses režiimis 7.0+), tulemüür (agent peab jõudma <em>kõigi</em> proksideni), skriptide sünkroon, VMware päringukoormus.</p>
+<p>6) <strong>Trace‑ID / logiotsing</strong>: Zabbix pole logi‑otsingu tööriist. Sobivamad on Loki (logid) ja Tempo/Jaeger (traces) + OTel.</p>
+<p>7) <strong>OTel tugi</strong>: lihtsustab standardset instrumentatsiooni ja korrelatsiooni modernses stackis; Prometheus jääb metrics‑kihis tugevaks, Zabbix püüab osa observability mustreid enda maailma tuua.</p>
+</details>
 <hr />
 <h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
-<h3 id="peamised">Peamised<a class="headerlink" href="#peamised" title="Lingi sektsioonile">&para;</a></h3>
+<details class="note">
+<summary>Allikad (peida/ava)</summary>
+<p><strong>Peamised:</strong></p>
 <ul>
 <li>Zabbix docs: <a href="https://www.zabbix.com/documentation/current/en/manual">https://www.zabbix.com/documentation/current/en/manual</a></li>
 <li>Performance tuning: <a href="https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning">https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning</a></li>
 <li>Proxy groups (7.0+): <a href="https://www.zabbix.com/documentation/current/en/manual/distributed_monitoring/proxies/ha">https://www.zabbix.com/documentation/current/en/manual/distributed_monitoring/proxies/ha</a></li>
 <li>History/Trends: <a href="https://www.zabbix.com/documentation/current/en/manual/config/items/history_and_trends">https://www.zabbix.com/documentation/current/en/manual/config/items/history_and_trends</a></li>
 </ul>
-<details class="note">
-<summary>Lisalugemine</summary>
+<p><strong>Lisalugemine:</strong></p>
 <ul>
 <li>Roadmap: <a href="https://www.zabbix.com/roadmap">https://www.zabbix.com/roadmap</a></li>
 <li>“What’s new in Zabbix 8.0”: <a href="https://www.zabbix.com/documentation/8.0/en/manual/whatsnew">https://www.zabbix.com/documentation/8.0/en/manual/whatsnew</a></li>
@@ -2835,7 +2814,7 @@ võrguühendus Cloudi (agendid/proksid peavad jõudma), andmete asukoht/complian
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:43:13 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:44:44 UTC">23. aprill 2026</span>
   </span>
 
     
