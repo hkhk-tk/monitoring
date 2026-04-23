@@ -9,7 +9,6 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.expand
-    - navigation.sections
     - navigation.indexes
     - navigation.tracking
     - navigation.instant
