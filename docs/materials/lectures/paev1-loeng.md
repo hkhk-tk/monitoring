@@ -731,9 +731,28 @@ remote_write:
 6. Kui sul on 10 serverit, iga väljastab summary-d `rpc_duration_seconds{quantile="0.95"}`. Kas saad arvutada koond-p95? Miks / miks mitte?
 7. Millal eelistad föderatsiooni ja millal `remote_write`-i?
 
+??? note "Vastused (peida/ava)"
+    1) Pull-mudelis on “sihtmärk vaikib” kohe nähtav (`up==0`) ja debug on lihtne (`curl /metrics` = mida Prometheus näeb).
+
+    2) `user_id` tekitab kardinaalsusplahvatuse (miljonid väärtused) → RAM ja TSDB koormus kasvavad kiiresti.
+
+    3) Näide:
+       \n```promql\nsum by(service) (rate(http_requests_total{status=~\"5..\"}[5m]))\n/\nsum by(service) (rate(http_requests_total[5m]))\n```
+
+    4) `rate()` silub aknas, `irate()` kasutab viimaseid punkte (spikid). `irate()` sobib lühikese hetkekäitumise jaoks, `rate()` üldiselt dashboardidele.
+
+    5) `for: 5m` nõuab, et tingimus kestaks 5 min katkematult → vähendab valehäireid.
+
+    6) Summary protsentiilid ei ole instantside vahel agregeeritavad; koond-p95 jaoks kasuta histogramme.
+
+    7) Föderatsioon hierarhiliseks koondamiseks; `remote_write` pikaajaliseks säilituseks ja horisontaalseks skaleerimiseks (Thanos/Mimir/VictoriaMetrics).
+
 ---
 
 ## Viited ja süvendatud lugemine
+
+<details>
+<summary><strong>Viited (peida/ava)</strong></summary>
 
 ### Ametlik dokumentatsioon
 
@@ -771,3 +790,5 @@ remote_write:
 | [PromLabs training](https://training.promlabs.com/) | Julius Volz (Prometheus looja) kursused |
 | [PromQL cheat sheet](https://promlabs.com/promql-cheat-sheet/) | Prindi välja, hoia laua peal |
 | [Cortex, Mimir, Thanos compared](https://grafana.com/blog/2022/04/19/cortex-vs-mimir-vs-thanos-why-grafana-mimir/) | Otsuspuu skaleerimisel |
+
+</details>

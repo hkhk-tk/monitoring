@@ -518,45 +518,63 @@ Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub **Grafa
 6. Kirjuta LogQL päring, mis annab Nginx 5xx-vigade määra (error rate) sekundis viimase 5 minuti jooksul, rakenduspõhiste kaupa grupeeritult.
 7. Millal eelistad Loki, millal ELK? Nimeta kaks konkreetset stsenaariumi kummagi jaoks.
 
+??? note "Vastused (peida/ava)"
+    1) Loki leiab “error” rea kas täisteksti filtriga (`|= "error"`) või parseri + filtri abil. Piirang: kui filtreerid ainult sisu järgi, peab Loki rohkem andmeid “läbi skännima” (aeglasem kui indeksipõhine label-filter).
+
+    2) `trace_id` on kõrge kardinaalsusega (peaaegu iga rea kohta unikaalne). Kui paned selle sildiks, tekib “stream explosion” → indeks paisub ja päringud/log ingestion muutuvad aeglaseks või Loki hakkab tagasi lükkama.
+
+    3) Sildid on indekseeritud ja peavad olema madala kardinaalsusega; Structured Metadata võimaldab hoida rohkem infot “struktureeritult” ilma sama kardinaalsusplahvatuseta. Kasuta silte dimensioonideks (service, env), metadata’t detailideks.
+
+    4) ~50 GB/päev, üks meeskond, K8s: tüüpiliselt valid SSD või microservices suuna sõltuvalt skaleerimise vajadusest; praktikas juhindud Grafana doki “deployment modes” soovitustest ja storage/backendi valikust.
+
+    5) SSD režiim on ajaloost tulnud ja muutub vähem soovitatavaks, sest mikroteenused/objektisalvestus teeb skaleerimise ja kulumudeli paremini hallatavaks.
+
+    6) Näide:
+       \n```logql\nsum by (app) (rate({job=\"nginx\"} | pattern `<_> <_> <_> <_> <_> <status> <_>` | status =~ \"5..\" [5m]))\n```
+       (täpne parser sõltub logiformaadist).
+
+    7) Loki: operatiivne debug, odavam logikiht, Grafana integratsioon. ELK: täisteksti/forensika, keerukamad otsingud, turvatiimi workflow.
+
 ---
 
 ## Allikad
 
-### Ametlik dokumentatsioon
-
-| Allikas | URL |
-|---------|-----|
-| Grafana Loki dokumentatsioon | https://grafana.com/docs/loki/latest/ |
-| Loki arhitektuur | https://grafana.com/docs/loki/latest/get-started/architecture/ |
-| Loki paigaldusrežiimid | https://grafana.com/docs/loki/latest/get-started/deployment-modes/ |
-| LogQL | https://grafana.com/docs/loki/latest/query/ |
-| Siltide parimad tavad | https://grafana.com/docs/loki/latest/get-started/labels/ |
-| Structured Metadata | https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/ |
-| Grafana Alloy | https://grafana.com/docs/alloy/latest/ |
-| Helm chart (ametlik) | https://github.com/grafana/loki/tree/main/production/helm/loki |
-
-### Teooria ja kontekst
-
-| Allikas | URL |
-|---------|-----|
-| Grafana ajalugu (Torkel Ödegaard) | https://grafana.com/about/team/torkel/ |
-| KubeCon 2018 Loki tutvustus (Tom Wilkie) | https://www.youtube.com/results?search_query=loki+tom+wilkie+kubecon+2018 |
-| Grafana Labs blog — Loki 3.0 | https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/ |
-| "How we designed Loki" (Tom Wilkie) | https://grafana.com/blog/2018/12/12/loki-prometheus-inspired-open-source-logging-for-cloud-natives/ |
-| Promtail → Alloy migratsioon | https://grafana.com/docs/alloy/latest/tasks/migrate/from-promtail/ |
-
-### Praktiline
-
-| Allikas | URL |
-|---------|-----|
-| Awesome Loki | https://github.com/grafana/loki/blob/main/docs/sources/community/getting-in-touch.md |
-| LGTM demo (Docker Compose) | https://github.com/grafana/intro-to-mltp |
-| Loki Canary | https://grafana.com/docs/loki/latest/operations/loki-canary/ |
-
-**Versioonid (testitud, aprill 2026):**
-- Loki: `grafana/loki:3.3.0`
-- Grafana: `grafana/grafana:11.4.0`
-- Alloy: `grafana/alloy:v1.5.0`
+??? note "Allikad (peida/ava)"
+    **Ametlik dokumentatsioon**
+    
+    | Allikas | URL |
+    |---------|-----|
+    | Grafana Loki dokumentatsioon | https://grafana.com/docs/loki/latest/ |
+    | Loki arhitektuur | https://grafana.com/docs/loki/latest/get-started/architecture/ |
+    | Loki paigaldusrežiimid | https://grafana.com/docs/loki/latest/get-started/deployment-modes/ |
+    | LogQL | https://grafana.com/docs/loki/latest/query/ |
+    | Siltide parimad tavad | https://grafana.com/docs/loki/latest/get-started/labels/ |
+    | Structured Metadata | https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/ |
+    | Grafana Alloy | https://grafana.com/docs/alloy/latest/ |
+    | Helm chart (ametlik) | https://github.com/grafana/loki/tree/main/production/helm/loki |
+    
+    **Teooria ja kontekst**
+    
+    | Allikas | URL |
+    |---------|-----|
+    | Grafana ajalugu (Torkel Ödegaard) | https://grafana.com/about/team/torkel/ |
+    | KubeCon 2018 Loki tutvustus (Tom Wilkie) | https://www.youtube.com/results?search_query=loki+tom+wilkie+kubecon+2018 |
+    | Grafana Labs blog — Loki 3.0 | https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/ |
+    | "How we designed Loki" (Tom Wilkie) | https://grafana.com/blog/2018/12/12/loki-prometheus-inspired-open-source-logging-for-cloud-natives/ |
+    | Promtail → Alloy migratsioon | https://grafana.com/docs/alloy/latest/tasks/migrate/from-promtail/ |
+    
+    **Praktiline**
+    
+    | Allikas | URL |
+    |---------|-----|
+    | Awesome Loki | https://github.com/grafana/loki/blob/main/docs/sources/community/getting-in-touch.md |
+    | LGTM demo (Docker Compose) | https://github.com/grafana/intro-to-mltp |
+    | Loki Canary | https://grafana.com/docs/loki/latest/operations/loki-canary/ |
+    
+    **Versioonid (testitud, aprill 2026):**
+    - Loki: `grafana/loki:3.3.0`
+    - Grafana: `grafana/grafana:11.4.0`
+    - Alloy: `grafana/alloy:v1.5.0`
 
 ---
 

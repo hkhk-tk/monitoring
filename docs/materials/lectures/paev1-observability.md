@@ -497,9 +497,28 @@ Cloud-kulude jälgimine kui observability distsipliin. Tööriistad nagu Kubecos
 7. Millal eelistad Lokit ELK-le? Millal vastupidi?
 8. Mida toob OpenTelemetry juurde võrreldes traditsioonilise instrumentatsiooniga?
 
+??? note "Vastused (peida/ava)"
+    1) **MTTD** = aeg avastamiseni, **MTTR** = aeg lahenduseni. Hea observability vähendab mõlemat (eriti MTTD-d).
+
+    2) **Logid** on sündmused (tekst/JSON), **seire** on aegread (numbrid ajas). Päringud ja säilitusloogika on erinevad.
+
+    3) **USE** sobib infrastruktuurile (CPU/mälu/ketas/võrk). **RED** sobib teenustele (rate/errors/duration). Näited: ketta I/O saturation (USE) vs API p95 latency + error rate (RED).
+
+    4) Error budget on “lubatud ebaõnnestumise eelarve” SLO raames; kui eelarve on otsas, peatad riskantsed release’id ja fookus läheb stabiilsusele.
+
+    5) Symptom-based alert mõõdab kasutajamõju (latentsus, error rate), mitte impl. detaili (CPU 90%). Halb: “CPU > 90%”; parem: “p95 latency > 2s”.
+
+    6) Tüüpiline järjekord: metrics (kas on süsteemne anomaalia) → logs (mis juhtus) → traces (kus täpselt viibib ja miks).
+
+    7) Loki: operatiivne debug ja odavam logikiht. ELK: täisteksti/forensika ja keerukamad otsingud.
+
+    8) OTel ühtlustab instrumentatsiooni (metrics/logs/traces) vendor‑neutraalse standardina.
 ---
 
 ## Viited ja süvendatud lugemine
+
+<details>
+<summary><strong>Viited (peida/ava)</strong></summary>
 
 ### Põhiteosed
 
@@ -541,3 +560,5 @@ Cloud-kulude jälgimine kui observability distsipliin. Tööriistad nagu Kubecos
 ### Eesti kontekst
 
 Mitmed Eesti ettevõtted on avalikult rääkinud oma observability praktikatest — Bolt, Wise (Transferwise), Pipedrive, Veriff. Otsi nende inseneri-blogidest või tehnoloogiakonverentside ettekannetest (nt TalTech-i konverentsid, Devclub.eu).
+
+</details>
