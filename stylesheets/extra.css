@@ -155,7 +155,9 @@
   display: block !important;
 }
 
-.md-nav--secondary {
+/* Ära sunni TOC-i nähtavaks ka vasakus navis (Material embedib TOC-i HTML-i ka sinna).
+   Hoia see reegel scoped ainult parempoolse sidebar'i alla. */
+.md-sidebar--secondary .md-nav--secondary {
   display: block !important;
 }
 
