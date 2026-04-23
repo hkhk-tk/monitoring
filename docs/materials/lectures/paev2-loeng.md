@@ -380,61 +380,22 @@ Täna kasutad tõenäoliselt Zabbix 7.0 LTS-i, mis ilmus 2024. aasta juunis. Aga
 
 Zabbix 8 filosoofia on üleminek "monitooringult" → "täielikule vaatlusele" (observability). Alexei Vladišev on ise öelnud: see on liikumine reaktiivselt seirelt proaktiivsele mõistmisele. See seob Zabbixi otseselt samasse maailma, kus on Prometheus + Grafana + Tempo + Loki, DataDog, Splunk — kogu kursuse teine pool. Seega mõned ideed, mida täna Zabbixi kontekstis puudutame, tulevad nädalate pärast uuesti teiste tööriistade juures tagasi.
 
-### OpenTelemetry natiivne integratsioon
+### 3 suunda, mis sind 2026 päriselt mõjutavad
 
-See on **suurim uuendus**. OpenTelemetry (OTel) on avatud standard vaatlusandmete — meetrikate, logide ja jälituste — kogumiseks ja ülekandeks. Tänapäeval on see de facto standard mikroteenuste maailmas. Prometheus, Grafana, Jaeger, Tempo — kõik toetavad seda.
+1. **OpenTelemetry (OTel) tugi**  
+   Zabbix liigub sinna, kus “telemeetria standard” hakkab olema OTel — eriti mikroteenuste ja pilvega.
 
-Zabbix 8 hakkab OpenTelemetry andmeid koguma, salvestama ja visualiseerima natiivselt. See tähendab, et sama Zabbix, mis täna jälgib võrguswitche ja UPS-e, saab jälgida ka Kubernetese mikroteenuste jälitusi. Üks tool, üks konfiguratsioon, terve pilt. Day 5 juures vaatame OTel-it eraldi — siis saab see selgemaks.
+2. **Logipõhine korrelatsioon**  
+   Logid + meetrikad samal ajateljel (sarnane mõte, mida me kursusel Loki/Tempo päevadel teeme).
 
-### Log-based observability
+3. **Uued backendid ja andmetüübid**  
+   Suund analüütilisematele andmehoidlatele (nt ClickHouse) ja struktureeritud andmetele (JSON), et suurtes mahtudes päringud oleksid mõistlikumad.
 
-Zabbix 8 analüüsib logisid reaalajas ja **korreleerib neid meetrikatega**. Näiteks: protsessori spike 14:23 + samal hetkel tekkinud NullPointerException logides + aeglane päring DB-s — süsteem näitab need kokku ühel ajateljel. See on territoorium, mida seni on domineerinud Splunk ja Datadog — Zabbix tuleb sinna tasuta ja avatud lähtekoodiga.
-
-### Uued andmehoidlad — ClickHouse ja JSON
-
-Üks suur tehniline samm on **ClickHouse** kui valikuline backend ajaloo jaoks. ClickHouse on kolonn-orienteeritud analüütiline DB, mis on kiirem aegridade ja logide analüütiliste päringute puhul kui klassikaline PostgreSQL või MySQL. Sarnane roll, mis on Elasticsearchil juba 7.0-s, aga ClickHouse on mõõdetult kiirem suurtele mahtudele.
-
-Samas lisandub **JSON andmetüüp** — võimalus salvestada struktureeritud andmeid natiivselt, ilma et peaks neid tekstiks flatteneerima. See on kasulik, kui kogud näiteks REST API vastuseid (Kubernetese pod'i olek, pilve resource'i metadata) ja tahad neist hiljem konkreetseid välju välja tõmmata.
-
-### Scatter Plot widget — seoste avastamine
-
-Hajusdiagramm on uus dashboard-widget, mis kuvab **kahe meetriku seost**. Üks meetrik X-teljel, teine Y-teljel, iga host/ajahetk on üks punkt. Selle jõud on mustrituvastuses: inimaju leiab visuaalselt klastreid ja anomaaliaid sekunditega, tekstiliste logide lugemisel oleks see tunde kestev protsess.
-
-Mõned praktilised näited, mis sobivad osalejatega arutamiseks:
-
-| Stsenaarium | X-telg vs Y-telg | Mida näed |
-|-------------|------------------|-----------|
-| CPU vs Mälu | CPU koormus vs RAM kasutus | Kas server on "CPU-piiratud" või "RAM-piiratud" |
-| Ketas vs latentsus | Ketta kasutus % vs I/O latentsus ms | Ülekoormatud salvestusega serverid |
-| Võrk vs vead | Võrguliiklus (bps) vs vigade arv | Vigased kaablid või draiveri probleemid (madal liiklus + kõrge viga) |
-| Kiirus vs saadavus | Vastamisaeg vs saadavus % | "Aeglased aga stabiilsed" vs ebakindlad teenused |
-
-Scatter plot toetab ka kombineeritud lävendväärtusi — näiteks "kui X ≥ 80 ja Y ≥ 200, värvi punkt punaseks". Kriitilised hälbed muutuvad visuaalselt karjuvaks.
-
-### GeoMap klasterdamine
-
-Geograafiliselt hajutatud süsteemide haldamisel on peamine probleem **visuaalne müra**. Zabbix 8 lisab GeoMap widget'ile **"Zoom level"** valiku — saad määrata suumitaseme, millest allpool klastrid lagunevad eraldi punktideks. Ettevõtte tasandi vaade jääb puhtaks, detailid ilmuvad alles siis, kui suumid sisse. See on väike UI-parendus, aga suurte taristutega tiimidele kullakaaluga.
-
-### Pärilikud sildid (inherited tags) visuaalse indikaatoriga
-
-Sildid on Zabbixis alati olnud tähtsad filtreerimiseks ja grupeerimiseks. Zabbix 8 lisab UI-sse **lehe/dokumendi ikooni**, mis näitab et silt on pärilik — pärineb template'ist, mitte hostilt endalt. Ikoonita sildid on käsitsi lisatud hosti-spetsiifilised.
-
-See on triaaži jaoks väärtuslik: näed kohe, kas probleem on ühes seadmes või laiemalt kogu mallis ehk sadades seadmetes korraga. Täpselt seda infot vajad esimesena õnnetuse ajal.
-
-### Ülejäänud olulised muudatused
-
-- **NetFlow kogumine + visualiseerimine** — Zabbix astub ametlikult NPMD (Network Performance Monitoring and Diagnostics) kategooriasse
-- **Automaatne võrgutopoloogia avastamine** ilma konfiguratsioonita
-- **Complex Event Processing (CEP)** mootor — keerukamad sündmuste reeglid ja korrelatsioonid
-- **Ametlik mobiilirakendus** (iOS + Android) — push-notifications, probleemide haldus telefonist
-- **Inline validation ja UI parendused** — vähem klikke, kiirem frontend
-- **Proxy ja proxy group permissions** — granulaarsem juurdepääsukontroll: kes mida näha võib
-
-### Mida see kursuse mõttes tähendab
-
-Zabbix 8 ei ole lihtsalt "Zabbix+1". See paneb Zabbixi otseselt konkurentsi kommertsplatvormidega nagu Splunk, Datadog, New Relic — aga avatud lähtekoodiga. Ja veelgi olulisem — see toob Zabbixi samasse maailma, kus on ülejäänud kaasaegne vaatlemise stack, mida me järgmistel päevadel vaatame. Loki logid, Tempo trace'id, OTel kollektor — kõik see hakkab ka Zabbixiga rääkima.
-
-Traditsioonilist IT-d jälgivad asutused ei pea valima "vana Zabbix vs uus kuum tool". Valik kaob.
+??? note "Lisadetailid (kui tahad süvitsi)"
+    Kui tahad “mis täpselt UI-s muutub” ja millised uued widgetid tulevad (scatter plot, geomap klasterdamine, inherited tags, CEP jne), siis vaata:
+    - “What’s new in Zabbix 8.0” (docs)
+    - roadmap
+    Need detailid on huvitavad, aga kursuse eesmärgi jaoks on olulisem mõista **suunda**: Zabbix püüab tuua rohkem observability-mustreid enda maailma.
 
 ---
 
@@ -506,40 +467,20 @@ Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (a
 
 ## Allikad
 
-### Primaarne dokumentatsioon
+### Peamised
 
-| Allikas | URL |
-|---------|-----|
-| Zabbix ametlik dokumentatsioon | https://www.zabbix.com/documentation/current/en/manual |
-| History ja Trends | https://www.zabbix.com/documentation/current/en/manual/config/items/history_and_trends |
-| Housekeeper | https://www.zabbix.com/documentation/current/en/manual/web_interface/frontend_sections/administration/housekeeping |
-| Proxy groups (7.0+) | https://www.zabbix.com/documentation/current/en/manual/distributed_monitoring/proxies/ha |
-| HA klaster | https://www.zabbix.com/documentation/current/en/manual/concepts/server/ha |
+- Zabbix docs: <https://www.zabbix.com/documentation/current/en/manual>
+- Performance tuning: <https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning>
+- Proxy groups (7.0+): <https://www.zabbix.com/documentation/current/en/manual/distributed_monitoring/proxies/ha>
+- History/Trends: <https://www.zabbix.com/documentation/current/en/manual/config/items/history_and_trends>
 
-### Zabbix 8
-
-| Allikas | URL |
-|---------|-----|
-| What's new in Zabbix 8.0 | https://www.zabbix.com/documentation/8.0/en/manual/whatsnew |
-| Zabbix roadmap | https://www.zabbix.com/roadmap |
-| Zabbix 8.0 ülevaade (initMAX) | https://www.initmax.com/the-new-zabbix-8-0-is-here/ |
-| Zabbix 8.0 LTS (Hawatel) | https://hawatel.com/en/blog/zabbix-8-0-lts-a-new-standard-for-monitoring-and-observability/ |
-
-### Jõudlus ja skaleerimine
-
-| Allikas | URL |
-|---------|-----|
-| Zabbix performance tuning | https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning |
-| Zabbix blog | https://blog.zabbix.com/ |
-| MySQL partitsioneerimise skript | https://github.com/OpensourceICTSolutions/zabbix-mysql-partitioning-perl |
-| TimescaleDB ja Zabbix | https://www.timescale.com/blog/tag/zabbix/ |
-
-### Kommuunikatsioon ja ressursid
-
-| Allikas | URL |
-|---------|-----|
-| Zabbix GitHub | https://github.com/zabbix/zabbix |
-| Zabbix ametlikud koolitused | https://www.zabbix.com/training |
+??? note "Lisalugemine"
+    - Roadmap: <https://www.zabbix.com/roadmap>
+    - “What’s new in Zabbix 8.0”: <https://www.zabbix.com/documentation/8.0/en/manual/whatsnew>
+    - Zabbix blog: <https://blog.zabbix.com/>
+    - TimescaleDB + Zabbix (tag): <https://www.timescale.com/blog/tag/zabbix/>
+    - MySQL partitsioneerimise skript: <https://github.com/OpensourceICTSolutions/zabbix-mysql-partitioning-perl>
+    - Zabbix GitHub: <https://github.com/zabbix/zabbix>
 
 ---
 
