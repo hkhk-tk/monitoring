@@ -3,7 +3,14 @@
 **Kestus:** ~2,5 tundi iseseisvat lugemist  
 **Eeldused:** [Päev 1: Prometheus + Grafana](paev1-loeng.md) loetud, Linux CLI põhitõed, võrgunduse alused  
 **Versioonid laboris:** Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+)  
-**Viited:** [zabbix.com/documentation/7.0](https://www.zabbix.com/documentation/7.0/en/manual) · [Zabbix 8.0 roadmap](https://www.zabbix.com/roadmap) · [Performance tuning](https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning)
+**Kiirlingid:** [Zabbix docs](https://www.zabbix.com/documentation/current/en/manual) · [Roadmap](https://www.zabbix.com/roadmap) · [Performance tuning](https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning)
+
+!!! abstract "TL;DR (kui sul on 5 min)"
+    - **Zabbix = “kõik ühes”**: agentid, SNMP, HTTP, templated, dashboardid, alerting — eriti hea traditsioonilises infrastruktuuris.
+    - **Andmemudel**: Host → Item → Trigger → Action (Template on “korrutaja”, mis teeb halduse võimalikuks).
+    - **Kõige ohtlikum viga**: `History=0` → **triggerid ei tööta** (sa kogud andmeid, aga süsteem ei hoiata).
+    - **Jõudlus = DB**: SSD + RAM + (suures mahus) partitsioneerimine.
+    - **Skaleerimine**: proksid jagavad koormust, HA annab rikkekindluse; proxy groupid (7.0+) on mugavad, aga piirangutega.
 
 ---
 
@@ -24,9 +31,17 @@ Pärast selle materjali läbitöötamist osaleja:
 
 ## 1. Miks Zabbix?
 
-Eile vaatasime Prometheust — moodsa cloud-native maailma meetrikakogujat. Pull-mudel, deklaratiivne konfiguratsioon koodifailides, Kubernetes-esimene mõtteviis. Täna oleme teisel pool spektrit.
+Eile vaatasime Prometheust — cloud-native maailma meetrikakogujat: pull-mudel, deklaratiivne konfig, Kubernetes-esimene mõtteviis. Täna oleme teisel pool spektrit.
 
-Zabbix sündis 1998. aastal Läti Ülikoolis Alexei Vladišev'i diplomitööna. Esimene avalik versioon ilmus 2001. Rohkem kui 25 aastat ajalugu — mitte tähenduses "aegunud", pigem tähenduses "käinud läbi sada tootmiskeskkonda ja õppinud hakkama saama kõige imelikuma reaalsusega". Zabbix on klassikaline kõikehõlmav monitooringutööriist. Agendid, SNMP, IPMI, JMX, VMware, SQL, ICMP, SSH, Telnet, HTTP — ühest kohast konfigureerid kogu ettevõtte ja lõpuks on kõik silmade all.
+Zabbix sündis 1998. aastal Läti Ülikoolis (Alexei Vladišev’i diplomitöö) ja esimene avalik versioon ilmus 2001. See on 25+ aastat “tootmiskarastust” — mitte aegumine, vaid kogemus.
+
+Zabbix on klassikaline *kõikehõlmav* seireplatvorm:
+- agendid
+- SNMP / IPMI / JMX / VMware
+- SQL / ICMP / SSH / Telnet / HTTP
+- templated + dashboardid + alertimine
+
+Mõte: **ühest kohast** konfigureerid suure osa ettevõtte infra “vaatluse baasist”.
 
 Eestis on Zabbix laialt kasutuses. Telia, Swedbank, maksu- ja tolliamet, enamus riigiasutusi, ülikoolid — kus tahes vaatad, seal ta on. Kuna Zabbix on open-source koos enterprise-tasemel kvaliteediga ja Läti päritolu (seega lokaalne tugi), on ta Baltikumis kodus nagu kala vees.
 
@@ -42,7 +57,11 @@ Eestis on Zabbix laialt kasutuses. Telia, Swedbank, maksu- ja tolliamet, enamus 
 | HA | Alates 6.0 natiivne | Föderatsioon + Thanos/Mimir |
 | Agendid | Kõik-ühes paketid | Per-teenus exporterid |
 
-Reaalses maailmas kasutatakse sageli *mõlemaid*. Zabbix teenindab traditsioonilise IT-infra nõuded — võrguseadmed, virtualisatsioon, fileserverid, UPS-id, printerid. Prometheus tegeleb konteinerplatvormidega. Mõlemad voolavad Grafanasse ja keegi ei peagi valima.
+Reaalses maailmas kasutatakse sageli **mõlemaid**:
+- **Zabbix**: traditsiooniline IT-infra (võrk, virtualisatsioon, fileserverid, UPS-id, printerid, “legacy”)
+- **Prometheus**: konteinerplatvormid ja dünaamiline keskkond
+
+Mõlemad võivad voolata Grafanasse — ja keegi ei pea “üht ainsat” valima.
 
 ---
 
@@ -50,17 +69,49 @@ Reaalses maailmas kasutatakse sageli *mõlemaid*. Zabbix teenindab traditsioonil
 
 Zabbixi süda koosneb neljast osast. Igaüks vastab ühe lihtsa küsimuse eest.
 
-**Zabbix Server** on aju. Võtab vastu andmeid, hindab triggereid, genereerib probleeme, saadab hoiatusi. Kirjutatud C-s, jookseb Linuxi teenusena. Üks protsess aga mitu lõime — pollerid, trapperid, housekeeper, alerter, igaüks oma tööga.
+**Zabbix Server** (aju)  
+Võtab vastu andmeid, hindab triggereid, tekitab probleeme, saadab hoiatusi. C-s kirjutatud, Linuxi teenus. Üks protsess, palju tööprotsesse (pollerid, trapperid, housekeeper, alerter).
 
-**Zabbix Database** on mälu. Tavaliselt MySQL/MariaDB või PostgreSQL. Siin on *kõik* — nii konfiguratsioon (millised hostid on jälgitud, millised triggerid kehtivad) kui ka ajalooandmed. See on ühtlasi Zabbixi peamine pudelikael. Kui jätate tänasest ühe asja meelde, siis see: **Zabbixi jõudlusprobleemid lahendatakse 90% ulatuses andmebaasi tasemel.**
+**Zabbix Database** (mälu)  
+Tavaliselt MySQL/MariaDB või PostgreSQL. Siin on **kõik**: nii konfiguratsioon (hostid, template’id, triggerid) kui ka ajalooandmed. Ja see on peamine pudelikael.
 
-**Zabbix Frontend** on nägu. PHP-põhine veebiliides, tavaliselt Apache või Nginx taga. Räägib sama DB-ga, mis server. Kasutaja klikib siin — serveriga ei tohi segi ajada.
+!!! tip "Reegel"
+    **Zabbixi jõudlusprobleemid lahenevad ~90% ulatuses andmebaasi tasemel.**
 
-**Zabbix Agent** on käed ja jalad. Jookseb iga jälgitava masina peal, kogub andmeid lokaalsest süsteemist ja saadab serverile. Kaks paralleelset versiooni on elus — **Agent 1** (C-s kirjutatud, stabiilne klassika) ja **Agent 2** (Go-s kirjutatud, uus, moodulitega). Tootmises kohtad mõlemaid.
+**Zabbix Frontend** (nägu)  
+PHP-põhine veebiliides (Apache/Nginx taga). Räägib **sama DB-ga**, mis server. Kasutaja “klikib” frontendis — seda ei tohi segi ajada serveriga.
+
+**Zabbix Agent** (käed-jalad)  
+Jookseb jälgitaval masinal, kogub lokaalsed mõõdikud ja edastab serverile. Kaks peamist haru:
+- **Agent 1** (C) — stabiilne klassika
+- **Agent 2** (Go) — uuem, moodulitega
 
 Viies komponent — **Zabbix Proxy** — tuleb mängu, kui on vaja jälgida asju kaugvõrgus, piiratud internetiühendusega harukontorites või serverit koormuse alt välja võtta. Proksi kogub andmeid kohapeal, puhverdab neid vajadusel ja saadab serverile edasi. Proksist rohkem peatselt.
 
 Kriitiline punkt: **Zabbix Server ja DB on tihedalt seotud**. Kui DB jääb hätta, kukub server. Kui server kogub 1000 väärtust sekundis ja DB suudab kirjutada 500 — mahajäämus kasvab, järjekorrad täituvad, andmeid läheb kaduma. Suurem osa Zabbixi häälestamisest ongi tegelikult *andmebaasi* häälestamine.
+
+### Topoloogia pilt (mida sa täna praktikas ehitad)
+
+```mermaid
+flowchart LR
+  user[Admin / Ops] --> ui[Zabbix Frontend]
+  ui --> db[(Zabbix DB)]
+
+  server[Zabbix Server] --> db
+  server --> notif[Actions: email / webhook / Slack]
+
+  subgraph Sites[Asukohad / võrgusegmendid]
+    agent1[Agent / SNMP / HTTP] --> proxy[Zabbix Proxy]
+    agent2[Agent / SNMP / HTTP] --> proxy
+  end
+
+  proxy --> server
+```
+
+??? note "Kus mida jooksutatakse (kiire mental model)"
+    - **Frontend** võib olla eraldi konteiner/VM (UI).
+    - **Server + DB** võivad alguses olla ühes masinas, aga tootmises on DB sageli eraldi (ja HA puhul ka klastris).
+    - **Proxy** on “piirkondlik kogujasõlm”: kogub lokaalselt, puhverdab, saadab serverile.
 
 ---
 
@@ -68,37 +119,76 @@ Kriitiline punkt: **Zabbix Server ja DB on tihedalt seotud**. Kui DB jääb hät
 
 Zabbixi kogu maailm tugineb neljale kontseptsioonile. Need on nagu matrjoškad — üks on teise sees.
 
-**Host** on "asi mida jälgitakse". Linuxi server, Cisco switch, MikroTik ruuter, VMware ESXi host, MySQL andmebaas, Docker konteineri node — kõik need on hostid. Hostil on IP-aadress, agendiport(id) ja üks või mitu template'i.
+**Host** = “asi mida jälgitakse”  
+Linuxi server, switch, ruuter, ESXi host, DB, VM, jne. Hostil on IP/DNS, interface’id ja 1+ template’i.
 
-**Item** on üks konkreetne mõõtmine sellel hostil. Näiteks `system.cpu.load[all,avg1]` küsib Linuxi load average-i. `net.if.in[eth0]` jälgib võrguliidese sissetulevat liiklust. Üks host sisaldab tüüpiliselt sadu iteme — Linuxi standardtemplate annab ~60 iteme ilma, et sa midagi kirjutaks.
+**Item** = üks konkreetne mõõtmine hostil  
+Nt `system.cpu.load[all,avg1]` või `net.if.in[eth0]`. Ühel hostil on tihti kümneid kuni sadu item’eid.
 
-**Trigger** on tingimus, mis kontrollib itemi väärtusi. Näiteks *"kui viimane CPU load ületab 5, siis tõsta häire"*. Kui tingimus täidetakse, trigger "fires" ja tekib **Problem**. Triggerite prioriteedid: `Not classified`, `Information`, `Warning`, `Average`, `High`, `Disaster` — värvid paistavad frontendis kohe silma.
+**Trigger** = tingimus item’i väärtuste peal  
+Nt “kui CPU load > 5, tee häire”. Kui tingimus täitub, tekib **Problem**. Prioriteedid: `Not classified`, `Information`, `Warning`, `Average`, `High`, `Disaster`.
 
-**Action** on see, mis juhtub probleemi tekkimisel. Email, SMS, Slack, webhook, skriptide käivitamine. Actionite kirjeldamine võib olla üsna nüansirikas — reegel stiilis *"saada CTO-le SMS ainult siis kui disaster-probleem kestab üle 10 minuti ja keegi pole seda acknowledge-inud"* on päris tavaline.
+**Action** = “mis juhtub probleemi korral”  
+Email, SMS, Slack, webhook, skript. Reeglid võivad olla nüansirikkad (kestus, severity, acknowledge, eskalatsioon).
 
-Üks pedagoogiline hoiatus enne laborisse minekut. Zabbix 7.0 frontendis on triggerite loomise rada selline: **Data collection → Hosts → leia host → kliki "Triggers" *lingil* (mitte hosti nimel!) → Create trigger**. Kliki hosti *nimel* ja satud hosti settingute redigeerimisse, mitte triggeritele. See on klassikaline komistuskivi — tuletame laboris iseendale mitu korda meelde.
+!!! warning "Klassikaline komistuskivi (Zabbix 7.0 UI)"
+    Triggeri loomine: **Data collection → Hosts → hosti real “Triggers” link → Create trigger**  
+    Kui klikid hosti *nimel*, jõuad hosti seadistusse, mitte triggerite vaatesse.
 
 **Template** on juurkontseptsioon, ilma milleta on Zabbix kasutu. Selle asemel, et 500 serveril kõik itemid ükshaaval luua, teed ühe template'i ("Linux by Zabbix agent") ja rakendad 500-le hostile. Muudad template'it — muutused levivad kõigile. Hiiglastes ettevõtetes on template hierarhia mitmekihiline: baas-template + keskkonna-kiht + rolli-kiht + rakenduse-kiht.
 
 ---
 
-## 4. Agendid: aktiivne vs passiivne
+## 4. Agentid: tüübid, pluginad, active vs passive
+
+Zabbixis on “agent” lai mõiste: osa mõõdikuid tuleb Zabbix Agent’ist, osa tuleb *ilma agendita* (SNMP, HTTP, IPMI, JMX, VMware, …).
+
+### 4.1 Zabbix Agent vs Agent 2
+
+- **Zabbix Agent (Agent 1)**: klassikaline, väga levinud, stabiilne.
+- **Zabbix Agent 2**: uuem agent, mille tugevus on **pluginad** (laiendatavus). Tootmises kohtad mõlemaid.
+
+Praktiline rusikareegel:
+- kui sul on “standard Linux host” ja tahad kiiresti üles saada → mõlemad sobivad
+- kui vajad lisa-integratsioone/pluginasid või tahad tulevikukindlust → Agent 2 on tihti mõistlik valik
+
+### 4.2 Kuidas “agentita” monitooring Zabbixis välja näeb
+
+Zabbix ei nõua alati hosti peal agenti:
+- **SNMP** (võrguseadmed, UPS-id, printerid, kaamerad)
+- **HTTP Agent** (REST API-d, endpointid, stub_status)
+- **ICMP** (ping, latency)
+- **IPMI** (serveri riistvara)
+- **JMX** (Java)
+- **VMware** (vCenter/ESXi)
+
+See on põhjus, miks Zabbix on traditsioonilises inframaailmas nii tugev.
 
 Eile vaatasime pull-mudelit Prometheuse juures. Zabbix agent toetab mõlemat stiili — ja tootmises kasutatakse sageli korraga mõlemat.
 
-**Passiivne agent** on Zabbixi vaikimisi režiim. Server küsib, agent vastab. See on nagu pull. Eelis tulemüüride seisukohast on lihtne — ainult serveri IP peab saama agendini jõuda, ühes suunas. Probleem on server: tuhande masina küsitlemisel iga paari sekundi järel tekib märgatav overhead.
+### Passiivne agent (server küsib)
+Server küsib, agent vastab — Prometheuse mõttes *pull*.  
+**Pluss**: tulemüüris lihtne (server → agent).  
+**Miinus**: skaleerimisel koormus serverile.
 
-**Aktiivne agent** töötab vastupidi — agent saadab andmed ise serverile. Esmalt küsib agent serverilt "mida ma pean jälgima" (active check'ide nimekirja), ja siis saadab tulemusi regulaarselt. See on nagu push. Eelis on skaleeruvus — tuhanded agendid edastavad serverile ilma, et server peaks igaühe uksele koputama. Probleem: agent peab serveri IP-ni jõudma (tulemüüri teisele poole), ja kui võrgus on NAT või proksid vahel, on seadistamine keerulisem.
+### Aktiivne agent (agent saadab)
+Agent küsib serverilt “mida jälgida” (active checks) ja saadab tulemused ise — *push*.  
+**Pluss**: skaleerub paremini suurtes keskkondades.  
+**Miinus**: agent peab serverini (või proksini) jõudma; NAT/proksid/tulemüürid võivad keeruliseks teha.
 
 Reaalne valik sõltub itemi tüübist. Madala sagedusega itemid (kettaruum kord tunnis) on tihti passiivsed. Kõrge sagedusega itemid (CPU iga 30 sekundit) on sageli aktiivsed. **Log-failide monitoorimine on alati aktiivne** — passiivne režiim ei toeta log-tail'i üldse.
 
 Oluline piirang edasiseks: Zabbix 7.0+ proksi gruppide kasutamisel on **aktiivne režiim ainus valik**.
 
+!!! tip "Kiirvalik"
+    - **Agent “passive”**: kui server pääseb agentini (intranet, lihtne tulemüür).
+    - **Agent “active”**: kui hoste on palju / võrgu suunad on keerulised / kasutad proksisid või proxy group’e.
+
 ---
 
 ## 5. History vs Trends — andmete elutsükkel
 
-See on kõige olulisem kontseptsioon, mida tootmiskeskkondades ebakogenud administraatorid tihti ei mõista. Seetõttu läheme aeglaselt.
+See on *üks olulisemaid* tootmiskeskkonna mõisteid. Kui see läheb valesti, läheb “kõik valesti”.
 
 ### Kaks mälu tüüpi
 
@@ -112,7 +202,9 @@ Zabbixil on kaks eraldiseisvat salvestustasandit, mis töötavad eri loogikaga.
 
 Kui organisatsioon hoiab kõike History-na ja pikalt, siis ketta I/O kasvab plahvatuslikult (iga väärtus on DB kirjutamisoperatsioon), DB maht ulatub miljardiastmetesse (varukoopiad muutuvad praktiliselt võimatuks), ja päringud aeglustuvad nii, et graafikud võtavad mitu minutit laadida.
 
-Teises äärmuses — kui hoiad ainult trendi ja paned History=0 — juhtub midagi palju hullemat: **triggerid lõpetavad töötamise**. See on kriitiline punkt. Zabbix hindab triggeri funktsioone (last, avg, max jne) ainult History-põhiselt. History=0 → pole millegi pealt triggerdada. Süsteem kogub aja-andmeid, ei genereeri ühtki hoiatust. See on üks kogenematu administraatori klassikaline viga — taheti "DB-d säästa", saadi süsteem, mis näeb midagi aga ei ütle midagi.
+!!! danger "Kõige ohtlikum viga: History=0"
+    Kui paned `History=0`, siis **triggerid lõpetavad töötamise**.  
+    Põhjus: triggeri funktsioonid (`last`, `avg`, `max`, …) töötavad History pealt. Kui History puudub, pole “mille pealt” hinnata.
 
 Tootmises tüüpilised väärtused:
 - **History**: 7-14 päeva (operatiivseks vaatluseks ja triggerite jaoks)
@@ -144,15 +236,27 @@ Trendide maht 5 aasta jaoks (iga tund × iga item × üks rida):
 
 **Tekst ja logid maksavad ~500 baiti punkti kohta** — umbes 5-6 korda rohkem kui numbrid. Ja logidele trendi *ei arvutata* — seega logide säilitamiseks on ainus hoob History säilitusperiood. Rusikareegel: pane numbreid igasse nurka, logisid ainult seal kus hädapärast vajalikud.
 
+??? tip "NVPS kontroll tootmises"
+    Kui sul on juba Zabbix püsti, võrdle planeeringut reaalsusega:
+    - vaata sisemisi item’eid, mis näitavad tegelikku kirjutusmahtu ja järjekordi
+    - kui NVPS on 2× suurem kui arvasid, on tihti põhjus “liiga tihe intervall” või “liiga palju item’eid template’is”
+
 ### Housekeeper ja selle piirid
 
 Zabbix server püüab regulaarselt vanu ridu kustutada — seda teeb sisseehitatud **housekeeper**. See jookseb DB-s rida-realt, kustutades ükshaaval.
 
-Housekeeper töötab hästi — väikestes süsteemides. Kuni umbes 500 NVPS-ni. Üle selle muutub housekeeper kogu süsteemi pudelikaelaks. Miks? Sest rida-realt kustutamine on DB jaoks kallis — läheb läbi indeksid, logib iga kustutamise, fragmenteerib tabeli. Kui kustutada tuleb 10 miljonit rida, on kogu DB hõivatud kustutamisega, ja uusi andmeid ei jõua samal ajal kirjutada. Tekib "100% CPU loop" — housekeeper ei jõua uute andmete pealevooluga sammu pidada.
+Housekeeper töötab hästi väikestes süsteemides (kuni ~500 NVPS). Üle selle muutub ta sageli pudelikaelaks.
+
+Põhjus: rida-realt kustutamine on DB jaoks kallis (indeksid, redo/binlog, fragmentatsioon). Kui kustutada tuleb miljoneid ridu, võib DB suure osa ajast kulutada kustutamisele, samal ajal kui uued väärtused tulevad peale.
 
 Lahendus on **tabelite partitsioneerimine**. Jagad history- ja trends-tabelid päevade või kuude põhisteks partitsioonideks. Vanade andmete kustutamine tähendab siis terve partitsiooni kukutamist — üks käsk, sekundijagu aega, ei puuduta ülejäänud andmeid. See on suurte süsteemide standard: partisjoneerimine sisse, housekeeper välja.
 
 **TimescaleDB** on PostgreSQL-i laiendus, mis teeb partitsioneerimise automaatselt ja lisab kompressiooni. Zabbix 5.0+ toetab seda ametlikult. Kui alustad uut paigaldust ja tead, et see kasvab suureks — TimescaleDB on sageli parem valik kui klassikaline MySQL/MariaDB.
+
+!!! warning "Housekeeperi sümptomid (mida päriselus näed)"
+    - graafikud laevad aeglaselt (DB “busy”)
+    - `zabbix[queue]` kasvab (server ei jõua)
+    - DB CPU/I/O on pidevalt kõrge, eriti housekeeping akna ajal
 
 ---
 
@@ -172,6 +276,12 @@ RAM-i osas: DB server vajab piisavalt mälu, et indeksid ja kuumandmed mahuks si
 | Keskmine | 500 | 500 | 4 | 8 GB | MySQL InnoDB SSD |
 | Suur | >1000 | >1000 | 8 | 16-32 GB | RAID10 SSD, eraldi DB server |
 | Väga suur | >10000 | >10000 | 16+ | 64+ GB | NVMe RAID, klaster |
+
+!!! tip "Kiire kontroll: kas DB on pudelikael?"
+    Kui “Zabbix on aeglane”, alusta 3 küsimusest:
+    - kas `zabbix[queue]` on 0 või kasvab?
+    - kas mõni `zabbix[process,<tüüp>,avg,busy]` on püsivalt >75%?
+    - kas DB masinal on I/O latency kõrge (ja kas ketas on SSD/NVMe)?
 
 ### Mida andmebaasi juures häälestada
 
@@ -226,6 +336,12 @@ Näide: grupi keskmine on 5 hosti proksi kohta, ühel proksil 15 — vahe 10 (t�
 - **Välised skriptid** tuleb käsitsi kopeerida kõigile grupi proksidele identselt
 - **VMware monitooringu juures ettevaatust.** Iga grupi proksi peab puhverdama KOGU vCenter'i andmestiku, mis võib vCenterit päringutega üle koormata
 
+!!! warning "Proxy group praktikas (tüüpiline tootmiskomistus)"
+    Failover töötab ainult siis, kui:
+    - agent/proksi “näeb” alternatiivseid proksisid (võrk + tulemüür)
+    - kasutad sobivaid agenti versioone
+    Muidu läheb proksi rikke ajal “kõik vaikseks” ja sa avastad probleemi liiga hilja.
+
 ### Zabbix Server HA (alates 6.0)
 
 Enne 6.0 pidi HA tegema välise tarkvaraga (Corosync/Pacemaker) — keeruline ja vigaderohke. Alates 6.0 on see sisseehitatud.
@@ -251,6 +367,10 @@ Kolm kõige tähtsamat:
 - **`zabbix[wcache,values,all]`** näitab reaalselt saabuvat NVPS-i — kas see vastab sinu plaanile või on midagi oodatust rohkem/vähem
 
 Tee neist eraldi dashboard — **monitori monitori**. Kui keegi küsib "Zabbix on aeglane", annab see dashboard vastuse 10 sekundiga.
+
+??? note "Miks see õpetlik on (ka väljaspool Zabbixit)"
+    Sisemine telemeetria (queue, busy%, cache) on sama muster igas observability süsteemis:  
+    kui tööriist on aeglane, küsi kõigepealt “mis on tema enda tervis ja järjekorrad?”.
 
 ---
 
@@ -318,23 +438,57 @@ Traditsioonilist IT-d jälgivad asutused ei pea valima "vana Zabbix vs uus kuum 
 
 ---
 
-## 11. Kokkuvõte
+## 10. Kokkuvõte
 
-Zabbix on suur süsteem, täna puudutasime pinda. Enne laborisse minekut jäta meelde viis asja:
+Zabbix on suur süsteem — täna puudutasime pinda. Enne laborisse minekut jäta meelde viis asja:
 
-**Host → Item → Trigger → Action on kogu kontseptsioon.** Kõik muu on nende variandid. Template on viies element, mis hoiab asja hallatavaks.
+1. **Host → Item → Trigger → Action** on alus. Template on “korrutaja”, mis teeb halduse võimalikuks.
 
-**History hoiab toorandmeid, Trends hoiab tunnipõhise statistika.** Kui paned History=0 et DB-d säästa, kaotad triggerid — süsteem kogub andmeid aga ei hoiata millestki.
+2. **History = toorandmed, Trends = tunnipõhine statistika.** `History=0` → triggerid ei tööta.
 
-**Andmebaas on Zabbixi pudelikael.** SSD, RAM buffer poolile, partitsioneerimine üle 500 NVPS-i. Need kolm põhimõtet mõistetud — katastroof on ära hoitud.
+3. **DB on pudelikael.** SSD + piisav RAM (buffer pool) + suuremas mahus partitsioneerimine.
 
-**Proksi skaleerib horisontaalselt, HA klaster tagab rikkekindluse.** 7.0+ proxy groupid on mugavad, aga SNMP trapidega ja vanemate agentitega tuleb ettevaatlik olla.
+4. **Proksi skaleerib, HA tagab rikkekindluse.** Proxy groupid on mugavad, aga piirangutega.
 
-**Zabbix 8 muudab süsteemi monitooringust täisvaatluse platvormiks.** OpenTelemetry, log korrelatsioon, ClickHouse, scatter plot. See seob Zabbixi kõige sellega, mida järgmistel päevadel vaatame.
+5. **Zabbix 8 liigutab fookuse “monitoring” → “observability”.** OTel, log-korrelatsioon, ClickHouse, scatter plot.
 
 Zabbixit kritiseeritakse tihti tema "kitchen sink" lähenemise pärast — teeb kõike, aga eriti midagi. Tegelikult on see tema tugevus. Väga vähe tööriistu katab kogu infrastruktuuri spektrit ühest kohast, ühe konfiguratsiooniga, ühe skillsetiga. 8.0-ga astub ta ka vaatlemise territooriumile. Tulev kümmekond aastat on põnev.
 
 **Järgmine samm:** [Labor: Zabbix](../../labs/02_zabbix_loki/zabbix_lab.md) — ehita Zabbix stack üles, lisa host'id ja template'id, jookse läbi trigger-fire/resolve tsükkel.
+
+---
+
+## 11. Zabbix Cloud (mida see on ja millal valida)
+
+Zabbix on open-source ja saad seda ise majutada. **Zabbix Cloud** on “managed” variant: Zabbixi tiim hostib ja haldab serveri/DB platvormi osa sinu eest.
+
+Tüüpiline väärtus:
+- vähem “DB + upgrade + backup” tööd
+- kiire stardikiirus (eriti väiksematel tiimidel)
+- sobib kui tahad Zabbixi funktsionaalsust, aga mitte Zabbixi platvormi opereerimist
+
+Piirangud/kaalutlused:
+- võrguühendus ja andmete suunamine Cloudi (agendid/proksid peavad jõudma)
+- andmete asukoha ja compliance nõuded (kus andmed paiknevad)
+- kulumudel (subscription)
+
+!!! info "Hinnad"
+    Zabbixi hinnad sõltuvad paketist/mahu- ja retention-valikutest ning muutuvad ajas. Kasuta ametlikku hinnakirja: [Zabbix Cloud](https://www.zabbix.com/cloud)
+
+---
+
+## 12. Integratsioonid ja “feature map” (kiire orientiir)
+
+Kui keegi ütleb “Zabbix oskab kõike”, siis tavaliselt mõeldakse neid kategooriaid:
+
+- **Andmete kogumine**: Agent/Agent2, SNMP, HTTP, IPMI, JMX, VMware, ICMP
+- **Modelleerimine**: hostid, host groups, template’id, discovery (LLD)
+- **Korrigeerimine**: preprocessing (regex, JSONPath, JS), dependent items
+- **Alerting**: triggerid, event correlation, actions, eskalatsioon, maintenance, silences
+- **Visualiseerimine**: graafikud, dashboardid, mapid/geomap, (8.0+) scatter plot
+- **Automatiseerimine**: API, import/export, integratsioonid webhookide kaudu
+
+Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (agent + template + trigger + action), aga tootmises on suur jõud **template’ides**, **discovery’s** ja **preprocessing’u** mustrites.
 
 ---
 
@@ -386,13 +540,6 @@ Zabbixit kritiseeritakse tihti tema "kitchen sink" lähenemise pärast — teeb 
 |---------|-----|
 | Zabbix GitHub | https://github.com/zabbix/zabbix |
 | Zabbix ametlikud koolitused | https://www.zabbix.com/training |
-
-**Versioonid (aprill 2026):**
-- Zabbix server: 7.0 LTS (tootmine) või 7.4 (uusimad funktsioonid, non-LTS)
-- Zabbix 8.0 LTS: alfas (okt 2025), ametlik väljalase 2026
-- Zabbix agent 2: 7.0+
-- MariaDB: 10.11 LTS või 11.4 LTS
-- PostgreSQL: 16 (+TimescaleDB 2.15+)
 
 ---
 
