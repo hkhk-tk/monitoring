@@ -28,7 +28,7 @@ Labor jätkab sealt, kus Zabbix osa lõppes — Zabbix stack jääb taustale, Lo
 
 ## Eeltöö
 
-Kontrolli et Zabbix stack on eelmisest osast üleval:
+Kontrolli, et Zabbix stack on eelmisest osast üleval:
 
 ```bash
 cd ~/paev2/zabbix && docker compose ps
@@ -69,6 +69,7 @@ Run query. Rohelised read sobivad, hallid ei sobi.
 Erinevus — nüüd **parsisid** logi ja filtreerisid **labeli** järgi, mitte tekstiotsingu järgi.
 
 **Miks see parem:** logfmt on vorming `level=error service=auth duration=42ms`. Parser teeb `level` järgi filtri semantiliselt — üle jääb ainult INFO-rida, kus sisus kogemata sõna "error". Filter on täpsem.
+**Miks see parem:** logfmt on vorming `level=error service=auth duration=42ms`. Parser teeb `level` järgi filtri semantiliselt — üle jäävad ainult `level=error` read, ning INFO-read (ka need, kus tekstis esineb sõna "error") jäävad välja. Filter on täpsem.
 
 ### 6.3 Pattern parser (struktureerimata tekst)
 
@@ -221,6 +222,7 @@ Lisa `services:` alla:
 ```
 
 **Miks LEVELS nii:** `INFO INFO INFO INFO INFO WARN ERROR` — 5 INFO, 1 WARN, 1 ERROR. See simuleerib reaalset distributsiooni: enamik logisid on informatiivsed, WARN'ureid vähem, ERROR'eid kriitiliselt vähe. Iga sekundi `shuf -n1` valib tõenäosusega 5/7 INFO.
+**Miks LEVELS nii:** `INFO INFO INFO INFO INFO WARN ERROR` — 5 INFO, 1 WARN, 1 ERROR. See simuleerib reaalset jaotust: enamik logisid on informatiivsed, WARN-e vähem, ERROR-e kriitiliselt vähe. Iga sekundi `shuf -n1` valib tõenäosusega 5/7 INFO.
 
 ```bash
 docker compose up -d log-generator
@@ -325,7 +327,7 @@ Lisa `services:` alla:
 **Miks `3001:3000`:** host'i port 3001 → konteineri port 3000. Konteineris on Grafana ikka 3000 (vaikimisi), aga host'is näeme teda 3001-l, et mitte segada päev 1 Grafanat.
 
 ```bash
-docker compose up -d grafana-loki
+docker compose up -d grafana
 ```
 
 Brauseris `http://192.168.35.12X:3001` (admin / `monitoring2026`).
