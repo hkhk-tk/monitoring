@@ -1,9 +1,12 @@
 # Päev 2: Zabbix — kõik-ühes seiresüsteem
 
-**Kestus:** ~2,5 tundi iseseisvat lugemist  
-**Eeldused:** [Päev 1: Prometheus + Grafana](paev1-loeng.md) loetud, Linux CLI põhitõed, võrgunduse alused  
-**Versioonid laboris:** Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+)  
-**Kiirlingid:** [Zabbix docs](https://www.zabbix.com/documentation/current/en/manual) · [Roadmap](https://www.zabbix.com/roadmap) · [Performance tuning](https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning)
+Siin on Zabbixi “mõtlemise mudel” ja praktilised otsused, mis päriselus kõige sagedamini valesti lähevad (agent/tulemüür, andmete säilitus, DB pudelikael, proxy/HA).
+
+??? note "Tehnilised detailid (peida/ava)"
+    **Kestus:** ~2,5 tundi iseseisvat lugemist  
+    **Eeldused:** [Päev 1: Prometheus + Grafana](paev1-loeng.md) loetud, Linux CLI põhitõed, võrgunduse alused  
+    **Versioonid laboris:** Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+)  
+    **Kiirlingid:** [Zabbix docs](https://www.zabbix.com/documentation/current/en/manual) · [Roadmap](https://www.zabbix.com/roadmap) · [Performance tuning](https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning)
 
 !!! abstract "TL;DR (kui sul on 5 min)"
     **4 asja, mis tasub päriselt meelde jätta:**
