@@ -1273,10 +1273,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#14-grafana-cloud-uks-lause" class="md-nav__link">
+  <a href="#14-grafana-cloud-luhidalt" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14. Grafana Cloud — üks lause
+        14. Grafana Cloud — lühidalt
       
     </span>
   </a>
@@ -2295,10 +2295,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#14-grafana-cloud-uks-lause" class="md-nav__link">
+  <a href="#14-grafana-cloud-luhidalt" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14. Grafana Cloud — üks lause
+        14. Grafana Cloud — lühidalt
       
     </span>
   </a>
@@ -2379,7 +2379,7 @@
 <h2 id="1-kust-me-pooleli-jaime">1. Kust me pooleli jäime<a class="headerlink" href="#1-kust-me-pooleli-jaime" title="Lingi sektsioonile">&para;</a></h2>
 <p>Hommikul rääkisime Zabbixist — vanast heast tööhobusest, mis on olnud IT-maastikul ligi 25 aastat. Zabbix on monoliit: üks server, üks andmebaas, kõik ühes kastis. Töötab hästi seadmete ja nende oleku jälgimiseks.</p>
 <p>Esimesel päeval nägime ka Grafanat, aga ainult kui "visualiseerimiskihti" — tööriistana, mis küsib andmeid Prometheuselt ja joonistab graafikuid. Mainisin põgusalt akronüümi <strong>LGTM</strong>: neli Grafana Labs'i projekti, mis moodustavad terve vaadeldavuse platvormi. Pärastlõunal kaevume sellest sügavamale ja ehitame töösse selle pere logihaldustööriista — <strong>Loki</strong>.</p>
-<p>Miks see oluline on? Sest pilvepõhises maailmas — Kubernetes, mikroteenused, efemeersed konteinerid — Zabbixi monoliitne mudel murdub. Kui su pod elab 30 sekundit ja surub sel ajal välja 50 MB logisid, on vaja teistsugust süsteemi. Loki on ehitatud just selleks olukorraks.</p>
+<p>Miks see oluline on? Sest pilvepõhises maailmas — Kubernetes, mikroteenused, efemeersed konteinerid — Zabbixi monoliitne mudel murdub. Kui su pod elab 30 sekundit ja surub sel ajal välja 50 MB logisid, on vaja teistsugust lähenemist.</p>
 <hr />
 <h2 id="2-lgtm-pinu-kogu-perekond">2. LGTM-pinu — kogu perekond<a class="headerlink" href="#2-lgtm-pinu-kogu-perekond" title="Lingi sektsioonile">&para;</a></h2>
 <p>Päev 1 loengus mainisin akronüümi möödaminnes. Paneme kirja, mis see täpselt tähendab:</p>
@@ -2390,20 +2390,20 @@
 </span></code></pre></div>
 <p>Need neli on ehitanud sama meeskond (Grafana Labs, eesotsas CTO Tom Wilkie'ga) sama filosoofiaga: indekseeri vähem, salvesta odavalt, skaleeri horisontaalselt. Nende tugevus tuleb integratsioonist — sellepärast ongi akronüüm "pinu", mitte "neli tööriista".</p>
 <h3 id="21-unified-observability-korrelatsiooni-lugu">2.1 Unified Observability — korrelatsiooni lugu<a class="headerlink" href="#21-unified-observability-korrelatsiooni-lugu" title="Lingi sektsioonile">&para;</a></h3>
-<p>Meenuta päev 1 stsenaariumi: kell 18:00, Black Friday, süsteem katki. Traditsiooniline sysadmin teeb seda nii:</p>
+<p>Meenuta päev 1 stsenaariumi: kell 18:00, Black Friday, süsteem katki. Traditsiooniline sysadmin teeb seda tihti nii:</p>
 <ol>
-<li>Zabbixis näeb, et mingi server on halb — CPU 100%</li>
-<li>SSH-b sinna, hakkab <code>tail -f /var/log/...</code> jooksutama</li>
-<li>Leiab ridade kaupa veateateid, aga ei tea, kas need on põhjus või tagajärg</li>
-<li>Helistab arendajale, kes süveneb koodi, otsib trace-ID logist, üritab seda oma logiaggregaatorist üles leida</li>
-<li>Üks tund hiljem keegi vast saab aru, mis juhtus</li>
+<li>Zabbixis näeb, et mingi server on halb — CPU 100%.</li>
+<li>SSH-b sinna ja hakkab <code>tail -f /var/log/...</code> jooksutama.</li>
+<li>Leiab ridade kaupa veateateid, aga ei tea, kas need on põhjus või tagajärg.</li>
+<li>Helistab arendajale, kes süveneb koodi, otsib trace-ID logist ja üritab seda logiaggregaatorist üles leida.</li>
+<li>Tund hiljem saab keegi lõpuks aru, mis juhtus.</li>
 </ol>
-<p>LGTM-pinu lubab järgmist: Grafanas vaatad dashboardi, näed anomaaliat meetrikute graafikul (Mimir), klõpsad sellel ajavahemikul → hüppad automaatselt samasse aega logidesse (Loki) → näed veateadet, millel on trace-ID → klõpsad sellel → avaneb jälituse vaade (Tempo), mis näitab täpselt, millises mikroteenuses päring seiskus.</p>
+<p>LGTM-pinu lubab teistsugust töövoogu: Grafanas vaatad dashboardi, näed anomaaliat meetrikute graafikul (Mimir), klõpsad ajavahemikul → hüppad samasse aega logidesse (Loki) → näed veateadet, millel on trace-ID → klõpsad sellel → avaneb jälituse vaade (Tempo), mis näitab, millises mikroteenuses päring seiskus.</p>
 <p>See on <strong>korrelatsiooni kolmik</strong> — mõõdikult logisse, logist jälitusse. Kõik ühes UI-s, ilma tabivahetuseta. Inseneride keeles: <strong>MTTR</strong> (mean time to recovery) langeb oluliselt, sest pole enam tarvis kolmel tööriistal vahet teha.</p>
 <p>Ilma selle integratsioonita ei erineks LGTM midagi neljast eraldi tööriistast. Just see, kuidas Grafana räägib Loki'ga ja Loki räägib Tempo'ga, ongi see, millest räägime tegelikult, kui ütleme "LGTM-pinu".</p>
 <h3 id="22-mis-on-iga-komponendi-too">2.2 Mis on iga komponendi töö?<a class="headerlink" href="#22-mis-on-iga-komponendi-too" title="Lingi sektsioonile">&para;</a></h3>
 <p><strong>Loki — logid.</strong> Täna põhiteema. Indekseerib ainult silte, mitte sisu. Salvestab S3-tüüpi objektisalvestusse. 35–50% odavam kui ELK enamikes kasutuslugudes.</p>
-<p><strong>Grafana — UI ja päringukeskus.</strong> Juba tuttav. Päev 1-st mäletad — ei salvesta ise andmeid, kogub neid datasource-idest. LGTM-kontekstis on ta <strong>ainus koht, kust kasutaja midagi näeb</strong>. See on oluline arhitektuuriline valik — kõik muud komponendid on "päringuallikad".</p>
+<p><strong>Grafana — UI ja päringukeskus.</strong> Juba tuttav. Päev 1-st mäletad — ei salvesta ise andmeid, vaid kogub neid andmeallikatest (datasource’idest). LGTM-kontekstis on ta <strong>ainus koht, kust kasutaja midagi näeb</strong>. See on oluline arhitektuuriline valik — kõik muud komponendid on "päringuallikad".</p>
 <p><strong>Tempo — jäljed.</strong> Hajutatud jälgimine. Kui sinu süsteem on 20 mikroteenust, mis räägivad omavahel, siis üks kasutaja-päring võib käia läbi 15 teenuse. Tempo salvestab iga sellise päringu tee — kus ta oli, kui kaua, mis juhtus. Filosoofia sama nagu Lokil: ei indekseeri sisu, ainult trace-ID-d. Selle juurde jõuame päeval 5.</p>
 <p><strong>Mimir — meetrikad.</strong> "Prometheus steroididega." Üks Mimir-klaster suudab hallata <strong>miljardeid aktiivseid aegridu</strong>, samal ajal kui üksik Prometheus jookseb mõne miljoni peal kokku. Täielikult Prometheuse API-ühilduv, ehk kõik PromQL-päringud töötavad edasi. Enterprise-keskkonnad, mis tahavad Prometheust skaleerida üle mitme klastri ja regiooni, kasutavad Mimirit.</p>
 <p>Iga neli saab kasutada <strong>eraldi</strong> — sa võid võtta ainult Loki ja jätta Mimirist Prometheuse. Või võtta ainult Tempo oma OpenTelemetry-stack'i. Need ei ole lukustatud kokku. Aga <strong>nende tugevus on perekonnana</strong>.</p>
@@ -2413,22 +2413,28 @@
 <p><strong>Skaleeritavus ja režiimid.</strong> Tulen selle juurde Loki kontekstis tagasi (§8), aga põhimõte kehtib kogu LGTM-pinule: kuni väikese mahuni (paar GB päevas) töötab monoliitne paigaldus. Keskmise mahu puhul eralda kirjutus- ja lugemistee. Suure mahu puhul (1 TB+ päevas logisid, miljonid meetrikud) — <strong>mikroteenuste režiim</strong>, kus iga komponenti saab eraldi skaleerida. Tootmisstandard suurettevõtetes.</p>
 <p><strong>Käideldavus ja SLA.</strong> Grafana Cloud pakub 99.5–99.9% SLA-sid. Self-hosted puhul saad sama, kui ehitad süsteemi <strong>zone-aware replication</strong>-iga — komponendid jaotuvad eri Kubernetes-tsoonidesse, ja kui üks tsoon kukub, teised jätkavad. Replikatsioonifaktor 3 (iga andmeid hoiab 3 koopiat) on soovitus.</p>
 <p><strong>Compliance.</strong> Grafana Enterprise ja Cloud paketid on <strong>SOC 2 Type II, GDPR, PCI-DSS</strong> sertifitseeritud. Self-hosted puhul on compliance sinu õlgadel, aga võimalused on olemas — krüpteerimine andmete liikumisel ja puhkeolekus, audit-logid, RBAC kasutaja-tasemel.</p>
-<p><strong>RBAC.</strong> Rollipõhine juurdepääs — kes näeb milliseid dashboard'e, kes saab päringuid teha millistes datasource-ides, kes saab alerti muuta. Enterprise-versioonis on see palju detailsem kui OSS-is. Kui sinu firmas on auditinõue "iga dashboardi muudatus peab olema jälgitav kasutajani" — enterprise on ainus valik.</p>
+<p><strong>RBAC.</strong> Rollipõhine juurdepääs — kes näeb milliseid dashboard’e, kes saab päringuid teha millistes andmeallikates (datasource’ides), kes saab alerti muuta. Enterprise-versioonis on see palju detailsem kui OSS-is. Kui sinu firmas on auditinõue "iga dashboardi muudatus peab olema jälgitav kasutajani" — Enterprise on sageli praktiliselt ainus valik.</p>
 <h3 id="24-self-hosted-vs-grafana-cloud-otsustuspuu">2.4 Self-hosted vs Grafana Cloud — otsustuspuu<a class="headerlink" href="#24-self-hosted-vs-grafana-cloud-otsustuspuu" title="Lingi sektsioonile">&para;</a></h3>
 <p>See on otsus, mida iga sysadmin peab kunagi tegema.</p>
-<p><strong>Self-hosted (te ise Kubernetes-klastris hoiate):</strong>
-- ✅ Andmed jäävad sinu infrastruktuuri. GDPR, saladuslik info, sise-eeskirjad — kõik puhas.
-- ✅ Kulu kontrolli all — maksad ainult infrastruktuuri eest.
-- ✅ Täielik paindlikkus — saad lugemistee tuunida, lisada plugin'e, muuta mida tahad.
-- ❌ Kõik operatiivne vastutus on sinul. Ingester kukub keskööl — sina vastutad.
-- ❌ Vajab kompetentsi — Kubernetes, Helm, storage, networking.</p>
-<p><strong>Grafana Cloud (hallatud):</strong>
-- ✅ Paigalduseni minutid, mitte nädalad.
-- ✅ Grafana Labs vastutab uptime'i eest.
-- ✅ AI-lisaväärtus (sellest kohe).
-- ❌ Andmed lähevad <strong>nende pilve</strong> — privaatsuskaalutlus.
-- ❌ Kuluarvestus põhineb logi- ja mõõdikumahul — võib kiirelt kasvada ettearvamatult.
-- ❌ Vendor lock-in risk. Aga see on väiksem kui konkurentidel, sest LGTM-komponendid on avatud lähtekoodiga, migreerud välja.</p>
+<ul>
+<li><strong>Self-hosted (te ise Kubernetes-klastris hoiate)</strong></li>
+<li>✅ Andmed jäävad sinu infrastruktuuri. GDPR, tundlik info, sise-eeskirjad — kõik puhas.</li>
+<li>✅ Kulu kontrolli all — maksad ainult infrastruktuuri eest.</li>
+<li>✅ Täielik paindlikkus — saad lugemistee tuunida, lisada pluginaid ja muuta mida tahad.</li>
+<li>❌ Kõik operatiivne vastutus on sinul. Ingester kukub keskööl — sina vastutad.</li>
+<li>
+<p>❌ Vajab kompetentsi — Kubernetes, Helm, storage, networking.</p>
+</li>
+<li>
+<p><strong>Grafana Cloud (hallatud)</strong></p>
+</li>
+<li>✅ Paigalduseni minutid, mitte nädalad.</li>
+<li>✅ Grafana Labs vastutab uptime'i eest.</li>
+<li>✅ AI-lisaväärtus (sellest kohe).</li>
+<li>❌ Andmed lähevad nende pilve — privaatsuskaalutlus.</li>
+<li>❌ Kuluarvestus põhineb logi- ja mõõdikumahul — võib kiirelt kasvada ja olla raskesti ette prognoositav.</li>
+<li>❌ Vendor lock-in risk. Aga see on väiksem kui konkurentidel, sest LGTM-komponendid on avatud lähtekoodiga — saad välja migreerida.</li>
+</ul>
 <p>Eestis kohtad mõlemat. Bolt, Wise — enamasti self-hosted, kuna mastaap on suur ja kulu kriitiline. Väiksemad iduettevõtted lähevad sageli Grafana Cloud'iga, sest "lihtsalt töötab". Meie laboris täna — self-hosted (Docker Compose), sest see annab arusaamise sellest, mis kapoti all toimub.</p>
 <h3 id="25-ai-ja-lgtm-kus-see-toesti-aitab">2.5 AI ja LGTM — kus see tõesti aitab<a class="headerlink" href="#25-ai-ja-lgtm-kus-see-toesti-aitab" title="Lingi sektsioonile">&para;</a></h3>
 <p>Siin tuleb olla aus — 2024–2026 on iga tootja panustanud "AI"-märgi lisamisele oma toodetele. Osa neist on tõeline kasu, osa on pressi-esitlus. Teeme vahet.</p>
@@ -2705,7 +2711,7 @@
 </tr>
 </tbody>
 </table>
-<p>Eriline hoiatus: kui kasutad ChatGPT-d või Claude'i (või mind, hehe) <code>values.yaml</code> genereerimiseks — <strong>kontrolli kriitiliselt</strong>. Mudelite treeningandmed sisaldavad vanu tutorialeid, ja nad pakuvad sageli <code>loki-stack</code>-i näidiseid. Need ei tööta Loki 3.0-ga.</p>
+<p>Eriline hoiatus: kui kasutad <code>values.yaml</code> genereerimiseks LLM-e (nt ChatGPT või Claude) — <strong>kontrolli kriitiliselt</strong>. Mudelite treeningandmed sisaldavad vanu tutoriale ja nad pakuvad sageli <code>loki-stack</code>-i näidiseid. Need ei tööta Loki 3.0+ maailmas.</p>
 <hr />
 <h2 id="12-logql-paringukeel-luhidalt">12. LogQL — päringukeel lühidalt<a class="headerlink" href="#12-logql-paringukeel-luhidalt" title="Lingi sektsioonile">&para;</a></h2>
 <p>LogQL on PromQL-i vend. Kui PromQL oskad, saad LogQL-iga 15 minutiga hakkama.</p>
@@ -2718,7 +2724,7 @@ See tagastab kõik sellise siltide komplektiga logiread.</p>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>{app=&quot;nginx&quot;} != &quot;healthcheck&quot;     # EI sisalda
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>{app=&quot;nginx&quot;} |~ &quot;5[0-9]{2}&quot;       # regex — HTTP 5xx koodid
 </span></code></pre></div></p>
-<p><strong>Parsimine ja labelite ekstraktimine:</strong>
+<p><strong>Parsimine ja siltide (labelite) ekstraktimine:</strong>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>{app=&quot;nginx&quot;} | json | status_code &gt;= 500
 </span></code></pre></div>
 Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljadest kättesaadavad muutujad.</p>
@@ -2805,8 +2811,8 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
 </ul>
 <p>Paljudes ettevõtetes leiab mõlemad paralleelselt — Loki igapäevaseks operatiivseks tööks, ELK turvatiimile. See on täiesti mõistlik lähenemine.</p>
 <hr />
-<h2 id="14-grafana-cloud-uks-lause">14. Grafana Cloud — üks lause<a class="headerlink" href="#14-grafana-cloud-uks-lause" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub <strong>Grafana Cloud</strong> hallatud versiooni (tasuta tase — 50 GB logisid, 14-päevane säilitus). Meie laboris kasutame self-hosted, aga tasub teada, et valik on olemas.</p>
+<h2 id="14-grafana-cloud-luhidalt">14. Grafana Cloud — lühidalt<a class="headerlink" href="#14-grafana-cloud-luhidalt" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kui sa ei taha LGTM-pinu ise Kubernetes-klastris paigaldada ja hallata, siis <strong>Grafana Cloud</strong> pakub sama stack’i hallatud teenusena. Pluss on kiirem start ja väiksem ops-koormus; miinus on see, et andmed lähevad teenusepakkuja pilve ning hind sõltub mahust.</p>
 <hr />
 <h2 id="15-kokkuvote">15. Kokkuvõte<a class="headerlink" href="#15-kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>LGTM = Logs + Grafana + Tempo + Mimir.</strong> Grafana ei ole enam lihtsalt dashboard — see on platvorm.</p>
@@ -2841,9 +2847,17 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
 
     5) SSD režiim on ajaloost tulnud ja muutub vähem soovitatavaks, sest mikroteenused/objektisalvestus teeb skaleerimise ja kulumudeli paremini hallatavaks.
 
-    6) Näide:
-       \n```logql\nsum by (app) (rate({job=\"nginx\"} | pattern `<_> <_> <_> <_> <_> <status> <_>` | status =~ \"5..\" [5m]))\n```
-       (täpne parser sõltub logiformaadist).
+    6) Näide (täpne parser sõltub logiformaadist):
+
+       <div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sum by (app) (
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  rate(
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    {job=&quot;nginx&quot;}
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>      | pattern `&lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;status&gt; &lt;_&gt;`
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>      | status =~ &quot;5..&quot;
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>      [5m]
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>  )
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>)
+</span></code></pre></div>
 
     7) Loki: operatiivne debug, odavam logikiht, Grafana integratsioon. ELK: täisteksti/forensika, keerukamad otsingud, turvatiimi workflow.
 
@@ -2977,7 +2991,7 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:44:29 UTC">23. aprill 2026</span>
   </span>
 
     
