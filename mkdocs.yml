@@ -87,7 +87,7 @@ markdown_extensions:
 
 plugins:
   - search:
-      lang: et
+      lang: en
   - git-revision-date-localized:
       fallback_to_build_date: true
       type: date
@@ -100,7 +100,10 @@ nav:
       - "Kava": materials/paev1-kava.md
       - "Loeng 1: Observability": materials/lectures/paev1-observability.md
       - "Loeng 2: Prometheus + Grafana": materials/lectures/paev1-loeng.md
+      - "Slaidid: Loeng 1 (Marp)": materials/esitlused/paev1-loeng1-esitlus.md
+      - "Slaidid: Loeng 2 (Marp)": materials/esitlused/paev1-loeng2-esitlus.md
       - "Labor": labs/01_prometheus_grafana/lab.md
+      - "Koolitaja juhend (viide)": labs/01_prometheus_grafana/koolitaja-juhend.md
 
   - "Päev 2 — Zabbix + Loki":
       - "Loeng: Zabbix": materials/lectures/paev2-loeng.md

@@ -500,7 +500,7 @@ Pead nägema numbri (võib-olla 0 kui õnneks pole praegu payment-ERROR'eid vool
 
 💡 **Kui `ZBX_NOTSUPPORTED`:** süntaksiviga konfis — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` ja kontrolli.
 
-### 5.4 Item ja trigger — andmed nähtavaks UI-s
+### 5.4 Item ja trigger — andmed nähtavaks UI-s {#54-item-trigger}
 
 Agent tagastab numbri, aga Zabbix ei **salvesta** seda veel — pole item'it. Item ütleb Zabbixile "hakka seda võtit regulaarselt küsima ja salvestama". Trigger ütleb "ja kui väärtus käib üle lävendi, tekita probleem".
 
