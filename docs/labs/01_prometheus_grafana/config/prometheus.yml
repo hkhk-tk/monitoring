@@ -16,6 +16,13 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
+  # Sinu enda VM (node_exporter VM-il, mitte Dockeris)
+  - job_name: 'local'
+    static_configs:
+      - targets: ['host.docker.internal:9100']
+        labels:
+          host: 'minu-vm'
+
   # Jagatud target-masinad
   - job_name: 'targets'
     static_configs:

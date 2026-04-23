@@ -36,16 +36,17 @@
 /* --- Listid: tihedamalt --- */
 .md-typeset ul,
 .md-typeset ol {
-  margin: 0.25em 0;
-  padding-left: 1.4em;
+  margin: 0.5em 0;
+  padding-left: 1.5em;
 }
 
 .md-typeset li {
-  margin: 0.1em 0;
+  margin: 0.25em 0;
+  display: list-item;
 }
 
 .md-typeset li > p {
-  margin: 0.1em 0;
+  margin: 0.25em 0;
 }
 
 /* --- Tabelid: kompaktsed ja loetavad --- */
@@ -146,6 +147,15 @@
 
 /* --- Paremservas sisukord (TOC): alati nähtav pikematel lehtedel --- */
 .md-sidebar--secondary {
+  display: block !important;
+  order: 2;
+}
+
+.md-sidebar--secondary:not([hidden]) {
+  display: block !important;
+}
+
+.md-nav--secondary {
   display: block !important;
 }
 
