@@ -1209,67 +1209,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Viited ja süvendatud lugemine">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pohiteosed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Põhiteosed
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metoodikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Metoodikad
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cncf-ja-standardid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CNCF ja standardid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#praktiline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Praktiline
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#eesti-kontekst" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Eesti kontekst
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -2691,67 +2630,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Viited ja süvendatud lugemine">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pohiteosed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Põhiteosed
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metoodikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Metoodikad
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cncf-ja-standardid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CNCF ja standardid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#praktiline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Praktiline
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#eesti-kontekst" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Eesti kontekst
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -3321,122 +3199,64 @@ Piirang: vaid Linuxi (mitte Windows / macOS), vajab õige sügavaid kerneli tead
 <li>Millal eelistad Lokit ELK-le? Millal vastupidi?</li>
 <li>Mida toob OpenTelemetry juurde võrreldes traditsioonilise instrumentatsiooniga?</li>
 </ol>
+<details class="note">
+<summary>Vastused (peida/ava)</summary>
+<p>1) <strong>MTTD</strong> = aeg avastamiseni, <strong>MTTR</strong> = aeg lahenduseni. Hea observability vähendab mõlemat (eriti MTTD-d).</p>
+<p>2) <strong>Logid</strong> on sündmused (tekst/JSON), <strong>seire</strong> on aegread (numbrid ajas). Päringud ja säilitusloogika on erinevad.</p>
+<p>3) <strong>USE</strong> sobib infrastruktuurile (CPU/mälu/ketas/võrk). <strong>RED</strong> sobib teenustele (rate/errors/duration). Näited: ketta I/O saturation (USE) vs API p95 latency + error rate (RED).</p>
+<p>4) Error budget on “lubatud ebaõnnestumise eelarve” SLO raames; kui eelarve on otsas, peatad riskantsed release’id ja fookus läheb stabiilsusele.</p>
+<p>5) Symptom-based alert mõõdab kasutajamõju (latentsus, error rate), mitte impl. detaili (CPU 90%). Halb: “CPU &gt; 90%”; parem: “p95 latency &gt; 2s”.</p>
+<p>6) Tüüpiline järjekord: metrics (kas on süsteemne anomaalia) → logs (mis juhtus) → traces (kus täpselt viibib ja miks).</p>
+<p>7) Loki: operatiivne debug ja odavam logikiht. ELK: täisteksti/forensika ja keerukamad otsingud.</p>
+<p>8) OTel ühtlustab instrumentatsiooni (metrics/logs/traces) vendor‑neutraalse standardina.</p>
+</details>
 <hr />
 <h2 id="viited-ja-suvendatud-lugemine">Viited ja süvendatud lugemine<a class="headerlink" href="#viited-ja-suvendatud-lugemine" title="Lingi sektsioonile">&para;</a></h2>
-<h3 id="pohiteosed">Põhiteosed<a class="headerlink" href="#pohiteosed" title="Lingi sektsioonile">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>Miks lugeda</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://sre.google/sre-book/table-of-contents/">Google SRE raamat</a></td>
-<td>Tasuta, valdkonnas standardsereferents. Peatükk 6 eriti oluline</td>
-</tr>
-<tr>
-<td><a href="https://sre.google/workbook/table-of-contents/">Google SRE Workbook</a></td>
-<td>Teise raamatu praktiline jätk</td>
-</tr>
-<tr>
-<td><a href="https://www.oreilly.com/library/view/observability-engineering/9781492076438/">Observability Engineering</a></td>
-<td>Charity Majors jt — moodne observability filosoofia</td>
-</tr>
-<tr>
-<td><a href="https://www.oreilly.com/library/view/seeking-sre/9781491978856/">Seeking SRE</a></td>
-<td>David Blank-Edelman, intervjuud tööstuse liidritelt</td>
-</tr>
-</tbody>
-</table>
-<h3 id="metoodikad">Metoodikad<a class="headerlink" href="#metoodikad" title="Lingi sektsioonile">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>Miks lugeda</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://www.brendangregg.com/usemethod.html">Brendan Gregg — USE Method</a></td>
-<td>Ametlik allikas, Netflix / Oracle / Intel</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/">Tom Wilkie — RED Method</a></td>
-<td>Grafana Labs CTO</td>
-</tr>
-<tr>
-<td><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Four Golden Signals</a></td>
-<td>Google SRE raamatu peatükk 6</td>
-</tr>
-<tr>
-<td><a href="https://sre.google/sre-book/service-level-objectives/">Service Level Objectives</a></td>
-<td>Google SRE raamatu peatükk 4 — SLI/SLO/SLA formaalselt</td>
-</tr>
-<tr>
-<td><a href="https://sre.google/sre-book/postmortem-culture/">Postmortem Culture</a></td>
-<td>Google SRE raamatu peatükk 15</td>
-</tr>
-</tbody>
-</table>
-<h3 id="cncf-ja-standardid">CNCF ja standardid<a class="headerlink" href="#cncf-ja-standardid" title="Lingi sektsioonile">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>Miks lugeda</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://github.com/cncf/tag-observability/blob/main/whitepaper.md">CNCF Observability Whitepaper</a></td>
-<td>Cloud Native Computing Foundation ametlik seisukoht</td>
-</tr>
-<tr>
-<td><a href="https://landscape.cncf.io/guide#observability-and-analysis">CNCF Landscape</a></td>
-<td>Kõikide observability-tööriistade kaart</td>
-</tr>
-<tr>
-<td><a href="https://opentelemetry.io/docs/">OpenTelemetry</a></td>
-<td>Moodne instrumentatsiooni standard</td>
-</tr>
-<tr>
-<td><a href="https://openmetrics.io/">OpenMetrics spec</a></td>
-<td>Exposition format standard</td>
-</tr>
-</tbody>
-</table>
-<h3 id="praktiline">Praktiline<a class="headerlink" href="#praktiline" title="Lingi sektsioonile">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>Miks lugeda</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://github.com/danluu/post-mortems">post-mortems (Dan Luu GitHub)</a></td>
-<td>Avalike intsidentide kollektsioon</td>
-</tr>
-<tr>
-<td><a href="https://observability.dev/">observability.dev</a></td>
-<td>Praktiliste näidete kogumik</td>
-</tr>
-<tr>
-<td><a href="https://www.honeycomb.io/blog">Honeycomb blog</a></td>
-<td>High-cardinality observability perspektiiv</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/blog/">Grafana Labs blog</a></td>
-<td>Praktilised juhendid</td>
-</tr>
-</tbody>
-</table>
-<h3 id="eesti-kontekst">Eesti kontekst<a class="headerlink" href="#eesti-kontekst" title="Lingi sektsioonile">&para;</a></h3>
-<p>Mitmed Eesti ettevõtted on avalikult rääkinud oma observability praktikatest — Bolt, Wise (Transferwise), Pipedrive, Veriff. Otsi nende inseneri-blogidest või tehnoloogiakonverentside ettekannetest (nt TalTech-i konverentsid, Devclub.eu).</p>
+<details>
+<summary><strong>Viited (peida/ava)</strong></summary>
+
+### Põhiteosed
+
+| Allikas | Miks lugeda |
+|---------|-------------|
+| [Google SRE raamat](https://sre.google/sre-book/table-of-contents/) | Tasuta, valdkonnas standardsereferents. Peatükk 6 eriti oluline |
+| [Google SRE Workbook](https://sre.google/workbook/table-of-contents/) | Teise raamatu praktiline jätk |
+| [Observability Engineering](https://www.oreilly.com/library/view/observability-engineering/9781492076438/) | Charity Majors jt — moodne observability filosoofia |
+| [Seeking SRE](https://www.oreilly.com/library/view/seeking-sre/9781491978856/) | David Blank-Edelman, intervjuud tööstuse liidritelt |
+
+### Metoodikad
+
+| Allikas | Miks lugeda |
+|---------|-------------|
+| [Brendan Gregg — USE Method](https://www.brendangregg.com/usemethod.html) | Ametlik allikas, Netflix / Oracle / Intel |
+| [Tom Wilkie — RED Method](https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/) | Grafana Labs CTO |
+| [Four Golden Signals](https://sre.google/sre-book/monitoring-distributed-systems/) | Google SRE raamatu peatükk 6 |
+| [Service Level Objectives](https://sre.google/sre-book/service-level-objectives/) | Google SRE raamatu peatükk 4 — SLI/SLO/SLA formaalselt |
+| [Postmortem Culture](https://sre.google/sre-book/postmortem-culture/) | Google SRE raamatu peatükk 15 |
+
+### CNCF ja standardid
+
+| Allikas | Miks lugeda |
+|---------|-------------|
+| [CNCF Observability Whitepaper](https://github.com/cncf/tag-observability/blob/main/whitepaper.md) | Cloud Native Computing Foundation ametlik seisukoht |
+| [CNCF Landscape](https://landscape.cncf.io/guide#observability-and-analysis) | Kõikide observability-tööriistade kaart |
+| [OpenTelemetry](https://opentelemetry.io/docs/) | Moodne instrumentatsiooni standard |
+| [OpenMetrics spec](https://openmetrics.io/) | Exposition format standard |
+
+### Praktiline
+
+| Allikas | Miks lugeda |
+|---------|-------------|
+| [post-mortems (Dan Luu GitHub)](https://github.com/danluu/post-mortems) | Avalike intsidentide kollektsioon |
+| [observability.dev](https://observability.dev/) | Praktiliste näidete kogumik |
+| [Honeycomb blog](https://www.honeycomb.io/blog) | High-cardinality observability perspektiiv |
+| [Grafana Labs blog](https://grafana.com/blog/) | Praktilised juhendid |
+
+### Eesti kontekst
+
+Mitmed Eesti ettevõtted on avalikult rääkinud oma observability praktikatest — Bolt, Wise (Transferwise), Pipedrive, Veriff. Otsi nende inseneri-blogidest või tehnoloogiakonverentside ettekannetest (nt TalTech-i konverentsid, Devclub.eu).
+
+</details>
 
 
 
@@ -3457,7 +3277,7 @@ Piirang: vaid Linuxi (mitte Windows / macOS), vajab õige sügavaid kerneli tead
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="22. aprill 2026 19:08:00 UTC">22. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:48:12 UTC">23. aprill 2026</span>
   </span>
 
     

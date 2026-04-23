@@ -1192,45 +1192,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Viited ja süvendatud lugemine">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ametlik-dokumentatsioon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ametlik dokumentatsioon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#grafana" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Grafana
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tootmiskogemus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tootmiskogemus
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -2579,45 +2540,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Viited ja süvendatud lugemine">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ametlik-dokumentatsioon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ametlik dokumentatsioon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#grafana" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Grafana
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tootmiskogemus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tootmiskogemus
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -3414,129 +3336,60 @@
 <li>Kui sul on 10 serverit, iga väljastab summary-d <code>rpc_duration_seconds{quantile="0.95"}</code>. Kas saad arvutada koond-p95? Miks / miks mitte?</li>
 <li>Millal eelistad föderatsiooni ja millal <code>remote_write</code>-i?</li>
 </ol>
+<details class="note">
+<summary>Vastused (peida/ava)</summary>
+<p>1) Pull-mudelis on “sihtmärk vaikib” kohe nähtav (<code>up==0</code>) ja debug on lihtne (<code>curl /metrics</code> = mida Prometheus näeb).</p>
+<p>2) <code>user_id</code> tekitab kardinaalsusplahvatuse (miljonid väärtused) → RAM ja TSDB koormus kasvavad kiiresti.</p>
+<p>3) Näide:
+   \n<code>promql\nsum by(service) (rate(http_requests_total{status=~\"5..\"}[5m]))\n/\nsum by(service) (rate(http_requests_total[5m]))\n</code></p>
+<p>4) <code>rate()</code> silub aknas, <code>irate()</code> kasutab viimaseid punkte (spikid). <code>irate()</code> sobib lühikese hetkekäitumise jaoks, <code>rate()</code> üldiselt dashboardidele.</p>
+<p>5) <code>for: 5m</code> nõuab, et tingimus kestaks 5 min katkematult → vähendab valehäireid.</p>
+<p>6) Summary protsentiilid ei ole instantside vahel agregeeritavad; koond-p95 jaoks kasuta histogramme.</p>
+<p>7) Föderatsioon hierarhiliseks koondamiseks; <code>remote_write</code> pikaajaliseks säilituseks ja horisontaalseks skaleerimiseks (Thanos/Mimir/VictoriaMetrics).</p>
+</details>
 <hr />
 <h2 id="viited-ja-suvendatud-lugemine">Viited ja süvendatud lugemine<a class="headerlink" href="#viited-ja-suvendatud-lugemine" title="Lingi sektsioonile">&para;</a></h2>
-<h3 id="ametlik-dokumentatsioon">Ametlik dokumentatsioon<a class="headerlink" href="#ametlik-dokumentatsioon" title="Lingi sektsioonile">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>Miks lugeda</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://prometheus.io/docs/introduction/overview/">Prometheus Docs — Introduction</a></td>
-<td>Lähtepunkt kõigele</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/concepts/data_model/">Data Model</a></td>
-<td>Label'ite ja aegrea sügavam selgitus</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/concepts/metric_types/">Metric Types</a></td>
-<td>Counter, gauge, histogram, summary ametlikult</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/prometheus/latest/querying/basics/">PromQL basics</a></td>
-<td>Keele formaalne määratlus</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/prometheus/latest/querying/operators/">PromQL operators</a></td>
-<td>Vector matching, group_left/right</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/practices/histograms/">Best practices — Histograms</a></td>
-<td>Miks Histogram &gt; Summary</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/practices/pushing/">When to use the Pushgateway</a></td>
-<td>Pushgateway anti-muster</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/alerting/latest/alertmanager/">AlertManager</a></td>
-<td>Routing, grouping, silencing</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/blog/2024/11/14/prometheus-3-0/">Prometheus 3.0 release</a></td>
-<td>V2 → V3 migratsioon</td>
-</tr>
-<tr>
-<td><a href="https://prometheus.io/docs/specs/native_histograms/">Native Histograms</a></td>
-<td>Tuleviku histogrammi spetsifikatsioon</td>
-</tr>
-<tr>
-<td><a href="https://openmetrics.io/">OpenMetrics spec</a></td>
-<td>Exposition formaadi standard</td>
-</tr>
-</tbody>
-</table>
-<h3 id="grafana">Grafana<a class="headerlink" href="#grafana" title="Lingi sektsioonile">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>Miks lugeda</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/">Dashboards overview</a></td>
-<td>Kolm etappi: plugin → query → transform</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/docs/grafana/latest/panels-visualizations/">Panels and visualizations</a></td>
-<td>Kõik visualiseeringutüübid</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/docs/grafana/latest/dashboards/variables/">Variables</a></td>
-<td>Dünaamilised dashboardid</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/docs/grafana/latest/alerting/">Grafana alerting</a></td>
-<td>Unified alerting</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/docs/grafana/latest/administration/provisioning/">Provisioning</a></td>
-<td>Dashboard-as-Code</td>
-</tr>
-</tbody>
-</table>
-<h3 id="tootmiskogemus">Tootmiskogemus<a class="headerlink" href="#tootmiskogemus" title="Lingi sektsioonile">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>Miks lugeda</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE raamat — peatükk 6</a></td>
-<td>Four Golden Signals, alert-disaini filosoofia</td>
-</tr>
-<tr>
-<td><a href="https://samber.github.io/awesome-prometheus-alerts/">Awesome Prometheus alerts</a></td>
-<td>Production-valmis alert-reeglid</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/grafana/dashboards/1860">Node Exporter Full (ID 1860)</a></td>
-<td>Kõige kasutatum referents-dashboard</td>
-</tr>
-<tr>
-<td><a href="https://training.promlabs.com/">PromLabs training</a></td>
-<td>Julius Volz (Prometheus looja) kursused</td>
-</tr>
-<tr>
-<td><a href="https://promlabs.com/promql-cheat-sheet/">PromQL cheat sheet</a></td>
-<td>Prindi välja, hoia laua peal</td>
-</tr>
-<tr>
-<td><a href="https://grafana.com/blog/2022/04/19/cortex-vs-mimir-vs-thanos-why-grafana-mimir/">Cortex, Mimir, Thanos compared</a></td>
-<td>Otsuspuu skaleerimisel</td>
-</tr>
-</tbody>
-</table>
+<details>
+<summary><strong>Viited (peida/ava)</strong></summary>
+
+### Ametlik dokumentatsioon
+
+| Allikas | Miks lugeda |
+|---------|-------------|
+| [Prometheus Docs — Introduction](https://prometheus.io/docs/introduction/overview/) | Lähtepunkt kõigele |
+| [Data Model](https://prometheus.io/docs/concepts/data_model/) | Label'ite ja aegrea sügavam selgitus |
+| [Metric Types](https://prometheus.io/docs/concepts/metric_types/) | Counter, gauge, histogram, summary ametlikult |
+| [PromQL basics](https://prometheus.io/docs/prometheus/latest/querying/basics/) | Keele formaalne määratlus |
+| [PromQL operators](https://prometheus.io/docs/prometheus/latest/querying/operators/) | Vector matching, group_left/right |
+| [Best practices — Histograms](https://prometheus.io/docs/practices/histograms/) | Miks Histogram > Summary |
+| [When to use the Pushgateway](https://prometheus.io/docs/practices/pushing/) | Pushgateway anti-muster |
+| [AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) | Routing, grouping, silencing |
+| [Prometheus 3.0 release](https://prometheus.io/blog/2024/11/14/prometheus-3-0/) | V2 → V3 migratsioon |
+| [Native Histograms](https://prometheus.io/docs/specs/native_histograms/) | Tuleviku histogrammi spetsifikatsioon |
+| [OpenMetrics spec](https://openmetrics.io/) | Exposition formaadi standard |
+
+### Grafana
+
+| Allikas | Miks lugeda |
+|---------|-------------|
+| [Dashboards overview](https://grafana.com/docs/grafana/latest/fundamentals/dashboards-overview/) | Kolm etappi: plugin → query → transform |
+| [Panels and visualizations](https://grafana.com/docs/grafana/latest/panels-visualizations/) | Kõik visualiseeringutüübid |
+| [Variables](https://grafana.com/docs/grafana/latest/dashboards/variables/) | Dünaamilised dashboardid |
+| [Grafana alerting](https://grafana.com/docs/grafana/latest/alerting/) | Unified alerting |
+| [Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) | Dashboard-as-Code |
+
+### Tootmiskogemus
+
+| Allikas | Miks lugeda |
+|---------|-------------|
+| [Google SRE raamat — peatükk 6](https://sre.google/sre-book/monitoring-distributed-systems/) | Four Golden Signals, alert-disaini filosoofia |
+| [Awesome Prometheus alerts](https://samber.github.io/awesome-prometheus-alerts/) | Production-valmis alert-reeglid |
+| [Node Exporter Full (ID 1860)](https://grafana.com/grafana/dashboards/1860) | Kõige kasutatum referents-dashboard |
+| [PromLabs training](https://training.promlabs.com/) | Julius Volz (Prometheus looja) kursused |
+| [PromQL cheat sheet](https://promlabs.com/promql-cheat-sheet/) | Prindi välja, hoia laua peal |
+| [Cortex, Mimir, Thanos compared](https://grafana.com/blog/2022/04/19/cortex-vs-mimir-vs-thanos-why-grafana-mimir/) | Otsuspuu skaleerimisel |
+
+</details>
 
 
 
@@ -3557,7 +3410,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="22. aprill 2026 19:08:00 UTC">22. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:48:12 UTC">23. aprill 2026</span>
   </span>
 
     

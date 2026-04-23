@@ -1314,45 +1314,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Allikad">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ametlik-dokumentatsioon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ametlik dokumentatsioon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#teooria-ja-kontekst" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Teooria ja kontekst
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#praktiline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Praktiline
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -2345,45 +2306,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Allikad">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ametlik-dokumentatsioon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ametlik dokumentatsioon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#teooria-ja-kontekst" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Teooria ja kontekst
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#praktiline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Praktiline
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -2876,9 +2798,23 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
 <li>Kirjuta LogQL päring, mis annab Nginx 5xx-vigade määra (error rate) sekundis viimase 5 minuti jooksul, rakenduspõhiste kaupa grupeeritult.</li>
 <li>Millal eelistad Loki, millal ELK? Nimeta kaks konkreetset stsenaariumi kummagi jaoks.</li>
 </ol>
+<details class="note">
+<summary>Vastused (peida/ava)</summary>
+<p>1) Loki leiab “error” rea kas täisteksti filtriga (<code>|= "error"</code>) või parseri + filtri abil. Piirang: kui filtreerid ainult sisu järgi, peab Loki rohkem andmeid “läbi skännima” (aeglasem kui indeksipõhine label-filter).</p>
+<p>2) <code>trace_id</code> on kõrge kardinaalsusega (peaaegu iga rea kohta unikaalne). Kui paned selle sildiks, tekib “stream explosion” → indeks paisub ja päringud/log ingestion muutuvad aeglaseks või Loki hakkab tagasi lükkama.</p>
+<p>3) Sildid on indekseeritud ja peavad olema madala kardinaalsusega; Structured Metadata võimaldab hoida rohkem infot “struktureeritult” ilma sama kardinaalsusplahvatuseta. Kasuta silte dimensioonideks (service, env), metadata’t detailideks.</p>
+<p>4) ~50 GB/päev, üks meeskond, K8s: tüüpiliselt valid SSD või microservices suuna sõltuvalt skaleerimise vajadusest; praktikas juhindud Grafana doki “deployment modes” soovitustest ja storage/backendi valikust.</p>
+<p>5) SSD režiim on ajaloost tulnud ja muutub vähem soovitatavaks, sest mikroteenused/objektisalvestus teeb skaleerimise ja kulumudeli paremini hallatavaks.</p>
+<p>6) Näide:
+   \n<code>logql\nsum by (app) (rate({job=\"nginx\"} | pattern `&lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;status&gt; &lt;_&gt;` | status =~ \"5..\" [5m]))\n</code>
+   (täpne parser sõltub logiformaadist).</p>
+<p>7) Loki: operatiivne debug, odavam logikiht, Grafana integratsioon. ELK: täisteksti/forensika, keerukamad otsingud, turvatiimi workflow.</p>
+</details>
 <hr />
 <h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
-<h3 id="ametlik-dokumentatsioon">Ametlik dokumentatsioon<a class="headerlink" href="#ametlik-dokumentatsioon" title="Lingi sektsioonile">&para;</a></h3>
+<details class="note">
+<summary>Allikad (peida/ava)</summary>
+<p><strong>Ametlik dokumentatsioon</strong></p>
 <table>
 <thead>
 <tr>
@@ -2921,7 +2857,7 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
 </tr>
 </tbody>
 </table>
-<h3 id="teooria-ja-kontekst">Teooria ja kontekst<a class="headerlink" href="#teooria-ja-kontekst" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Teooria ja kontekst</strong></p>
 <table>
 <thead>
 <tr>
@@ -2952,7 +2888,7 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
 </tr>
 </tbody>
 </table>
-<h3 id="praktiline">Praktiline<a class="headerlink" href="#praktiline" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Praktiline</strong></p>
 <table>
 <thead>
 <tr>
@@ -2979,6 +2915,7 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
 - Loki: <code>grafana/loki:3.3.0</code>
 - Grafana: <code>grafana/grafana:11.4.0</code>
 - Alloy: <code>grafana/alloy:v1.5.0</code></p>
+</details>
 <hr />
 <p><em>Järgmine: <a href="../../../labs/02_zabbix_loki/loki_lab/">Labor: Loki</a> — ehitame Loki + Alloy + Grafana stack'i, mis kogub logisid ja teeme LogQL-i päringuid.</em></p>
 
@@ -3001,7 +2938,7 @@ Siin <code>| json</code> parsib JSON-vormingus logiread ja teeb kõigist väljad
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 07:48:16 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:48:12 UTC">23. aprill 2026</span>
   </span>
 
     
