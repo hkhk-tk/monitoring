@@ -14,35 +14,35 @@ theme:
   name: material
   language: et
   features:
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - navigation.indexes
-    - navigation.tracking
-    - navigation.instant
-    - toc.follow
-    - search.suggest
-    - search.highlight
-    - content.tabs.link
-    - content.code.copy
-    - content.code.annotate
+  - navigation.tabs
+  - navigation.tabs.sticky
+  - navigation.sections
+  - navigation.expand
+  - navigation.top
+  - navigation.indexes
+  - navigation.tracking
+  - navigation.instant
+  - toc.follow
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+  - content.code.copy
+  - content.code.annotate
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: deep purple
-      accent: amber
-      toggle:
-        icon: material/weather-night
-        name: Tume teema
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: deep purple
-      accent: amber
-      toggle:
-        icon: material/weather-sunny
-        name: Hele teema
+  - media: "(prefers-color-scheme: light)"
+    scheme: default
+    primary: deep purple
+    accent: amber
+    toggle:
+      icon: material/weather-night
+      name: Tume teema
+  - media: "(prefers-color-scheme: dark)"
+    scheme: slate
+    primary: deep purple
+    accent: amber
+    toggle:
+      icon: material/weather-sunny
+      name: Hele teema
   font:
     text: Inter
     code: JetBrains Mono
@@ -50,88 +50,85 @@ theme:
     repo: fontawesome/brands/github
 
 extra_css:
-  - stylesheets/extra.v2.css
+- stylesheets/extra.v2.css
 
 extra_javascript:
-  - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
+- https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
 
 markdown_extensions:
-  - toc:
-      permalink: true
-      permalink_title: "Lingi sektsioonile"
-  - abbr
-  - attr_list
-  - md_in_html
-  - admonition
-  - footnotes
-  - tables
-  - def_list
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.inlinehilite
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.details
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.snippets
-  - pymdownx.keys
-  - pymdownx.critic
-  - pymdownx.caret
-  - pymdownx.mark
-  - pymdownx.tilde
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+- toc:
+    permalink: true
+    permalink_title: "Lingi sektsioonile"
+- abbr
+- attr_list
+- md_in_html
+- admonition
+- footnotes
+- tables
+- def_list
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.superfences:
+    custom_fences:
+    - name: mermaid
+      class: mermaid
+      format: !!python/name:pymdownx.superfences.fence_code_format ""
+- pymdownx.details
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.snippets
+- pymdownx.keys
+- pymdownx.critic
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
+- pymdownx.tasklist:
+    custom_checkbox: true
+- pymdownx.emoji:
+    emoji_index: !!python/name:material.extensions.emoji.twemoji ""
+    emoji_generator:
 
+      !!python/name:material.extensions.emoji.to_svg ""
 plugins:
-  - search:
-      lang: en
-  - git-revision-date-localized:
-      fallback_to_build_date: true
-      type: date
-      locale: et
+- search:
+    lang: en
+- git-revision-date-localized:
+    fallback_to_build_date: true
+    type: date
+    locale: et
 
 nav:
-  - Avaleht: index.md
+- Avaleht: index.md
 
-  - "Päev 1 — Prometheus + Grafana":
-      - "Kava": materials/paev1-kava.md
-      - "Loeng 1: Observability": materials/lectures/paev1-observability.md
-      - "Loeng 2: Prometheus + Grafana": materials/lectures/paev1-loeng.md
-      - "Slaidid: Loeng 1 (Marp)": materials/esitlused/paev1-loeng1-esitlus.md
-      - "Slaidid: Loeng 2 (Marp)": materials/esitlused/paev1-loeng2-esitlus.md
-      - "Labor": labs/01_prometheus_grafana/lab.md
-      - "Koolitaja juhend (viide)": labs/01_prometheus_grafana/koolitaja-juhend.md
+- "Päev 1 — Prometheus + Grafana":
+  - "Kava": materials/paev1-kava.md
+  - "Loeng 1: Observability": materials/lectures/paev1-observability.md
+  - "Loeng 2: Prometheus + Grafana": materials/lectures/paev1-loeng.md
+  - "Labor": labs/01_prometheus_grafana/lab.md
 
-  - "Päev 2 — Zabbix + Loki":
-      - "Loeng: Zabbix": materials/lectures/paev2-loeng.md
-      - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
-      - "Labor: Zabbix": labs/02_zabbix_loki/zabbix_lab.md
-      - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
+- "Päev 2 — Zabbix + Loki":
+  - "Loeng: Zabbix": materials/lectures/paev2-loeng.md
+  - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
+  - "Labor: Zabbix": labs/02_zabbix_loki/zabbix_lab.md
+  - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 
-  - "Päev 3 — ELK Stack":
-      - "Labor": labs/03_elk_stack/lab.md
+- "Päev 3 — ELK Stack":
+  - "Labor": labs/03_elk_stack/lab.md
 
-  - "Päev 4 — TICK + Kesksed logimissüsteemid":
-      - "TICK labor": labs/04_tick_keskne_logimine/tick_lab.md
-      - "Ülevaade": labs/04_tick_keskne_logimine/keskne_logimine.md
+- "Päev 4 — TICK + Kesksed logimissüsteemid":
+  - "TICK labor": labs/04_tick_keskne_logimine/tick_lab.md
+  - "Ülevaade": labs/04_tick_keskne_logimine/keskne_logimine.md
 
-  - "Päev 5 — Tempo + OTel + Kokkuvõte":
-      - "Labor": labs/05_tempo_otel/lab.md
-      - "Trendid 2026": labs/05_tempo_otel/trendid.md
+- "Päev 5 — Tempo + OTel + Kokkuvõte":
+  - "Labor": labs/05_tempo_otel/lab.md
+  - "Trendid 2026": labs/05_tempo_otel/trendid.md
 
-  - Ressursid:
-      - "VM ligipääs": resources/vm-access.md
-      - "Docker Compose cheatsheet": resources/docker-cheatsheet.md
-      - "Materjalide stiilijuhend": resources/material-style.md
+- Ressursid:
+  - "Docker Compose cheatsheet": resources/docker-cheatsheet.md
+  - "Grafana Stack — LGTM ülevaade": resources/grafana-stack.md
 
 copyright: >
   © 2026 Maria Talvik · Haapsalu Kutsehariduskeskus
