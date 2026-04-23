@@ -2167,30 +2167,36 @@
 <hr />
 <h2 id="opivaljundid">🎯 Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>Teadmised:</strong></p>
-<ol>
+<ul>
 <li>Selgitab Loki rolli LGTM stackis ja labelite vs sisu indekseerimise erinevust</li>
 <li>Eristab LogQL parserite kasutusolukordi (pattern, json, logfmt, regexp)</li>
 <li>Põhjendab label-disaini reegleid kardinaalsuse piiri kontekstis</li>
-</ol>
+</ul>
 <p><strong>Oskused:</strong></p>
-<ol>
+<ul>
 <li>Ehitab Loki + Alloy + Grafana stack'i Docker Compose'iga</li>
 <li>Kirjutab LogQL päringuid ja parsib struktureerimata logi</li>
 <li>Teisendab logi metrikaks (<code>rate()</code>, <code>count_over_time</code>) ja ehitab dashboard'i</li>
 <li>Vaatab sama sündmust kahest vaatenurgast — Zabbix trigger + Loki graafik</li>
-</ol>
+</ul>
 <hr />
 <h2 id="eeltoo">Eeltöö<a class="headerlink" href="#eeltoo" title="Lingi sektsioonile">&para;</a></h2>
 <p>Kontrolli, et Zabbix stack on eelmisest osast üleval:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>~/paev2/zabbix<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>ps
 </span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Kui <code>docker compose</code> ei tööta</p>
+<p>Mõnes VM-is/masinas on Compose vanema nimega. Kui saad veateate, kasuta sama käsu asemel <code>docker-compose</code> (näiteks <code>docker-compose ps</code>).</p>
+</div>
 <p>Neli konteinerit <code>Up</code>. Kui ei, <a href="../zabbix_lab/">mine tagasi Zabbix labi juurde</a>.</p>
 <hr />
 <p>Zabbix ütles "trigger Firing" — on probleem. Aga <strong>mida</strong> täpselt? Logid vastavad sellele. Lokiga tood logid Grafanasse — SSH + grep asemel LogQL päringud brauseris.</p>
 <hr />
 <h2 id="osa-6-logql-brauseris-ja-pariselt">Osa 6 · LogQL — brauseris ja päriselt<a class="headerlink" href="#osa-6-logql-brauseris-ja-pariselt" title="Lingi sektsioonile">&para;</a></h2>
+<p>Selles osas harjutad LogQL-i ilma oma Loki instantsi käivitamata, et “keel” oleks enne käpas kui infra lisandub. Eesmärk on mõista vahet täisteksti filtri (<code>|=</code>) ja parserite (<code>logfmt</code>, <code>pattern</code>, <code>json</code>) vahel—see määrab, kas saad täpseid vastuseid või ainult “grep’i”.</p>
 <p>Enne oma stacki ehitamist prooviks LogQL-i Grafana ametlikul simulatoril. Eelis: tulemused on kohesed, ei pea ootama Loki käivitust. Harjutame 4 parserit (logfmt, pattern, json + filter <code>|=</code>) üksteise järel.</p>
 <h3 id="61-simulator-taisteksti-filter">6.1 Simulator — täisteksti filter<a class="headerlink" href="#61-simulator-taisteksti-filter" title="Lingi sektsioonile">&para;</a></h3>
+<p>Alustad kõige lihtsamast tööriistast: “grep” LogQL-is. Siin saad kiiresti aru, kuidas label-selectors ja tekstiotsing käituvad, enne kui lisad parserid ja hakkad struktuuri välja võtma.</p>
 <p>Ava brauseris: <a href="https://grafana.com/docs/loki/latest/query/analyzer/">https://grafana.com/docs/loki/latest/query/analyzer/</a></p>
 <p>Vali <strong>logfmt</strong> formaat. Kirjuta:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>{job=&quot;analyze&quot;} |= &quot;error&quot;
@@ -2198,18 +2204,21 @@
 <p>Run query. Rohelised read sobivad, hallid ei sobi.</p>
 <p><strong>Mis juhtus:</strong> <code>{job="analyze"}</code> valib voog ja <code>|=</code> on täistekstifilter — sarnane <code>grep -i "error"</code>-iga. Lihtne ja kiire, aga <strong>ei eristu</strong> INFO-tasemega reast, kus sisus on sõna "error". Iga rida, kus esineb tähistring "error", võidab.</p>
 <h3 id="62-ekstraheeri-labelid-logfmt-parser">6.2 Ekstraheeri labelid (logfmt parser)<a class="headerlink" href="#62-ekstraheeri-labelid-logfmt-parser" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin näed, miks parser on parem kui paljas tekstiotsing: filter käib <em>välja</em> järgi (nt <code>level=error</code>), mitte “kusagil stringis on error”. See vähendab valepositiivseid ja teeb päringu semantiliseks.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>{job=&quot;analyze&quot;} | logfmt | level = &quot;error&quot;
 </span></code></pre></div>
 <p>Erinevus — nüüd <strong>parsisid</strong> logi ja filtreerisid <strong>labeli</strong> järgi, mitte tekstiotsingu järgi.</p>
 <p><strong>Miks see parem:</strong> logfmt on vorming <code>level=error service=auth duration=42ms</code>. Parser teeb <code>level</code> järgi filtri semantiliselt — üle jääb ainult INFO-rida, kus sisus kogemata sõna "error". Filter on täpsem.
 <strong>Miks see parem:</strong> logfmt on vorming <code>level=error service=auth duration=42ms</code>. Parser teeb <code>level</code> järgi filtri semantiliselt — üle jäävad ainult <code>level=error</code> read, ning INFO-read (ka need, kus tekstis esineb sõna "error") jäävad välja. Filter on täpsem.</p>
 <h3 id="63-pattern-parser-struktureerimata-tekst">6.3 Pattern parser (struktureerimata tekst)<a class="headerlink" href="#63-pattern-parser-struktureerimata-tekst" title="Lingi sektsioonile">&para;</a></h3>
+<p>Pattern on “kiire ja ohutu” viis vabatekstist välju kätte saada ilma regex-õuduseta. Eesmärk on näha, et saad labeli (<code>user</code>) välja võtta ka siis, kui logi pole JSON ega logfmt.</p>
 <p>Vali <strong>unstructured</strong> formaat:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>{job=&quot;analyze&quot;} | pattern `&lt;_&gt; &lt;user&gt; &lt;_&gt;` | user =~ &quot;kling.*&quot;
 </span></code></pre></div>
 <p><code>&lt;_&gt;</code> ignoreerib, <code>&lt;user&gt;</code> püüab labeli.</p>
 <p><strong>Miks pattern oluline:</strong> mitmed tootmises olevad logid <strong>ei ole</strong> logfmt ega JSON kujul. Apache access log, Nginx error log, Tomcat catalina.out — kõik vabas vormis. Pattern ütleb "selles kohas oota sõna, selles kohas ignore" ja teeb labelid struktureerimata stringist.</p>
 <h3 id="64-json-parser">6.4 JSON parser<a class="headerlink" href="#64-json-parser" title="Lingi sektsioonile">&para;</a></h3>
+<p>JSON parser on kõige otsem tee, kui logi on struktureeritud: väljad on juba olemas ja neid saab kohe filtrites kasutada. Siin kinnitad idee: vali parser vastavalt logiformaadile, muidu “ei juhtu midagi” ja otsid viga valest kohast.</p>
 <p>Vali <strong>json</strong> formaat:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>{job=&quot;analyze&quot;} | json | status_code = &quot;500&quot;
 </span></code></pre></div>
@@ -2218,6 +2227,7 @@
 <p>💭 <strong>Mõtle:</strong> Sinu töö logid — mis formaadis need on? Millist parserit kasutaksid?</p>
 <hr />
 <h2 id="osa-7-loki-alloy-stack">Osa 7 · Loki + Alloy stack<a class="headerlink" href="#osa-7-loki-alloy-stack" title="Lingi sektsioonile">&para;</a></h2>
+<p>Selles osas paned püsti minimaalse, kuid realistliku logipinu: Loki (salvestus/otsing), Alloy (agent), Grafana (UI) ja logigeneraator (testandmed). Eesmärk on saada “otsast lõpuni” ahel tööle, et hiljem debugides oleks selge, millises lülis logid kaduma lähevad.</p>
 <p>Nüüd ehitame oma stacki. Sama lähenemine mis Zabbix labis — kiht-kihi haaval, iga kiht testitud eraldi enne järgmise lisamist. Stack koosneb 4 komponendist: <strong>Loki</strong> (kirjutab ja otsib logisid), <strong>log-generator</strong> (tekitab test-logi), <strong>Alloy</strong> (loeb logifaili ja saadab Lokisse), <strong>Grafana</strong> (UI).</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/paev2/loki/config<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/paev2/loki
 </span></code></pre></div>
@@ -2226,6 +2236,7 @@
 <p>Kasutame tänavust ametlikku soovitust — <strong>Grafana Alloy</strong>. Promtail, mis Loki pärinud 2018 aastast, on tänaseks <strong>feature-freeze</strong> olekus (vt Loki loeng §10). Alloy on universaalne telemeetria-kollektor: sama agent saab koguda logid (Lokile), mõõdikud (Prometheusele/Mimirile), traces (Tempo'le) ja OpenTelemetry-ühilduvatele backendidele. Selle laboris hoiame selle lihtsa kujul — ainult logide osa.</p>
 </div>
 <h3 id="71-loki-konfiguratsioon">7.1 Loki konfiguratsioon<a class="headerlink" href="#71-loki-konfiguratsioon" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin seadistad Loki minimaalseks single-node jooksuks: auth väljas ja storage failisüsteemis. Eesmärk on saada <code>ready</code> endpoint tööle, et teaksid, et Loki on päriselt valmis logisid vastu võtma.</p>
 <p>Esmalt kirjutame Loki enda konfi. Loki vajab teadmisi: kuhu salvestada (filesystem, S3), millise skeemi versiooniga (v13 on praegune), kas autentimine on olemas. Laboris kasutame kõige lihtsamat varianti — lokaalne filesystem, auth väljas, single-node.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>config/loki-config.yml<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">auth_enabled: false</span>
@@ -2266,6 +2277,7 @@
 - <code>allow_structured_metadata: true</code> — Loki 3.x feature (structured metadata), lubatud tootmises.</p>
 <p>Tootmises oleks S3 asemel filesystem, auth sisse lülitatud, replikatsioonifaktor &gt;1.</p>
 <h3 id="72-loki-teenus">7.2 Loki teenus<a class="headerlink" href="#72-loki-teenus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin paned Loki konteineri tööle ja kontrollid seda “väikese pingiga”, mitte Grafana kaudu. Kui <code>curl /ready</code> ei anna <code>ready</code>, pole mõtet Alloy/Grafanat veel lisada—viga on Lokis.</p>
 <p>Loo <code>docker-compose.yml</code>:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">services</span><span class="p">:</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">loki</span><span class="p">:</span>
@@ -2293,6 +2305,7 @@
 </span></code></pre></div>
 <p>Vastus <code>ready</code>. Kui ei — <code>docker compose logs loki</code>. Loki tagastab <code>ready</code> alles siis, kui sisemine initsialiseerimine on läbi (TSDB indeksid, ring konsensus ka single-node puhul). Tavaliselt 5-10s.</p>
 <h3 id="73-log-generator">7.3 Log-generator<a class="headerlink" href="#73-log-generator" title="Lingi sektsioonile">&para;</a></h3>
+<p>See osa annab sulle kontrollitud testandmed: ilma logideta ei saa Loki/Alloy ahelat verifitseerida. Eesmärk on näha, et logifail tekib ja kasvab enne kui Alloy seda tail’ima hakkab.</p>
 <p>Loki töötab, aga meil pole logisid. Lisame sisupakkuja — konteiner, mis 1x sekundis kirjutab juhusliku logirea applog-faili. Faili jälgib hiljem Alloy.</p>
 <p>Lisa <code>services:</code> alla:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">  </span><span class="nt">log-generator</span><span class="p">:</span>
@@ -2324,6 +2337,7 @@
 </span></code></pre></div>
 <p>Näed ridu nagu <code>2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345</code>.</p>
 <h3 id="74-alloy">7.4 Alloy<a class="headerlink" href="#74-alloy" title="Lingi sektsioonile">&para;</a></h3>
+<p>Alloy on “transport”: ta loeb faili ja push’ib read Loki API-sse. Siin on fookus kahel asjal—õige mount (<code>:ro</code>) ja õige Loki URL konteinerivõrgus (<code>http://loki:3100/...</code>), sest need on kaks tüüpilisemat esimest viga.</p>
 <p>Loki ja logid on valmis, aga keegi peab logid Lokisse saatma. <strong>Alloy</strong> on see "keegi" — agent, mis jookseb logide peremees-masinal, loeb logifaile (sarnaselt <code>tail -f</code>-ile) ja saadab ridade Loki HTTP API-sse.</p>
 <p>Alloy konfig on <strong>HCL-sarnane</strong> (Terraform-stiilis plokid), mitte YAML. See on Grafana Labs'i valik — plokki saab kirjutada iga komponendi jaoks ja siduda neid <code>forward_to</code> viidetega.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>config/config.alloy<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
@@ -2382,6 +2396,7 @@
 <p>Alloy logis peab olema <code>component "loki.source.file.applog" started</code> ja mitte ühtki <code>error</code> rida.</p>
 <p>💡 <strong>Kui "connection refused" Loki'sse:</strong> Loki pole veel ready. Oota 15s, <code>docker restart alloy</code>. Alloy on sallivam kui Promtail — jätkab oma komponentide käivitamist ja proovib hiljem Loki'le saata.</p>
 <h3 id="75-grafana">7.5 Grafana<a class="headerlink" href="#75-grafana" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin lisad UI ja ühendad ta Loki datasource’iga. Eesmärk on teha üks asi õigesti: datasource URL peab olema konteineri vaatepunktist (<code>http://loki:3100</code>), mitte hosti <code>localhost</code>.</p>
 <p>Lõpuks UI. Grafana, tuttav päev 1-st, aga seekord <strong>uus instants</strong> pordil 3001 (päev 1 Grafana on 3000-l). Kui päev 1 stack on veel üleval, hoiame need eraldi pordil, et konflikti ei tekiks.</p>
 <p>Lisa <code>services:</code> alla:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
@@ -2402,6 +2417,7 @@
 <p><em>Connections → Data sources → Add → Loki</em> → URL: <code>http://loki:3100</code> → <em>Save &amp; test</em> → roheline ✅.</p>
 <p><strong>Miks URL on <code>http://loki:3100</code>, mitte <code>localhost:3100</code>:</strong> Grafana jookseb konteineris. Konteineri jaoks <code>localhost</code> on Grafana ise. Loki on eraldi konteiner — jõuame Docker-võrgu DNS-nimega <code>loki</code>. See on <strong>levinuim esimene eksitus</strong> Loki datasource'i seadistamisel.</p>
 <h3 id="76-esimesed-read">7.6 Esimesed read<a class="headerlink" href="#76-esimesed-read" title="Lingi sektsioonile">&para;</a></h3>
+<p>See on end-to-end kontrollpunkt: üks LogQL <code>{job="applog"}</code> peab näitama ridu, mis tulevad sekunditega. Kui siin on tühi, siis viga on peaaegu alati Alloy configis (path/labels) või Loki datasource URL-is.</p>
 <p><em>Explore</em> → datasource: Loki → Code view:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>{job=&quot;applog&quot;}
 </span></code></pre></div>
@@ -2411,19 +2427,23 @@
 <p>💭 <strong>Mõtle:</strong> Alloy loeb faili nagu <code>tail -f</code>. Mis juhtub kui fail roteeritakse? Mis on positsioonide-andmestiku roll?</p>
 <hr />
 <h2 id="osa-8-pattern-parser-rate-dashboard">Osa 8 · Pattern parser → rate() → dashboard<a class="headerlink" href="#osa-8-pattern-parser-rate-dashboard" title="Lingi sektsioonile">&para;</a></h2>
+<p>Selles osas teed Loki “triki” nähtavaks: parsid vabateksti struktuuriks ja teisendad logid metrikaks (<code>rate</code>, <code>count_over_time</code>), et joonistada dashboard. Eesmärk on näha sama probleemi kahest vaatest: Zabbix annab häire, Loki/Grafana näitab <em>mida täpselt logides juhtus</em>.</p>
 <p>Nüüd kui stack on üleval ja LogQL alus on olemas, teeme üht päris kasulikku asja — teisendame logid metrikaks, et saaks graafikul jooksu jälgida. See on Loki võtmehetk: ilma Lokita oleks sul vaja <strong>kahte</strong> süsteemi (logi + metrika); Lokiga saad ühe logi-andmest teha metrika lennult.</p>
 <h3 id="81-pattern-struktuuri-lisamine">8.1 Pattern — struktuuri lisamine<a class="headerlink" href="#81-pattern-struktuuri-lisamine" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin teed logirea “andmestruktuuriks”: võtad level/service/duration välja, et neid saaks filtrites ja agregaatides kasutada. See on sama mõtteviis mis metrikate labelid—ainult et siin tuleb struktuur tekstist.</p>
 <p>Meie logirida: <code>2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345</code></p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>{job=&quot;applog&quot;} | pattern `&lt;_&gt; [&lt;level&gt;] [&lt;service&gt;] duration=&lt;duration&gt;ms trace_id=&lt;_&gt;`
 </span></code></pre></div>
 <p>Kliki rea peal — näed labeleid <code>level</code>, <code>service</code>, <code>duration</code>.</p>
 <p><strong>Mis just juhtus:</strong> Loki polnud enne teadnud, et <code>[ERROR]</code> on midagi erilist — see oli lihtsalt osa sõnelisest sisust. Pattern parser määras struktuuri: esimene vaba väljend on aeg (<code>&lt;_&gt;</code> = ignoreeri), kaks nurksulu sees on level ja service, <code>duration=Xms</code> osa annab numbrilise kestuse. Pärast seda päringut võid neid väärtusi filtrisse panna ja agregeerida.</p>
 <h3 id="82-filtreeri-patterni-tulemusi">8.2 Filtreeri pattern'i tulemusi<a class="headerlink" href="#82-filtreeri-patterni-tulemusi" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin näed vahet “otsin stringi” vs “filtreerin välja”: pärast parsingu saad kirjutada <code>level="ERROR"</code> ja <code>service="payment"</code>. See on täpsem kui <code>|= "ERROR"</code> ja vähem veaohtlik päringutes.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>{job=&quot;applog&quot;} | pattern `&lt;_&gt; [&lt;level&gt;] [&lt;service&gt;] duration=&lt;duration&gt;ms trace_id=&lt;_&gt;` | level=&quot;ERROR&quot; | service=&quot;payment&quot;
 </span></code></pre></div>
 <p>Ainult payment error'id. Lisafiltrit saab lihtsalt täiendada — <code>| duration &gt; 300</code> annab aeglased. Proovi ise: näita <code>api</code> teenuse logisid kus <code>duration &gt; 300</code>.</p>
 <p><strong>Märka:</strong> enne <code>| pattern</code> filtreeris Loki <strong>tekstisõnu</strong>. Pärast <code>| pattern</code> filtreerib <strong>struktureeritud väärtusi</strong>. See on sama hetk, mis päev 1 Prometheus'es oli "eraldi label'id per dimensioon" — üleminek tekstist andmestruktuurile.</p>
 <h3 id="83-label-disain-mis-on-label-mis-on-sisu">8.3 Label disain — mis on label, mis on sisu?<a class="headerlink" href="#83-label-disain-mis-on-label-mis-on-sisu" title="Lingi sektsioonile">&para;</a></h3>
+<p>Selle osa mõte on vältida kardinaalsuse plahvatust: kõik väljad ei tohi olla labelid. Eesmärk on meelde jätta lihtne reegel—madal kardinaalsus labeliks, kõrge kardinaalsus jääb sisusse.</p>
 <p>Meie logis on: <code>level</code>, <code>service</code>, <code>duration</code>, <code>trace_id</code>. Pattern parser tegi neist kõigist labelid. Aga kas kõik peaksid olema labelid?</p>
 <p>Mõtle:</p>
 <table>
@@ -2498,6 +2518,7 @@ See on tootmise vs labi erinevus. Labis parsime runtime'is (lihtsam setup), toot
 </details>
 
 <h3 id="84-rate-logist-metrika">8.4 rate() — logist metrika<a class="headerlink" href="#84-rate-logist-metrika" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin teed logidest ajas muutuvaks numbriks: mitu ERROR rida sekundis teenuse kaupa. See on Loki tugevus legacy süsteemide juures—ka siis, kui äpp ei ekspordi metricsit, saad trendi logidest.</p>
 <p>Siiamaani vaatasime logisid kui ridu (vaatlus). Nüüd teisendame nad <strong>numbriks ajas</strong> — logist saab metrika, nagu Prometheus annaks.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>sum by (service) (
 </span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>  rate(
@@ -2520,6 +2541,7 @@ See on tootmise vs labi erinevus. Labis parsime runtime'is (lihtsam setup), toot
 </ol>
 <p><strong>Miks see võimas:</strong> sama loogika kui Prometheus'e <code>rate(http_requests_total[5m])</code> — aga allikas on <strong>logirida</strong>, mitte counter. Kui rakendus ei eksporteeri mõõdikut, aga logib "FAILED transaction" rida, saad Loki'ga sellest ikka trendi teha. See on palju vaheteenuseid (legacy rakendused), mida ei saa instrumenteerida.</p>
 <h3 id="85-dashboard">8.5 Dashboard<a class="headerlink" href="#85-dashboard" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin pakid töötavad päringud “tooteks”: dashboard, mida saab hiljem avada ilma Explore’s päringut uuesti kirjutamata. Eesmärk on vähemalt kaks paneeli—üks error-rate, teine logimaht/jaotus.</p>
 <p>Nüüd kui üks päring töötab, paneme ta dashboardile. Grafanas on muster alati sama: <em>loo dashboard → lisa paneel → päring → vali visualiseering</em>.</p>
 <p><em>Dashboards → New → Add visualization</em> → Loki datasource:</p>
 <p><strong>Paneel 1:</strong> <code>ERRORs per service</code> — eelmine päring, Time series.</p>
@@ -2532,6 +2554,7 @@ Bar chart — logimaht taseme järgi.</p>
 - <code>count_over_time()</code> — ridude <strong>koguarv</strong> aknas (kasulik bar chart'ile, mis näitab "mitu ERROR-rida oli viimase minutiga")</p>
 <p>Salvesta: <code>App monitoring</code>.</p>
 <h3 id="86-finaal-sama-sundmus-kaks-vaatenurka">8.6 FINAAL — sama sündmus, kaks vaatenurka<a class="headerlink" href="#86-finaal-sama-sundmus-kaks-vaatenurka" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin teed korrelatsiooni: sama error-spike peab olema nähtav nii Zabbixi triggerina kui Loki graafikuna/logidena. Eesmärk on kinnistada tööjaotus: Zabbix ütleb “on probleem”, Loki ütleb “mis juhtus”.</p>
 <p>Nüüd on mõlemad stackid üleval. Tekita error-torm mon-target'il:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ssh<span class="w"> </span>&lt;eesnimi&gt;@192.168.35.140<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="s1">&#39;for i in $(seq 1 200); do echo &quot;$(date -Iseconds) [ERROR] [payment] Spam_$i&quot; | sudo tee -a /var/log/app/app.log &gt; /dev/null; done&#39;</span>
@@ -2711,7 +2734,7 @@ Bar chart — logimaht taseme järgi.</p>
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:44:29 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 12:04:53 UTC">23. aprill 2026</span>
   </span>
 
     

@@ -2323,22 +2323,26 @@
 <hr />
 <h2 id="opivaljundid">🎯 Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>Teadmised:</strong></p>
-<ol>
+<ul>
 <li>Eristab Zabbixi push-mudelit Prometheuse pull-mudelist ja põhjendab millal kumbagi kasutada</li>
 <li>Kirjeldab Zabbixi andmemudelit: host → template → item → trigger → action</li>
-</ol>
+</ul>
 <p><strong>Oskused:</strong></p>
-<ol>
+<ul>
 <li>Ehitab Zabbix stack'i Docker Compose'iga teenus-teenuse haaval</li>
 <li>Seadistab host'i, template'i ja jälgib trigger fire/resolve tsüklit</li>
 <li>Loob HTTP Agent + Dependent item struktuuri ilma välise exporter'ita</li>
 <li>Kirjutab UserParameter'i, discovery skripti ja honeypot-triggeri</li>
-</ol>
+</ul>
 <hr />
 <h2 id="eeltoo">Eeltöö<a class="headerlink" href="#eeltoo" title="Lingi sektsioonile">&para;</a></h2>
 <p>Päev 1 stack maha (volumes jäävad alles juhuks kui tahad naasta):</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>~/paev1<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~
 </span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Kui <code>docker compose</code> ei tööta</p>
+<p>Mõnes VM-is/masinas on Compose vanema nimega. Kui saad veateate, kasuta sama käsu asemel <code>docker-compose</code> (näiteks <code>docker-compose up -d</code>).</p>
+</div>
 <p>mon-target ja mon-target-web peale on <code>zabbix-agent</code> juba paigaldatud. Kontrolli:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.35.140<span class="w"> </span><span class="m">10050</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.35.141<span class="w"> </span><span class="m">10050</span>
 </span></code></pre></div>
@@ -2348,9 +2352,11 @@
 <p>Ehitame neid ükshaaval ja testime iga sammu eraldi.</p>
 <hr />
 <h2 id="osa-1-zabbix-baas">Osa 1 · Zabbix baas<a class="headerlink" href="#osa-1-zabbix-baas" title="Lingi sektsioonile">&para;</a></h2>
+<p>Selles osas paned püsti Zabbixi “südame”: andmebaas + server. Eesmärk on saada tööle stabiilne alus, enne kui lisad UI ja hostid—nii on lihtsam aru saada, <em>mis täpselt</em> katki on, kui midagi ei käivitu.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/paev2/zabbix/config<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/paev2/zabbix
 </span></code></pre></div>
 <h3 id="11-baas">1.1 Baas<a class="headerlink" href="#11-baas" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin teed “raami”, kuhu teenused lisanduvad, ja paned kohe paika püsiva andmesalvestuse (volume). Kui jätad volume alguses tegemata, kaob Zabbixi konfig/ajalugu esimese <code>down</code> järel ja kogu “state” läheb nulli.</p>
 <p>Loo <code>docker-compose.yml</code>:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">services</span><span class="p">:</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="c1"># teenused lisanduvad siia</span>
@@ -2360,6 +2366,7 @@
 </span></code></pre></div>
 <p><code>mysql-data</code> volume kohe alguses — ilma selleta kaotaks <code>docker compose down</code> kogu Zabbix konfi.</p>
 <h3 id="12-mysql">1.2 MySQL<a class="headerlink" href="#12-mysql" title="Lingi sektsioonile">&para;</a></h3>
+<p>MySQL hoiab Zabbixi konfi ja ajaloo tabelid, seega peab ta olema enne serverit “healthy”. Healthcheck on siin oluline—ta teeb sõltuvused deterministlikuks (server ei alusta enne, kui DB päriselt vastab).</p>
 <p>Lisa <code>services:</code> alla:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql:8.0</span>
@@ -2394,6 +2401,7 @@
 <p>Pead nägema rida <code>zabbix</code>.</p>
 <p>💡 <strong>Kui <code>unhealthy</code>:</strong> <code>docker compose logs mysql</code> — tavaline põhjus on RAM. <code>free -h</code> näitab.</p>
 <h3 id="13-zabbix-server">1.3 Zabbix Server<a class="headerlink" href="#13-zabbix-server" title="Lingi sektsioonile">&para;</a></h3>
+<p>Server on Zabbixi “aju”: ta kirjutab DB skeemi, küsib agente/HTTP item’eid ja arvutab triggerid. Eesmärk on näha logidest selget “started” rida—see on kiireim signaal, et DB ühendus ja skeemiloome õnnestusid.</p>
 <p>Lisa <code>services:</code> alla MySQL-i järele:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="w">  </span><span class="nt">zabbix-server</span><span class="p">:</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zabbix/zabbix-server-mysql:ubuntu-7.0.6</span>
@@ -2421,8 +2429,10 @@
 <p>~170 tabelit — Server lõi need ise.</p>
 <hr />
 <h2 id="osa-2-web-agent">Osa 2 · Web + Agent<a class="headerlink" href="#osa-2-web-agent" title="Lingi sektsioonile">&para;</a></h2>
+<p>Selles osas teed süsteemi inimesele kasutatavaks (Web UI) ja lisad esimese andmeallika (Agent). See on koht, kus enamik algaja “andmeid pole” vigu tekib—hostname/DNS/IP peavad omavahel klappima.</p>
 <p>Baas töötab (MySQL + Server). Nüüd vajame kahte asja, et inimene saaks süsteemi kasutada — <strong>Web UI</strong> ja vähemalt ühe <strong>Agent'i</strong>, kes andmeid kogub.</p>
 <h3 id="21-zabbix-web">2.1 Zabbix Web<a class="headerlink" href="#21-zabbix-web" title="Lingi sektsioonile">&para;</a></h3>
+<p>Web on UI ja räägib peamiselt DB-ga, mitte ainult serveriga—seepärast sõltub ta samuti MySQL-ist. Siin saad kohe kontrollida, kas kogu stack on kasutatav (login, paroolivahetus, “Database is not available” tüüpi vead).</p>
 <p>Server oskab andmeid vastu võtta ja trigger'eid arvutada, aga tal pole oma veebiliidest. See on teadlik disain — frontend on eraldi konteiner (PHP + Nginx), mis räägib <strong>otse andmebaasiga</strong> (mitte serveriga). See võimaldab frontend'i skaleerida sõltumatult serverist.</p>
 <p>Lisa:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="w">  </span><span class="nt">zabbix-web</span><span class="p">:</span>
@@ -2451,6 +2461,7 @@
 <p><strong>Miks vaheta parool kohe:</strong> <code>zabbix</code> on <strong>avalikult teada</strong> vaikeparool — iga turvakontroll lööb selle peale märgilist. Ainult localhost'is? Ikkagi vaheta — see harjutab õiget refleksi.</p>
 <p>💡 <strong>Kui "Database is not available":</strong> MySQL pole veel healthy. Oota 30s, refresh.</p>
 <h3 id="22-zabbix-agent">2.2 Zabbix Agent<a class="headerlink" href="#22-zabbix-agent" title="Lingi sektsioonile">&para;</a></h3>
+<p>Agent on “käed-jalad”: ta kogub hosti mõõdikud ja server küsib neid võtmete kaupa. Kõige tavalisem komistus on nimi—<code>ZBX_HOSTNAME</code> peab täpselt ühtima UI-s loodud hosti nimega, muidu server ignoreerib andmeid.</p>
 <p>Server on olemas, aga kust ta andmeid saab? Agent on eraldi protsess, mis jookseb <strong>igal masinal mida tahad jälgida</strong> ja kogub süsteemi mõõdikuid (CPU, mälu, ketas, võrk). Mõte on lihtne: agent on käed-jalad, server on aju.</p>
 <p>Eelmisest osast tuleb meelde, et Zabbix on modulaarne — server ise ei skanni masinat. See tundub esialgu liigne (Prometheus-es on üks binaar), aga annab paindlikkust: üks server jookseb 10–100–tuhanded agente paralleelselt.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="w">  </span><span class="nt">zabbix-agent</span><span class="p">:</span>
@@ -2473,6 +2484,7 @@
 </span></code></pre></div>
 <p>Vastus <code>1</code> — agent elab.</p>
 <h3 id="23-kontroll">2.3 Kontroll<a class="headerlink" href="#23-kontroll" title="Lingi sektsioonile">&para;</a></h3>
+<p>See on “sanity check” enne UI-klõpsimist: kõik konteinerid peavad olema Up ja DB healthy, muidu järgmised sammud annavad segaseid sümptomeid. Kui siin on midagi punast/restarting, lahenda see kohe—hiljem on viga raskem tagasi jälitada.</p>
 <p>Enne kui liigume host'ide ja trigger'ite juurde, kontrollime et baas on tõesti stabiilne.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps
 </span></code></pre></div>
@@ -2480,8 +2492,10 @@
 <p>💭 <strong>Mõtle:</strong> Prometheus oli üks binaar + konfi-fail. Zabbix on neli komponenti + andmebaas. Miks nii keeruline? Mis on selle eelised võrreldes sinu töökogemusega?</p>
 <hr />
 <h2 id="osa-3-host-template-trigger-dashboard">Osa 3 · Host, template, trigger, dashboard<a class="headerlink" href="#osa-3-host-template-trigger-dashboard" title="Lingi sektsioonile">&para;</a></h2>
+<p>Siin seod “teooria” (host → template → item → trigger) päris eluga: lisad hostid ja vaatad, kuidas trigger päriselt fire/resolve tsükli läbi teeb. Eesmärk on saada kätte refleks: kui alert tuleb, kust kontrollida (Latest data, zabbix_get, trigger expression).</p>
 <p>Süsteem on üleval, agent elab. Aga Zabbix ei tea veel, et me tahame midagi jälgida. Päev 2 loengu 4 kontseptsiooni tulevad siin päriseks: <strong>Host</strong> (mida jälgida), <strong>Template</strong> (millist komplekti mõõdikuid rakendame), <strong>Trigger</strong> (millal häirima hakata), <strong>Dashboard</strong> (kuidas näha).</p>
 <h3 id="31-docker-agent">3.1 docker-agent<a class="headerlink" href="#31-docker-agent" title="Lingi sektsioonile">&para;</a></h3>
+<p>Alustad kõige lihtsamast hostist (sama Docker võrgu sees), et välistada võrgu/portide probleemid. Kui <code>docker-agent</code> ei lähe roheliseks, pole mõtet kohe päris VM-idega võidelda—viga on tavaliselt hostname või interface valikus.</p>
 <p>Esimesena lisame iseenda Zabbix agent'i kui host'i. See on kõige lihtsam — Docker Compose võrgus konteinerid näevad üksteist DNS-nimega (<code>zabbix-agent</code> on teenuse nimi compose-failis).</p>
 <p><em>Data collection → Hosts → Create host</em>:</p>
 <ul>
@@ -2495,6 +2509,7 @@
 <p>Add. Oota 60s. <em>Hosts</em> lehel roheline ZBX.</p>
 <p>💡 <strong>Kui ZBX punane:</strong> kontrolli et Host name = <code>docker-agent</code> (täpselt sama mis <code>ZBX_HOSTNAME</code> environment'is).</p>
 <h3 id="32-mon-target">3.2 mon-target<a class="headerlink" href="#32-mon-target" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin teed ülemineku “päris” masinale, kus agent jookseb systemd teenusena ja side käib üle võrgu. <code>zabbix_get</code> on kiire kontroll: kui käsitsi serverist ping töötab, siis UI kaudu hakkab ka andmeid tulema.</p>
 <p>Nüüd lisame <strong>päris</strong> masina — mon-target. See on eraldi VM, kus Zabbix agent jookseb systemd teenusena. Erinevalt docker-agent'ist ei ole ta sama Docker-võrgu sees, seega DNS-nimi ei tööta.</p>
 <p>Sama, aga interface on IP:</p>
 <ul>
@@ -2508,6 +2523,7 @@
 </span></code></pre></div>
 <p>Peab tagastama <code>1</code>. Kui töötab serverist käsitsi, töötab ka UI kaudu — see on kiire sanity check enne kui UI-s 1 min ootad.</p>
 <h3 id="33-trigger-fireresolve">3.3 Trigger fire/resolve<a class="headerlink" href="#33-trigger-fireresolve" title="Lingi sektsioonile">&para;</a></h3>
+<p>Eesmärk on näha, et trigger ei ole “must kast”, vaid konkreetne valem + ajaken, mis muutub olekuteks (pending/firing/resolved). Kui saad selle tsükli korra päriselt läbi teha, oskad hiljem eristada “probleem on päris” vs “noise/spike”.</p>
 <p>Millal trigger töötab? Vaatame seda praktikas. <code>Linux by Zabbix agent</code> template sisaldab järgmist trigger'it:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>avg(/mon-target/system.cpu.util,5m) &gt; 90
 </span></code></pre></div>
@@ -2550,18 +2566,22 @@ Expression builder aitab, aga päris Zabbixi admin kirjutab expression'id käsit
 </details>
 
 <h3 id="34-dashboard">3.4 Dashboard<a class="headerlink" href="#34-dashboard" title="Lingi sektsioonile">&para;</a></h3>
+<p>Dashboard on siin kontrollpunkt: template’i lisamine peab automaatselt tekitama mõõdikud ja vaated ilma käsitööta. Kui graafikuid ei teki, on probleem kas hosti availabilitys, template linkimises või ajavahemikus/andmete kogumises.</p>
 <p><em>Monitoring → Dashboards → Global view</em></p>
 <p><code>Linux by Zabbix agent</code> template tõi kaasa valmis dashboardi. Näed CPU, mälu, ketta graafikuid ilma ühtki PromQL'i kirjutamata. Võrdle Grafanaga päevast 1 — Zabbixi dashboard tuleb template'iga automaatselt, Grafanas kirjutasid PromQL päringud ise.</p>
 <p><strong>Mis see tähendab praktikas</strong>: Zabbix on "monitoring out of the box". Lisa host, lisa template, jookse. Grafana + Prometheus nõuab rohkem ettevalmistustes käsitööd, aga on <strong>versioonitud</strong> (PromQL YAML-is + Grafana dashboards JSON-is). Mõlemal on kohad, millal sobib.</p>
 <p>💭 <strong>Mõtle:</strong> Zabbix template andis ~300 item'it ja ~50 trigger'it ühe klikiga. Prometheuses kirjutasid alert-reeglid YAML-i käsitsi. Kumb sobib paremini sinu töökeskkonda — template'd või "infrastructure as code"?</p>
 <hr />
 <h2 id="osa-4-http-agent-dependent-items">Osa 4 · HTTP Agent + Dependent items<a class="headerlink" href="#osa-4-http-agent-dependent-items" title="Lingi sektsioonile">&para;</a></h2>
+<p>Selles osas õpid Zabbixi HTTP Agent mustrit: üks päring (master item) ja mitu dependent item’it, mis parsivad ühest vastusest erinevad mõõdikud. See vähendab exporter’ite hulka ja teeb monitooringu “kergemaks” nii halduse kui koormuse mõttes.</p>
 <p>Päev 1 Prometheuses kasutasid <code>nginx-prometheus-exporter</code> konteinerit et Nginx stub_status andmeid koguda. Zabbix HTTP Agent teeb sama ilma välise exporter'ita — server küsib URL-i otse.</p>
 <p><strong>Miks see oluline:</strong> iga exporter-konteiner on üks rohkem asi, mida hoida üleval (logid, uuendused, konflikte, failure mode'd). Kui suudad küsida otse (HTTP API, SNMP, JMX), säästad end sellest üleliigsest kihist. Selle osa eesmärk on näha <strong>master + dependent</strong> mustrit — üks HTTP päring annab mitu mõõdikut.</p>
 <h3 id="41-host-ilma-agentita">4.1 Host ilma agent'ita<a class="headerlink" href="#41-host-ilma-agentita" title="Lingi sektsioonile">&para;</a></h3>
+<p>See näitab “agent pole alati vajalik”: kui teenusel on HTTP endpoint, saab Zabbix ise küsida ja mõõdiku teha. Praktikas vähendab see agentide/eksportijate hulka ja lihtsustab haldust.</p>
 <p>Loo <code>nginx-web</code> host. Host group: loo uus <code>Applications</code>. <strong>Interface'i ära lisa</strong> — HTTP Agent teeb päringu otse URL-ile, agent'i pole vaja.</p>
 <p><strong>Miks ilma interface'ita</strong>: Zabbixis on interface "kuidas server mõõdetava objektiga ühenduse saab" (tavaliselt agent'i kaudu). HTTP Agent tüüpi item küsib URL-i otse, ei vaja välise protsessi (agent) vahenduses. See on sama muster mida Prometheus kasutab (pull HTTP → scrape).</p>
 <h3 id="42-master-item">4.2 Master item<a class="headerlink" href="#42-master-item" title="Lingi sektsioonile">&para;</a></h3>
+<p>Master item on üks kallim/networki mõttes päring, mille vastust kasutavad mitu dependent item’it. See on oluline muster: üks HTTP request → mitu mõõdikut, mitte viis eraldi request’i iga numbri jaoks.</p>
 <p>Esimene item küsib <strong>kogu</strong> stub_status väljundit korraga. See on "master" — hiljem ehitame sellest mitu "dependent" item'it, kes kasutavad sama toorandmeid.</p>
 <p><em>Items → Create</em>:</p>
 <ul>
@@ -2575,6 +2595,7 @@ Expression builder aitab, aga päris Zabbixi admin kirjutab expression'id käsit
 <p><strong>Miks Text, mitte Numeric</strong>: stub_status väljund on mitmerealine tekst, mõne numbrilise väärtusega. Numeric ei sobi. Master item hoiab <strong>toorandmeid</strong>, dependent item'id parseerivad numbri välja.</p>
 <p>Minut hiljem <em>Latest data</em> näitab stub_status teksti.</p>
 <h3 id="43-dependent-item">4.3 Dependent item<a class="headerlink" href="#43-dependent-item" title="Lingi sektsioonile">&para;</a></h3>
+<p>Dependent item teeb parsingu serveri poolel—agentit pole vaja ja Nginxit ei koormata lisapäringutega. Kui regex ei taba, on viga peaaegu alati mustris (vaata “Test” master item’i pealt).</p>
 <p>Nüüd ekstraheerime ühe konkreetse numbri master item'i väljundist.</p>
 <p><em>Items → Create</em>:</p>
 <ul>
@@ -2590,6 +2611,7 @@ Expression builder aitab, aga päris Zabbixi admin kirjutab expression'id käsit
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span><span class="m">1</span>..20<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>http://192.168.35.141:8080/<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="k">done</span><span class="p">;</span><span class="w"> </span><span class="nb">wait</span>
 </span></code></pre></div>
 <h3 id="44-tee-ise">4.4 Tee ise<a class="headerlink" href="#44-tee-ise" title="Lingi sektsioonile">&para;</a></h3>
+<p>See on koht, kus kinnistad “master → dependent” loogika: sama toorandme pealt 2–3 erinevat mõõdikut. Eesmärk pole perfektne regex, vaid arusaam, kuidas üks HTTP vastus “lahutatakse” mitmeks numbriks.</p>
 <p>Loo dependent item <code>Requests total</code> — regex: <code>requests\s+\d+\s+(\d+)\s+\d+</code>. Üks HTTP päring annab kolm mõõdikut (active connections, requests total + mida veel ise ekstraheerida soovid).</p>
 <p>See on iseseisev harjutus — külge vaadatakse regex'i ja master item'i väljundit. Kui regex ei tule kohe välja, kliki master item'ile <em>Test</em> nuppu — Zabbix näitab väljundit ja saad regex'i jooksvalt testida.</p>
 <details>
@@ -2612,9 +2634,11 @@ JSONPath on nagu XPath, aga JSON-ile. Regex'ist selgem, vähem vigu. [Docs / pre
 <p>💭 <strong>Mõtle:</strong> Prometheus vajab nginx-exporter konteinerit. Zabbix HTTP Agent küsib otse. Mida see tähendab halduse ja sõltuvuste poolest?</p>
 <hr />
 <h2 id="osa-5-userparameter-honeypot">Osa 5 · UserParameter + honeypot<a class="headerlink" href="#osa-5-userparameter-honeypot" title="Lingi sektsioonile">&para;</a></h2>
+<p>Selles osas teed Zabbixi “laiendatavuse” päriseks: tood oma shell-käsu mõõdikuks (UserParameter) ja kasutad seda nii töökindluse (error-count) kui ka turbe-signaali (honeypot) jaoks. Mõte pole “shelliga kõike teha”, vaid näha, kus see on kiire prototüüp ja kus tootmises on vaja rangemat lähenemist.</p>
 <p>UserParameter on shell-käsk mida agent käivitab, kui server küsib võtmega. Üks rida ja sul on uus mõõdik. <a href="https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters">Docs</a>.</p>
 <p><strong>Miks see on oluline:</strong> template'id katavad ~300 standard-mõõdikut, aga iga organisatsioon vajab <strong>oma mõõdikuid</strong> — ärilogide veaarvud, küsimuste järjekord, licence'i expiration, tarkvaraversioon. Ilma UserParameter'ita peaksid need tulema HTTP exporter'ist või eraldi teenusest. UserParameter teeb selle ühe rea konfiga.</p>
 <h3 id="51-echo-42-minimaalne-userparameter">5.1 echo 42 — minimaalne UserParameter<a class="headerlink" href="#51-echo-42-minimaalne-userparameter" title="Lingi sektsioonile">&para;</a></h3>
+<p>See on “hello world” UserParameter: enne keerulist logiparsingut pead nägema, et agent loeb sinu conf’i, restart töötab ja <code>zabbix_get</code> tagastab ootuspärase väärtuse. Kui siin ei tööta, ei tööta ka ükski järgmine UserParameter.</p>
 <p>Esimesena teeme kõige lihtsama võimaliku UserParameter'i — konstant 42. See aitab aru saada, mis on "võti" ja mis on "väärtus", enne kui läheme keerulisemate peale.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;UserParameter=minu.test, echo 42&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>~/paev2/zabbix/config/test.conf
 </span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>docker<span class="w"> </span>restart<span class="w"> </span>zabbix-agent
@@ -2624,6 +2648,7 @@ JSONPath on nagu XPath, aga JSON-ile. Regex'ist selgem, vähem vigu. [Docs / pre
 <p>Vastus: <code>42</code>.</p>
 <p><strong>Mis just juhtus:</strong> kirjutasid agent'i config'i faili, mille mount on <code>./config:/etc/zabbix/zabbix_agentd.d:ro</code>. Konfig ütleb: kui server küsib võtit <code>minu.test</code>, käivita <code>echo 42</code> ja tagasta väljund. Võti <code>minu.test</code> on suvaline string — sa ise valid konventsiooni (tavaliselt <code>rakendus.alam-mõõdik</code>).</p>
 <h3 id="52-parameetrid-votmes">5.2 Parameetrid võtmes<a class="headerlink" href="#52-parameetrid-votmes" title="Lingi sektsioonile">&para;</a></h3>
+<p>Parameetrid lasevad ühe “retsepti” kaudu mõõta kümneid variante (teenus, tase, fail, jne) ilma 10 eri UserParameter’it kirjutamata. See on aluseks LLD ja “item prototype” mustrile—üks definitsioon, palju instantsse.</p>
 <p>Võtmed on dünaamilised — võid anda talle argumente nurksulgudes. See võimaldab ühe UserParameter'iga kirjutada "malli" ja siis küsida konkreetseid järgi.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/paev2/zabbix/config/test.conf<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
 </span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="s">UserParameter=minu.topelt[*], echo $(($1 * 2))</span>
@@ -2635,6 +2660,7 @@ JSONPath on nagu XPath, aga JSON-ile. Regex'ist selgem, vähem vigu. [Docs / pre
 <p>Esimene päring annab <code>10</code>, teine <code>200</code>. <code>[*]</code> võtme definitsioonis tähendab "lubatud on mistahes parameetrid", <code>$1</code> viitab esimesele parameetrile, <code>$2</code> teisele jne.</p>
 <p><strong>Miks see on oluline:</strong> hiljem kirjutame <code>applog.errors[payment]</code>, <code>applog.errors[auth]</code>, <code>applog.errors[api]</code> — üks UserParameter, aga Zabbixis on kolm eraldi item'it. Ilma parameetriteta peaks iga teenuse jaoks eraldi UserParameter'i kirjutama.</p>
 <h3 id="53-paris-moodik-applog">5.3 Päris mõõdik — applog<a class="headerlink" href="#53-paris-moodik-applog" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin seod Zabbixi otse “ärisignaaliga”: mitte CPU/mälu, vaid konkreetse teenuse vead logis. Eesmärk on näha, et <code>zabbix_get</code> saab päriselt numbri kätte enne, kui hakkad UI-s item’eid ja trigger’eid looma.</p>
 <p>Nüüd kirjutame midagi kasulikku. mon-target'il jookseb log-generator, mis lisab <code>/var/log/app/app.log</code> failile ridu kujul <code>2026-04-25T10:23:41 [ERROR] [payment] ...</code>. Tahame teada: mitu <code>ERROR</code> rida on teenusest <code>payment</code> viimases 1000 reas.</p>
 <p><strong>Lahendus <code>tail + grep</code></strong> on shell-klassika — <code>tail -n 1000</code> annab faili viimased 1000 rida, <code>grep -c</code> loendab mustrile vastavad read. Cron'is teeks sama. UserParameter teeb sellest Zabbix item'i.</p>
 <p>SSH mon-target'ile:</p>
@@ -2657,6 +2683,7 @@ JSONPath on nagu XPath, aga JSON-ile. Regex'ist selgem, vähem vigu. [Docs / pre
 </div>
 <p>💡 <strong>Kui <code>ZBX_NOTSUPPORTED</code>:</strong> süntaksiviga konfis — <code>sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf</code> ja kontrolli.</p>
 <h3 id="54-item-trigger">5.4 Item ja trigger — andmed nähtavaks UI-s<a class="headerlink" href="#54-item-trigger" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin teed kaks sammu, mida algajad tihti segi ajavad: item kogub ja salvestab, trigger teeb sellest “probleemi”. Kui trigger ei lähe firing’usse, alusta alati Latest data’st—kas item väärtus üldse muutub?</p>
 <p>Agent tagastab numbri, aga Zabbix ei <strong>salvesta</strong> seda veel — pole item'it. Item ütleb Zabbixile "hakka seda võtit regulaarselt küsima ja salvestama". Trigger ütleb "ja kui väärtus käib üle lävendi, tekita probleem".</p>
 <p>mon-target host → <em>Items → Create</em>:</p>
 <ul>
@@ -2676,12 +2703,14 @@ JSONPath on nagu XPath, aga JSON-ile. Regex'ist selgem, vähem vigu. [Docs / pre
 <p><strong>Miks <code>last() &gt; 10</code></strong>: item'i väärtus on <code>tail -n 1000 | grep -c ERROR payment</code>. Kui viimase 1000 rea hulgas on üle 10 payment-ERROR'i, midagi on tegelikult katki. <code>{HOST.NAME}</code> on Zabbixi <strong>makro</strong> — trigger'i kirjeldusse paigutatakse automaatselt vastav host'i nimi (siin <code>mon-target</code>). Sama trigger töötab teise host'iga, kui linkida uuesti.</p>
 <p>💡 <strong>Trigger navigatsioon Zabbix 7.0:</strong> trigger'i loomiseks mine host'i real "Triggers" lingile — paljud otsivad menüüst Alerts → Triggers, aga seal näeb ainult olemasolevaid.</p>
 <h3 id="55-error-torm-testi-et-trigger-elab">5.5 Error-torm — testi, et trigger elab<a class="headerlink" href="#55-error-torm-testi-et-trigger-elab" title="Lingi sektsioonile">&para;</a></h3>
+<p>Test on osa disainist: kui sa ei ole ise probleemi tekitanud, sa ei tea, kas alert päriselt töötab. Siin kinnitad nii item’i töö kui triggeri reageerimise ajastuse (update interval + server processing).</p>
 <p>Produktsioon on kvaliteetne ainult siis, kui sa oled testinud, et probleemi tekkimisel see ka välja lööb. Tekita künstlik error-torm mon-target'i logifaili ja vaata, mitu sekundit hiljem Zabbix seda märkab.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>ssh<span class="w"> </span>&lt;eesnimi&gt;@192.168.35.140<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="s1">&#39;for i in $(seq 1 100); do echo &quot;$(date -Iseconds) [ERROR] [payment] Spam_$i&quot; | sudo tee -a /var/log/app/app.log &gt; /dev/null; done&#39;</span>
 </span></code></pre></div>
 <p>See tekitab 100 ERROR rida pärast viimase 1000 rea hulka. Nii on kindel, et <code>grep -c</code> annab väärtuse üle 10. Umbes 1 min pärast (update interval + server-side processing) <em>Problems</em> lehel trigger <strong>Firing</strong>. Kui lakkad logikirjadeid lisamast, vead liiguvad aknast välja ja trigger laheneb ise.</p>
 <h3 id="56-honeypot-userparameter-turbe-kontekstis">5.6 Honeypot — UserParameter turbe-kontekstis<a class="headerlink" href="#56-honeypot-userparameter-turbe-kontekstis" title="Lingi sektsioonile">&para;</a></h3>
+<p>See osa näitab, et sama mehhanism (UserParameter) sobib ka turbesignaalideks, mitte ainult jõudluseks. Reegel on lihtne: kui “lõksuport” saab ühenduse, on see anomaalia ja väärib kõrgemat severity’t.</p>
 <p>UserParameter ei pea olema ainult jõudluse jaoks. Lihtsaim honeypot on avatud port kuhu keegi "õiges" ei peaks ühenduma — tulemüüri taga teenuste, ainult ründaja skannib. Iga ühendus on turvasignaal.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>ssh<span class="w"> </span>&lt;eesnimi&gt;@192.168.35.140
 </span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/usr/local/bin/honeypot-listen.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
@@ -2735,6 +2764,7 @@ See on rohkem turvameeskonnale — aga näitab kui laiendatav UserParameter on.
 </details>
 
 <h3 id="57-user-macros-tundlik-info-itemides">5.7 User macros — tundlik info item'ides<a class="headerlink" href="#57-user-macros-tundlik-info-itemides" title="Lingi sektsioonile">&para;</a></h3>
+<p>Siin õpid “mitte hardcode’i paroole”: makrod annavad sama paindlikkuse, aga hoiavad tundliku info UI-s (ja Secret tüübi puhul peidetuna). Eesmärk on, et item/trigger definitsioon oleks jagatav ilma, et parool logidesse või giti satuks.</p>
 <p>Enne kui edasi — üks tähtis küsimus: Osa 5.3 konfis olid paroolid ja teed kõvakodeeritud. Tootmises nii ei tee.</p>
 <p><strong>Miks see on probleem</strong>: kui kirjutad konfis <code>-u root -p Monitor2026!</code>, on parool nüüd agent'i konfis kettal, audit-logis, git'is (kui kommittid), backup'is. See on 4+ kohta, kust parool saab lekkida. User macros lahendab selle — väärtused Zabbix'i UI-s, krüpteeritud serveris, item kasutab makro-nime.</p>
 <p><em>Data collection → Hosts → <code>docker-agent</code> → Macros</em> tab → <em>Add</em>:</p>
@@ -3075,7 +3105,7 @@ See on rohkem turvameeskonnale — aga näitab kui laiendatav UserParameter on.
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 12:04:53 UTC">23. aprill 2026</span>
   </span>
 
     
