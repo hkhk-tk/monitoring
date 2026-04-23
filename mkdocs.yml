@@ -47,7 +47,7 @@ theme:
     repo: fontawesome/brands/github
 
 extra_css:
-  - stylesheets/extra.css?v=93309bf
+  - stylesheets/extra.v2.css
 
 extra_javascript:
   - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
