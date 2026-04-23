@@ -2328,11 +2328,8 @@
 <h2 id="1-miks-zabbix">1. Miks Zabbix?<a class="headerlink" href="#1-miks-zabbix" title="Lingi sektsioonile">&para;</a></h2>
 <p>Eile vaatasime Prometheust — cloud-native maailma meetrikakogujat: pull-mudel, deklaratiivne konfig, Kubernetes-esimene mõtteviis. Täna oleme teisel pool spektrit.</p>
 <p>Zabbix sündis 1998. aastal Läti Ülikoolis (Alexei Vladišev’i diplomitöö) ja esimene avalik versioon ilmus 2001. See on 25+ aastat “tootmiskarastust” — mitte aegumine, vaid kogemus.</p>
-<p>Zabbix on klassikaline <em>kõikehõlmav</em> seireplatvorm:
-- agendid
-- SNMP / IPMI / JMX / VMware
-- SQL / ICMP / SSH / Telnet / HTTP
-- templated + dashboardid + alertimine</p>
+<p>Zabbix on klassikaline <em>kõikehõlmav</em> seireplatvorm — selle tugevus on laius. Ühes ja samas süsteemis saad jälgida nii servereid kui võrguseadmeid ning teha sellest kohe ka alertid ja dashboardid.</p>
+<p>Praktikas tähendab see, et Zabbix saab andmeid väga erinevatest kohtadest: agentidelt, SNMP-st, IPMI-st, HTTP endpointidest, JMX-ist, VMware-st, jne. Sa ei pea “iga asja jaoks” eraldi tööriista võtma.</p>
 <p>Mõte: <strong>ühest kohast</strong> konfigureerid suure osa ettevõtte infra “vaatluse baasist”.</p>
 <p>Eestis on Zabbix laialt kasutuses. Telia, Swedbank, maksu- ja tolliamet, enamus riigiasutusi, ülikoolid — kus tahes vaatad, seal ta on. Kuna Zabbix on open-source koos enterprise-tasemel kvaliteediga ja Läti päritolu (seega lokaalne tugi), on ta Baltikumis kodus nagu kala vees.</p>
 <p><strong>Zabbix vs Prometheus</strong> — mõlemad on head tööriistad, aga erinevate ülesannete jaoks:</p>
@@ -2382,9 +2379,11 @@
 </tr>
 </tbody>
 </table>
-<p>Reaalses maailmas kasutatakse sageli <strong>mõlemaid</strong>:
-- <strong>Zabbix</strong>: traditsiooniline IT-infra (võrk, virtualisatsioon, fileserverid, UPS-id, printerid, “legacy”)
-- <strong>Prometheus</strong>: konteinerplatvormid ja dünaamiline keskkond</p>
+<p>Reaalses maailmas kasutatakse sageli <strong>mõlemaid</strong>. Lihtsustatud (aga kasulik) jaotus on selline:</p>
+<ul>
+<li><strong>Zabbix</strong> sobib eriti hästi traditsioonilise IT-infra jaoks: võrk, virtualisatsioon, failiserverid, UPS-id, printerid ja muu “legacy”.</li>
+<li><strong>Prometheus</strong> sobib eriti hästi konteinerplatvormidele ja dünaamilisse keskkonda (service discovery, cloud-native mustrid).</li>
+</ul>
 <p>Mõlemad võivad voolata Grafanasse — ja keegi ei pea “üht ainsat” valima.</p>
 <hr />
 <h2 id="2-arhitektuur-neli-komponenti">2. Arhitektuur — neli komponenti<a class="headerlink" href="#2-arhitektuur-neli-komponenti" title="Lingi sektsioonile">&para;</a></h2>
@@ -2784,7 +2783,7 @@ Need detailid on huvitavad, aga kursuse eesmärgi jaoks on olulisem mõista <str
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:36:03 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 10:41:29 UTC">23. aprill 2026</span>
   </span>
 
     
