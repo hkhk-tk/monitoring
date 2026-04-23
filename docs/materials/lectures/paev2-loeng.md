@@ -447,18 +447,37 @@ Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (a
 6. Kui su rakendus logib JSON-formaadis ja tahad trace id'de põhjal otsida — miks Zabbix ei sobi ja mis sobib paremini?
 7. Zabbix 8 toob OpenTelemetry natiivse toe. Mida see praktiliselt tähendab keskkonnas, kus on juba Prometheus?
 
+??? note "Vastused (peida/ava)"
+    1) **Push vs pull**: Zabbixis on mõlemad mustrid olemas — passiivne agent (server küsib) ja aktiivne agent (agent saadab). Valik sõltub võrgu/tulemüüri reaalsusest ja skaleerimisest (palju hoste → aktiivne/proksid).
+
+    2) **`History=0`**: triggeri funktsioonid töötavad History peal. Kui History puudub, võib süsteem küll “koguda”, aga **ei hinda triggereid** nii, nagu ootad.
+
+    3) **NVPS**: \(5000/30 \approx 166{,}7\).  
+       **Maht 30 päeva** (numbrid, ~90 baiti/punkt):  
+       \(166{,}7 \times 3600 \times 24 \times 30 \times 90 \approx 39\ \text{GB}\) (+ indeksid/overhead).
+
+    4) **Housekeeper** kustutab rida‑realt (kallis). Partitsioneerimine laseb vanad andmed eemaldada partitsiooni kaupa (kiire, ei koorma).
+
+    5) **Proxy group piirangud**: SNMP trapid, agentiversioonid (aktiivses režiimis 7.0+), tulemüür (agent peab jõudma *kõigi* proksideni), skriptide sünkroon, VMware päringukoormus.
+
+    6) **Trace‑ID / logiotsing**: Zabbix pole logi‑otsingu tööriist. Sobivamad on Loki (logid) ja Tempo/Jaeger (traces) + OTel.
+
+    7) **OTel tugi**: lihtsustab standardset instrumentatsiooni ja korrelatsiooni modernses stackis; Prometheus jääb metrics‑kihis tugevaks, Zabbix püüab osa observability mustreid enda maailma tuua.
+
 ---
 
 ## Allikad
 
-### Peamised
+??? note "Allikad (peida/ava)"
+    **Peamised:**
 
-- Zabbix docs: <https://www.zabbix.com/documentation/current/en/manual>
-- Performance tuning: <https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning>
-- Proxy groups (7.0+): <https://www.zabbix.com/documentation/current/en/manual/distributed_monitoring/proxies/ha>
-- History/Trends: <https://www.zabbix.com/documentation/current/en/manual/config/items/history_and_trends>
+    - Zabbix docs: <https://www.zabbix.com/documentation/current/en/manual>
+    - Performance tuning: <https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning>
+    - Proxy groups (7.0+): <https://www.zabbix.com/documentation/current/en/manual/distributed_monitoring/proxies/ha>
+    - History/Trends: <https://www.zabbix.com/documentation/current/en/manual/config/items/history_and_trends>
 
-??? note "Lisalugemine"
+    **Lisalugemine:**
+
     - Roadmap: <https://www.zabbix.com/roadmap>
     - “What’s new in Zabbix 8.0”: <https://www.zabbix.com/documentation/8.0/en/manual/whatsnew>
     - Zabbix blog: <https://blog.zabbix.com/>
