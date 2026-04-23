@@ -1,22 +1,23 @@
 # Päev 2: Grafana LGTM stack ja Loki
 
-**Kursus:** Kaasaegne IT-süsteemide monitooring ja jälgitavus
-**Kestus:** ~45 minutit (loeng) + labor
-**Tase:** Kesktase — eeldame, et Prometheus ja Grafana on juba tuttavad
+**Kestus:** ~45 minutit iseseisvat lugemist  
+**Eeldused:** [Päev 2: Zabbix](paev2-loeng.md) loetud, Prometheus ja Grafana põhitõed ([Päev 1](paev1-loeng.md))  
+**Versioonid laboris:** Loki 3.3.0, Grafana 11.4.0, Alloy 1.5.0  
+**Viited:** [grafana.com/docs/loki](https://grafana.com/docs/loki/latest/) · [Grafana Alloy](https://grafana.com/docs/alloy/latest/) · [LogQL](https://grafana.com/docs/loki/latest/query/)
 
 ---
 
 ## Õpiväljundid
 
-Pärast seda loengut oskad:
+Pärast selle materjali läbitöötamist osaleja:
 
-- Selgitada, kuidas Grafana on arenenud visualiseerimistööriistast täielikuks vaadeldavuse platvormiks (LGTM)
-- Kirjeldada Loki põhifilosoofiat — miks indekseeritakse ainult sildid, mitte sisu
-- Eristada Loki paigaldusrežiime (Monolithic, SSD, Microservices) ja teada, milline neist on tänaseks soovitatud
-- Selgitada kardinaalsuse mõistet ja miks see on Loki suurim vaenlane
-- Nimetada Loki peamised komponendid kirjutus- ja lugemisteel
-- Põhjendada, millal valida Loki ja millal ELK Stack
-- Lugeda põhilisi LogQL päringuid
+1. **Selgitab**, kuidas Grafana on arenenud visualiseerimistööriistast täielikuks vaadeldavuse platvormiks (LGTM)
+2. **Kirjeldab** Loki põhifilosoofiat — miks indekseeritakse ainult sildid, mitte sisu
+3. **Eristab** Loki paigaldusrežiime (Monolithic, SSD, Microservices) ja teab, milline on tänaseks soovitatud
+4. **Mõistab** kardinaalsuse mõistet ja mõju Loki jõudlusele
+5. **Nimetab** Loki peamised komponendid kirjutus- ja lugemisteel
+6. **Põhjendab**, millal valida Loki ja millal ELK Stack
+7. **Loeb** põhilisi LogQL päringuid ja eristab nelja parserit (pattern, json, logfmt, regexp)
 
 ---
 
@@ -32,12 +33,12 @@ Miks see oluline on? Sest pilvepõhises maailmas — Kubernetes, mikroteenused, 
 
 ## 2. LGTM-pinu — kogu perekond
 
-Day 1 slaidil mainisin akronüümi möödaminnes. Paneme kirja, mis see täpselt tähendab:
+Päev 1 loengus mainisin akronüümi möödaminnes. Paneme kirja, mis see täpselt tähendab:
 
 ```
 L — Loki    — logid
 G — Grafana — visualiseerimine ja UI (juba tuttav)
-T — Tempo   — jäljed (traces), hajutatud jälgimine  → Day 5
+T — Tempo   — jäljed (traces), hajutatud jälgimine  → Päev 5
 M — Mimir   — meetrikad, mastaapne Prometheus-ühilduv TSDB
 ```
 
@@ -45,7 +46,7 @@ Need neli on ehitanud sama meeskond (Grafana Labs, eesotsas CTO Tom Wilkie'ga) s
 
 ### 2.1 Unified Observability — korrelatsiooni lugu
 
-Meenuta Day 1 stsenaariumi: kell 18:00, Black Friday, süsteem katki. Traditsiooniline sysadmin teeb seda nii:
+Meenuta päev 1 stsenaariumi: kell 18:00, Black Friday, süsteem katki. Traditsiooniline sysadmin teeb seda nii:
 
 1. Zabbixis näeb, et mingi server on halb — CPU 100%
 2. SSH-b sinna, hakkab `tail -f /var/log/...` jooksutama
@@ -63,9 +64,9 @@ Ilma selle integratsioonita ei erineks LGTM midagi neljast eraldi tööriistast.
 
 **Loki — logid.** Täna põhiteema. Indekseerib ainult silte, mitte sisu. Salvestab S3-tüüpi objektisalvestusse. 35–50% odavam kui ELK enamikes kasutuslugudes.
 
-**Grafana — UI ja päringukeskus.** Juba tuttav. Day 1-st mäletad — ei salvesta ise andmeid, kogub neid datasource-idest. LGTM-kontekstis on ta **ainus koht, kust kasutaja midagi näeb**. See on oluline arhitektuuriline valik — kõik muud komponendid on "päringuallikad".
+**Grafana — UI ja päringukeskus.** Juba tuttav. Päev 1-st mäletad — ei salvesta ise andmeid, kogub neid datasource-idest. LGTM-kontekstis on ta **ainus koht, kust kasutaja midagi näeb**. See on oluline arhitektuuriline valik — kõik muud komponendid on "päringuallikad".
 
-**Tempo — jäljed.** Hajutatud jälgimine. Kui sinu süsteem on 20 mikroteenust, mis räägivad omavahel, siis üks kasutaja-päring võib käia läbi 15 teenuse. Tempo salvestab iga sellise päringu tee — kus ta oli, kui kaua, mis juhtus. Filosoofia sama nagu Lokil: ei indekseeri sisu, ainult trace-ID-d. Selle juurde jõuame Day 5.
+**Tempo — jäljed.** Hajutatud jälgimine. Kui sinu süsteem on 20 mikroteenust, mis räägivad omavahel, siis üks kasutaja-päring võib käia läbi 15 teenuse. Tempo salvestab iga sellise päringu tee — kus ta oli, kui kaua, mis juhtus. Filosoofia sama nagu Lokil: ei indekseeri sisu, ainult trace-ID-d. Selle juurde jõuame päeval 5.
 
 **Mimir — meetrikad.** "Prometheus steroididega." Üks Mimir-klaster suudab hallata **miljardeid aktiivseid aegridu**, samal ajal kui üksik Prometheus jookseb mõne miljoni peal kokku. Täielikult Prometheuse API-ühilduv, ehk kõik PromQL-päringud töötavad edasi. Enterprise-keskkonnad, mis tahavad Prometheust skaleerida üle mitme klastri ja regiooni, kasutavad Mimirit.
 
@@ -487,7 +488,7 @@ Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub **Grafa
 
 ---
 
-## 15. Kokkuvõte — mis on täna tähtis
+## 15. Kokkuvõte
 
 **LGTM = Logs + Grafana + Tempo + Mimir.** Grafana ei ole enam lihtsalt dashboard — see on platvorm.
 
@@ -502,6 +503,20 @@ Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub **Grafa
 **Agent:** täna on **Alloy**, mitte Promtail.
 
 **Loki vs ELK:** operatiivne silumine → Loki. Forensika → ELK. Mõistlik kasutada mõlemat erinevate ülesannete jaoks.
+
+**Järgmine samm:** [Labor: Loki](../../labs/02_zabbix_loki/loki_lab.md) — ehitame Loki + Alloy + Grafana stack'i, mis kogub logisid, teeme LogQL-i päringuid ja seome need kokku Zabbix labori tulemustega.
+
+---
+
+## Enesekontrolli küsimused
+
+1. Kui Loki ei indekseeri logi sisu, kuidas ta siis "error"-rea leiab? Milline on sellise päringu jõudluse piirang?
+2. Selgita, miks `trace_id` ei tohi olla Loki silt. Mis juhtub, kui sa ta siiski sildiks paned?
+3. Mis on erinevus Structured Metadata ja siltide vahel? Millal kumba kasutada?
+4. Sul on käsil uus juurutus: ~50 GB logisid päevas, üks meeskond, Kubernetes keskkond. Millist paigaldusrežiimi valid ja miks?
+5. Miks on SSD paigaldusrežiim aegumas? Millest lähtus Grafana Labsi otsus?
+6. Kirjuta LogQL päring, mis annab Nginx 5xx-vigade määra (error rate) sekundis viimase 5 minuti jooksul, rakenduspõhiste kaupa grupeeritult.
+7. Millal eelistad Loki, millal ELK? Nimeta kaks konkreetset stsenaariumi kummagi jaoks.
 
 ---
 
@@ -545,4 +560,4 @@ Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub **Grafa
 
 ---
 
-*Järgmine: Labor 2 — ehitame Loki + Alloy + Grafana stack'i, mis kogub logisid kolmelt sihtmärgilt ja teeme LogQL-i päringuid.*
+*Järgmine: [Labor: Loki](../../labs/02_zabbix_loki/loki_lab.md) — ehitame Loki + Alloy + Grafana stack'i, mis kogub logisid ja teeme LogQL-i päringuid.*

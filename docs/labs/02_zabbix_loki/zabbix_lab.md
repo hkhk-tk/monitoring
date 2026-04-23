@@ -1,9 +1,11 @@
-# Päev 2 · Zabbix + Loki
+# Päev 2 · Labor: Zabbix
 
-**Kestus:** ~4 tundi (klassis jõuad põhiosa, ülejäänu iseseisvalt)
-**Tase:** Keskaste
-**VM:** VM (nt `ssh <eesnimi>@192.168.35.12X`)
-**Eeldused:** Päev 1 (Docker Compose, Grafana datasource, Prometheus pull-mudel, PromQL `rate()`).
+**Kestus:** ~2 tundi (pool päev 2 laborist)  
+**Tase:** Keskaste  
+**VM:** VM (nt `ssh <eesnimi>@192.168.35.12X`)  
+**Eeldused:** [Päev 2: Zabbix loeng](../../materials/lectures/paev2-loeng.md) loetud. Päev 1 Docker Compose ja Grafana tuttav.
+
+Labori teine pool — LogQL, Loki stack ja FINAAL — jätkub [Labor: Loki](loki_lab.md) lehel.
 
 ---
 
@@ -13,17 +15,13 @@
 
 1. Eristab Zabbixi push-mudelit Prometheuse pull-mudelist ja põhjendab millal kumbagi kasutada
 2. Kirjeldab Zabbixi andmemudelit: host → template → item → trigger → action
-3. Selgitab Loki rolli LGTM stackis ja labelite vs sisu indekseerimise erinevust
-4. Eristab LogQL parserite kasutusolukordi (pattern, json, logfmt, regexp)
 
 **Oskused:**
 
-5. Ehitab Zabbix stacki Docker Compose'iga teenus-teenuse haaval
-6. Seadistab host'i, template'i ja jälgib trigger fire/resolve tsüklit
-7. Kirjutab UserParameter'i ja honeypot-triggeri
-8. Ehitab Loki + Promtail stacki ja kirjutab LogQL päringuid
-9. Parsib struktureerimata logi ja teisendab selle metrikaks (`rate()`, `count_over_time`)
-10. Vaatab sama sündmust kahest vaatenurgast — Zabbix trigger + Loki graafik
+3. Ehitab Zabbix stack'i Docker Compose'iga teenus-teenuse haaval
+4. Seadistab host'i, template'i ja jälgib trigger fire/resolve tsüklit
+5. Loob HTTP Agent + Dependent item struktuuri ilma välise exporter'ita
+6. Kirjutab UserParameter'i, discovery skripti ja honeypot-triggeri
 
 ---
 
@@ -44,53 +42,6 @@ nc -zv 192.168.35.140 10050 && nc -zv 192.168.35.141 10050
 Mõlemad `succeeded`. Kui ei ole, ütle koolitajale.
 
 ---
-
-## Meie stack täna — ülevaade
-
-Ehitame kaks eraldi Docker Compose stacki, mis mõlemad monitoorivad sama käitumisala. Üks meetrikatega (Zabbix), teine logidega (Loki).
-
-```
-Sinu VM (192.168.100.12X)
-┌───────────────────────────────────────────────────────┐
-│                                                            │
-│  ZABBIX stack (~/paev2/zabbix/)                           │
-│  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  ┌─────────┐  │
-│  │    MySQL    │◀─│ zabbix-     │◀─│ zabbix-web │  │ agent   │  │
-│  │   :3306    │  │  server     │  │   :8080    │  │ :10050  │  │
-│  └─────────────┘  └─────┬───────┘  └────────────┘  └───┬─────┘  │
-│                         │                              │        │
-│                         │ küsib meetrikaid             │        │
-│                         │                              │        │
-│  LOKI stack (~/paev2/loki/)                               │        │
-│  ┌─────────────┐  ┌─────────────┐  ┌────────────┐           │
-│  │   Loki     │◀─│  Promtail   │◀─│log-      │           │
-│  │   :3100    │  │ (loeb logi) │  │generator │           │
-│  └────┬──────┘  └─────────────┘  └────────────┘           │
-│       │                                                   │
-│       ▼                                                   │
-│  ┌─────────────┐                                          │
-│  │  Grafana   │  (Päev 2 Grafana — eraldi Päev 1 omast)   │
-│  │   :3001    │                                           │
-│  └─────────────┘                                          │
-└──────────────────────────────────────────────────────────┘
-                              │ zabbix-server küsib
-                              ▼
-     mon-target (.140) ←─── agendiga Linux server,
-                            kirjutab /var/log/app/app.log
-     mon-target-web (.141) ← agendiga Nginx, stub_status endpoint
-```
-
-**Mis millega seotud:**
-
-- **Zabbix Server** küsib meetrikaid agentidelt (`zabbix-agent` sinu konteineris, `mon-target`, `mon-target-web`) ja HTTP päringuid (Nginx stub_status)
-- **Promtail** loeb faili `/var/log/app/app.log` konteinerist ja saadab logiread Lokile
-- **Loki** indekseerib labelid (`job`, `level`, `service`) aga **ei indekseeri sisu** — see on mõtte erinevus Elasticsearch'ist
-- **Grafana (port 3001)** on teie teine Grafana instants (Päev 1 Grafana port 3000 jääb tööle), võtab Lokist logid sisse
-- **Zabbix ja Loki on eraldi** — nad ei räägi omavahel, aga **sa näed mõlemas sama intsidenti** (finaali demos)
-
----
-
-## ZABBIX
 
 Zabbix on neli komponenti: **MySQL** hoiab konfi ja ajalugu, **Server** töötleb ja arvutab trigger'id, **Web** on UI, **Agent** kogub mõõdikuid. Erinevalt Prometheusest (üks binaar) on Zabbix modulaarne — iga komponent eraldi konteineris.
 
@@ -205,7 +156,11 @@ docker exec mysql mysql -uzabbix -pzabbix_pwd zabbix -e 'SHOW TABLES;' | wc -l
 
 ## Osa 2 · Web + Agent
 
+Baas töötab (MySQL + Server). Nüüd vajame kahte asja, et inimene saaks süsteemi kasutada — **Web UI** ja vähemalt ühe **Agent'i**, kes andmeid kogub.
+
 ### 2.1 Zabbix Web
+
+Server oskab andmeid vastu võtta ja trigger'eid arvutada, aga tal pole oma veebiliidest. See on teadlik disain — frontend on eraldi konteiner (PHP + Nginx), mis räägib **otse andmebaasiga** (mitte serveriga). See võimaldab frontend'i skaleerida sõltumatult serverist.
 
 Lisa:
 
@@ -237,9 +192,15 @@ docker compose up -d zabbix-web
 
 Brauseris `http://192.168.35.12X:8080`. Login: `Admin` / `zabbix`. Vaheta kohe parool: üleval paremas nurgas ikoon → Users → Admin → Change password → `Monitor2026!`.
 
+**Miks vaheta parool kohe:** `zabbix` on **avalikult teada** vaikeparool — iga turvakontroll lööb selle peale märgilist. Ainult localhost'is? Ikkagi vaheta — see harjutab õiget refleksi.
+
 💡 **Kui "Database is not available":** MySQL pole veel healthy. Oota 30s, refresh.
 
 ### 2.2 Zabbix Agent
+
+Server on olemas, aga kust ta andmeid saab? Agent on eraldi protsess, mis jookseb **igal masinal mida tahad jälgida** ja kogub süsteemi mõõdikuid (CPU, mälu, ketas, võrk). Mõte on lihtne: agent on käed-jalad, server on aju.
+
+Eelmisest osast tuleb meelde, et Zabbix on modulaarne — server ise ei skanni masinat. See tundub esialgu liigne (Prometheus-es on üks binaar), aga annab paindlikkust: üks server jookseb 10–100–tuhanded agente paralleelselt.
 
 ```yaml
   zabbix-agent:
@@ -258,6 +219,8 @@ Brauseris `http://192.168.35.12X:8080`. Login: `Admin` / `zabbix`. Vaheta kohe p
 
 `ZBX_HOSTNAME` **peab** ühtima sellega, mida kasutad UI-s host-i loomisel. Kui ei vasta — Server viskab andmed ära.
 
+**Miks see reegel olemas:** Zabbix agent saadab andmeid serverile koos enda nimega. Server kontrollib — kas mul on sõlm nimega `docker-agent`? Kui jah, salvesta. Kui ei, ignoreeri (et kogemata teise firma agent ei pumpaks andmeid). See on **esimene tüüpiline viga** uutel Zabbix'i kasutajatel — konfis on nimi A, UI-s host nimega B, andmeid pole kunagi.
+
 ```bash
 docker compose up -d zabbix-agent
 docker exec zabbix-server zabbix_get -s zabbix-agent -k agent.ping
@@ -267,11 +230,13 @@ Vastus `1` — agent elab.
 
 ### 2.3 Kontroll
 
+Enne kui liigume host'ide ja trigger'ite juurde, kontrollime et baas on tõesti stabiilne.
+
 ```bash
 docker compose ps
 ```
 
-Neli teenust `Up`, MySQL `(healthy)`.
+Neli teenust `Up`, MySQL `(healthy)`. Kui mõni on restarting või exited, vaata selle konteineri logi (`docker compose logs <nimi>`) enne edasi minekut.
 
 💭 **Mõtle:** Prometheus oli üks binaar + konfi-fail. Zabbix on neli komponenti + andmebaas. Miks nii keeruline? Mis on selle eelised võrreldes sinu töökogemusega?
 
@@ -279,7 +244,11 @@ Neli teenust `Up`, MySQL `(healthy)`.
 
 ## Osa 3 · Host, template, trigger, dashboard
 
+Süsteem on üleval, agent elab. Aga Zabbix ei tea veel, et me tahame midagi jälgida. Päev 2 loengu 4 kontseptsiooni tulevad siin päriseks: **Host** (mida jälgida), **Template** (millist komplekti mõõdikuid rakendame), **Trigger** (millal häirima hakata), **Dashboard** (kuidas näha).
+
 ### 3.1 docker-agent
+
+Esimesena lisame iseenda Zabbix agent'i kui host'i. See on kõige lihtsam — Docker Compose võrgus konteinerid näevad üksteist DNS-nimega (`zabbix-agent` on teenuse nimi compose-failis).
 
 *Data collection → Hosts → Create host*:
 
@@ -288,11 +257,17 @@ Neli teenust `Up`, MySQL `(healthy)`.
 - Interfaces → Add → Agent → DNS name `zabbix-agent`, Connect to **DNS**, port `10050`
 - Templates → Select → `Linux by Zabbix agent`
 
+**Miks Connect to DNS, mitte IP**: Docker bridge-võrgus konteinerite IP-d muutuvad iga restart'iga. DNS-nimi on stabiilne — Docker sisene DNS lahendab selle automaatselt.
+
+**Miks template `Linux by Zabbix agent`**: üks kliki ja saad ~300 valmismeetrikut (CPU, mälu, ketas, võrk, protsessid, filesystem) + ~50 valmist trigger'it. Ilma template'ita peaksid iga item'i ise looma — 2 päeva tööd.
+
 Add. Oota 60s. *Hosts* lehel roheline ZBX.
 
 💡 **Kui ZBX punane:** kontrolli et Host name = `docker-agent` (täpselt sama mis `ZBX_HOSTNAME` environment'is).
 
 ### 3.2 mon-target
+
+Nüüd lisame **päris** masina — mon-target. See on eraldi VM, kus Zabbix agent jookseb systemd teenusena. Erinevalt docker-agent'ist ei ole ta sama Docker-võrgu sees, seega DNS-nimi ei tööta.
 
 Sama, aga interface on IP:
 
@@ -300,29 +275,43 @@ Sama, aga interface on IP:
 - Interface → Agent → IP `192.168.35.140`, Connect to **IP**, port `10050`
 - Templates → `Linux by Zabbix agent`
 
+**Millal IP, millal DNS**: kui masin on püsiv infrastruktuur (VM, server), IP on mõistlik. Konteinerid või dünaamiliselt muutuvad keskkonnad (Kubernetes) → DNS või discovery. IP on lihtsam, aga nõuab et masin selle IP ka järjepidevalt hoiaks (static DHCP lease või static IP).
+
 Kontroll:
 
 ```bash
 docker exec zabbix-server zabbix_get -s 192.168.35.140 -k agent.ping
 ```
 
-Peab tagastama `1`.
+Peab tagastama `1`. Kui töötab serverist käsitsi, töötab ka UI kaudu — see on kiire sanity check enne kui UI-s 1 min ootad.
 
 ### 3.3 Trigger fire/resolve
 
-`Linux by Zabbix agent` template sisaldab CPU triggerit. SSH mon-target'ile:
+Millal trigger töötab? Vaatame seda praktikas. `Linux by Zabbix agent` template sisaldab järgmist trigger'it:
+
+```
+avg(/mon-target/system.cpu.util,5m) > 90
+```
+
+Tõlgiksime: "kui CPU kasutus keskmiselt viimased 5 minutit on üle 90%, löö häiret". Selline keskmistatud trigger jätab lühikesed spike-id ignoreerituks — üks sekund 95% CPU ei ole probleem, aga 5 minutit järjest on.
+
+SSH mon-target'ile ja tekita koormust:
 
 ```bash
 ssh <eesnimi>@192.168.35.140
 sudo stress-ng --cpu 4 --timeout 180s &
 ```
 
+`stress-ng --cpu 4` paneb 4 protsessorit 100% koormuse alla 3 minutiks. Kuna trigger nõuab 5 minutit keskmist, jookseme tahtlikult üle lävendi, aga mitte nii kaua et trigger Firing muutub.
+
 *Monitoring → Problems* — 1-2 min pärast ilmub `High CPU utilization`. Peata (`sudo pkill stress-ng`) → trigger laheneb ise.
+
+**Miks see oluline**: sellisel kujul töötab **iga** Zabbix trigger — olek liigub `Inactive → Pending → Firing → Inactive` vastavalt tingimuse täitumisele. "Pending" on automaatne "for" kestus — ei löö kohe tulekahju, ootab et tingimus püsib. Kui kunagi ütled "miks mu alerti ei tuletatud", vaata esmalt seda oleku ajalugu.
 
 <details>
 <summary>🔧 Edasijõudnule: kirjuta ise keerulisem trigger</summary>
 
-Template'i triggerid kasutavad lihtsaid expression'eid. Proovi kirjutada oma:
+Template'i trigger-id kasutavad lihtsaid expression'eid. Proovi kirjutada oma:
 
 *Data collection → Hosts → kliki `mon-target` real **Triggers** lingil → Create trigger*:
 
@@ -355,7 +344,9 @@ Expression builder aitab, aga päris Zabbixi admin kirjutab expression'id käsit
 
 *Monitoring → Dashboards → Global view*
 
-`Linux by Zabbix agent` template tõi kaasa valmis dashboardi. Näed CPU, mälu, ketta graafikuid. Võrdle Grafanaga päevast 1 — Zabbixi dashboard tuleb template'iga automaatselt, Grafanas kirjutasid PromQL päringud ise.
+`Linux by Zabbix agent` template tõi kaasa valmis dashboardi. Näed CPU, mälu, ketta graafikuid ilma ühtki PromQL'i kirjutamata. Võrdle Grafanaga päevast 1 — Zabbixi dashboard tuleb template'iga automaatselt, Grafanas kirjutasid PromQL päringud ise.
+
+**Mis see tähendab praktikas**: Zabbix on "monitoring out of the box". Lisa host, lisa template, jookse. Grafana + Prometheus nõuab rohkem ettevalmistustes käsitööd, aga on **versioonitud** (PromQL YAML-is + Grafana dashboards JSON-is). Mõlemal on kohad, millal sobib.
 
 💭 **Mõtle:** Zabbix template andis ~300 item'it ja ~50 trigger'it ühe klikiga. Prometheuses kirjutasid alert-reeglid YAML-i käsitsi. Kumb sobib paremini sinu töökeskkonda — template'd või "infrastructure as code"?
 
@@ -365,11 +356,17 @@ Expression builder aitab, aga päris Zabbixi admin kirjutab expression'id käsit
 
 Päev 1 Prometheuses kasutasid `nginx-prometheus-exporter` konteinerit et Nginx stub_status andmeid koguda. Zabbix HTTP Agent teeb sama ilma välise exporter'ita — server küsib URL-i otse.
 
+**Miks see oluline:** iga exporter-konteiner on üks rohkem asi, mida hoida üleval (logid, uuendused, konflikte, failure mode'd). Kui suudad küsida otse (HTTP API, SNMP, JMX), säästad end sellest üleliigsest kihist. Selle osa eesmärk on näha **master + dependent** mustrit — üks HTTP päring annab mitu mõõdikut.
+
 ### 4.1 Host ilma agent'ita
 
 Loo `nginx-web` host. Host group: loo uus `Applications`. **Interface'i ära lisa** — HTTP Agent teeb päringu otse URL-ile, agent'i pole vaja.
 
+**Miks ilma interface'ita**: Zabbixis on interface "kuidas server mõõdetava objektiga ühenduse saab" (tavaliselt agent'i kaudu). HTTP Agent tüüpi item küsib URL-i otse, ei vaja välise protsessi (agent) vahenduses. See on sama muster mida Prometheus kasutab (pull HTTP → scrape).
+
 ### 4.2 Master item
+
+Esimene item küsib **kogu** stub_status väljundit korraga. See on "master" — hiljem ehitame sellest mitu "dependent" item'it, kes kasutavad sama toorandmeid.
 
 *Items → Create*:
 
@@ -380,9 +377,13 @@ Loo `nginx-web` host. Host group: loo uus `Applications`. **Interface'i ära lis
 - Type of information: **Text**
 - Update interval: `30s`
 
+**Miks Text, mitte Numeric**: stub_status väljund on mitmerealine tekst, mõne numbrilise väärtusega. Numeric ei sobi. Master item hoiab **toorandmeid**, dependent item'id parseerivad numbri välja.
+
 Minut hiljem *Latest data* näitab stub_status teksti.
 
 ### 4.3 Dependent item
+
+Nüüd ekstraheerime ühe konkreetse numbri master item'i väljundist.
 
 *Items → Create*:
 
@@ -393,6 +394,8 @@ Minut hiljem *Latest data* näitab stub_status teksti.
 - Type of information: **Numeric (unsigned)**
 - Preprocessing → Add → Regular expression: pattern `Active connections: (\d+)`, output `\1`
 
+**Miks master + dependent**: stub_status annab kogu infot ühe HTTP päringuga — active connections, reading, writing, waiting, handled requests jne. Kui teeksid iga numbri jaoks eraldi HTTP päringu, tekiks 5 päringut 30s kohta (Nginx pool = koormus, võrgus = latency). Master küsib ühe korra, dependent'id parsivad sealt erinevaid numbreid. Üks päring → viis mõõdikut.
+
 Tekita liiklust:
 
 ```bash
@@ -401,7 +404,9 @@ for i in {1..20}; do curl -s http://192.168.35.141:8080/ > /dev/null & done; wai
 
 ### 4.4 Tee ise
 
-Loo dependent item `Requests total` — regex: `requests\s+\d+\s+(\d+)\s+\d+`. Üks HTTP päring annab kolm mõõdikut.
+Loo dependent item `Requests total` — regex: `requests\s+\d+\s+(\d+)\s+\d+`. Üks HTTP päring annab kolm mõõdikut (active connections, requests total + mida veel ise ekstraheerida soovid).
+
+See on iseseisev harjutus — külge vaadatakse regex'i ja master item'i väljundit. Kui regex ei tule kohe välja, kliki master item'ile *Test* nuppu — Zabbix näitab väljundit ja saad regex'i jooksvalt testida.
 
 <details>
 <summary>🔧 Edasijõudnule: JSONPath preprocessing</summary>
@@ -428,7 +433,11 @@ JSONPath on nagu XPath, aga JSON-ile. Regex'ist selgem, vähem vigu. [Docs / pre
 
 UserParameter on shell-käsk mida agent käivitab, kui server küsib võtmega. Üks rida ja sul on uus mõõdik. [Docs](https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters).
 
-### 5.1 echo 42
+**Miks see on oluline:** template'id katavad ~300 standard-mõõdikut, aga iga organisatsioon vajab **oma mõõdikuid** — ärilogide veaarvud, küsimuste järjekord, licence'i expiration, tarkvaraversioon. Ilma UserParameter'ita peaksid need tulema HTTP exporter'ist või eraldi teenusest. UserParameter teeb selle ühe rea konfiga.
+
+### 5.1 echo 42 — minimaalne UserParameter
+
+Esimesena teeme kõige lihtsama võimaliku UserParameter'i — konstant 42. See aitab aru saada, mis on "võti" ja mis on "väärtus", enne kui läheme keerulisemate peale.
 
 ```bash
 echo 'UserParameter=minu.test, echo 42' > ~/paev2/zabbix/config/test.conf
@@ -439,7 +448,11 @@ docker exec zabbix-server zabbix_get -s zabbix-agent -k minu.test
 
 Vastus: `42`.
 
-### 5.2 Parameetrid
+**Mis just juhtus:** kirjutasid agent'i config'i faili, mille mount on `./config:/etc/zabbix/zabbix_agentd.d:ro`. Konfig ütleb: kui server küsib võtit `minu.test`, käivita `echo 42` ja tagasta väljund. Võti `minu.test` on suvaline string — sa ise valid konventsiooni (tavaliselt `rakendus.alam-mõõdik`).
+
+### 5.2 Parameetrid võtmes
+
+Võtmed on dünaamilised — võid anda talle argumente nurksulgudes. See võimaldab ühe UserParameter'iga kirjutada "malli" ja siis küsida konkreetseid järgi.
 
 ```bash
 cat > ~/paev2/zabbix/config/test.conf <<'EOF'
@@ -450,11 +463,17 @@ docker exec zabbix-server zabbix_get -s zabbix-agent -k "minu.topelt[5]"
 docker exec zabbix-server zabbix_get -s zabbix-agent -k "minu.topelt[100]"
 ```
 
-`[*]` → parameetrid lubatud. `$1` viitab esimesele.
+Esimene päring annab `10`, teine `200`. `[*]` võtme definitsioonis tähendab "lubatud on mistahes parameetrid", `$1` viitab esimesele parameetrile, `$2` teisele jne.
+
+**Miks see on oluline:** hiljem kirjutame `applog.errors[payment]`, `applog.errors[auth]`, `applog.errors[api]` — üks UserParameter, aga Zabbixis on kolm eraldi item'it. Ilma parameetriteta peaks iga teenuse jaoks eraldi UserParameter'i kirjutama.
 
 ### 5.3 Päris mõõdik — applog
 
-mon-target'il kirjutab log-generator `/var/log/app/app.log`. SSH sinna:
+Nüüd kirjutame midagi kasulikku. mon-target'il jookseb log-generator, mis lisab `/var/log/app/app.log` failile ridu kujul `2026-04-25T10:23:41 [ERROR] [payment] ...`. Tahame teada: mitu `ERROR` rida on teenusest `payment` viimases 1000 reas.
+
+**Lahendus `tail + grep`** on shell-klassika — `tail -n 1000` annab faili viimased 1000 rida, `grep -c` loendab mustrile vastavad read. Cron'is teeks sama. UserParameter teeb sellest Zabbix item'i.
+
+SSH mon-target'ile:
 
 ```bash
 ssh <eesnimi>@192.168.35.140
@@ -466,15 +485,24 @@ sudo systemctl restart zabbix-agent
 exit
 ```
 
-Testi:
+Kaks UserParameter'it — üks spetsialiseeritud "errors" (ainult ERROR tase), teine üldine "count" (kasutaja annab mõlemad). Mõlemad kasutavad parameetritega võtmeid. Zabbix agent jookseb mon-target'il juba eelinstallitult.
+
+Testi, et agent tagastab päris numbri:
 
 ```bash
 docker exec zabbix-server zabbix_get -s 192.168.35.140 -k "applog.errors[payment]"
 ```
 
+Pead nägema numbri (võib-olla 0 kui õnneks pole praegu payment-ERROR'eid voolus).
+
+!!! warning "Piirang: `tail -n 1000`"
+    See käsk loeb ainult viimased 1000 rida. Kui logi kasvab kiiresti, võib reaalne veaarv olla palju suurem kui see, mida näed. Tootmises eelistatakse [Log monitoring](https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/log_items) item-tüüpi, mis hoiab positsiooni ja loeb ainult uued read. UserParameter + grep on lihtsam, aga vaid demo-kvaliteedis.
+
 💡 **Kui `ZBX_NOTSUPPORTED`:** süntaksiviga konfis — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` ja kontrolli.
 
-### 5.4 Item + trigger
+### 5.4 Item ja trigger — andmed nähtavaks UI-s
+
+Agent tagastab numbri, aga Zabbix ei **salvesta** seda veel — pole item'it. Item ütleb Zabbixile "hakka seda võtit regulaarselt küsima ja salvestama". Trigger ütleb "ja kui väärtus käib üle lävendi, tekita probleem".
 
 mon-target host → *Items → Create*:
 
@@ -484,26 +512,32 @@ mon-target host → *Items → Create*:
 - Type of information: Numeric (unsigned)
 - Update interval: `30s`
 
+**Miks 30 sekundit**: logi kasvab ~1 rida sekundis, 30s annab õige kompromissi reaktsioonikiiruse ja serveri koormuse vahel. Iga sekund oleks üleliigne, iga 5 minut oleks aeglasem kui märkate.
+
 *Data collection → Hosts → kliki `mon-target` real **Triggers** lingil (mitte host nimel!) → Create trigger*:
 
 - Name: `Too many payment errors on {HOST.NAME}`
 - Severity: Warning
 - Expression: `last(/mon-target/applog.errors[payment])>10`
 
+**Miks `last() > 10`**: item'i väärtus on `tail -n 1000 | grep -c ERROR payment`. Kui viimase 1000 rea hulgas on üle 10 payment-ERROR'i, midagi on tegelikult katki. `{HOST.NAME}` on Zabbixi **makro** — trigger'i kirjeldusse paigutatakse automaatselt vastav host'i nimi (siin `mon-target`). Sama trigger töötab teise host'iga, kui linkida uuesti.
+
 💡 **Trigger navigatsioon Zabbix 7.0:** trigger'i loomiseks mine host'i real "Triggers" lingile — paljud otsivad menüüst Alerts → Triggers, aga seal näeb ainult olemasolevaid.
 
-### 5.5 Error-torm
+### 5.5 Error-torm — testi, et trigger elab
+
+Produktsioon on kvaliteetne ainult siis, kui sa oled testinud, et probleemi tekkimisel see ka välja lööb. Tekita künstlik error-torm mon-target'i logifaili ja vaata, mitu sekundit hiljem Zabbix seda märkab.
 
 ```bash
 ssh <eesnimi>@192.168.35.140 \
   'for i in $(seq 1 100); do echo "$(date -Iseconds) [ERROR] [payment] Spam_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
 ```
 
-1 min → *Problems* → trigger Firing.
+See tekitab 100 ERROR rida pärast viimase 1000 rea hulka. Nii on kindel, et `grep -c` annab väärtuse üle 10. Umbes 1 min pärast (update interval + server-side processing) *Problems* lehel trigger **Firing**. Kui lakkad logikirjadeid lisamast, vead liiguvad aknast välja ja trigger laheneb ise.
 
-### 5.6 Honeypot
+### 5.6 Honeypot — UserParameter turbe-kontekstis
 
-UserParameter ei pea olema ainult jõudluse jaoks. Lihtne honeypot: ava port kuhu keegi ei peaks ühenduma.
+UserParameter ei pea olema ainult jõudluse jaoks. Lihtsaim honeypot on avatud port kuhu keegi "õiges" ei peaks ühenduma — tulemüüri taga teenuste, ainult ründaja skannib. Iga ühendus on turvasignaal.
 
 ```bash
 ssh <eesnimi>@192.168.35.140
@@ -518,7 +552,9 @@ sudo touch /var/log/honeypot.log
 nohup sudo /usr/local/bin/honeypot-listen.sh &
 ```
 
-Lisa UserParameter:
+Skript avab pordi 2222 ja iga ühenduse kohta kirjutab rea `HIT` faili. Kui keegi seda porti skannib, tekib rida. Mingit teenust seal õieti ei jookse — port on mõeldud "lõksuks".
+
+Lisa UserParameter, mis loendab HIT-e:
 
 ```bash
 sudo tee -a /etc/zabbix/zabbix_agentd.d/applog.conf <<'EOF'
@@ -528,13 +564,17 @@ sudo systemctl restart zabbix-agent
 exit
 ```
 
+See UserParameter on **ilma parameetrita** — lihtsalt loendab rida honeypoti logis.
+
 Loo item (`honeypot.hits`, Numeric unsigned, 15s) ja trigger:
 
 - Name: `Honeypot hit detected on {HOST.NAME}`
 - Severity: **High**
 - Expression: `last(/mon-target/honeypot.hits)>0`
 
-Palud naabril:
+**Miks `High`**: `Warning` päev 2 payment-error'itel — need juhtuvad mingi määra, tavaline müra. Honeypot hit on **definitsiooni järgi** anomaalia — ei tohiks kunagi juhtuda. `last() > 0` ja `High` ütleb "iga üks löök ongi probleem".
+
+Testi üks ühendus (palu naabril seda teha või ise testi VM-ist):
 
 ```bash
 nc -zv 192.168.35.140 2222
@@ -568,6 +608,8 @@ See on rohkem turvameeskonnale — aga näitab kui laiendatav UserParameter on.
 
 Enne kui edasi — üks tähtis küsimus: Osa 5.3 konfis olid paroolid ja teed kõvakodeeritud. Tootmises nii ei tee.
 
+**Miks see on probleem**: kui kirjutad konfis `-u root -p Monitor2026!`, on parool nüüd agent'i konfis kettal, audit-logis, git'is (kui kommittid), backup'is. See on 4+ kohta, kust parool saab lekkida. User macros lahendab selle — väärtused Zabbix'i UI-s, krüpteeritud serveris, item kasutab makro-nime.
+
 *Data collection → Hosts → `docker-agent` → Macros* tab → *Add*:
 
 | Macro | Value | Type |
@@ -575,382 +617,13 @@ Enne kui edasi — üks tähtis küsimus: Osa 5.3 konfis olid paroolid ja teed k
 | `{$APP.LOG.PATH}` | `/var/log/app/app.log` | Text |
 | `{$APP.DB.PASSWORD}` | `secret_123` | **Secret text** |
 
-**Secret text** peidab väärtuse UI-s ja audit-logis. Ava sama host'i Macros tab uuesti — Secret väärtust ei näe enam.
+Item'is kasuta võtit nagu `applog.errors[{$APP.SERVICE}]` — Zabbix asendab makro enne agentile saatmist. **Secret text** peidab väärtuse UI-s ja audit-logis. Ava sama host'i Macros tab uuesti — Secret väärtust ei näe enam.
 
 💭 **Mõtle:** UserParameter võimaldab mis tahes shell-käsku mõõdikuks muuta. Mis on selle turvarisk? Kuidas hallatakse sinu tööl paroole ja tokeneid monitooringu kontekstis — Vault, env-muutujad, failid?
 
 ---
 
-## LOKI
-
-Zabbix ütles "trigger Firing" — on probleem. Aga **mida** täpselt? Logid vastavad sellele. Lokiga tood logid Grafanasse — SSH + grep asemel LogQL päringud brauseris.
-
----
-
-## Osa 6 · LogQL — brauseris ja päriselt
-
-### 6.1 Simulator
-
-Ava brauseris: <https://grafana.com/docs/loki/latest/query/analyzer/>
-
-Vali **logfmt** formaat. Kirjuta:
-
-```logql
-{job="analyze"} |= "error"
-```
-
-Run query. Rohelised read sobivad, hallid ei sobi.
-
-### 6.2 Ekstraheeri labelid
-
-```logql
-{job="analyze"} | logfmt | level = "error"
-```
-
-Erinevus — nüüd **parsisid** logi ja filtreerisid **labeli** järgi, mitte tekstiotsingu järgi.
-
-### 6.3 Pattern parser
-
-Vali **unstructured** formaat:
-
-```logql
-{job="analyze"} | pattern `<_> <user> <_>` | user =~ "kling.*"
-```
-
-`<_>` ignoreerib, `<user>` püüab labeli.
-
-### 6.4 JSON
-
-Vali **json** formaat:
-
-```logql
-{job="analyze"} | json | status_code = "500"
-```
-
-Neli parserit — `json`, `logfmt`, `pattern`, `regexp`. `pattern` on enim kasutatav kuna enamik logisid on vabatekst.
-
-💭 **Mõtle:** Sinu töö logid — mis formaadis need on? Millist parserit kasutaksid?
-
----
-
-## Osa 7 · Loki + Promtail stack
-
-```bash
-mkdir -p ~/paev2/loki/config && cd ~/paev2/loki
-```
-
-### 7.1 Loki konfiguratsioon
-
-```bash
-cat > config/loki-config.yml << 'EOF'
-auth_enabled: false
-
-server:
-  http_listen_port: 3100
-
-common:
-  instance_addr: 127.0.0.1
-  path_prefix: /loki
-  storage:
-    filesystem:
-      chunks_directory: /loki/chunks
-      rules_directory: /loki/rules
-  replication_factor: 1
-  ring:
-    kvstore:
-      store: inmemory
-
-schema_config:
-  configs:
-    - from: 2024-01-01
-      store: tsdb
-      object_store: filesystem
-      schema: v13
-      index:
-        prefix: index_
-        period: 24h
-
-limits_config:
-  allow_structured_metadata: true
-EOF
-```
-
-### 7.2 Loki teenus
-
-Loo `docker-compose.yml`:
-
-```yaml
-services:
-  loki:
-    image: grafana/loki:3.2.1
-    container_name: loki
-    ports:
-      - "3100:3100"
-    volumes:
-      - ./config/loki-config.yml:/etc/loki/local-config.yaml
-      - loki-data:/loki
-    command: -config.file=/etc/loki/local-config.yaml
-    restart: unless-stopped
-
-volumes:
-  loki-data:
-  grafana-data:
-  app-logs:
-  nginx-logs:
-```
-
-```bash
-docker compose up -d loki
-sleep 10
-curl -s http://localhost:3100/ready
-```
-
-Vastus `ready`. Kui ei — `docker compose logs loki`.
-
-### 7.3 Log-generator
-
-Lisa `services:` alla:
-
-```yaml
-  log-generator:
-    image: busybox:latest
-    container_name: log-generator
-    command:
-      - sh
-      - -c
-      - |
-        mkdir -p /var/log/app /var/log/nginx
-        SERVICES="payment auth api database cache"
-        LEVELS="INFO INFO INFO INFO INFO WARN ERROR"
-        while true; do
-          S=$$(echo $$SERVICES | tr " " "\n" | shuf -n1)
-          L=$$(echo $$LEVELS | tr " " "\n" | shuf -n1)
-          LATENCY=$$((RANDOM % 500))
-          echo "$$(date -Iseconds) [$$L] [$$S] duration=$${LATENCY}ms trace_id=$$RANDOM" >> /var/log/app/app.log
-          sleep 1
-        done
-    volumes:
-      - app-logs:/var/log/app
-    restart: unless-stopped
-```
-
-```bash
-docker compose up -d log-generator
-sleep 5
-docker exec log-generator tail -3 /var/log/app/app.log
-```
-
-Näed ridu nagu `2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345`.
-
-### 7.4 Promtail
-
-```bash
-cat > config/promtail-config.yml << 'EOF'
-server:
-  http_listen_port: 9080
-  grpc_listen_port: 0
-
-positions:
-  filename: /tmp/positions.yaml
-
-clients:
-  - url: http://loki:3100/loki/api/v1/push
-
-scrape_configs:
-  - job_name: applog
-    static_configs:
-      - targets:
-          - localhost
-        labels:
-          job: applog
-          __path__: /var/log/app/*.log
-EOF
-```
-
-Lisa `services:` alla:
-
-```yaml
-  promtail:
-    image: grafana/promtail:3.2.1
-    container_name: promtail
-    volumes:
-      - ./config/promtail-config.yml:/etc/promtail/config.yml
-      - app-logs:/var/log/app:ro
-    command: -config.file=/etc/promtail/config.yml
-    depends_on:
-      - loki
-    restart: unless-stopped
-```
-
-```bash
-docker compose up -d promtail
-sleep 10
-docker compose logs promtail | tail -5
-```
-
-💡 **Kui "context deadline exceeded":** Loki pole veel ready. Oota 15s, `docker restart promtail`.
-
-### 7.5 Grafana
-
-Lisa `services:` alla:
-
-```yaml
-  grafana:
-    image: grafana/grafana:11.1.0
-    container_name: grafana-loki
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=monitoring2026
-    volumes:
-      - grafana-data:/var/lib/grafana
-    restart: unless-stopped
-```
-
-```bash
-docker compose up -d grafana-loki
-```
-
-Brauseris `http://192.168.35.12X:3000` (admin / `monitoring2026`).
-
-*Connections → Data sources → Add → Loki* → URL: `http://loki:3100` → *Save & test* → roheline ✅.
-
-### 7.6 Esimesed read
-
-*Explore* → datasource: Loki → Code view:
-
-```logql
-{job="applog"}
-```
-
-Run query. Näed ridu tekkima.
-
-💭 **Mõtle:** Promtail loeb faili nagu `tail -f`. Mis juhtub kui fail roteeritakse? Mis on positions-faili roll?
-
----
-
-## Osa 8 · Pattern parser → rate() → dashboard
-
-### 8.1 Pattern
-
-Meie logirida: `2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345`
-
-```logql
-{job="applog"} | pattern `<_> [<level>] [<service>] duration=<duration>ms trace_id=<_>`
-```
-
-Kliki rea peal — näed labeleid `level`, `service`, `duration`.
-
-### 8.2 Filtreeri
-
-```logql
-{job="applog"} | pattern `<_> [<level>] [<service>] duration=<duration>ms trace_id=<_>` | level="ERROR" | service="payment"
-```
-
-Ainult payment error'id. Proovi ise: näita `api` teenuse logisid kus `duration > 300`.
-
-### 8.3 Label disain — mis on label, mis on sisu?
-
-Meie logis on: `level`, `service`, `duration`, `trace_id`. Pattern parser tegi neist kõigist labelid. Aga kas kõik peaksid olema labelid?
-
-Mõtle:
-
-| Väli | Unikaalseid väärtusi | Label? |
-|------|---------------------|--------|
-| `level` | 3 (INFO, WARN, ERROR) | ✅ Jah |
-| `service` | 5 (payment, auth, api, database, cache) | ✅ Jah |
-| `duration` | ~500 erinevat numbrit | ❌ Ei — liiga palju |
-| `trace_id` | unikaalne iga rea kohta | ❌ Kindlasti ei |
-
-**Reegel:** label'iks ainult asjad millest on kuni ~100 unikaalset väärtust. Kõik muu jääb sisusse ja otsitakse `|=` või parseri abil.
-
-Mis juhtub kui teed `trace_id` label'iks? Proovi:
-
-```logql
-{job="applog"} | pattern `<_> [<_>] [<_>] <_> trace_id=<trace_id>`
-```
-
-Loki töötab — aga kujuta ette 10 000 unikaalset trace_id'd. See on 10 000 eraldi voogu. Loki indeks paisub, päringud aeglustuvad. Tootmises = raha ja aeg.
-
-<details>
-<summary>🔧 Edasijõudnule: Promtail pipeline stages</summary>
-
-Tootmises ei parsi alati runtime'is. Promtail saab logisid **enne Loki saatmist** töödelda `pipeline_stages` abil:
-
-```yaml
-scrape_configs:
-  - job_name: applog
-    pipeline_stages:
-      - regex:
-          expression: '\[(?P<level>\w+)\] \[(?P<service>\w+)\]'
-      - labels:
-          level:
-          service:
-    static_configs:
-      - targets: [localhost]
-        labels:
-          job: applog
-          __path__: /var/log/app/*.log
-```
-
-Nüüd `level` ja `service` on **püsivad labelid** Lokis — filter `{level="ERROR"}` kasutab indeksit, mitte brute-force skaneerimist. `duration` ja `trace_id` jäävad sisusse.
-
-See on tootmise vs labi erinevus. Labis parsime runtime'is (lihtsam setup), tootmises Promtail pipeline'is (kiiremad päringud).
-
-</details>
-
-### 8.4 rate() — logist metrika
-
-```logql
-sum by (service) (
-  rate(
-    {job="applog"}
-      | pattern `<_> [<level>] [<service>] <_>`
-      | level="ERROR"
-      [5m]
-  )
-)
-```
-
-Vaheta Time series view — näed graafikut. Logist sai number — sama kontseptsioon mis PromQL `rate()`, aga allikas on tekst.
-
-### 8.5 Dashboard
-
-*Dashboards → New → Add visualization* → Loki datasource:
-
-**Paneel 1:** `ERRORs per service` — eelmine päring, Time series.
-
-**Paneel 2:**
-```logql
-sum by (level) (count_over_time({job="applog"} | pattern `<_> [<level>] [<_>] <_>` [1m]))
-```
-Bar chart — logimaht taseme järgi.
-
-Salvesta: `App monitoring`.
-
-### 8.6 FINAAL — sama sündmus, kaks vaatenurka
-
-Nüüd on mõlemad stackid üleval. Tekita error-torm mon-target'il:
-
-```bash
-ssh <eesnimi>@192.168.35.140 \
-  'for i in $(seq 1 200); do echo "$(date -Iseconds) [ERROR] [payment] Spam_$i" | sudo tee -a /var/log/app/app.log > /dev/null; done'
-```
-
-Ava kaks brauseri tabi:
-
-1. **Zabbix:** `http://192.168.35.12X:8080` → *Monitoring → Problems* → `Too many payment errors` trigger **Firing**
-2. **Loki Grafana:** `http://192.168.35.12X:3000` → Dashboard `App monitoring` → payment error spike graafikul
-
-Sama sündmus, kaks perspektiivi. Zabbix ütleb **"on probleem"** (trigger). Loki näitab **"mis juhtus"** (logid + rate).
-
-💭 **Lõpureflektsioon:** Sul on nüüd kolm tööriista — Prometheus (metrikad, pull), Zabbix (agent, push), Loki (logid). Millist probleemi oma tööst lahendaksid nendega esimesena? Kas näed olukorda kus kaks neist töötaksid kõrvuti?
-
----
-
-## ✅ Lõpukontroll
-
-**Zabbix:**
+## ✅ Lõpukontroll (Zabbix pool)
 
 - [ ] `docker compose ps` (`~/paev2/zabbix/`) — 4 konteinerit Up
 - [ ] docker-agent ja mon-target availability roheline
@@ -960,14 +633,7 @@ Sama sündmus, kaks perspektiivi. Zabbix ütleb **"on probleem"** (trigger). Lok
 - [ ] Payment errors trigger läks Firing ja lahenes
 - [ ] Honeypot trigger Firing kui keegi ühendus port 2222-le
 
-**Loki:**
-
-- [ ] `docker compose ps` (`~/paev2/loki/`) — 4 konteinerit Up
-- [ ] Grafana Loki datasource roheline
-- [ ] Explore näitab `{job="applog"}` logisid
-- [ ] Pattern parser ekstraheerib level, service, duration
-- [ ] Dashboard `App monitoring` salvestatud, vähemalt 2 paneeli
-- [ ] FINAAL: error-torm nähtav Zabbixi Problems lehel JA Loki graafikul
+**Jätka:** [Labor: Loki](loki_lab.md) — logide stack, LogQL, FINAAL.
 
 ---
 
@@ -1016,23 +682,6 @@ Lisa template mon-target host'ile. 2-3 min → ~10 uut item'it tekib automaatsel
 *Alerts → Media types → Discord* → lisa webhook URL → *Users → Admin → Media → Discord* → *Actions → Create action* (severity ≥ Warning, send to Admin via Discord, + recovery operation).
 
 Testi error-tormiga — sõnum peaks tulema Discord kanalisse.
-
----
-
-### Loki: Nginx accesslog + RED
-
-Lisa `log-generator` konteinerisse nginx-stiilis accesslog genereerimine. Lisa Promtail konffi `job: nginx`. Ehita RED dashboard:
-- `rate()` — päringuid sekundis
-- `status =~ "5.."` — error rate
-- `sum by (path)` — per path
-
-### Log-based alert
-
-Grafana → *Alerting → Alert rules → New* → Loki query `rate({job="applog"} | pattern ... | level="ERROR" | service="payment" [2m])` → threshold > 0.1 → Contact point: Discord.
-
-### Correlation — metric → log
-
-Dashboard paneelis *Data links → Add link* mis viib Explore vaatesse sama teenuse Loki logidele. Ühe klikiga graafikult logidesse.
 
 ### Trigger hysteresis
 
@@ -1320,65 +969,6 @@ Järgnevad teemad on mõeldud tootmiskeskkondade jaoks. Igaüks on iseseisev —
     - [Audit log](https://www.zabbix.com/documentation/7.0/en/manual/web_interface/frontend_sections/reports/audit)
     - [Maintenance](https://www.zabbix.com/documentation/7.0/en/manual/maintenance)
 
-
-??? note "Loki: retention, multi-tenancy ja S3 storage"
-
-    Tootmises ei hoia logisid lõputult kohalikul kettal.
-
-    **Retention (logide eluiga):**
-
-    `loki-config.yml`:
-
-    ```yaml
-    limits_config:
-      retention_period: 168h    # 7 päeva
-
-    compactor:
-      working_directory: /loki/compactor
-      retention_enabled: true
-      delete_request_store: filesystem
-    ```
-
-    **Multi-tenancy (mitme meeskonna logid eraldi):**
-
-    `loki-config.yml`:
-
-    ```yaml
-    auth_enabled: true
-    ```
-
-    Promtail saadab `X-Scope-OrgID` header'i:
-
-    ```yaml
-    clients:
-      - url: http://loki:3100/loki/api/v1/push
-        tenant_id: team-backend
-    ```
-
-    Grafana datasource'is: HTTP Headers → `X-Scope-OrgID: team-backend`.
-
-    Iga meeskond näeb ainult oma logisid.
-
-    **S3/MinIO storage (tootmises):**
-
-    ```yaml
-    common:
-      storage:
-        s3:
-          endpoint: minio:9000
-          bucketnames: loki-chunks
-          access_key_id: minioadmin
-          secret_access_key: minioadmin
-          insecure: true
-          s3forcepathstyle: true
-    ```
-
-    **Loe edasi:**
-
-    - [Loki retention](https://grafana.com/docs/loki/latest/operations/storage/retention/)
-    - [Multi-tenancy](https://grafana.com/docs/loki/latest/operations/multi-tenancy/)
-    - [S3 storage](https://grafana.com/docs/loki/latest/storage/)
-
 ---
 
 ## Veaotsing
@@ -1391,12 +981,6 @@ Järgnevad teemad on mõeldud tootmiskeskkondade jaoks. Igaüks on iseseisev —
 | ZBX_NOTSUPPORTED | UserParameter süntaksiviga — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` |
 | Trigger ei Firing | Latest data — kas väärtus tegelikult ületab künnise? |
 | HTTP Agent timeout | `curl -v http://192.168.35.141:8080/stub_status` otse |
-| Loki "no labels found" | `{job="applog"}` — peab vastama Promtail config'ile |
-| Loki "too many streams" | Label on liiga unikaalne (trace_id). Eemalda. |
-| Promtail deadline exceeded | Loki pole ready — `docker restart promtail` |
-| Grafana Loki datasource punane | URL peab olema `http://loki:3100`, mitte `localhost` |
-| rate() tagastab 0 | Time range liiga kitsas — vaheta "Last 15 min" |
-| Mõlemad stackid aeglased | `free -h` — 4GB piir. Peata üks ajutiselt kui vaja. |
 
 ---
 
@@ -1408,10 +992,6 @@ Järgnevad teemad on mõeldud tootmiskeskkondade jaoks. Igaüks on iseseisev —
 | UserParameters | [zabbix.com/.../userparameters](https://www.zabbix.com/documentation/7.0/en/manual/config/items/userparameters) |
 | Low-Level Discovery | [zabbix.com/.../low_level_discovery](https://www.zabbix.com/documentation/7.0/en/manual/discovery/low_level_discovery) |
 | HTTP Agent | [zabbix.com/.../http](https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/http) |
-| Loki dokumentatsioon | [grafana.com/docs/loki](https://grafana.com/docs/loki/latest/) |
-| LogQL spetsifikatsioon | [grafana.com/.../query](https://grafana.com/docs/loki/latest/query/) |
-| Pattern parser | [grafana.com/.../pattern](https://grafana.com/docs/loki/latest/query/log_queries/#pattern) |
-| LogQL simulator | [grafana.com/.../analyzer](https://grafana.com/docs/loki/latest/query/analyzer/) |
 | Discord integration | [zabbix.com/integrations/discord](https://www.zabbix.com/integrations/discord) |
 
-**Versioonid:** Zabbix 7.0.6 LTS, MySQL 8.0, Loki 3.2.1, Promtail 3.2.1, Grafana 11.1.0.
+**Versioonid:** Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+).
