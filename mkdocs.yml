@@ -14,7 +14,6 @@ theme:
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
-    - navigation.expand
     - navigation.indexes
     - navigation.tracking
     - navigation.instant
