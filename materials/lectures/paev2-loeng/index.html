@@ -15,10 +15,6 @@
         <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/paev2-loeng/">
       
       
-        <link rel="prev" href="../../../labs/01_prometheus_grafana/lab/">
-      
-      
-        <link rel="next" href="../paev2-loki-loeng/">
       
       
         
@@ -29,7 +25,7 @@
     
     
       
-        <title>Loeng: Zabbix - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Päev 2: Zabbix — kõik-ühes seiresüsteem - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
@@ -118,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Loeng: Zabbix
+              Päev 2: Zabbix — kõik-ühes seiresüsteem
             
           </span>
         </div>
@@ -264,13 +260,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../paev2-zabbix-v2/" class="md-tabs__link">
           
   
   
@@ -358,7 +352,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../resources/docker-cheatsheet/" class="md-tabs__link">
+        <a href="../../../resources/vm-access/" class="md-tabs__link">
           
   
   
@@ -458,6 +452,8 @@
   
     
     
+      
+        
       
         
       
@@ -626,6 +622,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Koolitaja juhend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -637,10 +661,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -656,22 +678,21 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -689,7 +710,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -704,37 +725,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Loeng: Zabbix
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../paev2-zabbix-v2/" class="md-nav__link">
         
   
   
@@ -750,392 +744,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#opivaljundid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Õpiväljundid
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#1-miks-zabbix" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Miks Zabbix?
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="1. Miks Zabbix?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#zabbix-vs-prometheus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Zabbix vs Prometheus
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-arhitektuur-neli-komponenti" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Arhitektuur — neli komponenti
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2. Arhitektuur — neli komponenti">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#topoloogia-mida-sa-tana-laboris-ehitad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Topoloogia (mida sa täna laboris ehitad)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-andmemudel-host-item-trigger-action" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Andmemudel: Host → Item → Trigger → Action
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-agentid-tuubid-pluginad-active-vs-passive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Agentid: tüübid, pluginad, active vs passive
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Agentid: tüübid, pluginad, active vs passive">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#41-agent-1-vs-agent-2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.1 Agent 1 vs Agent 2
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#42-agentita-monitooring" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.2 Agentita monitooring
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#43-active-vs-passive-agent" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.3 Active vs passive agent
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-history-vs-trends-andmete-elutsukkel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. History vs Trends — andmete elutsükkel
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. History vs Trends — andmete elutsükkel">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#kaks-malu-tuupi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kaks mälu tüüpi
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#miks-see-vahe-kriitiline-on" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Miks see vahe kriitiline on
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#uks-konkreetne-nuanss-umardamine" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Üks konkreetne nüanss — ümardamine
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nvps-ja-andmemahu-planeerimine" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        NVPS ja andmemahu planeerimine
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#housekeeper-ja-selle-piirid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Housekeeper ja selle piirid
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-performance-andmebaas-on-kuningas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Performance — andmebaas on kuningas
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="6. Performance — andmebaas on kuningas">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#riistvara-ssd-on-valtimatu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Riistvara: SSD on vältimatu
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#db-haalestus-kontseptsioon-mitte-arvud" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DB häälestus — kontseptsioon, mitte arvud
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#serveri-haalestus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Serveri häälestus
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-skaleerimine-proksid-ja-ha" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Skaleerimine: proksid ja HA
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="7. Skaleerimine: proksid ja HA">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#71-proksi-klassikaliselt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7.1 Proksi — klassikaliselt
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#72-proxy-groups-zabbix-70" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7.2 Proxy groups (Zabbix 7.0+)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#73-zabbix-server-ha-alates-60" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7.3 Zabbix Server HA (alates 6.0)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#74-andmebaasi-ha" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7.4 Andmebaasi HA
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-sisemine-diagnostika" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Sisemine diagnostika
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#9-zabbix-8-kuhu-minnakse" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. Zabbix 8 — kuhu minnakse
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#10-kokkuvote" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Kokkuvõte
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#enesekontrolli-kusimused" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Enesekontrolli küsimused
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Allikad
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1148,7 +756,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../paev2-loki-loeng/" class="md-nav__link">
+      <a href="../paev2-loki-v2/" class="md-nav__link">
         
   
   
@@ -1584,6 +1192,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1638,6 +1250,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../resources/vm-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VM ligipääs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/grafana-stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana Stack — LGTM ülevaade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
         
   
@@ -1666,14 +1334,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/grafana-stack.md" class="md-nav__link">
+      <a href="../../../resources/material-style/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Grafana Stack — LGTM ülevaade
+    Materjalide stiilijuhend
   
 
     
@@ -2525,6 +2193,10 @@ Põhjus: triggeri funktsioonid (<code>last</code>, <code>avg</code>, <code>max</
 <h2 id="9-zabbix-8-kuhu-minnakse">9. Zabbix 8 — kuhu minnakse<a class="headerlink" href="#9-zabbix-8-kuhu-minnakse" title="Lingi sektsioonile">&para;</a></h2>
 <p>Täna kasutad Zabbix 7.0 LTS-i, mis ilmus juunis 2024. Aga tasub teada, mis tuleb: <strong>Zabbix 8.0 LTS ilmub sel aastal</strong> (alfa oktoobris 2025, stabiilne 2026 jooksul) ja see ei ole tavaline versiooniuuendus.</p>
 <p><strong>Zabbix 8 filosoofia</strong> on üleminek monitooringult → täielikule vaatlusele (observability). Alexei Vladišev: <em>liikumine reaktiivselt seirelt proaktiivsele mõistmisele</em>. See seob Zabbixi otseselt samasse maailma, kus on Prometheus + Grafana + Tempo + Loki — kogu kursuse teine pool.</p>
+<div class="admonition tip">
+<p class="admonition-title">Cloud-native observability — taustateadmine</p>
+<p>Kui kursuse teine pool (Grafana, Loki, Tempo) hakkab järgmistel päevadel kokku jooksma, vaata <a href="../../../resources/grafana-stack/">Grafana Stack — LGTM ülevaade</a>. See reader seletab, millisesse ruumi Zabbix 8 OTel-iga siseneb ja miks see pole juhuslik suund.</p>
+</div>
 <p><strong>Kolm suunda, mis 2026 sind päriselt mõjutavad:</strong></p>
 <ol>
 <li>
@@ -2635,7 +2307,7 @@ Põhjus: triggeri funktsioonid (<code>last</code>, <code>avg</code>, <code>max</
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 12:58:37 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 15:22:43 UTC">23. aprill 2026</span>
   </span>
 
     

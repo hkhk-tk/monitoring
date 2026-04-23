@@ -61,11 +61,19 @@
          <lastmod>2026-04-23</lastmod>
     </url>
     <url>
+         <loc>https://hkhk-tk.github.io/monitoring/materials/lectures/paev2-loki-v2/</loc>
+         <lastmod>2026-04-23</lastmod>
+    </url>
+    <url>
+         <loc>https://hkhk-tk.github.io/monitoring/materials/lectures/paev2-zabbix-v2/</loc>
+         <lastmod>2026-04-23</lastmod>
+    </url>
+    <url>
          <loc>https://hkhk-tk.github.io/monitoring/resources/docker-cheatsheet/</loc>
          <lastmod>2026-04-23</lastmod>
     </url>
     <url>
-         <loc>https://hkhk-tk.github.io/monitoring/resources/intro-to-grafana-stack/</loc>
+         <loc>https://hkhk-tk.github.io/monitoring/resources/grafana-stack/</loc>
          <lastmod>2026-04-23</lastmod>
     </url>
     <url>
