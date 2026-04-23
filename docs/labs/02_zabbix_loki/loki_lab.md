@@ -13,16 +13,16 @@ Labor jätkab sealt, kus Zabbix osa lõppes — Zabbix stack jääb taustale, Lo
 
 **Teadmised:**
 
-1. Selgitab Loki rolli LGTM stackis ja labelite vs sisu indekseerimise erinevust
-2. Eristab LogQL parserite kasutusolukordi (pattern, json, logfmt, regexp)
-3. Põhjendab label-disaini reegleid kardinaalsuse piiri kontekstis
+- Selgitab Loki rolli LGTM stackis ja labelite vs sisu indekseerimise erinevust
+- Eristab LogQL parserite kasutusolukordi (pattern, json, logfmt, regexp)
+- Põhjendab label-disaini reegleid kardinaalsuse piiri kontekstis
 
 **Oskused:**
 
-4. Ehitab Loki + Alloy + Grafana stack'i Docker Compose'iga
-5. Kirjutab LogQL päringuid ja parsib struktureerimata logi
-6. Teisendab logi metrikaks (`rate()`, `count_over_time`) ja ehitab dashboard'i
-7. Vaatab sama sündmust kahest vaatenurgast — Zabbix trigger + Loki graafik
+- Ehitab Loki + Alloy + Grafana stack'i Docker Compose'iga
+- Kirjutab LogQL päringuid ja parsib struktureerimata logi
+- Teisendab logi metrikaks (`rate()`, `count_over_time`) ja ehitab dashboard'i
+- Vaatab sama sündmust kahest vaatenurgast — Zabbix trigger + Loki graafik
 
 ---
 
@@ -34,6 +34,9 @@ Kontrolli, et Zabbix stack on eelmisest osast üleval:
 cd ~/paev2/zabbix && docker compose ps
 ```
 
+!!! tip "Kui `docker compose` ei tööta"
+    Mõnes VM-is/masinas on Compose vanema nimega. Kui saad veateate, kasuta sama käsu asemel `docker-compose` (näiteks `docker-compose ps`).
+
 Neli konteinerit `Up`. Kui ei, [mine tagasi Zabbix labi juurde](zabbix_lab.md).
 
 ---
@@ -44,9 +47,13 @@ Zabbix ütles "trigger Firing" — on probleem. Aga **mida** täpselt? Logid vas
 
 ## Osa 6 · LogQL — brauseris ja päriselt
 
+Selles osas harjutad LogQL-i ilma oma Loki instantsi käivitamata, et “keel” oleks enne käpas kui infra lisandub. Eesmärk on mõista vahet täisteksti filtri (`|=`) ja parserite (`logfmt`, `pattern`, `json`) vahel—see määrab, kas saad täpseid vastuseid või ainult “grep’i”.
+
 Enne oma stacki ehitamist prooviks LogQL-i Grafana ametlikul simulatoril. Eelis: tulemused on kohesed, ei pea ootama Loki käivitust. Harjutame 4 parserit (logfmt, pattern, json + filter `|=`) üksteise järel.
 
 ### 6.1 Simulator — täisteksti filter
+
+Alustad kõige lihtsamast tööriistast: “grep” LogQL-is. Siin saad kiiresti aru, kuidas label-selectors ja tekstiotsing käituvad, enne kui lisad parserid ja hakkad struktuuri välja võtma.
 
 Ava brauseris: <https://grafana.com/docs/loki/latest/query/analyzer/>
 
@@ -62,6 +69,8 @@ Run query. Rohelised read sobivad, hallid ei sobi.
 
 ### 6.2 Ekstraheeri labelid (logfmt parser)
 
+Siin näed, miks parser on parem kui paljas tekstiotsing: filter käib *välja* järgi (nt `level=error`), mitte “kusagil stringis on error”. See vähendab valepositiivseid ja teeb päringu semantiliseks.
+
 ```logql
 {job="analyze"} | logfmt | level = "error"
 ```
@@ -72,6 +81,8 @@ Erinevus — nüüd **parsisid** logi ja filtreerisid **labeli** järgi, mitte t
 **Miks see parem:** logfmt on vorming `level=error service=auth duration=42ms`. Parser teeb `level` järgi filtri semantiliselt — üle jäävad ainult `level=error` read, ning INFO-read (ka need, kus tekstis esineb sõna "error") jäävad välja. Filter on täpsem.
 
 ### 6.3 Pattern parser (struktureerimata tekst)
+
+Pattern on “kiire ja ohutu” viis vabatekstist välju kätte saada ilma regex-õuduseta. Eesmärk on näha, et saad labeli (`user`) välja võtta ka siis, kui logi pole JSON ega logfmt.
 
 Vali **unstructured** formaat:
 
@@ -84,6 +95,8 @@ Vali **unstructured** formaat:
 **Miks pattern oluline:** mitmed tootmises olevad logid **ei ole** logfmt ega JSON kujul. Apache access log, Nginx error log, Tomcat catalina.out — kõik vabas vormis. Pattern ütleb "selles kohas oota sõna, selles kohas ignore" ja teeb labelid struktureerimata stringist.
 
 ### 6.4 JSON parser
+
+JSON parser on kõige otsem tee, kui logi on struktureeritud: väljad on juba olemas ja neid saab kohe filtrites kasutada. Siin kinnitad idee: vali parser vastavalt logiformaadile, muidu “ei juhtu midagi” ja otsid viga valest kohast.
 
 Vali **json** formaat:
 
@@ -101,6 +114,8 @@ Neli parserit — `json`, `logfmt`, `pattern`, `regexp`. `pattern` on enim kasut
 
 ## Osa 7 · Loki + Alloy stack
 
+Selles osas paned püsti minimaalse, kuid realistliku logipinu: Loki (salvestus/otsing), Alloy (agent), Grafana (UI) ja logigeneraator (testandmed). Eesmärk on saada “otsast lõpuni” ahel tööle, et hiljem debugides oleks selge, millises lülis logid kaduma lähevad.
+
 Nüüd ehitame oma stacki. Sama lähenemine mis Zabbix labis — kiht-kihi haaval, iga kiht testitud eraldi enne järgmise lisamist. Stack koosneb 4 komponendist: **Loki** (kirjutab ja otsib logisid), **log-generator** (tekitab test-logi), **Alloy** (loeb logifaili ja saadab Lokisse), **Grafana** (UI).
 
 ```bash
@@ -111,6 +126,8 @@ mkdir -p ~/paev2/loki/config && cd ~/paev2/loki
     Kasutame tänavust ametlikku soovitust — **Grafana Alloy**. Promtail, mis Loki pärinud 2018 aastast, on tänaseks **feature-freeze** olekus (vt Loki loeng §10). Alloy on universaalne telemeetria-kollektor: sama agent saab koguda logid (Lokile), mõõdikud (Prometheusele/Mimirile), traces (Tempo'le) ja OpenTelemetry-ühilduvatele backendidele. Selle laboris hoiame selle lihtsa kujul — ainult logide osa.
 
 ### 7.1 Loki konfiguratsioon
+
+Siin seadistad Loki minimaalseks single-node jooksuks: auth väljas ja storage failisüsteemis. Eesmärk on saada `ready` endpoint tööle, et teaksid, et Loki on päriselt valmis logisid vastu võtma.
 
 Esmalt kirjutame Loki enda konfi. Loki vajab teadmisi: kuhu salvestada (filesystem, S3), millise skeemi versiooniga (v13 on praegune), kas autentimine on olemas. Laboris kasutame kõige lihtsamat varianti — lokaalne filesystem, auth väljas, single-node.
 
@@ -158,6 +175,8 @@ Tootmises oleks S3 asemel filesystem, auth sisse lülitatud, replikatsioonifakto
 
 ### 7.2 Loki teenus
 
+Siin paned Loki konteineri tööle ja kontrollid seda “väikese pingiga”, mitte Grafana kaudu. Kui `curl /ready` ei anna `ready`, pole mõtet Alloy/Grafanat veel lisada—viga on Lokis.
+
 Loo `docker-compose.yml`:
 
 ```yaml
@@ -193,6 +212,8 @@ curl -s http://localhost:3100/ready
 Vastus `ready`. Kui ei — `docker compose logs loki`. Loki tagastab `ready` alles siis, kui sisemine initsialiseerimine on läbi (TSDB indeksid, ring konsensus ka single-node puhul). Tavaliselt 5-10s.
 
 ### 7.3 Log-generator
+
+See osa annab sulle kontrollitud testandmed: ilma logideta ei saa Loki/Alloy ahelat verifitseerida. Eesmärk on näha, et logifail tekib ja kasvab enne kui Alloy seda tail’ima hakkab.
 
 Loki töötab, aga meil pole logisid. Lisame sisupakkuja — konteiner, mis 1x sekundis kirjutab juhusliku logirea applog-faili. Faili jälgib hiljem Alloy.
 
@@ -233,6 +254,8 @@ docker exec log-generator tail -3 /var/log/app/app.log
 Näed ridu nagu `2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345`.
 
 ### 7.4 Alloy
+
+Alloy on “transport”: ta loeb faili ja push’ib read Loki API-sse. Siin on fookus kahel asjal—õige mount (`:ro`) ja õige Loki URL konteinerivõrgus (`http://loki:3100/...`), sest need on kaks tüüpilisemat esimest viga.
 
 Loki ja logid on valmis, aga keegi peab logid Lokisse saatma. **Alloy** on see "keegi" — agent, mis jookseb logide peremees-masinal, loeb logifaile (sarnaselt `tail -f`-ile) ja saadab ridade Loki HTTP API-sse.
 
@@ -307,6 +330,8 @@ Alloy logis peab olema `component "loki.source.file.applog" started` ja mitte ü
 
 ### 7.5 Grafana
 
+Siin lisad UI ja ühendad ta Loki datasource’iga. Eesmärk on teha üks asi õigesti: datasource URL peab olema konteineri vaatepunktist (`http://loki:3100`), mitte hosti `localhost`.
+
 Lõpuks UI. Grafana, tuttav päev 1-st, aga seekord **uus instants** pordil 3001 (päev 1 Grafana on 3000-l). Kui päev 1 stack on veel üleval, hoiame need eraldi pordil, et konflikti ei tekiks.
 
 Lisa `services:` alla:
@@ -338,6 +363,8 @@ Brauseris `http://192.168.35.12X:3001` (admin / `monitoring2026`).
 
 ### 7.6 Esimesed read
 
+See on end-to-end kontrollpunkt: üks LogQL `{job="applog"}` peab näitama ridu, mis tulevad sekunditega. Kui siin on tühi, siis viga on peaaegu alati Alloy configis (path/labels) või Loki datasource URL-is.
+
 *Explore* → datasource: Loki → Code view:
 
 ```logql
@@ -356,9 +383,13 @@ Run query. Näed ridu tekkima.
 
 ## Osa 8 · Pattern parser → rate() → dashboard
 
+Selles osas teed Loki “triki” nähtavaks: parsid vabateksti struktuuriks ja teisendad logid metrikaks (`rate`, `count_over_time`), et joonistada dashboard. Eesmärk on näha sama probleemi kahest vaatest: Zabbix annab häire, Loki/Grafana näitab *mida täpselt logides juhtus*.
+
 Nüüd kui stack on üleval ja LogQL alus on olemas, teeme üht päris kasulikku asja — teisendame logid metrikaks, et saaks graafikul jooksu jälgida. See on Loki võtmehetk: ilma Lokita oleks sul vaja **kahte** süsteemi (logi + metrika); Lokiga saad ühe logi-andmest teha metrika lennult.
 
 ### 8.1 Pattern — struktuuri lisamine
+
+Siin teed logirea “andmestruktuuriks”: võtad level/service/duration välja, et neid saaks filtrites ja agregaatides kasutada. See on sama mõtteviis mis metrikate labelid—ainult et siin tuleb struktuur tekstist.
 
 Meie logirida: `2026-04-25T10:23:41+03:00 [ERROR] [payment] duration=245ms trace_id=12345`
 
@@ -372,6 +403,8 @@ Kliki rea peal — näed labeleid `level`, `service`, `duration`.
 
 ### 8.2 Filtreeri pattern'i tulemusi
 
+Siin näed vahet “otsin stringi” vs “filtreerin välja”: pärast parsingu saad kirjutada `level="ERROR"` ja `service="payment"`. See on täpsem kui `|= "ERROR"` ja vähem veaohtlik päringutes.
+
 ```logql
 {job="applog"} | pattern `<_> [<level>] [<service>] duration=<duration>ms trace_id=<_>` | level="ERROR" | service="payment"
 ```
@@ -381,6 +414,8 @@ Ainult payment error'id. Lisafiltrit saab lihtsalt täiendada — `| duration > 
 **Märka:** enne `| pattern` filtreeris Loki **tekstisõnu**. Pärast `| pattern` filtreerib **struktureeritud väärtusi**. See on sama hetk, mis päev 1 Prometheus'es oli "eraldi label'id per dimensioon" — üleminek tekstist andmestruktuurile.
 
 ### 8.3 Label disain — mis on label, mis on sisu?
+
+Selle osa mõte on vältida kardinaalsuse plahvatust: kõik väljad ei tohi olla labelid. Eesmärk on meelde jätta lihtne reegel—madal kardinaalsus labeliks, kõrge kardinaalsus jääb sisusse.
 
 Meie logis on: `level`, `service`, `duration`, `trace_id`. Pattern parser tegi neist kõigist labelid. Aga kas kõik peaksid olema labelid?
 
@@ -442,6 +477,8 @@ See on tootmise vs labi erinevus. Labis parsime runtime'is (lihtsam setup), toot
 
 ### 8.4 rate() — logist metrika
 
+Siin teed logidest ajas muutuvaks numbriks: mitu ERROR rida sekundis teenuse kaupa. See on Loki tugevus legacy süsteemide juures—ka siis, kui äpp ei ekspordi metricsit, saad trendi logidest.
+
 Siiamaani vaatasime logisid kui ridu (vaatlus). Nüüd teisendame nad **numbriks ajas** — logist saab metrika, nagu Prometheus annaks.
 
 ```logql
@@ -470,6 +507,8 @@ Vaheta Time series view — näed graafikut. Logist sai number — sama kontsept
 
 ### 8.5 Dashboard
 
+Siin pakid töötavad päringud “tooteks”: dashboard, mida saab hiljem avada ilma Explore’s päringut uuesti kirjutamata. Eesmärk on vähemalt kaks paneeli—üks error-rate, teine logimaht/jaotus.
+
 Nüüd kui üks päring töötab, paneme ta dashboardile. Grafanas on muster alati sama: *loo dashboard → lisa paneel → päring → vali visualiseering*.
 
 *Dashboards → New → Add visualization* → Loki datasource:
@@ -489,6 +528,8 @@ Bar chart — logimaht taseme järgi.
 Salvesta: `App monitoring`.
 
 ### 8.6 FINAAL — sama sündmus, kaks vaatenurka
+
+Siin teed korrelatsiooni: sama error-spike peab olema nähtav nii Zabbixi triggerina kui Loki graafikuna/logidena. Eesmärk on kinnistada tööjaotus: Zabbix ütleb “on probleem”, Loki ütleb “mis juhtus”.
 
 Nüüd on mõlemad stackid üleval. Tekita error-torm mon-target'il:
 
