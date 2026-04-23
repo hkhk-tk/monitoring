@@ -723,6 +723,9 @@ remote_write:
 
 ## Enesekontrolli küsimused
 
+<details>
+<summary><strong>Küsimused + vastused (peida/ava)</strong></summary>
+
 1. Milline on pull-mudeli peamine operatiivne eelis push-mudeli ees?
 2. Miks on `user_id` halb label? Mis juhtuks kui selle lisaksid?
 3. Kirjuta PromQL päring, mis näitab veaprotsendi (5xx/kogusumma) iga teenuse kohta viimase 5 minuti jooksul.
@@ -746,6 +749,8 @@ remote_write:
     6) Summary protsentiilid ei ole instantside vahel agregeeritavad; koond-p95 jaoks kasuta histogramme.
 
     7) Föderatsioon hierarhiliseks koondamiseks; `remote_write` pikaajaliseks säilituseks ja horisontaalseks skaleerimiseks (Thanos/Mimir/VictoriaMetrics).
+
+</details>
 
 ---
 
@@ -792,3 +797,5 @@ remote_write:
 | [Cortex, Mimir, Thanos compared](https://grafana.com/blog/2022/04/19/cortex-vs-mimir-vs-thanos-why-grafana-mimir/) | Otsuspuu skaleerimisel |
 
 </details>
+
+--8<-- "_snippets/abbr.md"

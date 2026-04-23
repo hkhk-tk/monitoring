@@ -3,6 +3,9 @@ site_url: https://hkhk-tk.github.io/monitoring/
 site_description: "Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026"
 site_author: "Maria Talvik"
 
+exclude_docs: |
+  _snippets/**
+
 repo_name: hkhk-tk/monitoring
 repo_url: https://github.com/hkhk-tk/monitoring
 edit_uri: edit/main/docs/
@@ -56,6 +59,7 @@ markdown_extensions:
   - toc:
       permalink: true
       permalink_title: "Lingi sektsioonile"
+  - abbr
   - attr_list
   - md_in_html
   - admonition
@@ -127,6 +131,7 @@ nav:
   - Ressursid:
       - "VM ligipääs": resources/vm-access.md
       - "Docker Compose cheatsheet": resources/docker-cheatsheet.md
+      - "Materjalide stiilijuhend": resources/material-style.md
 
 copyright: >
   © 2026 Maria Talvik · Haapsalu Kutsehariduskeskus

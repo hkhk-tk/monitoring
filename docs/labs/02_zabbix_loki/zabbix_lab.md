@@ -971,6 +971,9 @@ Järgnevad teemad on mõeldud tootmiskeskkondade jaoks. Igaüks on iseseisev —
 
 ---
 
+<details>
+<summary><strong>Veaotsing + allikad (peida/ava)</strong></summary>
+
 ## Veaotsing
 
 | Probleem | Esimene kontroll |
@@ -981,8 +984,6 @@ Järgnevad teemad on mõeldud tootmiskeskkondade jaoks. Igaüks on iseseisev —
 | ZBX_NOTSUPPORTED | UserParameter süntaksiviga — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` |
 | Trigger ei Firing | Latest data — kas väärtus tegelikult ületab künnise? |
 | HTTP Agent timeout | `curl -v http://192.168.35.141:8080/stub_status` otse |
-
----
 
 ## 📚 Allikad
 
@@ -995,3 +996,7 @@ Järgnevad teemad on mõeldud tootmiskeskkondade jaoks. Igaüks on iseseisev —
 | Discord integration | [zabbix.com/integrations/discord](https://www.zabbix.com/integrations/discord) |
 
 **Versioonid:** Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+).
+
+</details>
+
+--8<-- "_snippets/abbr.md"

@@ -510,6 +510,9 @@ Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub **Grafa
 
 ## Enesekontrolli küsimused
 
+<details>
+<summary><strong>Küsimused + vastused (peida/ava)</strong></summary>
+
 1. Kui Loki ei indekseeri logi sisu, kuidas ta siis "error"-rea leiab? Milline on sellise päringu jõudluse piirang?
 2. Selgita, miks `trace_id` ei tohi olla Loki silt. Mis juhtub, kui sa ta siiski sildiks paned?
 3. Mis on erinevus Structured Metadata ja siltide vahel? Millal kumba kasutada?
@@ -534,6 +537,8 @@ Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub **Grafa
        (täpne parser sõltub logiformaadist).
 
     7) Loki: operatiivne debug, odavam logikiht, Grafana integratsioon. ELK: täisteksti/forensika, keerukamad otsingud, turvatiimi workflow.
+
+</details>
 
 ---
 
@@ -579,3 +584,5 @@ Kui sa ei taha ise LGTM-stack'i Kubernetes-klastris käimas hoida, pakub **Grafa
 ---
 
 *Järgmine: [Labor: Loki](../../labs/02_zabbix_loki/loki_lab.md) — ehitame Loki + Alloy + Grafana stack'i, mis kogub logisid ja teeme LogQL-i päringuid.*
+
+--8<-- "_snippets/abbr.md"

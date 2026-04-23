@@ -785,6 +785,9 @@ Järgmisel laupäeval alustame puhtalt — Zabbix + Loki.
 
 ---
 
+<details>
+<summary><strong>Tõrkeotsing + allikad (peida/ava)</strong></summary>
+
 ## Tõrkeotsing
 
 | Probleem | Lahendus |
@@ -795,8 +798,6 @@ Järgmisel laupäeval alustame puhtalt — Zabbix + Loki.
 | PromQL "no data" | Prometheus → Status → Targets — kas scrape töötab? |
 | Alert ei käivitu | `curl -X POST http://localhost:9090/-/reload` — kas reload õnnestus? |
 | `connection refused` | `docker compose ps` — kas konteiner jookseb? |
-
----
 
 ## Allikad
 
@@ -809,3 +810,10 @@ Järgmisel laupäeval alustame puhtalt — Zabbix + Loki.
 | Node Exporter Full dashboard | https://grafana.com/grafana/dashboards/1860 |
 | Awesome Prometheus alerts | https://samber.github.io/awesome-prometheus-alerts/ |
 | AlertManager dokumentatsioon | https://prometheus.io/docs/alerting/latest/alertmanager/ |
+
+**Kui midagi on valesti ja sa ei tea kust alustada:**  
+alusta alati `docker compose ps` → `docker compose logs <teenus>`, siis vaata Prometheuse Targets / Grafana datasource.
+
+</details>
+
+--8<-- "_snippets/abbr.md"

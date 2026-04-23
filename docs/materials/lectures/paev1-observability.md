@@ -488,6 +488,9 @@ Cloud-kulude jälgimine kui observability distsipliin. Tööriistad nagu Kubecos
 
 ## Enesekontrolli küsimused
 
+<details>
+<summary><strong>Küsimused + vastused (peida/ava)</strong></summary>
+
 1. Mis on MTTD ja MTTR? Kuidas observability mõjutab kumbagi?
 2. Selgita tehnilist erinevust logimise ja seire vahel. Mis andmetüüpi kumbki kasutab?
 3. Millal kasutad USE meetodit ja millal RED meetodit? Too konkreetne näide mõlemast.
@@ -513,6 +516,8 @@ Cloud-kulude jälgimine kui observability distsipliin. Tööriistad nagu Kubecos
     7) Loki: operatiivne debug ja odavam logikiht. ELK: täisteksti/forensika ja keerukamad otsingud.
 
     8) OTel ühtlustab instrumentatsiooni (metrics/logs/traces) vendor‑neutraalse standardina.
+
+</details>
 ---
 
 ## Viited ja süvendatud lugemine
@@ -562,3 +567,5 @@ Cloud-kulude jälgimine kui observability distsipliin. Tööriistad nagu Kubecos
 Mitmed Eesti ettevõtted on avalikult rääkinud oma observability praktikatest — Bolt, Wise (Transferwise), Pipedrive, Veriff. Otsi nende inseneri-blogidest või tehnoloogiakonverentside ettekannetest (nt TalTech-i konverentsid, Devclub.eu).
 
 </details>
+
+--8<-- "_snippets/abbr.md"

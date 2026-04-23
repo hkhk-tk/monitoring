@@ -659,6 +659,9 @@ Alloy võimas pool tuleb välja, kui lisada **teine** logiallikas üldse ilma uu
 
 ---
 
+<details>
+<summary><strong>Veaotsing + allikad (peida/ava)</strong></summary>
+
 ## Veaotsing
 
 | Probleem | Esimene kontroll |
@@ -672,8 +675,6 @@ Alloy võimas pool tuleb välja, kui lisada **teine** logiallikas üldse ilma uu
 | Mõlemad stackid aeglased | `free -h` — 4GB piir. Peata üks ajutiselt kui vaja. |
 | Alloy ei loe logifaile | `docker logs alloy` — permission? `app-logs:/var/log/app:ro` mount OK? |
 
----
-
 ## 📚 Allikad
 
 | Allikas | URL |
@@ -686,3 +687,7 @@ Alloy võimas pool tuleb välja, kui lisada **teine** logiallikas üldse ilma uu
 | Siltide parimad tavad | [grafana.com/.../labels](https://grafana.com/docs/loki/latest/get-started/labels/) |
 
 **Versioonid:** Loki 3.3.0, Alloy 1.5.0, Grafana 11.4.0.
+
+</details>
+
+--8<-- "_snippets/abbr.md"

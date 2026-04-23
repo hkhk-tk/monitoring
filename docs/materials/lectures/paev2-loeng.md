@@ -6,11 +6,12 @@
 **Kiirlingid:** [Zabbix docs](https://www.zabbix.com/documentation/current/en/manual) · [Roadmap](https://www.zabbix.com/roadmap) · [Performance tuning](https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning)
 
 !!! abstract "TL;DR (kui sul on 5 min)"
-    - **Zabbix = “kõik ühes”**: agentid, SNMP, HTTP, templated, dashboardid, alerting — eriti hea traditsioonilises infrastruktuuris.
-    - **Andmemudel**: Host → Item → Trigger → Action (Template on “korrutaja”, mis teeb halduse võimalikuks).
-    - **Kõige ohtlikum viga**: `History=0` → **triggerid ei tööta** (sa kogud andmeid, aga süsteem ei hoiata).
-    - **Jõudlus = DB**: SSD + RAM + (suures mahus) partitsioneerimine.
-    - **Skaleerimine**: proksid jagavad koormust, HA annab rikkekindluse; proxy groupid (7.0+) on mugavad, aga piirangutega.
+    **4 asja, mis tasub päriselt meelde jätta:**
+
+    - **Zabbix mõtleb nii:** Host → Item → Trigger → Action (ja **Template** teeb selle skaleeritavaks).
+    - **Kui Zabbix on aeglane, vaata DB-d:** SSD + piisav RAM + (suures mahus) partitsioneerimine.
+    - **Ära tee `History=0`:** muidu triggerid ei tööta ja saad “ilusad graafikud, null häiret”.
+    - **Kui võrk on keeruline, kasuta proksisid:** proxy/HA lahendavad päriselus 80% “kuidas ma üldse kogun andmeid?” probleemist.
 
 ---
 
@@ -439,6 +440,9 @@ Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (a
 
 ## Enesekontrolli küsimused
 
+<details>
+<summary><strong>Küsimused + vastused (peida/ava)</strong></summary>
+
 1. Mis vahe on Zabbixi push- ja pull-mudelil? Millal millist eelistada?
 2. Miks on history=0 triggerite jaoks kriitiline viga? Mida süsteem kogub ja mida ei kogu?
 3. Arvuta: 5000 itemi, iga uueneb 30 sekundi järel. Mis on NVPS? Kui palju ruumi vajab 30 päeva history numbriliste andmete jaoks?
@@ -464,6 +468,8 @@ Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (a
 
     7) **OTel tugi**: lihtsustab standardset instrumentatsiooni ja korrelatsiooni modernses stackis; Prometheus jääb metrics‑kihis tugevaks, Zabbix püüab osa observability mustreid enda maailma tuua.
 
+</details>
+
 ---
 
 ## Allikad
@@ -488,3 +494,5 @@ Praktiline mõte kursuse jaoks: laborites kasutame “klassikalist” Zabbixi (a
 ---
 
 *Järgmine: [Labor: Zabbix](../../labs/02_zabbix_loki/zabbix_lab.md) — Zabbix stack üles, agent + templates + triggers + dashboards*
+
+--8<-- "_snippets/abbr.md"
