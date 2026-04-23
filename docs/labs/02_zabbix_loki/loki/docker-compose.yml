@@ -1,6 +1,6 @@
 services:
   loki:
-    image: grafana/loki:3.2.1
+    image: grafana/loki:3.3.0
     container_name: loki
     ports:
       - "3100:3100"
@@ -31,19 +31,24 @@ services:
       - app-logs:/var/log/app
     restart: unless-stopped
 
-  promtail:
-    image: grafana/promtail:3.2.1
-    container_name: promtail
+  alloy:
+    image: grafana/alloy:v1.5.0
+    container_name: alloy
     volumes:
-      - ./config/promtail-config.yml:/etc/promtail/config.yml
+      - ./config/config.alloy:/etc/alloy/config.alloy
       - app-logs:/var/log/app:ro
-    command: -config.file=/etc/promtail/config.yml
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --server.http.listen-addr=0.0.0.0:12345
+    ports:
+      - "12345:12345"
     depends_on:
       - loki
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:11.1.0
+    image: grafana/grafana:11.4.0
     container_name: grafana-loki
     ports:
       - "3001:3000"

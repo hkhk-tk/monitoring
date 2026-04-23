@@ -305,7 +305,7 @@ Alloy logis peab olema `component "loki.source.file.applog" started` ja mitte ü
 
 ### 7.5 Grafana
 
-Lõpuks UI. Grafana, tuttav päev 1-st, aga seekord **uus instants** (port 3000, eraldi konteiner `grafana-loki`). See hoiab päev 1 Prometheus-Grafana sõltumatuna.
+Lõpuks UI. Grafana, tuttav päev 1-st, aga seekord **uus instants** pordil 3001 (päev 1 Grafana on 3000-l). Kui päev 1 stack on veel üleval, hoiame need eraldi pordil, et konflikti ei tekiks.
 
 Lisa `services:` alla:
 
@@ -314,7 +314,7 @@ Lisa `services:` alla:
     image: grafana/grafana:11.4.0
     container_name: grafana-loki
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=monitoring2026
     volumes:
@@ -322,11 +322,13 @@ Lisa `services:` alla:
     restart: unless-stopped
 ```
 
+**Miks `3001:3000`:** host'i port 3001 → konteineri port 3000. Konteineris on Grafana ikka 3000 (vaikimisi), aga host'is näeme teda 3001-l, et mitte segada päev 1 Grafanat.
+
 ```bash
 docker compose up -d grafana-loki
 ```
 
-Brauseris `http://192.168.35.12X:3000` (admin / `monitoring2026`).
+Brauseris `http://192.168.35.12X:3001` (admin / `monitoring2026`).
 
 *Connections → Data sources → Add → Loki* → URL: `http://loki:3100` → *Save & test* → roheline ✅.
 
@@ -496,7 +498,7 @@ ssh <eesnimi>@192.168.35.140 \
 Ava kaks brauseri tabi:
 
 1. **Zabbix:** `http://192.168.35.12X:8080` → *Monitoring → Problems* → `Too many payment errors` trigger **Firing** (see oli [Zabbix labori osa 5.4](zabbix_lab.md#54-item-trigger))
-2. **Loki Grafana:** `http://192.168.35.12X:3000` → Dashboard `App monitoring` → payment error spike graafikul
+2. **Loki Grafana:** `http://192.168.35.12X:3001` → Dashboard `App monitoring` → payment error spike graafikul
 
 Sama sündmus, kaks perspektiivi. Zabbix ütleb **"on probleem"** (trigger). Loki näitab **"mis juhtus"** (logid + rate).
 
