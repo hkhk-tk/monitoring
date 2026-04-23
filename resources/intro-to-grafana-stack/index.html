@@ -12,31 +12,27 @@
         <meta name="author" content="Maria Talvik">
       
       
-        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/labs/04_tick_keskne_logimine/keskne_logimine/">
+        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/resources/intro-to-grafana-stack/">
       
       
-        <link rel="prev" href="../tick_lab/">
-      
-      
-        <link rel="next" href="../../05_tempo_otel/lab/">
       
       
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Ülevaade - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Grafana Stack — LGTM ja kogu ökosüsteem - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +51,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.v2.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.v2.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -82,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#paev-4-kesksed-logimissusteemid-ulevaade" class="md-skip">
+        <a href="#grafana-stack-lgtm-ja-kogu-okosusteem" class="md-skip">
           Keri sisuni
         </a>
       
@@ -98,7 +94,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Päis">
-    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -118,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Ülevaade
+              Grafana Stack — LGTM ja kogu ökosüsteem
             
           </span>
         </div>
@@ -225,7 +221,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -246,7 +242,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../materials/paev1-kava/" class="md-tabs__link">
+        <a href="../../materials/paev1-kava/" class="md-tabs__link">
           
   
   
@@ -268,7 +264,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../materials/lectures/paev2-loeng/" class="md-tabs__link">
+        <a href="../../materials/lectures/paev2-loeng/" class="md-tabs__link">
           
   
   
@@ -290,7 +286,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../03_elk_stack/lab/" class="md-tabs__link">
+        <a href="../../labs/03_elk_stack/lab/" class="md-tabs__link">
           
   
   
@@ -308,13 +304,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../tick_lab/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../labs/04_tick_keskne_logimine/tick_lab/" class="md-tabs__link">
           
   
   
@@ -336,7 +330,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../05_tempo_otel/lab/" class="md-tabs__link">
+        <a href="../../labs/05_tempo_otel/lab/" class="md-tabs__link">
           
   
   
@@ -358,7 +352,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../resources/docker-cheatsheet/" class="md-tabs__link">
+        <a href="../docker-cheatsheet/" class="md-tabs__link">
           
   
   
@@ -400,7 +394,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -430,7 +424,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -521,7 +515,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/paev1-kava/" class="md-nav__link">
+      <a href="../../materials/paev1-kava/" class="md-nav__link">
         
   
   
@@ -549,7 +543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev1-observability/" class="md-nav__link">
+      <a href="../../materials/lectures/paev1-observability/" class="md-nav__link">
         
   
   
@@ -577,7 +571,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev1-loeng/" class="md-nav__link">
+      <a href="../../materials/lectures/paev1-loeng/" class="md-nav__link">
         
   
   
@@ -605,7 +599,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01_prometheus_grafana/lab/" class="md-nav__link">
+      <a href="../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
         
   
   
@@ -704,7 +698,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev2-loeng/" class="md-nav__link">
+      <a href="../../materials/lectures/paev2-loeng/" class="md-nav__link">
         
   
   
@@ -732,7 +726,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/lectures/paev2-loki-loeng/" class="md-nav__link">
+      <a href="../../materials/lectures/paev2-loki-loeng/" class="md-nav__link">
         
   
   
@@ -760,7 +754,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02_zabbix_loki/zabbix_lab/" class="md-nav__link">
+      <a href="../../labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
         
   
   
@@ -788,7 +782,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02_zabbix_loki/loki_lab/" class="md-nav__link">
+      <a href="../../labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
         
   
   
@@ -881,7 +875,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03_elk_stack/lab/" class="md-nav__link">
+      <a href="../../labs/03_elk_stack/lab/" class="md-nav__link">
         
   
   
@@ -913,10 +907,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -928,22 +920,21 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -961,7 +952,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -979,7 +970,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tick_lab/" class="md-nav__link">
+      <a href="../../labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
         
   
   
@@ -1004,19 +995,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../labs/04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
         
   
   
@@ -1032,7 +1014,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -1112,7 +1093,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../05_tempo_otel/lab/" class="md-nav__link">
+      <a href="../../labs/05_tempo_otel/lab/" class="md-nav__link">
         
   
   
@@ -1140,7 +1121,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../05_tempo_otel/trendid/" class="md-nav__link">
+      <a href="../../labs/05_tempo_otel/trendid/" class="md-nav__link">
         
   
   
@@ -1235,7 +1216,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
+      <a href="../docker-cheatsheet/" class="md-nav__link">
         
   
   
@@ -1263,7 +1244,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/grafana-stack.md" class="md-nav__link">
+      <a href="../grafana-stack.md" class="md-nav__link">
         
   
   
@@ -1311,6 +1292,174 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#miks-see-reader-on-olemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Miks see reader on olemas?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kust-see-koik-tuli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kust see kõik tuli?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kolm-signaalituupi-uhes-pildis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kolm signaalitüüpi ühes pildis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#komponendid-lahemalt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Komponendid lähemalt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Komponendid lähemalt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grafana-ui-ja-hairete-keskus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grafana — UI ja häirete keskus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loki-logid-odavamalt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loki — logid odavamalt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tempo-distributed-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tempo — distributed tracing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mimir-prometheus-aga-skaalal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mimir — Prometheus, aga skaalal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alloy-uks-agent-koigeks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alloy — üks agent kõigeks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kaks-eri-maailma-uks-kast-vs-hajutatud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kaks eri maailma: üks-kast vs hajutatud
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kuidas-see-erineb-teistest-stackidest-mida-opid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kuidas see erineb teistest stackidest, mida õpid?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pordid-ja-protokollid-kiire-meelespidamine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pordid ja protokollid (kiire meelespidamine)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kokkuvote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kusimused-enesetestiks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Küsimused enesetestiks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1329,10 +1478,223 @@
   
 
 
-<h1 id="paev-4-kesksed-logimissusteemid-ulevaade">Päev 4: Kesksed logimissüsteemid — Ülevaade<a class="headerlink" href="#paev-4-kesksed-logimissusteemid-ulevaade" title="Lingi sektsioonile">&para;</a></h1>
-<p><em>Tuleb 23. mail</em></p>
+<h1 id="grafana-stack-lgtm-ja-kogu-okosusteem">Grafana Stack — LGTM ja kogu ökosüsteem<a class="headerlink" href="#grafana-stack-lgtm-ja-kogu-okosusteem" title="Lingi sektsioonile">&para;</a></h1>
+<h2 id="miks-see-reader-on-olemas">Miks see reader on olemas?<a class="headerlink" href="#miks-see-reader-on-olemas" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kursuse käigus kohtud Grafana komponentidega tükkhaaval — Grafanaga Day 1, Lokiga Day 2, Tempo ja OpenTelemetryga Day 5. See lühike reader kogub nad kokku ühele lehele, et näeksid suurt pilti: <strong>mis on LGTM stack, miks see eksisteerib, ja kuidas komponendid omavahel räägivad.</strong></p>
+<p>Selleks ajaks, kui jõuad päev 5 juurde, on pool stackist sul juba selge. See leht aitab ülejäänud tükid paika panna.</p>
 <hr />
-<p>Opensearch, Graylog, Apache Kafka logimises — millal mida kasutada?</p>
+<h2 id="kust-see-koik-tuli">Kust see kõik tuli?<a class="headerlink" href="#kust-see-koik-tuli" title="Lingi sektsioonile">&para;</a></h2>
+<ol>
+<li>Torkel Ödegaard töötab Stockholmis eBay-s ja on rahulolematu Kibana graafikutega — need on tehtud logide jaoks, mitte mõõdikute (metrics) jaoks. Ta lahendab oma probleemi nädalavahetustel: võtab Kibana, tõstab selle lahti, kirjutab metrics-esmase vaatajalhti. Ühel reedel avaldab GitHubis nime all <strong>Grafana</strong>.</li>
+</ol>
+<p>Viikonna jooksul on esimene pull request sees. Kuu ajaga kasutab seda paar kümmend inimest. Aasta pärast on Grafana de facto dashboarding-tööriist kogu tööstuses.</p>
+<p><strong>Grafana alati oli visualiseerija</strong> — andmeid ta ise ei hoia. Ta küsib neid mujalt: Prometheusest, InfluxDB-st, Elasticsearchist, PostgreSQL-ist, suvalisest andmeallikast, millele on olemas plugin. See on Grafana superjõud: <strong>sa ei pea vahetama oma andmelattu, et saada ilus UI</strong>.</p>
+<p>Aastatel 2018–2022 firma (Grafana Labs) mõistab, et ainult visualiseerijaks jäämine on ebamugav koht — Prometheus, Elastic, InfluxData kõik ehitavad oma UI-d. Grafana Labs teeb vastupidise liigutuse: <strong>ehitab oma andmesalved</strong>, mis on API-ühilduvad turuliidrite omadega.</p>
+<ul>
+<li><strong>Loki</strong> (2018) — logidele, sarnaneb Elasticsearchile aga miljoneid kordi odavam</li>
+<li><strong>Tempo</strong> (2020) — trace'idele, OpenTelemetry natiivne</li>
+<li><strong>Mimir</strong> (2022) — metrics, Prometheus-API-ühilduv, kuid paremini skaleeruv</li>
+</ul>
+<p>Neli komponenti — <strong>L</strong>oki + <strong>G</strong>rafana + <strong>T</strong>empo + <strong>M</strong>imir — moodustavad <strong>LGTM stack</strong>. Kõik on avatud lähtekoodiga (AGPLv3), kõik kirjutatud Go-s, kõik skaleeruvad horisontaalselt.</p>
+<hr />
+<h2 id="kolm-signaalituupi-uhes-pildis">Kolm signaalitüüpi ühes pildis<a class="headerlink" href="#kolm-signaalituupi-uhes-pildis" title="Lingi sektsioonile">&para;</a></h2>
+<p>Observability raamistikus räägitakse <strong>kolmest signaalitüübist</strong> (three pillars of observability): metrics, logs, traces. Kui räägid süsteemi tervise eest, vajad kõiki kolme — ja LGTM stack on just selle ümber ehitatud:</p>
+<figure>
+<pre class="mermaid"><code>%%{init: {'theme':'base', 'themeVariables': {
+  'primaryColor':'#ede7f6',
+  'primaryBorderColor':'#5e35b1',
+  'primaryTextColor':'#212121',
+  'lineColor':'#7e57c2',
+  'secondaryColor':'#fff3e0'
+}}}%%
+graph LR
+    A[Rakendused&lt;br/&gt;ja serverid] --&gt; B[Alloy&lt;br/&gt;kogumisagent]
+    B --&gt;|metrics| M[Mimir]
+    B --&gt;|logs| L[Loki]
+    B --&gt;|traces| T[Tempo]
+    M --&gt; G[Grafana]
+    L --&gt; G
+    T --&gt; G
+    G --&gt; U[Kasutaja]</code></pre>
+<br />
+<figcaption>Joonis 1. LGTM stacki üldine andmevoog (Talvik, 2026). Loodud tehisintellekti abil.</figcaption>
+</figure>
+<p>Loogika on lihtne: <strong>üks agent kogub</strong>, <strong>kolm salve hoiavad</strong>, <strong>üks UI näitab</strong>. Agent on Alloy (endine Grafana Agent), kolm salve on Mimir/Loki/Tempo, UI on Grafana.</p>
+<hr />
+<h2 id="komponendid-lahemalt">Komponendid lähemalt<a class="headerlink" href="#komponendid-lahemalt" title="Lingi sektsioonile">&para;</a></h2>
+<h3 id="grafana-ui-ja-hairete-keskus">Grafana — UI ja häirete keskus<a class="headerlink" href="#grafana-ui-ja-hairete-keskus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Grafana on see, millega kasutaja igapäevaselt suhtleb. Ta teeb kolme asja:</p>
+<ol>
+<li><strong>Päringud andmeallikatele</strong> — üle 100 ametliku plugini (Prometheus, Loki, Tempo, Mimir, Elasticsearch, InfluxDB, PostgreSQL, CloudWatch jt)</li>
+<li><strong>Dashboarde</strong> — graafikud, tabelid, stat-paneelid, kaardid</li>
+<li><strong>Häired (alerts)</strong> — reeglid "kui tingimus X, saada teade Y-le"; alates Grafana 10-st on see ühtne keskne alerting-süsteem, mis oskab päringut teha mistahes andmeallikale</li>
+</ol>
+<p>Oluline punkt eksamiks: <strong>Grafana ei hoia mõõdikuid ega logisid</strong>. Kui Grafana kustub, dashboarde ja häireid kaotad (need on tema enda PostgreSQL-is või SQLite-is). Metrics, logs ja traces on turvalisena endiselt Mimiris, Lokis, Tempos.</p>
+<h3 id="loki-logid-odavamalt">Loki — logid odavamalt<a class="headerlink" href="#loki-logid-odavamalt" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loki on <strong>logide salv</strong>, mille põhiidee on sõnastatud Grafana Labs-i enda tootemoto's: <em>"Like Prometheus, but for logs."</em></p>
+<p>Kui Elasticsearch indekseerib kogu logisõnumi teksti (full-text search), siis Loki indekseerib <strong>ainult silte (labels)</strong> — nagu host, rakendus, keskkond. Sõnumi sisu ise pannakse tihendatud plokkidena kõvakettale või objektisalve (S3, MinIO).</p>
+<p>Tulemus: <strong>10–100× odavam kui Elasticsearch</strong>, aga pead oskama labelid ette mõelda. Kui otsid "errorit sõnumi sees sõnaga <code>database</code>", Loki grepib — see töötab, aga aeglasem kui indekseeritud otsing.</p>
+<p>Loki kasutab oma päringukeelt <strong>LogQL</strong>, mis süntaksilt sarnaneb PromQL-ile:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>{app=&quot;nginx&quot;, env=&quot;prod&quot;} |= &quot;error&quot; | json | status &gt;= 500
+</span></code></pre></div>
+<p>Tõlge: "nginx-i prod-keskkonna logidest need, mis sisaldavad sõna error, parse JSON-ina, näita kus status ≥ 500."</p>
+<h3 id="tempo-distributed-tracing">Tempo — distributed tracing<a class="headerlink" href="#tempo-distributed-tracing" title="Lingi sektsioonile">&para;</a></h3>
+<p>Tempo on <strong>trace'ide salv</strong>. Trace on üks konkreetne päring läbi mitme teenuse — klient teeb API-kutse, see läheb gateway kaudu auth-teenusele, sealt DB-sse, sealt tagasi. Iga samm on <strong>span</strong> (ajalõik ajatempliga), ja spanide kogum moodustab trace'i.</p>
+<p>Kasutaja näeb Grafanas "ajaskaala" vaadet (Gantt-tüüpi graafik), kus on näha, mis samm võttis kui kaua ja kus aega kulus.</p>
+<p>Tempo eristub kahes asjas:</p>
+<ul>
+<li><strong>OpenTelemetry-natiivne</strong> — võtab vastu OTLP (OpenTelemetry Protocol), Jaegeri ja Zipkini formaate ilma konverteerimiseta</li>
+<li><strong>Ei indekseeri</strong> — trace'id lähevad otse objektisalve (S3, GCS), otsing toimub trace ID järgi või Lokist/Mimirist tulevate linkide kaudu</li>
+</ul>
+<p>See teeb Tempost ehedalt odava — säilitad miljoneid trace'e päevas ilma Elasticsearchi-maksuta. Vastutasu: <strong>kui sa ei tea trace ID-d, pead leidma selle metrics- või log-päringu kaudu</strong>. Grafana sisseehitatud "exemplars" ja "logs-to-traces" lingid lahendavad selle elegantselt.</p>
+<h3 id="mimir-prometheus-aga-skaalal">Mimir — Prometheus, aga skaalal<a class="headerlink" href="#mimir-prometheus-aga-skaalal" title="Lingi sektsioonile">&para;</a></h3>
+<p>Mimir on Prometheuse <strong>horisontaalselt skaleeruv</strong> sõbruand. Prometheus ise on üks-serveri süsteem: ühes kastis on nii kogumine, salvestus kui päring. See töötab suurepäraselt kuni mingi suuruseni, aga kui sul on kümneid tuhandeid sihtmärke ja aastaid säilitusperioodi, tuleb mingi piir vastu.</p>
+<p>Mimir lahendab selle mikroteenuste arhitektuuriga: eraldi komponendid kirjutamiseks (ingester), päringuks (querier), plaanimiseks (query-frontend), indekseerimiseks (store-gateway). Andmed lähevad S3-ühilduvasse objektisalve.</p>
+<p>Oluline detail: <strong>API on 100% Prometheuse-ühilduv</strong>. Prometheus saab Mimirisse kirjutada <code>remote_write</code> kaudu, Grafana päringud on täpselt samasugused kui Prometheusele. Mimir sobib nii olemasolevate Prometheus-paigalduste laiendamiseks (jätad Prometheus paigale, lisad Mimiri pikaajaliseks säilitamiseks) kui ka täielikuks asenduseks.</p>
+<h3 id="alloy-uks-agent-koigeks">Alloy — üks agent kõigeks<a class="headerlink" href="#alloy-uks-agent-koigeks" title="Lingi sektsioonile">&para;</a></h3>
+<p>Alloy on <strong>kogumisagent</strong>, mis asendab kolme vanemat tööriista: Grafana Agent (metrics), Promtail (logs Lokile), ja OpenTelemetry Collector. Üks binaary, üks konfifail, üks protsess kõigi kolme signaalitüübi jaoks.</p>
+<p>Alloy oskab:</p>
+<ul>
+<li>Koguda metrics Prometheuse exporteritelt ja OTLP-st</li>
+<li>Koguda logisid failidest, journaldist, Dockerist, Kubernetese podidest</li>
+<li>Koguda trace'e OTLP, Jaegeri, Zipkini kujul</li>
+<li>Teha <strong>enne saatmist töötlust</strong> — labelite lisamine, filtreerimine, sämpling, relabel-reeglid</li>
+</ul>
+<p>See on Grafana Labs-i vastus küsimusele "mitu agenti peab installima?" — vastus on üks.</p>
+<hr />
+<h2 id="kaks-eri-maailma-uks-kast-vs-hajutatud">Kaks eri maailma: üks-kast vs hajutatud<a class="headerlink" href="#kaks-eri-maailma-uks-kast-vs-hajutatud" title="Lingi sektsioonile">&para;</a></h2>
+<p>Grafana komponendid (Loki, Tempo, Mimir) tulevad kõik <strong>kahes paigaldusrežiimis</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Režiim</th>
+<th>Kes kasutab</th>
+<th>Omadused</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Monolithic</strong> (üks kast)</td>
+<td>Algajad, väikesed meeskonnad, õppelaborid</td>
+<td>Üks konteiner, kõik moodulid sisemiselt. Lihtne seadistada, piiratud skaala.</td>
+</tr>
+<tr>
+<td><strong>Microservices</strong> (hajutatud)</td>
+<td>Tööstus, SaaS-pakkujad</td>
+<td>Iga moodul eraldi deployment. Horisontaalselt skaleeruv, vastupidav, aga keeruline.</td>
+</tr>
+</tbody>
+</table>
+<p>Meie laboris kasutame <strong>monolithic</strong> režiimi — õppeesmärgil. Tootmises Bolt, Veriff või Wise kasutaks microservices-paigaldust Kubernetesel.</p>
+<hr />
+<h2 id="kuidas-see-erineb-teistest-stackidest-mida-opid">Kuidas see erineb teistest stackidest, mida õpid?<a class="headerlink" href="#kuidas-see-erineb-teistest-stackidest-mida-opid" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kursuse jooksul näed nelja-viit erinevat monitooringu lähenemist. Siin on lühike orienteerumisjuhend:</p>
+<table>
+<thead>
+<tr>
+<th>Stack</th>
+<th>Fookus</th>
+<th>Parim koht</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prometheus + Grafana</td>
+<td>Metrics</td>
+<td>Kubernetes, mikroteenused</td>
+</tr>
+<tr>
+<td>Zabbix</td>
+<td>Metrics + taristu monitooring</td>
+<td>Klassikaline IT, serverid, võrgud</td>
+</tr>
+<tr>
+<td>ELK / Elastic Stack</td>
+<td>Logid + täistekstiotsing</td>
+<td>Suuremahuline logianalüüs, SIEM</td>
+</tr>
+<tr>
+<td>TICK Stack</td>
+<td>Aegread (IoT, tööstus)</td>
+<td>Sensorid, tootmine, DevOps</td>
+</tr>
+<tr>
+<td><strong>LGTM Stack</strong></td>
+<td>Kolm signaali (metrics + logs + traces)</td>
+<td>Cloud-native, observability-esmane</td>
+</tr>
+</tbody>
+</table>
+<p>LGTM-i tugev külg on <strong>ühtsus</strong>: üks UI, üks agent, üks vendor. Nõrk külg on <strong>noorus</strong> — Tempo on 2020-st, Mimir 2022-st, Alloy 2024-st. Tööturul näed rohkem Prometheus+Grafana+Loki kombinatsiooni kui täielikku LGTM-i.</p>
+<hr />
+<h2 id="pordid-ja-protokollid-kiire-meelespidamine">Pordid ja protokollid (kiire meelespidamine)<a class="headerlink" href="#pordid-ja-protokollid-kiire-meelespidamine" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kui hakkad lab-is komponente käivitama, kohtad neid porte:</p>
+<table>
+<thead>
+<tr>
+<th>Komponent</th>
+<th>Vaikeport</th>
+<th>Protokoll</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grafana UI</td>
+<td>3000</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>Loki API</td>
+<td>3100</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>Tempo OTLP gRPC</td>
+<td>4317</td>
+<td>gRPC</td>
+</tr>
+<tr>
+<td>Tempo OTLP HTTP</td>
+<td>4318</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>Tempo Jaeger compatible</td>
+<td>14268</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>Mimir HTTP</td>
+<td>9009</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>Alloy UI</td>
+<td>12345</td>
+<td>HTTP</td>
+</tr>
+</tbody>
+</table>
+<p>4317 ja 4318 on OTLP <strong>standard-portid</strong> — iga OpenTelemetry-natiivne tööriist kuulab neid. Kui näed neid porte, tead kohe: tegemist on tracing- või telemeetria-liidesega.</p>
+<hr />
+<h2 id="kokkuvote">Kokkuvõte<a class="headerlink" href="#kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
+<p>LGTM stack on Grafana Labs-i terviklik lahendus observability'le: <strong>L</strong>oki logidele, <strong>G</strong>rafana visualiseerimisele, <strong>T</strong>empo trace'idele, <strong>M</strong>imir mõõdikutele. Alloy on ühtne kogumisagent kõigi kolme signaali jaoks. Iga komponent on eraldi kasutatav — sa võid võtta Loki ilma Tempota, Grafana ilma Mimirita — ja samas toimib tervikuna ilma integratsiooniprojektita.</p>
+<p>Tööstuses on LGTM üks kolmest suurest valikust cloud-native observability jaoks (teised: Datadog kommertslahendusena, Elastic Observability). Eestis kasutavad seda täielikult või osaliselt näiteks Bolt, Wise, Pipedrive, Veriff.</p>
+<p>Päev 5 laboris paneme Tempo ja Alloy tööle ning ühendame need Lokiga (mis on juba Day 2 käigus tuttav) ja Grafanaga (Day 1). Mimir'i kursuse raames ise ei käivita — vaatame seda kontseptuaalselt, sest Prometheus, mis Day 1-l paigaldasid, katab kursuse vajadused.</p>
+<hr />
+<h2 id="kusimused-enesetestiks">Küsimused enesetestiks<a class="headerlink" href="#kusimused-enesetestiks" title="Lingi sektsioonile">&para;</a></h2>
+<ol>
+<li>Mille poolest erineb Grafana oma rollilt Prometheusest või Lokist?</li>
+<li>Mida tähendab akronüüm LGTM ja mis on iga tähe taga?</li>
+<li>Miks on Loki odavam kui Elasticsearch, kui mõlemad hoiavad logisid?</li>
+<li>Mis on span ja mis on trace? Kuidas nad omavahel seotud on?</li>
+<li>Miks on Tempo "odav", kui ta on trace-salv? Mis on selle kompromissi hind päringul?</li>
+<li>Mis on Mimiri suhe Prometheuse-ga? Kas see asendab Prometheuse või täiendab?</li>
+<li>Millise kolme vanema tööriista Alloy asendab?</li>
+<li>Mis vahe on monolithic ja microservices paigaldusel? Kumma valid tootmises?</li>
+<li>Nimeta kaks OTLP standard-porti ja kus neid kohtad.</li>
+<li>Kui Grafana server kustub, mis andmed kaovad ja mis jäävad?</li>
+</ol>
 
 
 
@@ -1353,7 +1715,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="22. aprill 2026 19:08:00 UTC">22. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 13:33:57 UTC">23. aprill 2026</span>
   </span>
 
     
@@ -1416,10 +1778,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js"></script>
       

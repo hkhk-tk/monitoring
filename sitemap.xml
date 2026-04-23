@@ -45,14 +45,6 @@
          <lastmod>2026-04-23</lastmod>
     </url>
     <url>
-         <loc>https://hkhk-tk.github.io/monitoring/materials/esitlused/paev1-loeng1-esitlus/</loc>
-         <lastmod>2026-04-23</lastmod>
-    </url>
-    <url>
-         <loc>https://hkhk-tk.github.io/monitoring/materials/esitlused/paev1-loeng2-esitlus/</loc>
-         <lastmod>2026-04-23</lastmod>
-    </url>
-    <url>
          <loc>https://hkhk-tk.github.io/monitoring/materials/lectures/paev1-loeng/</loc>
          <lastmod>2026-04-23</lastmod>
     </url>
@@ -70,6 +62,10 @@
     </url>
     <url>
          <loc>https://hkhk-tk.github.io/monitoring/resources/docker-cheatsheet/</loc>
+         <lastmod>2026-04-23</lastmod>
+    </url>
+    <url>
+         <loc>https://hkhk-tk.github.io/monitoring/resources/intro-to-grafana-stack/</loc>
          <lastmod>2026-04-23</lastmod>
     </url>
     <url>

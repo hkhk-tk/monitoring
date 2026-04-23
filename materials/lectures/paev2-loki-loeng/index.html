@@ -358,7 +358,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../resources/vm-access/" class="md-tabs__link">
+        <a href="../../../resources/docker-cheatsheet/" class="md-tabs__link">
           
   
   
@@ -458,12 +458,6 @@
   
     
     
-      
-        
-      
-        
-      
-        
       
         
       
@@ -611,62 +605,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../esitlused/paev1-loeng1-esitlus/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Slaidid: Loeng 1 (Marp)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../esitlused/paev1-loeng2-esitlus/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Slaidid: Loeng 2 (Marp)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
         
   
@@ -675,34 +613,6 @@
     
   
     Labor
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../labs/01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Koolitaja juhend (viide)
   
 
     
@@ -885,17 +795,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#opivaljundid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Õpiväljundid
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#1-kust-me-pooleli-jaime" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -907,22 +806,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-lgtm-pinu-mis-see-on" class="md-nav__link">
+  <a href="#2-lgtm-pinu" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. LGTM-pinu — mis see on
+        2. LGTM-pinu
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. LGTM-pinu — mis see on">
+    <nav class="md-nav" aria-label="2. LGTM-pinu">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-korrelatsiooni-kolmik-miks-lgtm-on-rohkem-kui-neli-tooriista" class="md-nav__link">
+  <a href="#korrelatsiooni-kolmik" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Korrelatsiooni kolmik — miks LGTM on rohkem kui neli tööriista
+        Korrelatsiooni kolmik
       
     </span>
   </a>
@@ -930,10 +829,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-mis-on-iga-komponendi-too" class="md-nav__link">
+  <a href="#self-hosted-voi-grafana-cloud" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 Mis on iga komponendi töö
+        Self-hosted või Grafana Cloud
       
     </span>
   </a>
@@ -941,21 +840,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#23-self-hosted-vs-grafana-cloud" class="md-nav__link">
+  <a href="#uks-oluline-tuleviku-otsus" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3 Self-hosted vs Grafana Cloud
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#24-uks-oluline-otsus-tuleviku-parast-opentelemetry" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.4 Üks oluline otsus tuleviku pärast — OpenTelemetry
+        Üks oluline tuleviku-otsus
       
     </span>
   </a>
@@ -968,10 +856,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-loki-prometheus-logide-jaoks" class="md-nav__link">
+  <a href="#3-loki-kui-prometheus-logide-jaoks" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Loki — "Prometheus logide jaoks"
+        3. Loki kui "Prometheus logide jaoks"
       
     </span>
   </a>
@@ -979,33 +867,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-miks-indekseeritakse-ainult-silte" class="md-nav__link">
+  <a href="#4-sildid-ja-logivood-arhitektuuri-suda" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Miks indekseeritakse ainult silte
+        4. Sildid ja logivood — arhitektuuri süda
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-sildid-ja-logivood-arhitektuuri-suda" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Sildid ja logivood — arhitektuuri süda
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. Sildid ja logivood — arhitektuuri süda">
+    <nav class="md-nav" aria-label="4. Sildid ja logivood — arhitektuuri süda">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#kuldreegel-nr-1-sildid-on-piiratud-hulgast" class="md-nav__link">
+  <a href="#kardinaalsus-arvudes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kuldreegel nr 1 — sildid on piiratud hulgast
+        Kardinaalsus arvudes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#structured-metadata-loki-30-lahendus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structured Metadata — Loki 3.0 lahendus
       
     </span>
   </a>
@@ -1018,66 +906,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-kardinaalsus-loki-tahtsaim-piirang" class="md-nav__link">
+  <a href="#5-kuidas-loki-paigaldatakse" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Kardinaalsus — Loki tähtsaim piirang
+        5. Kuidas Loki paigaldatakse
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-structured-metadata-loki-30-vastus-probleemile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Structured Metadata — Loki 3.0 vastus probleemile
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-paigaldusreziimid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Paigaldusrežiimid
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="8. Paigaldusrežiimid">
+    <nav class="md-nav" aria-label="5. Kuidas Loki paigaldatakse">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#monolithic-koik-uhes-protsessis" class="md-nav__link">
+  <a href="#komponendid-mida-naed-mikroteenuste-reziimis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Monolithic — kõik ühes protsessis
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#simple-scalable-deployment-ssd-aegumas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Simple Scalable Deployment (SSD) — aegumas
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#microservices-tootmiskeskkonna-standard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Microservices — tootmiskeskkonna standard
+        Komponendid, mida näed mikroteenuste režiimis
       
     </span>
   </a>
@@ -1090,60 +934,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-komponendid-sugavamalt" class="md-nav__link">
+  <a href="#6-logide-agent-promtail-on-lainud-tule-alloy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Komponendid sügavamalt
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="9. Komponendid sügavamalt">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#kirjutustee" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kirjutustee
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lugemistee" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lugemistee
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#taustaprotsessid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Taustaprotsessid
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#10-agent-promtail-on-lainud-tule-alloy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Agent — Promtail on läinud, tule Alloy
+        6. Logide agent — Promtail on läinud, tule Alloy
       
     </span>
   </a>
@@ -1151,10 +945,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-hoiatus-helm-chartide-dzungel" class="md-nav__link">
+  <a href="#7-logql-paringukeel-luhidalt" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. HOIATUS — Helm-chart'ide džungel
+        7. LogQL — päringukeel lühidalt
       
     </span>
   </a>
@@ -1162,10 +956,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-logql-paringukeel-luhidalt" class="md-nav__link">
+  <a href="#8-loki-versus-elk-millal-kumba-valida" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. LogQL — päringukeel lühidalt
+        8. Loki versus ELK — millal kumba valida
       
     </span>
   </a>
@@ -1173,10 +967,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-loki-vs-elk-millal-kumba-valida" class="md-nav__link">
+  <a href="#9-uks-hoiatus-helm-chartide-dzungel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Loki vs ELK — millal kumba valida
+        9. Üks hoiatus — Helm-chart'ide džungel
       
     </span>
   </a>
@@ -1184,10 +978,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#14-kokkuvote" class="md-nav__link">
+  <a href="#10-kokkuvote" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14. Kokkuvõte
+        10. Kokkuvõte
       
     </span>
   </a>
@@ -1640,8 +1434,6 @@
       
         
       
-        
-      
     
     
     
@@ -1696,34 +1488,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/vm-access/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    VM ligipääs
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
         
   
@@ -1752,14 +1516,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/material-style/" class="md-nav__link">
+      <a href="../../../resources/grafana-stack.md" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Materjalide stiilijuhend
+    Grafana Stack — LGTM ülevaade
   
 
     
@@ -1807,17 +1571,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#opivaljundid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Õpiväljundid
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#1-kust-me-pooleli-jaime" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1829,22 +1582,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-lgtm-pinu-mis-see-on" class="md-nav__link">
+  <a href="#2-lgtm-pinu" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. LGTM-pinu — mis see on
+        2. LGTM-pinu
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. LGTM-pinu — mis see on">
+    <nav class="md-nav" aria-label="2. LGTM-pinu">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-korrelatsiooni-kolmik-miks-lgtm-on-rohkem-kui-neli-tooriista" class="md-nav__link">
+  <a href="#korrelatsiooni-kolmik" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Korrelatsiooni kolmik — miks LGTM on rohkem kui neli tööriista
+        Korrelatsiooni kolmik
       
     </span>
   </a>
@@ -1852,10 +1605,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-mis-on-iga-komponendi-too" class="md-nav__link">
+  <a href="#self-hosted-voi-grafana-cloud" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 Mis on iga komponendi töö
+        Self-hosted või Grafana Cloud
       
     </span>
   </a>
@@ -1863,21 +1616,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#23-self-hosted-vs-grafana-cloud" class="md-nav__link">
+  <a href="#uks-oluline-tuleviku-otsus" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3 Self-hosted vs Grafana Cloud
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#24-uks-oluline-otsus-tuleviku-parast-opentelemetry" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.4 Üks oluline otsus tuleviku pärast — OpenTelemetry
+        Üks oluline tuleviku-otsus
       
     </span>
   </a>
@@ -1890,10 +1632,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-loki-prometheus-logide-jaoks" class="md-nav__link">
+  <a href="#3-loki-kui-prometheus-logide-jaoks" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Loki — "Prometheus logide jaoks"
+        3. Loki kui "Prometheus logide jaoks"
       
     </span>
   </a>
@@ -1901,33 +1643,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-miks-indekseeritakse-ainult-silte" class="md-nav__link">
+  <a href="#4-sildid-ja-logivood-arhitektuuri-suda" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Miks indekseeritakse ainult silte
+        4. Sildid ja logivood — arhitektuuri süda
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-sildid-ja-logivood-arhitektuuri-suda" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Sildid ja logivood — arhitektuuri süda
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. Sildid ja logivood — arhitektuuri süda">
+    <nav class="md-nav" aria-label="4. Sildid ja logivood — arhitektuuri süda">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#kuldreegel-nr-1-sildid-on-piiratud-hulgast" class="md-nav__link">
+  <a href="#kardinaalsus-arvudes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kuldreegel nr 1 — sildid on piiratud hulgast
+        Kardinaalsus arvudes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#structured-metadata-loki-30-lahendus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structured Metadata — Loki 3.0 lahendus
       
     </span>
   </a>
@@ -1940,66 +1682,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-kardinaalsus-loki-tahtsaim-piirang" class="md-nav__link">
+  <a href="#5-kuidas-loki-paigaldatakse" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Kardinaalsus — Loki tähtsaim piirang
+        5. Kuidas Loki paigaldatakse
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-structured-metadata-loki-30-vastus-probleemile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Structured Metadata — Loki 3.0 vastus probleemile
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-paigaldusreziimid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Paigaldusrežiimid
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="8. Paigaldusrežiimid">
+    <nav class="md-nav" aria-label="5. Kuidas Loki paigaldatakse">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#monolithic-koik-uhes-protsessis" class="md-nav__link">
+  <a href="#komponendid-mida-naed-mikroteenuste-reziimis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Monolithic — kõik ühes protsessis
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#simple-scalable-deployment-ssd-aegumas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Simple Scalable Deployment (SSD) — aegumas
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#microservices-tootmiskeskkonna-standard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Microservices — tootmiskeskkonna standard
+        Komponendid, mida näed mikroteenuste režiimis
       
     </span>
   </a>
@@ -2012,60 +1710,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-komponendid-sugavamalt" class="md-nav__link">
+  <a href="#6-logide-agent-promtail-on-lainud-tule-alloy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Komponendid sügavamalt
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="9. Komponendid sügavamalt">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#kirjutustee" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kirjutustee
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lugemistee" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lugemistee
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#taustaprotsessid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Taustaprotsessid
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#10-agent-promtail-on-lainud-tule-alloy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Agent — Promtail on läinud, tule Alloy
+        6. Logide agent — Promtail on läinud, tule Alloy
       
     </span>
   </a>
@@ -2073,10 +1721,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-hoiatus-helm-chartide-dzungel" class="md-nav__link">
+  <a href="#7-logql-paringukeel-luhidalt" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. HOIATUS — Helm-chart'ide džungel
+        7. LogQL — päringukeel lühidalt
       
     </span>
   </a>
@@ -2084,10 +1732,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-logql-paringukeel-luhidalt" class="md-nav__link">
+  <a href="#8-loki-versus-elk-millal-kumba-valida" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. LogQL — päringukeel lühidalt
+        8. Loki versus ELK — millal kumba valida
       
     </span>
   </a>
@@ -2095,10 +1743,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-loki-vs-elk-millal-kumba-valida" class="md-nav__link">
+  <a href="#9-uks-hoiatus-helm-chartide-dzungel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Loki vs ELK — millal kumba valida
+        9. Üks hoiatus — Helm-chart'ide džungel
       
     </span>
   </a>
@@ -2106,10 +1754,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#14-kokkuvote" class="md-nav__link">
+  <a href="#10-kokkuvote" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14. Kokkuvõte
+        10. Kokkuvõte
       
     </span>
   </a>
@@ -2163,458 +1811,97 @@
 <strong>Eeldused:</strong> <a href="../paev2-loeng/">Päev 2: Zabbix</a> loetud, Prometheus ja Grafana põhitõed (<a href="../paev1-loeng/">Päev 1</a>)<br />
 <strong>Versioonid laboris:</strong> Loki 3.7.1, Grafana 12.4.3, Alloy 1.15.1<br />
 <strong>Viited:</strong> <a href="https://grafana.com/docs/loki/latest/">grafana.com/docs/loki</a> · <a href="https://grafana.com/docs/alloy/latest/">Grafana Alloy</a> · <a href="https://grafana.com/docs/loki/latest/query/">LogQL</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">TL;DR (kui sul on 5 minutit)</p>
-<p><strong>5 asja, mis tasub päriselt meelde jätta:</strong></p>
-<ul>
-<li><strong>LGTM = Logs (Loki) + Grafana + Traces (Tempo) + Metrics (Mimir)</strong> — sama meeskonna 4 tööriista, tugevus integratsioonis.</li>
-<li><strong>Loki indekseerib ainult silte, mitte logi sisu</strong> — salvestus S3-l, 35–50% odavam kui ELK.</li>
-<li><strong>Kardinaalsus on vaenlane</strong> — ära kunagi pane trace_id'd, user_id'd ega IP-d sildiks. Kasuta Structured Metadata'd (Loki 3.0+).</li>
-<li><strong>Monolithic ≤20 GB/päevas, Microservices 1 TB+.</strong> SSD režiim on aegumas — ära alusta sellega.</li>
-<li><strong>Agent: Alloy, mitte Promtail.</strong> Helm-chart: <code>grafana/loki</code>, mitte <code>loki-stack</code> ega <code>loki-distributed</code>.</li>
-</ul>
-</div>
-<hr />
-<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
-<p>Pärast selle materjali läbitöötamist osaleja:</p>
-<ol>
-<li><strong>Selgitab</strong> LGTM-pinu komponentide rolli ja korrelatsiooni kolmikut (mõõdik → logi → jälg)</li>
-<li><strong>Kirjeldab</strong> Loki põhifilosoofiat — miks indekseeritakse ainult sildid, mitte sisu</li>
-<li><strong>Mõistab</strong> kardinaalsuse mõju jõudlusele ja oskab hoida silte madala kardinaalsusega</li>
-<li><strong>Eristab</strong> Loki paigaldusrežiime (Monolithic, Microservices) ja teab, milline on tänaseks soovitatud</li>
-<li><strong>Nimetab</strong> Loki peamised komponendid kirjutus- ja lugemisteel</li>
-<li><strong>Põhjendab</strong>, millal valida Loki ja millal ELK Stack</li>
-<li><strong>Loeb</strong> põhilisi LogQL päringuid ja eristab nelja parserit (pattern, json, logfmt, regexp)</li>
-</ol>
 <hr />
 <h2 id="1-kust-me-pooleli-jaime">1. Kust me pooleli jäime<a class="headerlink" href="#1-kust-me-pooleli-jaime" title="Lingi sektsioonile">&para;</a></h2>
-<p>Hommikul rääkisime Zabbixist — IT-maastiku vanast tööhobusest, mis on olnud tootmises 25+ aastat. Zabbix on arhitektuuriliselt monoliit: üks server, üks andmebaas, kõik ühes kastis. Töötab hästi <strong>seadmete ja nende oleku</strong> jälgimiseks.</p>
-<p>Aga pilvepõhises maailmas — Kubernetes, mikroteenused, efemeersed konteinerid — see mudel murdub. Kui su pod elab 30 sekundit ja paiskab sel ajal välja 50 MB logisid, on vaja teistsugust lähenemist.</p>
-<p>Päev 1-s nägime ka Grafanat, aga ainult kui <strong>visualiseerimiskihti</strong> — tööriista, mis küsib andmeid Prometheuselt ja joonistab graafikuid. Mainisin akronüümi <strong>LGTM</strong> ainult möödaminnes. Pärastlõunal kaevume sügavamale ja ehitame laboris selle pere logihaldustööriista — <strong>Loki</strong>.</p>
+<p>Hommikul vaatasime Zabbixit — IT-maastiku vana tööhobust, mis on olnud tootmises 25 aastat. Zabbixi tugevus on laius: ühest kohast jälgid servereid, võrguseadmeid, rakendusi ja kõigele sellele sama UI-ga teed ka alertid ja dashboardid. Arhitektuuriliselt on see aga monoliit — üks server, üks andmebaas, kõik ühes kastis. See mudel töötab ideaalselt tuttavas maailmas, kus sul on nimeldi 500 serverit ja iga server on pikaealine.</p>
+<p>Pilvepõhises maailmas see mudel kipub murduma. Kubernetes-klastris võib pod elada 30 sekundit, käivituda teises sõlmes, vahetada nime, kaduda lõplikult. Sel ajal surub ta välja viiskümmend megabaiti logisid, mida sul tegelikult vaja oleks näha. Klassikaline monitooringusüsteem, mille paradigma on "lisa host, lingi template", ei oska selliste lühiajaliste asjadega midagi peale hakata. Vaja on teistsugust lähenemist.</p>
+<p>Päev üks loengus nägime ka Grafanat, aga ainult ühes rollis — visualiseerimiskihina, mis võtab andmeid Prometheuselt ja joonistab graafikuid. Mainisin möödaminnes akronüümi LGTM, aga läksin sealt mööda. Pärastlõunal tuleme selle juurde tagasi ja vaatame, mida see päriselt tähendab, ehitades laborisse selle pere logihaldustööriista — <strong>Loki</strong>.</p>
 <hr />
-<h2 id="2-lgtm-pinu-mis-see-on">2. LGTM-pinu — mis see on<a class="headerlink" href="#2-lgtm-pinu-mis-see-on" title="Lingi sektsioonile">&para;</a></h2>
-<p><strong>LGTM</strong> tähistab neli Grafana Labsi projekti:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>L — Loki    — logid
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>G — Grafana — visualiseerimine ja UI (juba tuttav)
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>T — Tempo   — jäljed (traces), hajutatud jälgimine  → Päev 5
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>M — Mimir   — meetrikad, mastaapne Prometheus-ühilduv TSDB
-</span></code></pre></div>
-<p>Need neli on sama meeskonna toode sama filosoofiaga: <strong>indekseeri vähem, salvesta odavalt, skaleeri horisontaalselt</strong>. Tugevus tuleb integratsioonist — sellepärast ongi akronüüm "pinu", mitte "neli tööriista".</p>
-<h3 id="21-korrelatsiooni-kolmik-miks-lgtm-on-rohkem-kui-neli-tooriista">2.1 Korrelatsiooni kolmik — miks LGTM on rohkem kui neli tööriista<a class="headerlink" href="#21-korrelatsiooni-kolmik-miks-lgtm-on-rohkem-kui-neli-tooriista" title="Lingi sektsioonile">&para;</a></h3>
-<p>Klassikaline tõrkeotsing traditsioonilises infras käib nii: Zabbix näitab CPU 100%, SSH-id masinasse, teed <code>tail -f /var/log/...</code>, leiad veateateid aga ei tea, kas need on põhjus või tagajärg, helistad arendajale, tema otsib trace-ID'd eraldi logiaggregaatorist. Tund hiljem saad aru, mis juhtus.</p>
-<p>LGTM-pinu lubab teistsugust töövoogu:</p>
-<ol>
-<li><strong>Grafana</strong> — vaatad dashboardi, näed anomaaliat mõõdikute graafikul (Mimir/Prometheus)</li>
-<li><strong>Klõpsad ajavahemikul</strong> → hüppad samasse aega <strong>logidesse</strong> (Loki) — näed veateadet koos trace-ID-ga</li>
-<li><strong>Klõpsad trace-ID-l</strong> → avaneb <strong>jälituse vaade</strong> (Tempo) — näed, millises mikroteenuses päring seiskus</li>
-</ol>
-<p>Kõik ühes UI-s, ilma tabivahetuseta. <strong>MTTR</strong> (mean time to recovery) langeb oluliselt, sest sa ei pea kolmel tööriistal vahet tegema. See on LGTM-pinu päris väärtus — üksikud komponendid on vaid pooled sellest loost.</p>
-<h3 id="22-mis-on-iga-komponendi-too">2.2 Mis on iga komponendi töö<a class="headerlink" href="#22-mis-on-iga-komponendi-too" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Loki</strong> on logide salvestus ja otsing. Indekseerib ainult silte, mitte sisu. Salvestab S3-sse. <strong>Täna põhiteema.</strong></p>
-<p><strong>Grafana</strong> on UI ja päringukeskus. Päev 1-st mäletad — ta ei salvesta ise andmeid, vaid kogub neid datasource'idest. LGTM-kontekstis on ta <strong>ainus koht, kust kasutaja midagi näeb</strong>.</p>
-<p><strong>Tempo</strong> on jälitussüsteem. Kui sinu süsteem on 20 mikroteenust, mis räägivad omavahel, võib üks kasutaja-päring käia läbi 15 teenuse. Tempo salvestab selle tee. Filosoofia sama nagu Lokil — ei indekseeri sisu, ainult trace-ID-d. <strong>Päev 5.</strong></p>
-<p><strong>Mimir</strong> on "Prometheus steroididega". Üks Mimir-klaster hallab miljardeid aktiivseid aegridu, samas kui üksik Prometheus jookseb mõne miljoni peal kokku. Täielikult Prometheuse API-ühilduv — kõik PromQL-päringud töötavad edasi. Enterprise-keskkonnad, kes skaleerivad Prometheust üle mitme klastri, kasutavad Mimirit.</p>
-<p>Iga neli saab kasutada <strong>eraldi</strong> — sa võid võtta ainult Loki ja jätta Prometheuse. Või võtta ainult Tempo OpenTelemetry-stack'i. Aga nende tugevus on <strong>perekonnana</strong>.</p>
-<h3 id="23-self-hosted-vs-grafana-cloud">2.3 Self-hosted vs Grafana Cloud<a class="headerlink" href="#23-self-hosted-vs-grafana-cloud" title="Lingi sektsioonile">&para;</a></h3>
-<p>Üks otsus, mida iga sysadmin peab kunagi tegema.</p>
-<p><strong>Self-hosted</strong> (ise Kubernetes-klastris):
-- ✅ Andmed jäävad sinu infrastruktuuri (GDPR, tundlik info)
-- ✅ Kulu kontrolli all — maksad infrastruktuuri eest
-- ✅ Täielik paindlikkus
-- ❌ Operatiivne vastutus on sinul
-- ❌ Vajab kompetentsi (Kubernetes, Helm, storage, networking)</p>
-<p><strong>Grafana Cloud</strong> (hallatud):
-- ✅ Paigaldus minutites, mitte nädalates
-- ✅ Grafana Labs vastutab uptime'i eest
-- ❌ Andmed nende pilves
-- ❌ Kulu põhineb mahul — võib kiirelt kasvada</p>
-<p>Eestis kohtad mõlemat. Bolt, Wise on enamasti self-hosted, kuna mastaap on suur. Väiksemad iduettevõtted lähevad sageli Grafana Cloud'iga ("lihtsalt töötab"). <strong>Laboris täna on self-hosted</strong> (Docker Compose), sest see annab arusaamise sellest, mis kapoti all toimub.</p>
-<h3 id="24-uks-oluline-otsus-tuleviku-parast-opentelemetry">2.4 Üks oluline otsus tuleviku pärast — OpenTelemetry<a class="headerlink" href="#24-uks-oluline-otsus-tuleviku-parast-opentelemetry" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>OpenTelemetry (OTel)</strong> on CNCF-i standard, mis defineerib universaalse viisi, kuidas rakendused saadavad logisid, meetrikaid ja jälgi. Põhimõte: instrumenteerid rakenduse OTel-iga, kogutud andmed saad saata <strong>ükskõik kuhu</strong> — Datadog'i, New Relic'usse, Grafana Cloud'i, Lokisse.</p>
-<p>Grafana Labs tegi targa valiku — nende uus agent <strong>Grafana Alloy</strong> (§10) toetab OTel-i natiivselt. Kui valid täna Grafana Cloud'i, aga aasta pärast otsustad migreerida self-hosted'ile või Datadog'ile, sa ei pea rakendusi muutma — ainult kollektori sihtpunkti.</p>
-<p><strong>Sysadminina tähendab see:</strong> vali alati OTel-ühilduv tööriist, kui valida on. See on kindlustuspoliis tuleviku vastu.</p>
+<h2 id="2-lgtm-pinu">2. LGTM-pinu<a class="headerlink" href="#2-lgtm-pinu" title="Lingi sektsioonile">&para;</a></h2>
+<p>Akronüüm tähistab nelja Grafana Labsi projekti: <strong>Loki</strong> hoolitseb logide, <strong>Grafana</strong> visualiseerimise, <strong>Tempo</strong> jälgede ja <strong>Mimir</strong> meetrikate eest. Mimir on sisuliselt Prometheus steroididega — täielikult PromQL-ühilduv, aga ühe klastri sees hallab miljardeid aktiivseid aegridu seal, kus üksik Prometheus jookseb mõne miljoni peal kokku. Tempo teeb sama asja jälgimise poolel, millest räägime päev viiel.</p>
+<p>Need neli on sama meeskonna — Grafana Labsi, eesotsas CTO Tom Wilkie'ga — toode ja neid ühendab sama filosoofia: indekseeri vähem, salvesta odavalt, skaleeri horisontaalselt. Sel põhjusel on ka akronüüm "pinu", mitte "neli tööriista". Nende päris väärtus tuleb välja siis, kui nad töötavad koos.</p>
+<h3 id="korrelatsiooni-kolmik">Korrelatsiooni kolmik<a class="headerlink" href="#korrelatsiooni-kolmik" title="Lingi sektsioonile">&para;</a></h3>
+<p>Mõtle, kuidas käib klassikaline tõrkeotsing traditsioonilises infras. Zabbix näitab, et mõni server on halb — CPU sada protsenti. Teed masinasse SSH, hakkad <code>tail -f /var/log/...</code> jooksutama, näed ridade kaupa veateateid. Aga kas need on probleemi põhjus või tagajärg, sa ei tea. Helistad arendajale, kes süveneb koodi ja otsib trace-ID-d eraldi logiaggregaatorist. Tund hiljem saad lõpuks aru, mis juhtus. Kogu selle aja oli süsteem katki.</p>
+<p>LGTM-pinu lubab teistsugust töövoogu. Sa vaatad Grafanas dashboardi ja näed anomaaliat mõõdikute graafikul — Mimir või Prometheus serveerib neid andmeid. Klõpsad ajavahemikul ja hüppad täpselt samasse aega logidesse, mida Loki serveerib. Näed veateadet, millel on trace-ID. Klõpsad sellel ja avaneb jälituse vaade, mida teenindab Tempo — näed kogu päringu teed läbi mikroteenuste ja koha, kus see seiskus. Kõik ühes UI-s, ilma tabivahetuseta.</p>
+<p>Inseneride keeles öelduna langeb MTTR (mean time to recovery) sedasi oluliselt, sest sa ei pea enam kolme tööriista vahel orienteeruma. Just see korrelatsiooni võimalus on see, mis teeb LGTM-pinust rohkem kui neli eraldi tööriista. Ilma korrelatsioonita oleks see lihtsalt nelja paketi kollektsioon. Grafana ise on kogu asja juures oluline detail: see on <strong>ainus koht</strong>, kust kasutaja midagi näeb. Kõik ülejäänud komponendid on päringuallikad, Grafana on koht, kus need päringud kokku tulevad.</p>
+<h3 id="self-hosted-voi-grafana-cloud">Self-hosted või Grafana Cloud<a class="headerlink" href="#self-hosted-voi-grafana-cloud" title="Lingi sektsioonile">&para;</a></h3>
+<p>Iga sysadmin peab kunagi selle otsuse tegema. Self-hosted variandil — ehk siis Loki ja kaaslased omas Kubernetes-klastris — on eelisena täielik andmete kontroll. See on oluline GDPR-i, tundlike andmete ja siseeeskirjade seisukohast. Kulu on sul nähtav ja juhitav, maksad ainult infrastruktuuri eest. Paindlikkus on täielik — võid kõike tuunida ja muuta. Hind on aga operatiivne vastutus: kui keset ööd kukub ingester, vastutad selle eest sina. Lisaks eeldab see Kubernetese, Helmi, storage ja võrgunduse pädevust.</p>
+<p>Grafana Cloud on sama stack hallatud kujul. Paigalduseni minutid, mitte nädalad. Grafana Labs vastutab uptime'i eest. Vahepeal on sul rohkem aega rakenduste jaoks. Miinuseks on see, et andmed lähevad Grafana pilve — privaatsuskaalutlus, mis osade organisatsioonide puhul lükkab selle valiku kohe kõrvale. Kulu põhineb logi- ja meetrikamahul, mis võib kiirelt kasvada viisil, mida on raske ette prognoosida.</p>
+<p>Eestis kohtad mõlemat. Bolt ja Wise on enamasti self-hosted, sest nende mastaap on piisavalt suur, et operatiivne tiim oleks nagunii olemas ja kulu oluline. Väiksemad iduettevõtted lähevad tihti Grafana Cloud'iga, sest "lihtsalt töötab" on nende staadiumis olulisem kui kulu optimeerimine. Meie laboris kasutame self-hosted varianti Docker Compose'i peal, sest see annab arusaamise sellest, mis kapoti all toimub.</p>
+<h3 id="uks-oluline-tuleviku-otsus">Üks oluline tuleviku-otsus<a class="headerlink" href="#uks-oluline-tuleviku-otsus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Enne kui Loki juurde sukeldume, väärib üks kontseptsioon äramainimist. <strong>OpenTelemetry</strong> — lühend OTel — on CNCF-i standard, mis defineerib universaalse viisi, kuidas rakendused saadavad logisid, meetrikaid ja jälgi. Põhimõte on lihtne: instrumenteerid oma rakenduse OTel-iga ja seejärel saad samu andmeid saata ükskõik kuhu. Täna Grafana Cloud'i, homme self-hosted Lokile, ülehomme Datadog'i — rakendustes pole vaja midagi muuta, ainult kollektori sihtpunkti.</p>
+<p>Grafana Labs tegi siin targa valiku. Nende uus agent, millest §7 räägib, toetab OTel-i natiivselt. See tähendab, et sina sysadminina saad valida tööriistad, ilma et seoksid end aastakümneks ühe tarnijaga. Kui OTel-ühilduv tööriist on valida, vali alati see. See on sinu kindlustuspoliis tuleviku vastu.</p>
 <hr />
-<h2 id="3-loki-prometheus-logide-jaoks">3. Loki — "Prometheus logide jaoks"<a class="headerlink" href="#3-loki-prometheus-logide-jaoks" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="3-loki-kui-prometheus-logide-jaoks">3. Loki kui "Prometheus logide jaoks"<a class="headerlink" href="#3-loki-kui-prometheus-logide-jaoks" title="Lingi sektsioonile">&para;</a></h2>
 <ol>
-<li>aastal KubeConis, San Franciscos, tutvustab Tom Wilkie (Grafana Labs CTO) uut projekti. Tema kirjeldus jääb ajalukku:</li>
+<li>aasta mais, KubeConis San Franciscos, astus Tom Wilkie lavale ja tutvustas uut projekti. Tema kirjeldus on selleks ajaks saanud klassikaks:</li>
 </ol>
 <blockquote>
 <p><em>"Loki: like Prometheus, but for logs."</em></p>
 </blockquote>
-<p>See pole turundushüüdlause — see on arhitektuuriline avaldus.</p>
-<p><strong>Prometheus</strong> kogub iga sihtmärgi kohta mõõdikuid, mis on määratletud <strong>siltidega</strong> (<code>job="api"</code>, <code>env="prod"</code>). Sildid on indekseeritud, väärtused on aegread.</p>
-<p><strong>Loki</strong> kogub iga allika kohta logiridu, mis on määratletud samasuguste <strong>siltidega</strong> (<code>app="nginx"</code>, <code>namespace="prod"</code>). Sildid on indekseeritud, logi sisu on lihtsalt tekst, kokku pakitud, objektisalvestuses.</p>
-<p>Ehk — <strong>Loki ei indekseeri midagi sellest, mis logireal sees on</strong>. Ei kasutajanime, ei IP-d, ei veateksti. Ainult silte.</p>
+<p>See pole turundushüüdlause, vaid arhitektuuriline avaldus. Prometheus töötab nii, et ta kogub iga sihtmärgi kohta mõõdikuid, mis on määratletud siltidega — <code>job="api"</code>, <code>env="prod"</code>. Sildid on indekseeritud, väärtused on aegrea andmed. Filtreerid siltidega, agregeerid väärtusi.</p>
+<p>Loki teeb täpselt sama loogikaga, aga logidega. Ta kogub iga allika kohta logiridu, mis on määratletud samasuguste siltidega — <code>app="nginx"</code>, <code>namespace="prod"</code>. Sildid lähevad indeksisse, aga logi sisu on lihtsalt tekst, mis pakitakse kokku ja salvestatakse objektisalvestusse. Loki ei indekseeri sellest mitte midagi. Ei kasutajanime, ei IP-aadressi, ei veateksti. <strong>Ainult silte.</strong></p>
+<p>See on vastupidi sellele, kuidas Elasticsearch ja Splunk töötavad. Nende lähenemine on igivana: kui logirida tuleb sisse, tõkestatakse see sõnadeks, iga sõna lisatakse pöördindeksisse, indeks kasvab hiiglaslikuks, hoitakse SSD-l ja vajab palju RAM-i. Kui sul on kümme terabaiti logisid päevas, on Elasticsearchi indeks umbes viisteist terabaiti — suurem kui andmed ise. Sellel on oma põhjus: täistekstiotsing on kohene. Kirjutad otsingukasti sõna ja sekundi pärast on vastus. Aga hind on kõrge — SSD-d, RAM, shard-tuunimise pädevus.</p>
+<p>Loki teeb vastupidi. Kui logirida tuleb sisse, eraldatakse sellest ainult sildid. Sildid lähevad väiksesse indeksisse, mille suurus on megabaitides, mitte terabaitides. Ülejäänud rida pakitakse tükiks — tavaliselt umbes megabait pakitult — ja salvestub S3-tüüpi objektisalvestusse, kus gigabait andmeid maksab kuus umbes ühe sendi. Kiire SSD klastri ja S3 vahel on salvestuskulude vahe umbes kahekümnekordne. Meeskonnad, kes on ELK-lt Lokile üle läinud, raporteerivad logihalduse kulude langust kolmekümne viie kuni viiekümne protsendi ulatuses. See on märkimisväärne arv, kui sinu monitooringueelarvest on kuuekohaline summa.</p>
+<p>Loogiline küsimus on: kui logi sisu pole indekseeritud, kuidas sa siis otsid? Kuidas leiab Loki "error"-rea ilma indeksita? Vastus on: päringu ajal. Sa kirjutad LogQL-i päringu, mille alguses on siltide filter — näiteks <code>{app="nginx"}</code>. Loki leiab siltide järgi õiged logivood. Seejärel avab ta nende voogude tükid — mitte kogu süsteemi tükid, ainult siltidega vastavad — ja skaneerib neid paralleelselt, nagu grep. Kuna skaneerimine käib paralleelselt kümnetes querier-protsessides, on see kiire.</p>
+<p>Tingimus on oluline: sa pead teadma siltide põhjal, kust otsida. Kui ütled Lokile "otsi kogu mu kümne terabaidi andmekogust sõna 'timeout'", ta ei rõõmusta ja vastus ei tule kiirelt. Operatiivse silumise jaoks — kus sa tead, millist rakendust uurida ja tahad näha selle vigu — on see ideaalne. Üldise forensika jaoks — "otsi kogu logikogumist suvalist mustrit" — on Loki nõrgem tööriist ja Elasticsearch võidab. See pole Loki puudus, see on <strong>teadlik disain</strong>.</p>
 <hr />
-<h2 id="4-miks-indekseeritakse-ainult-silte">4. Miks indekseeritakse ainult silte<a class="headerlink" href="#4-miks-indekseeritakse-ainult-silte" title="Lingi sektsioonile">&para;</a></h2>
-<p>Traditsiooniline lähenemine (Elasticsearch, Splunk) töötab nii: tuleb logirida sisse → tõkestatud sõnadeks → iga sõna lisatakse pöördindeksisse → indeks kasvab hiiglaslikuks → hoitakse SSD-l → vajab palju RAM-i.</p>
-<p>Kui sul on 10 TB logisid päevas, on Elasticsearchi indeks <strong>15 TB</strong> — suurem kui andmed ise.</p>
-<p>Loki lähenemine:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Logirida tuleb sisse
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>   ↓
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Eraldatakse sildid: {app=&quot;nginx&quot;, env=&quot;prod&quot;}
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>   ↓
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Sildid lähevad indeksisse (väike — megabaidid, mitte terabaidid)
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>   ↓
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Logi sisu pakitakse tükiks (~1 MB)
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>   ↓
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Tükk salvestub S3-sse (~0.01 €/GB/kuus)
-</span></code></pre></div>
-<p>Salvestuskulu S3-s vs. kiire SSD klaster: erinevus on umbes <strong>20×</strong>. Meeskonnad, kes on ELK-lt Lokile üle läinud, raporteerivad logihalduse kulude langust <strong>35–50%</strong>. See pole väike number, kui monitoorimiseks on eelarvest 6-kohaline summa.</p>
-<p>Aga kuidas sa siis otsid? Kui logi sisu pole indekseeritud, kuidas leiad "error"-rida?</p>
-<p>Loki leiab päringu ajal kõigepealt <strong>siltide järgi</strong> õiged logivood (<code>{app="nginx"}</code>). Siis avab ta nende voogude tükid (mitte kogu logi) ja skannib neid paralleelselt — sama põhimõte nagu <code>grep</code>. Kuna tükke loetakse paralleelselt kümnetest querier-itest, on see kiire.</p>
-<p><strong>Tingimus:</strong> pead teadma siltide põhjal, kust otsida. Kui ütled Lokile "otsi 10 TB andmestikust sõna 'timeout'", ta ei rõõmusta. <strong>Operatiivse silumise jaoks</strong> (tead millise rakenduse logid) on see ideaalne. <strong>Üldine forensika</strong> ("otsi kõigest sõna X") paneb Loki kannatama — selleks on ELK parem.</p>
-<hr />
-<h2 id="5-sildid-ja-logivood-arhitektuuri-suda">5. Sildid ja logivood — arhitektuuri süda<a class="headerlink" href="#5-sildid-ja-logivood-arhitektuuri-suda" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kui on üks kontseptsioon, mida peab Loki juures õigesti mõistma, siis on see see.</p>
-<p><strong>Logivoog</strong> (log stream) on logiridade rühm, millel on täpselt sama komplekt silte. Iga kord, kui mõni silt erineb, tekib <strong>uus voog</strong>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>{app=&quot;frontend&quot;, env=&quot;dev&quot;}   → voog #1
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>{app=&quot;frontend&quot;, env=&quot;prod&quot;}  → voog #2
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>{app=&quot;backend&quot;,  env=&quot;prod&quot;}  → voog #3
-</span></code></pre></div>
-<p>Iga voog on Loki jaoks eraldi üksus. Ta kirjutab neid eraldi, pakib eraldi, salvestab eraldi. See toimib, kui voogusid on mõistlikult palju. Miljonite puhul hakkab süsteem kiduma.</p>
-<h3 id="kuldreegel-nr-1-sildid-on-piiratud-hulgast">Kuldreegel nr 1 — sildid on piiratud hulgast<a class="headerlink" href="#kuldreegel-nr-1-sildid-on-piiratud-hulgast" title="Lingi sektsioonile">&para;</a></h3>
-<p>Kõik sildid peavad olema <strong>piiratud väärtuste hulgast</strong> — ette teada ja väike.</p>
-<table>
-<thead>
-<tr>
-<th>Sildi tüüp</th>
-<th>Näide</th>
-<th>Unikaalseid väärtusi</th>
-<th>Sildiks?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Keskkond</td>
-<td><code>env=dev/staging/prod</code></td>
-<td>3</td>
-<td>✅ jah</td>
-</tr>
-<tr>
-<td>Klaster</td>
-<td><code>cluster=eu-west/us-east</code></td>
-<td>5–10</td>
-<td>✅ jah</td>
-</tr>
-<tr>
-<td>Rakendus</td>
-<td><code>app=nginx/api/db/...</code></td>
-<td>~20</td>
-<td>✅ jah</td>
-</tr>
-<tr>
-<td>Logitase</td>
-<td><code>level=info/warn/error</code></td>
-<td>3–5</td>
-<td>⚠️ sõltub</td>
-</tr>
-<tr>
-<td>IP-aadress</td>
-<td><code>src_ip=1.2.3.4</code></td>
-<td><strong>∞</strong></td>
-<td>❌ <strong>EI KUNAGI</strong></td>
-</tr>
-<tr>
-<td>Kasutaja ID</td>
-<td><code>user_id=12345</code></td>
-<td><strong>∞</strong></td>
-<td>❌ <strong>EI KUNAGI</strong></td>
-</tr>
-<tr>
-<td>Trace ID</td>
-<td><code>trace_id=abc123...</code></td>
-<td><strong>∞</strong></td>
-<td>❌ <strong>EI KUNAGI</strong></td>
-</tr>
-</tbody>
-</table>
-<p>Kui paned IP-aadressi sildiks, tekitab iga unikaalne IP uue voo. 10 000 kasutajat → 10 000 voogu. 100 000 → 100 000. Indeks paisub, Loki aeglustub.</p>
-<hr />
-<h2 id="6-kardinaalsus-loki-tahtsaim-piirang">6. Kardinaalsus — Loki tähtsaim piirang<a class="headerlink" href="#6-kardinaalsus-loki-tahtsaim-piirang" title="Lingi sektsioonile">&para;</a></h2>
-<p><strong>Kardinaalsus</strong> = unikaalsete sildikombinatsioonide arv. See on number, mida Loki administraator peab teadma ja jälgima.</p>
-<p>Meenuta §5-st — iga voog salvestatakse eraldi tükkideks. Ideaalne tüki suurus on ~1 MB pakitult. Kui tükk täitub, kirjutab Loki selle S3-sse.</p>
-<p>Mis juhtub, kui sul on 10 000 voogu, millest igaüks toodab vaid mõne kilobaidi logisid tunnis?</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>10 000 voogu × 10 KB/tund → 100 MB/tund
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>                         → aga 10 000 väikest tükki!
-</span></code></pre></div>
-<p>Iga tükk on eraldi fail S3-s. Iga päring, mis peab neid puudutama, teeb 10 000 HTTP-kutset. Süsteem muutub aeglaseks fragmenteerituse tõttu, <strong>isegi kui andmete maht on tagasihoidlik</strong>.</p>
-<p><strong>Praktilised piirid:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Logide maht päevas</th>
-<th>Mõistlik voogude arv</th>
-<th>Hoiatuslävi</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>&lt;100 GB</td>
-<td>kuni 10 000</td>
-<td>20 000</td>
-</tr>
-<tr>
-<td>1 TB</td>
-<td>kuni 10 000</td>
-<td>50 000</td>
-</tr>
-<tr>
-<td>10 TB+</td>
-<td>kuni 100 000</td>
-<td>200 000</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Kuldreegel nr 2:</strong> sildid on 5–8 voo kohta, tehniline piirang on 15. Iga lisasilt mitmekordistab potentsiaalselt voogude arvu.</p>
-<hr />
-<h2 id="7-structured-metadata-loki-30-vastus-probleemile">7. Structured Metadata — Loki 3.0 vastus probleemile<a class="headerlink" href="#7-structured-metadata-loki-30-vastus-probleemile" title="Lingi sektsioonile">&para;</a></h2>
-<p>"Aga mina tahan trace_id järgi otsida!" võib öelda arendaja. "Muidu pole kogu OpenTelemetry mõtet."</p>
-<p>Kuni Loki 2.x-ni oli vastus: kasuta <strong>filtrit, mitte silti</strong>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>{app=&quot;api&quot;} |= &quot;trace_id=abc123&quot;
-</span></code></pre></div>
-<p>See töötab, aga on aeglane — peab sisu skannima.</p>
-<p><strong>Loki 3.0</strong> (aprill 2024) tõi lahenduseks <strong>Structured Metadata</strong>. See on kolmas kategooria metaandmeid, mis elab <strong>logirea kõrval, mitte indeksis</strong>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>┌─────────────────────────────────────────────────────────┐
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>│ INDEKS (sildid)                                         │
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>│ {app=&quot;api&quot;, env=&quot;prod&quot;}                                 │
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├─────────────────────────────────────────────────────────┤
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│ STRUCTURED METADATA (kiire ligipääs, EI indekseerita)   │
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│ trace_id=abc123, user_id=42, request_id=xyz             │
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>├─────────────────────────────────────────────────────────┤
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│ LOGIREA SISU (pakitud, objektisalvestuses)              │
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│ &quot;2026-04-25 10:23:41 ERROR Payment failed: timeout&quot;     │
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>└─────────────────────────────────────────────────────────┘
-</span></code></pre></div>
-<p>Structured Metadata on <strong>otsitav ja kiire</strong>, aga ei kasva indeksis. See tähendab: <strong>kõrge kardinaalsusega andmed</strong> (trace_id, user_id, request_id) lähevad nüüd siia, mitte siltidesse. Kardinaalsuse plahvatuse oht kaob.</p>
-<p><strong>Kui kavandad Loki juurutust 2026. aastal — ära kunagi pane trace_id'd sildiks. Pane Structured Metadatasse.</strong></p>
-<hr />
-<h2 id="8-paigaldusreziimid">8. Paigaldusrežiimid<a class="headerlink" href="#8-paigaldusreziimid" title="Lingi sektsioonile">&para;</a></h2>
-<p>Loki saab paigaldada kolmel viisil. Üks neist on aegumas.</p>
-<h3 id="monolithic-koik-uhes-protsessis">Monolithic — kõik ühes protsessis<a class="headerlink" href="#monolithic-koik-uhes-protsessis" title="Lingi sektsioonile">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>┌──────────────────────────┐
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>│   Loki (üks binaarfail)  │
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>│  ┌────┐ ┌────┐ ┌──────┐ │
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│  │Dist│ │Ingr│ │Query │ │
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│  └────┘ └────┘ └──────┘ │
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>└──────────┬───────────────┘
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>           ▼
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>        ┌─────┐
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>        │ S3  │
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>        └─────┘
-</span></code></pre></div>
-<p>Üks protsess, kõik komponendid sees. Lihtne käivitada — üks Docker Compose, üks Helm-chart. <strong>Sobib kuni 20 GB päevas</strong> — väike-keskmine keskkond, arendus, testimine, koolitusruum.</p>
-<p><strong>Meie laboris täna on just see.</strong></p>
-<h3 id="simple-scalable-deployment-ssd-aegumas">Simple Scalable Deployment (SSD) — aegumas<a class="headerlink" href="#simple-scalable-deployment-ssd-aegumas" title="Lingi sektsioonile">&para;</a></h3>
-<p>Jagas töö kolmeks rolliks: <code>read</code>, <code>write</code>, <code>backend</code>. Oli vahepealne — suurem kui Monolithic, lihtsam kui täielik Microservices. Sobis keskkondadele kuni 1 TB päevas.</p>
-<p><strong>2025. märts — Grafana Labs teatas</strong> (David Allen): <em>"SSD režiimi keerukuse ja kasu suhe pole enam paigas. Uutel kasutajatel ei soovitata SSD-ga alustada."</em></p>
-<p>Ametlikult <strong>eemaldatakse enne Loki 4.0</strong>. Kui kohtad seda dokumentatsioonis või vanemas tutorialis — <strong>hoia eemale</strong>. Alusta Monolithicuga, kasva Microservices-iks.</p>
-<h3 id="microservices-tootmiskeskkonna-standard">Microservices — tootmiskeskkonna standard<a class="headerlink" href="#microservices-tootmiskeskkonna-standard" title="Lingi sektsioonile">&para;</a></h3>
-<p>Iga komponent eraldi Kubernetes-deployment. Iga komponenti saab eraldi skaleerida — kirjutamiskoormus kasvab → lisad Ingestereid; päringuid tuleb rohkem → lisad Querier-eid.</p>
-<p>Toetab <strong>tsooniteadlikku replikatsiooni</strong> — ingesterid jaotatakse eri Kubernetes-tsoonidesse, kui terve tsoon kukub, süsteem toimib edasi. Tootmiskriitilise süsteemi nõue.</p>
-<p><strong>Soovitatud 1 TB+ päevas</strong> või mujal, kus käideldavus on kriitiline.</p>
-<hr />
-<h2 id="9-komponendid-sugavamalt">9. Komponendid sügavamalt<a class="headerlink" href="#9-komponendid-sugavamalt" title="Lingi sektsioonile">&para;</a></h2>
-<p>Mikroteenuste režiimis näed kõiki komponente. Aga ka Monolithic-režiimis töötavad nad sama loogikaga — lihtsalt ühe protsessi sees.</p>
-<h3 id="kirjutustee">Kirjutustee<a class="headerlink" href="#kirjutustee" title="Lingi sektsioonile">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Agent (Alloy) → Gateway (NGINX) → Distributor → Ingester → S3
-</span></code></pre></div>
-<p><strong>Distributor</strong> on värav. Võtab vastu, valideerib, teeb rate limiting'ut, kontrollib tenant'it. Seejärel räsib logi sildid ja suunab õigele Ingesterile.</p>
-<p><strong>Ingester</strong> on süsteemi süda. Puhverdab logid mälus, pakib neid tükkidena kokku, replikeerib teistele Ingesteritele (tavaliselt 3 koopiat). Kui tükk saab valmis (~1 MB või aeg möödas), kirjutab selle S3-sse.</p>
-<h3 id="lugemistee">Lugemistee<a class="headerlink" href="#lugemistee" title="Lingi sektsioonile">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Grafana → Gateway → Query Frontend → Query Scheduler → Querier → {Ingester RAM, S3}
-</span></code></pre></div>
-<p><strong>Query Frontend</strong> tükeldab päringud — kui küsid viimase 24h andmeid, jagatakse 24-ks tunni-päringuks, mis käivad paralleelselt.</p>
-<p><strong>Query Scheduler</strong> haldab järjekorda — õiglane planeerimine, üks kasutaja ei saa süsteemi endale võtta.</p>
-<p><strong>Querier</strong> teeb tegeliku töö. Küsib andmeid nii Ingesteritest (viimased andmed veel mälus) kui S3-st (vanemad tükid), teeb deduplikatsiooni (sest tükid on replikeeritud), täidab LogQL päringu.</p>
-<h3 id="taustaprotsessid">Taustaprotsessid<a class="headerlink" href="#taustaprotsessid" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Compactor</strong> — käib regulaarselt üle: liidab väiksed tükid suurteks, optimeerib indeksit, kustutab vanu andmeid säilituspoliitika järgi. Ilma selleta paisuks S3 täis killustatud faile.</p>
-<p><strong>Ruler</strong> — täidab alerti- ja recording-reegleid (nagu Prometheuses). Siin saad kirjutada: <em>"kui viimase 5 minuti jooksul on rohkem kui 100 level=error rida → saada hoiatus."</em></p>
-<hr />
-<h2 id="10-agent-promtail-on-lainud-tule-alloy">10. Agent — Promtail on läinud, tule Alloy<a class="headerlink" href="#10-agent-promtail-on-lainud-tule-alloy" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kuni 2024 oli Loki standardagent <strong>Promtail</strong> — lihtne binaar, mis lõi logifailid üles ja saatis Lokile. Aastaid lihtsalt-toimiv lahendus.</p>
-<p>2024 teatas Grafana Labs, et <strong>Promtail liigub feature-freeze olekusse</strong> ja soovitatud on <strong>Grafana Alloy</strong>. Alloy on universaalne telemeetria-kollektor — üks agent kogub logisid, meetrikaid, jälgi. Põhineb OpenTelemetry Collectori komponentidel, pakub Grafana maailmas testitud konfiguratsiooni.</p>
-<p><strong>Kui ehitad täna uut süsteemi — kasuta Alloy.</strong> Kui sul on vana Promtail-deployment — töötab edasi, aga planeeri migratsiooni.</p>
-<p>Laboris kasutame Alloy'd. Kerge (~30 MB RAM), konfiguratsioon sarnane HCL-ile (Terraformi tuttav süntaks).</p>
-<hr />
-<h2 id="11-hoiatus-helm-chartide-dzungel">11. HOIATUS — Helm-chart'ide džungel<a class="headerlink" href="#11-hoiatus-helm-chartide-dzungel" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kui Google'ist otsid <em>"loki helm chart"</em>, leiad <strong>kolm</strong> erinevat nime. <strong>Ainult üks on elus.</strong></p>
-<table>
-<thead>
-<tr>
-<th>Chart</th>
-<th>Staatus</th>
-<th>Kasuta?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>grafana/loki</code></td>
-<td>✅ Ametlik, aktiivne, toetab Loki 3.0+</td>
-<td><strong>Jah — AINUS valik</strong></td>
-</tr>
-<tr>
-<td><code>grafana/loki-stack</code></td>
-<td>⚠️ Deprecated</td>
-<td><strong>Ei</strong></td>
-</tr>
-<tr>
-<td><code>grafana/loki-distributed</code></td>
-<td>⚠️ Hooldamata, seisab 2.9.0 peal</td>
-<td><strong>Ei</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Eriline hoiatus:</strong> kui kasutad <code>values.yaml</code> genereerimiseks LLM-e (ChatGPT, Claude) — <strong>kontrolli kriitiliselt</strong>. Mudelite treeningandmed sisaldavad vanu tutoriale ja nad pakuvad sageli <code>loki-stack</code>-i näidiseid. Need ei tööta Loki 3.0+ maailmas.</p>
-<hr />
-<h2 id="12-logql-paringukeel-luhidalt">12. LogQL — päringukeel lühidalt<a class="headerlink" href="#12-logql-paringukeel-luhidalt" title="Lingi sektsioonile">&para;</a></h2>
-<p>LogQL on PromQL-i vend. Kui PromQL oskad, saad LogQL-iga 15 minutiga hakkama.</p>
-<p><strong>Baaspäring — voo valik:</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>{app=&quot;nginx&quot;, env=&quot;prod&quot;}
-</span></code></pre></div>
-<p>Tagastab kõik sellise siltide komplektiga logiread.</p>
-<p><strong>Tekstifilter — grep-stiil:</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>{app=&quot;nginx&quot;} |= &quot;error&quot;        # sisaldab &quot;error&quot;
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>{app=&quot;nginx&quot;} != &quot;healthcheck&quot;  # EI sisalda
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>{app=&quot;nginx&quot;} |~ &quot;5[0-9]{2}&quot;    # regex — HTTP 5xx koodid
-</span></code></pre></div>
-<p><strong>Parsimine (4 parserit):</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>{app=&quot;nginx&quot;} | json | status_code &gt;= 500
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>{app=&quot;api&quot;}   | logfmt | level = &quot;error&quot;
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>{app=&quot;java&quot;}  | pattern `&lt;_&gt; [&lt;level&gt;] &lt;_&gt;` | level = &quot;ERROR&quot;
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>{app=&quot;legacy&quot;} | regexp `level=(?P&lt;lvl&gt;\w+)` | lvl = &quot;ERROR&quot;
-</span></code></pre></div>
-<p>Neli parserit erinevateks logiformaatideks. Tänane laborilabor keskendub <code>pattern</code>-ile (vabatekst) ja <code>json</code>-ile. Valik:</p>
-<table>
-<thead>
-<tr>
-<th>Logi välja näeb välja nagu</th>
-<th>Parser</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>{"level":"error","user":"ann"}</code></td>
-<td><code>json</code></td>
-</tr>
-<tr>
-<td><code>level=error user=ann duration=42ms</code></td>
-<td><code>logfmt</code></td>
-</tr>
-<tr>
-<td><code>2026-04-25 10:23 ERROR user=ann</code> (vabatekst, stabiilne struktuur)</td>
-<td><code>pattern</code></td>
-</tr>
-<tr>
-<td>Täiesti ebastandardne</td>
-<td><code>regexp</code></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Meetrikud LogQL-ist</strong> — siin läheb huvitavaks:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a># Veaolukordade arv sekundis
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>rate({app=&quot;nginx&quot;} |= &quot;error&quot; [5m])
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a># Viis suurimat 5xx-allikat viimase tunni jooksul
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>topk(5, sum by (app) (rate({env=&quot;prod&quot;} |~ &quot;5[0-9]{2}&quot; [1h])))
-</span></code></pre></div>
-<p>Jah — logidest saab teha meetrikuid PromQL-sarnase süntaksiga. <strong>Laboris käsitleme seda praktikas</strong> (§3.4 <code>rate()</code> — logist metrika).</p>
-<hr />
-<h2 id="13-loki-vs-elk-millal-kumba-valida">13. Loki vs ELK — millal kumba valida<a class="headerlink" href="#13-loki-vs-elk-millal-kumba-valida" title="Lingi sektsioonile">&para;</a></h2>
-<p>Ei ole õiget ja valet tööriista. On sobiv ja sobimatu kontekstis.</p>
-<table>
-<thead>
-<tr>
-<th>Kriteerium</th>
-<th>Loki</th>
-<th>ELK Stack</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Indekseerib</td>
-<td>Ainult silte (~1% mahust)</td>
-<td>Kogu teksti (~150% mahust)</td>
-</tr>
-<tr>
-<td>Salvestuskulu</td>
-<td>S3 — odav</td>
-<td>SSD — kallis</td>
-</tr>
-<tr>
-<td>RAM-vajadus</td>
-<td>Madal</td>
-<td>Kõrge</td>
-</tr>
-<tr>
-<td>Täistekstiotsing</td>
-<td>Aeglane (grep tükkidest)</td>
-<td>Kiire (indeks olemas)</td>
-</tr>
-<tr>
-<td>Operatiivne silumine</td>
-<td>Ideaalne</td>
-<td>Ülitugev</td>
-</tr>
-<tr>
-<td>Ad-hoc forensika</td>
-<td>Piiratud</td>
-<td>Ülitugev</td>
-</tr>
-<tr>
-<td>Turvaanalüüs</td>
-<td>Alajääb</td>
-<td>Domineerib (ES-SIEM)</td>
-</tr>
-<tr>
-<td>Kubernetes-integratsioon</td>
-<td>Natiivne</td>
-<td>Töötab, vajab häälestust</td>
-</tr>
-<tr>
-<td>TCO</td>
-<td><strong>35–50% odavam</strong></td>
-<td>Kallim</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Vali Loki, kui:</strong></p>
-<ul>
-<li>Sul on juba Grafana ja/või Prometheus kasutuses — integratsioon sujuv</li>
-<li>Peamine kasutusviis on <strong>operatiivne silumine</strong> (tean rakendust, otsin põhjust)</li>
-<li>Eelarve on piiratud ja logihulk kasvab</li>
-<li>Kubernetes-keskkond — Loki on sinna sündinud</li>
-</ul>
-<p><strong>Vali ELK, kui:</strong></p>
-<ul>
-<li>Teed <strong>turvaforensikat</strong> — vaja otsida suvalisi mustreid kogu andmekogus</li>
-<li><strong>Süvaanalüüs</strong> on peamine — agregatsioonid, keerukad päringud</li>
-<li>Vajad <strong>mitte-tehnilist UI-d</strong> (Kibana on logide jaoks parem kui Grafana)</li>
-<li>Compliance nõuab täisteksti indekseerimist</li>
-</ul>
-<p>Paljudes ettevõtetes leiab <strong>mõlemad paralleelselt</strong> — Loki igapäevaseks operatiivseks tööks, ELK turvatiimile. Täiesti mõistlik lähenemine.</p>
-<hr />
-<h2 id="14-kokkuvote">14. Kokkuvõte<a class="headerlink" href="#14-kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
-<p>Enne laborisse minekut jäta meelde viis asja:</p>
+<h2 id="4-sildid-ja-logivood-arhitektuuri-suda">4. Sildid ja logivood — arhitektuuri süda<a class="headerlink" href="#4-sildid-ja-logivood-arhitektuuri-suda" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kui kogu Loki juurest peaks meelde jätma ainult ühe kontseptsiooni, siis see on logivoog. Logivoog on logiridade rühm, millel on täpselt sama komplekt silte. Niipea kui mõni silt erineb, tekib uus voog. Kolmest reast <code>{app="frontend", env="dev"}</code>, <code>{app="frontend", env="prod"}</code> ja <code>{app="backend", env="prod"}</code> on juba kolm eraldi voogu, hoolimata sellest, et rakendus on vaid kaks.</p>
+<p>Iga voog on Loki jaoks eraldi üksus. Ta kirjutab seda eraldi, pakib eraldi, salvestab eraldi. Süsteem töötab korralikult, kui voogusid on mõistlik arv — tuhandeid, isegi kümneid tuhandeid. Kui neid on miljoneid, hakkab süsteem kiduma. See on põhjus, miks siltide valik on Loki administreerimise <strong>kõige tähtsam otsus</strong>.</p>
+<p>Kuldreegel on lihtne: kõik sildid peavad olema piiratud väärtuste hulgast. Keskkond — näiteks <code>dev</code>, <code>staging</code>, <code>prod</code> — on kolm väärtust. See on hea silt. Klaster, kui sul on mitu regiooni, võib olla viis või kümme väärtust. Sobib. Rakenduse nimi, kui sul on kaks tosinat teenust, on endiselt väikese hulga sees. Ka see on hea silt.</p>
+<p>Aga niipea kui paned silgiks IP-aadressi, kasutaja ID või trace-ID, lähed raja pealt maha. Iga uus unikaalne IP tekitab uue voo. Kümne tuhande kasutajaga süsteemis on sul üleöö kümme tuhat voogu. Saja tuhandega sada tuhat. Indeks paisub, tükid hakkavad olema killustatud, päringud aeglustuvad, ja lõpuks hakkab Loki uusi logisid tagasi lükkama, sest limit on ületatud.</p>
+<p>Seda nähtust nimetatakse kardinaalsuse plahvatuseks ja see on Loki halbus, mille pärast mitmed meeskonnad on ta peale vihastanud ja kirjutanud blogipostitusi pealkirjaga "why we switched back to Elasticsearch". Peaaegu alati on nende probleem olnud sama: nad olid pannud trace-ID või kasutaja-ID sildiks.</p>
+<h3 id="kardinaalsus-arvudes">Kardinaalsus arvudes<a class="headerlink" href="#kardinaalsus-arvudes" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kardinaalsus tähendab unikaalsete sildikombinatsioonide arvu, ja see on number, mida Loki administraator peab teadma ja jälgima. Miks see täpselt nii kriitiline on, selgub, kui mõtled, mis juhtub väikeste voogudega. Iga voog salvestatakse eraldi tükkideks, ja ideaalne tüki suurus on umbes megabait pakitult. Kui tükk täitub, kirjutab Loki selle objektisalvestusse.</p>
+<p>Nüüd kujutle olukorda, kus sul on kümme tuhat voogu, millest igaüks toodab vaid mõne kilobaidi logisid tunnis. Arvutuses on kogumaht sada megabaiti tunnis — tagasihoidlik. Aga igas voos on üks väike tükk. Kokku kümme tuhat väikest tükki. Iga tükk on eraldi fail S3-s. Iga päring, mis neid puudutab, teeb kümme tuhat HTTP-kutset. Iga tükk võtab ingesteri mälu. Süsteem muutub aeglaseks, hoolimata sellest, et andmete koguhulk on väike.</p>
+<p>Praktilised piirid on kogemuslikud: kuni saja gigabaidi päevamahtu võib lubada kuni kümmet tuhat voogu, tera- ja üle selle võib mastaabist lähtudes lubada rohkem. Sada tuhat voogu ei ole eesmärk, see on piir, mida päris suured keskkonnad puudutavad, aga tavaline tootmiskeskkond elab tuhande või kahe tuhandega täiesti õnnelikult. Tehniliselt on siltide arv voo kohta piiratud viieteistkümnega, aga reaalselt toimivates süsteemides on neid viis kuni kaheksa.</p>
+<h3 id="structured-metadata-loki-30-lahendus">Structured Metadata — Loki 3.0 lahendus<a class="headerlink" href="#structured-metadata-loki-30-lahendus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Arendajad põhjendavad sageli kardinaalsuse reegli rikkumist nii: "aga mul on vaja trace-ID järgi otsida, muidu pole OpenTelemetry mõtet". Kuni Loki versioonini 2.x oli vastus ebamugav — kasuta filtrit, mitte silti. Päring näeks välja selline: <code>{app="api"} |= "trace_id=abc123"</code>. See töötab, aga on aeglane, sest Loki peab sisu skaneerima.</p>
 <ol>
-<li>
-<p><strong>LGTM = Loki + Grafana + Tempo + Mimir</strong> — sama meeskond, sama filosoofia, tugevus integratsioonis (korrelatsiooni kolmik).</p>
-</li>
-<li>
-<p><strong>Loki indekseerib ainult silte.</strong> Logi sisu läheb objektisalvestusse. See on disainiotsus sügavate tagajärgedega — 35–50% odavam, aga täisteksti forensika on nõrgem.</p>
-</li>
-<li>
-<p><strong>Kardinaalsus on vaenlane.</strong> Ära kunagi pane trace_id'd, user_id'd ega IP-d sildiks. <strong>Structured Metadata</strong> (Loki 3.0+) on õige koht kõrge kardinaalsusega andmetele.</p>
-</li>
-<li>
-<p><strong>Paigaldusrežiimid:</strong> Monolithic ≤20 GB/päevas, Microservices 1 TB+. <strong>SSD on suremas</strong> — ära alusta sellega.</p>
-</li>
-<li>
-<p><strong>Agent: Alloy, mitte Promtail. Helm-chart: <code>grafana/loki</code>, mitte <code>loki-stack</code>.</strong></p>
-</li>
+<li>aasta aprillis ilmus Loki 3.0 ja sellega lahendus — <strong>Structured Metadata</strong>. See on kolmas kategooria metaandmeid, mis elab logirea kõrval, aga mitte indeksis. Ülemisel tasemel on endiselt sildid, mis lähevad indeksisse ja peavad olema väikese kardinaalsusega. Keskmisel tasemel on Structured Metadata — otsitav ja kiire, aga mitte indekseeritud. Alumisel tasemel on logirea sisu, mis on pakitud ja salvestub objektisalvestusse.</li>
 </ol>
-<p>Loki on noor ja areneb kiiresti — Bloom-filtrid (Loki 3.0), Structured Metadata, Alloy asendab Promtail'i. See, mis on täna "best practice", võib aastaga muutuda. <strong>Ametlikud docs &gt;&gt; blogid &gt;&gt; LLM-ide vastused.</strong></p>
-<p><strong>Järgmine samm:</strong> <a href="../../../labs/02_zabbix_loki/loki_lab/">Labor: Loki</a> — ehitame Loki + Alloy + Grafana stacki, teeme LogQL päringuid ja seome kokku Zabbix labori tulemustega.</p>
+<p>See kolmetasandiline mudel lahendab kogu probleemi. Kõrge kardinaalsusega andmed nagu trace-ID, kasutaja-ID ja päringu-ID lähevad nüüd Structured Metadatasse, mitte siltidesse. Kardinaalsuse plahvatuse oht kaob. Kui kavandad 2026. aastal uut Loki-juurutust, pea meeles: trace-ID ei kuulu kunagi silti. Ta kuulub Structured Metadatasse.</p>
+<hr />
+<h2 id="5-kuidas-loki-paigaldatakse">5. Kuidas Loki paigaldatakse<a class="headerlink" href="#5-kuidas-loki-paigaldatakse" title="Lingi sektsioonile">&para;</a></h2>
+<p>Loki saab paigaldada kolmel viisil. Üks neist on aegumas, mis on oluline teada enne kui hakkad ehitama.</p>
+<p>Lihtsaim variant on <strong>monolithic mode</strong>, kus kogu Loki töötab ühes protsessis. Üks binaarfail, kõik sisemised komponendid selle sees. Käivitad ühe Docker Compose'i või ühe Helm-chartiga, ja asi töötab. See sobib keskkondadele, kus logimaht on kuni paarkümmend gigabaiti päevas — arendusjärgus süsteemid, testkeskkonnad, väikesed tootmised, koolitusruumid. Meie laboris kasutame täna just seda režiimi.</p>
+<p>Teine variant on <strong>Simple Scalable Deployment</strong> ehk SSD, mis jagab töö kolmeks rolliks: kirjutus, lugemine ja backend. See oli mõeldud vahepealseks variandiks suurte ja väikeste paigalduste vahel. Sobis kuni terabaidile päevas. 2025. aasta märtsis teatas aga Grafana Labs, et SSD režiimi keerukuse ja kasu suhe pole enam mõistlik, ja selle ametlik tugi lõpetatakse enne Loki 4.0 versiooni. Kui kohtad seda dokumentatsioonis või vanemas tutorialis, hoia eemale. Alusta monolithic'uga, kasva vajadusel otse microservices-iks.</p>
+<p>Kolmas variant — <strong>microservices mode</strong> — on tootmiskeskkonna standard. Iga komponent jookseb eraldi Kubernetes-deployment'ina ja iga komponenti saab eraldi skaleerida. Kui kirjutamiskoormus kasvab, lisad ingester'eid. Kui päringuid tuleb rohkem, lisad querier'eid. See režiim toetab ka tsoonitundlikku replikatsiooni, mis tähendab, et ingester'id jaotatakse eri Kubernetes-tsoonidesse ja kui üks tsoon kukub, süsteem toimib edasi. Kasuta seda, kui päevamaht ületab terabaidi või kui käideldavus on kriitiline.</p>
+<h3 id="komponendid-mida-naed-mikroteenuste-reziimis">Komponendid, mida näed mikroteenuste režiimis<a class="headerlink" href="#komponendid-mida-naed-mikroteenuste-reziimis" title="Lingi sektsioonile">&para;</a></h3>
+<p>Isegi kui sa kasutad monolithic-režiimi, töötavad sees samad komponendid — ainult ühe protsessi sees. Kirjutamistee liigub Alloy-agendist gateway kaudu distributor'isse. Distributor on värav: võtab vastu, valideerib, teeb rate limitingut, kontrollib tenant-ID-d ja suunab logi siltide räsimise põhjal õigele ingester'ile. Ingester ise on süsteemi süda — ta puhverdab logid mälus, pakib neid tükkideks, replikeerib tüüpiliselt kolme eksemplari ja kui tükk on valmis, kirjutab S3-sse.</p>
+<p>Lugemistee käib teistpidi. Grafana esitab päringu, mis läheb läbi gateway query frontend'ile. Frontend tükeldab päringu väiksemateks — kui sa küsid viimase kahekümne nelja tunni andmeid, jagatakse see kahekümne neljaks paralleelseks tunni-päringuks. Query scheduler paneb need järjekorda ja jaotab querier'ite vahel. Querier teeb tegeliku töö: küsib andmeid nii ingester'itelt (kõige värskem, mis on veel mälus) kui ka S3-st (vanemad tükid), teeb deduplikatsiooni (sest tükid on replikeeritud) ja tagastab tulemuse.</p>
+<p>Taustaprotsessidest on oluline eraldi mainida compactor'it. See käib regulaarselt üle kõigist tükkidest, ühendab väiksed tükid suuremateks, optimeerib indeksit ja kustutab vanu andmeid vastavalt säilituspoliitikale. Ilma compactor'ita paisub S3 killustunud väikeste failide hunnikuks ja päringute jõudlus langeb. Teine oluline taustaprotsess on ruler, mis täidab alertimise ja recording-reegleid — täpselt samal loogikal nagu Prometheuses. Sellega saad kirjutada reegli, mis ütleb: kui viimase viie minuti jooksul on rohkem kui sada <code>level=error</code> rida, saada hoiatus.</p>
+<hr />
+<h2 id="6-logide-agent-promtail-on-lainud-tule-alloy">6. Logide agent — Promtail on läinud, tule Alloy<a class="headerlink" href="#6-logide-agent-promtail-on-lainud-tule-alloy" title="Lingi sektsioonile">&para;</a></h2>
+<p>Aastaid oli Loki standardagent <strong>Promtail</strong> — lihtne ja väikese jalajäljega binaar, mis lugedi logifaile üles ja saatis need Lokile. See oli lihtne ja töötas hästi. 2024. aastal teatas Grafana Labs aga, et Promtail läheb feature-freeze seisu ja tulevik on <strong>Grafana Alloy</strong>.</p>
+<p>Alloy on universaalne telemeetria-kollektor. Üks ja sama agent kogub kõik kolm asja — logisid, meetrikaid ja jälgi. Ta põhineb OpenTelemetry Collectori komponentidel, aga pakub lisaks Grafana maailmas testitud konfiguratsiooni ja komponente, mis kohanduvad just Loki, Mimiri ja Tempo jaoks optimaalselt. Kui ehitad täna uut süsteemi, kasuta Alloy'd. Kui sul on vana Promtail-deployment, töötab see edasi, aga tasub migratsioon plaanima hakata. Grafana pakub ametlikku migratsiooni dokumenti, mis konverteerib Promtail'i YAML-konfi Alloy HCL-sarnaseks konfiks.</p>
+<p>Laboris tänane Alloy-konfig on väga lihtne: kolm plokki, mis lubavad lugeda logifaile konkreetsest kataloogist ja saata need Lokile. Aga sama agent skaleerub tootmises ka meetrikate kogumisele Prometheuse või Mimiri jaoks ning jälgede vastuvõtule OpenTelemetry protokollis. Kolm eraldi agenti — Promtail, node_exporter ja otel-collector — asenduvad ühe Alloy-konteineriga. See on oluline administreerimise lihtsustus: üks agent, üks konfig, üks protsess, mida hoida silma peal.</p>
+<hr />
+<h2 id="7-logql-paringukeel-luhidalt">7. LogQL — päringukeel lühidalt<a class="headerlink" href="#7-logql-paringukeel-luhidalt" title="Lingi sektsioonile">&para;</a></h2>
+<p>LogQL on PromQL-i vend. Kui PromQL on sul kuidagi tuttav, siis LogQL-iga saad hakkama umbes veerand tunniga. Keel on teadlikult üles ehitatud nii, et Prometheuse kasutajal oleks tunne "oh, seda ma oskan".</p>
+<p>Kõige lihtsam päring on voo valik: <code>{app="nginx", env="prod"}</code>. See tagastab kõik logiread, mille sildikomplekt vastab täpselt sellele filtrile. Sealt edasi saad lisada tekstifiltreid. <code>|= "error"</code> tähendab "sisaldab sõna error", <code>!= "healthcheck"</code> tähendab "ei sisalda" ja <code>|~ "5[0-9]{2}"</code> teeb regex-otsingu, millega saad näiteks tabada HTTP viievõti-koodid.</p>
+<p>Aga tekstifiltri piirang on sama mis grep-i puhul — see on aeglane ja ebatäpne. Kui su logid on struktureeritud formaadis, tasub kasutada parserit. LogQL-il on neid neli. <strong>JSON-parser</strong> võtab struktureeritud logid ja teeb iga väljast eraldi muutuja — pärast <code>| json</code> saad kirjutada <code>status_code &gt;= 500</code>. <strong>Logfmt</strong> teeb sama asja logfmt-vorminguga (võti=väärtus paarid), mis on väga levinud Go-rakendustes. <strong>Pattern</strong> on vabateksti-parser, millega saad määrata mustri ja nimetada kohad, kust väljad välja võtta — näiteks <code>| pattern "&lt;_&gt; [&lt;level&gt;] &lt;_&gt;"</code> võtab ERROR-i nurksulgudest. <strong>Regexp</strong> on viimane variant, kui miski muu ei sobi — töötab alati, aga aeglaselt ja on vigaderohke.</p>
+<p>Parseri valik sõltub logi formaadist. Kui logi näeb välja nagu <code>{"level":"error","user":"ann"}</code>, kasuta <code>json</code>. Kui ta on kujul <code>level=error user=ann duration=42ms</code>, kasuta <code>logfmt</code>. Kui ta on vabatekst aga stabiilse struktuuriga — näiteks <code>2026-04-25 10:23 ERROR user=ann failed</code> — kasuta <code>pattern</code>. Ja kui struktuuri üldse pole, alles siis vali <code>regexp</code>.</p>
+<p>Siin läheb aga asi päriselt huvitavaks. LogQL võimaldab logidest teha meetrikuid PromQL-sarnase süntaksiga. Kirjutad <code>rate({app="nginx"} |= "error" [5m])</code> ja saad "error-ridu sekundis viimase viie minuti jooksul" — täpselt nagu oleks see Prometheuse counter. Võid grupeerida siltide järgi: <code>topk(5, sum by (app) (rate({env="prod"} |~ "5[0-9]{2}" [1h])))</code> annab viis suurimat 5xx-vigade allikat viimase tunni jooksul. Logidest saab number, numbrist saab graafik, graafikust saab alert. Laboris teeme seda osas 3.4, kui muudame payment-teenuse veaarvu graafikuks ja dashboard-paneeliks.</p>
+<hr />
+<h2 id="8-loki-versus-elk-millal-kumba-valida">8. Loki versus ELK — millal kumba valida<a class="headerlink" href="#8-loki-versus-elk-millal-kumba-valida" title="Lingi sektsioonile">&para;</a></h2>
+<p>Ei ole õiget ja valet tööriista, on sobiv ja sobimatu konteksti jaoks. Loki ja Elasticsearch on mõlemad head tööriistad, aga nad on head <strong>erinevate ülesannete</strong> jaoks.</p>
+<p>Loki sobib hästi siis, kui sul on juba Grafana või Prometheus kasutuses — integratsioon on sujuv ja korrelatsiooni kolmik töötab kohe. Sobib hästi operatiivse silumise jaoks, kus sa tead millist rakendust uurid ja otsid sealt põhjust. Sobib, kui eelarve on piiratud ja logihulk kasvab — kolmkümmend viis kuni viiskümmend protsenti kulude kokkuhoidu pole väike. Sobib Kubernetese keskkonda, kuhu ta on sisuliselt sündinud.</p>
+<p>Elasticsearch sobib hästi siis, kui teed turvaforensikat ja pead otsima suvalisi mustreid kogu andmekogust, mitte ainult teatud rakenduse omast. Sobib, kui süvaanalüüs on peamine kasutusviis — agregatsioonid, keerukamad päringud, aja jooksul mustrite leidmine. Sobib, kui vajad mittetehnilist UI-d, sest Kibana on logide jaoks oluliselt parem kui Grafana. Ja sobib alati, kui compliance-nõue dikteerib täisteksti indekseerimise — mõned regulatiivsed raamistikud, eriti finantssektoris, eeldavad seda sõnaselgelt.</p>
+<p>Paljudes ettevõtetes leiad mõlemad <strong>paralleelselt</strong>. Loki igapäevaseks operatiivseks tööks DevOps-tiimi käes, Elasticsearch eraldi platvormina turvatiimile. See pole raiskamine, see on mõistlik tööjaotus. Kumbki tööriist on hea omas kohas, ja mõlema paralleelne kasutamine annab mõlema eelised.</p>
+<hr />
+<h2 id="9-uks-hoiatus-helm-chartide-dzungel">9. Üks hoiatus — Helm-chart'ide džungel<a class="headerlink" href="#9-uks-hoiatus-helm-chartide-dzungel" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kui otsid Google'ist "loki helm chart", leiad kolm erinevat nime ja kaks neist on surnud. See on piisavalt levinud komistuskivi, et seda tasub eraldi mainida.</p>
+<p>Ainus elav ja aktiivselt arendatav chart on <code>grafana/loki</code>. See toetab Loki 3.0+ versioone ja on see, mida peaksid kasutama. Teised kaks — <code>grafana/loki-stack</code> ja <code>grafana/loki-distributed</code> — on mõlemad surnud või suremas. Esimene on ametlikult deprecated, teine on hooldamata ja seisab Loki 2.9.0 peal, mis on juba aegunud.</p>
+<p>Eriline hoiatus tuleks siia lisada, kui kasutad <code>values.yaml</code> genereerimiseks suurt keelemudelit nagu ChatGPT või Claude. Mudelite treeningandmed sisaldavad vanu tutoriaale ja nad pakuvad sageli <code>loki-stack</code>-i näidiseid, mis olid kolm aastat tagasi standardvalik. Nüüd need ei tööta Loki 3.0+ maailmas. Kui mudel annab sulle chart'i nime, kontrolli alati, et see on <code>grafana/loki</code> ja mitte miski muu. Ametlik dokumentatsioon on õigem kui mudeli vastus.</p>
+<hr />
+<h2 id="10-kokkuvote">10. Kokkuvõte<a class="headerlink" href="#10-kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
+<p>Loki lugu on huvitav, sest see pole esimene logihaldussüsteem ega parim kõigis mõõdetavustes — aga ta tegi ühe asja õigesti. Ta küsis, mida tegelikult logidest vaja on, ja vastas, et enamikes kasutuslugudes on vaja operatiivselt küsida "mis rakenduses ja millal midagi juhtus". Ülejäänu — täistekstiotsing suvalise mustriga, pikaajaline forensika — on teiste tööriistade pärusmaa.</p>
+<p>Sellest vastusest tuli disain, mis indekseerib ainult silte. Sellest tuli odav salvestus S3-l ja kolmekümne viie kuni viiekümne protsendi võit ELK-i ees. Sellest tuli sõltuvus siltide distsipliinist, mis on esmane põhjus, miks Loki-juurutused valesti lähevad. Siltide kardinaalsus on kogu süsteemi tähtsaim haldussuurus. IP-aadressid, trace-ID-d ja kasutaja-ID-d ei kuulu siltidesse kunagi — Loki 3.0 Structured Metadata andis nendele eraldi koha.</p>
+<p>Paigaldus-ja komponendipoolt on mõistlik alustada monolithic-režiimiga ja kasvada mikroteenuste peale, kui päevamaht jõuab terabaidini. SSD-režiim, mis vahepeal oli populaarne, on aegumas. Helm-chartidest on elus ainult <code>grafana/loki</code>. Agent on täna Alloy, mitte Promtail, ja see valik lahendab lisaks logidele ka meetrikate ja jälgimise kogumise.</p>
+<p>Loki on noor ja areneb kiiresti. Tänane best practice võib aastaga muutuda — Bloom-filtrid, Structured Metadata, Alloy — kõik tulid viimase kahe aasta jooksul. Seetõttu on oluline eelistada ametlikku dokumentatsiooni blogidele, ja blogisid LLM-ide vastustele. Ajalugu on seda tehniliste teemade puhul alati öelnud, aga Loki puhul eriti.</p>
+<p>Järgmine samm on <a href="../../../labs/02_zabbix_loki/loki_lab/">Labor: Loki</a>. Ehitame seal Loki + Alloy + Grafana stacki, kirjutame LogQL päringuid ja seome kokku Zabbix labori tulemustega nii, et sama sündmust näed kahest perspektiivist — Zabbix ütleb "on probleem", Loki näitab "mis juhtus".</p>
 <hr />
 <h2 id="enesekontrolli-kusimused">Enesekontrolli küsimused<a class="headerlink" href="#enesekontrolli-kusimused" title="Lingi sektsioonile">&para;</a></h2>
 <details>
@@ -2623,34 +1910,34 @@
 1. Kui Loki ei indekseeri logi sisu, kuidas ta siis "error"-rea leiab? Milline on sellise päringu jõudluse piirang?
 2. Selgita, miks `trace_id` ei tohi olla Loki silt. Mis juhtub, kui sa ta siiski sildiks paned?
 3. Mis on erinevus Structured Metadata ja siltide vahel? Millal kumba kasutada?
-4. Sul on uus juurutus: ~50 GB logisid päevas, üks meeskond, Kubernetes. Millise paigaldusrežiimi valid?
+4. Sul on uus juurutus: ~50 GB logisid päevas, üks meeskond, Kubernetes. Millise paigaldusrežiimi valid ja miks?
 5. Miks on SSD paigaldusrežiim aegumas?
 6. Kirjuta LogQL päring: Nginx 5xx-vigade määr sekundis viimase 5 minuti jooksul, rakenduse järgi grupeeritud.
 7. Millal eelistad Loki, millal ELK? Nimeta kaks konkreetset stsenaariumi kummagi jaoks.
 
 ??? note "Vastused (peida/ava)"
-    1) Loki leiab "error"-rea kas täisteksti filtriga (`|= "error"`) või parseri + filtri abil. **Piirang:** kui filtreerid ainult sisu järgi, peab Loki rohkem andmeid skaneerima (aeglasem kui indeksipõhine label-filter). Seepärast pead alati esmalt kitsendama siltidega.
+    1) Loki leiab "error"-rea kas täisteksti filtriga (`|= "error"`) või parseri ja filtri kombinatsiooniga pärast pattern- või logfmt-parsimist. Piirang on selles, et kui filtreerid ainult sisu järgi, peab Loki rohkem tükke skaneerima ja see muutub aeglasemaks, mida vähem siltidega enne kitsendasid. Seetõttu on esimene soovitus alati: alusta kitsast silifiltrist, siis alles tekstifilter.
 
-    2) `trace_id` on kõrge kardinaalsusega — peaaegu iga rea kohta unikaalne. Kui paned sildiks, tekib "stream explosion" — indeks paisub, päringud aeglustuvad, Loki hakkab uusi logisid tagasi lükkama. Kasuta **Structured Metadata'd** (Loki 3.0+).
+    2) `trace_id` on kõrge kardinaalsusega — peaaegu iga logirea kohta unikaalne. Kui paned sildiks, tekib "stream explosion": kümme tuhat päringut päevas tähendab kümme tuhat eraldi voogu, indeks paisub, ingester mälu täitub, päringud aeglustuvad ja lõpuks hakkab Loki tagasi lükkama uusi logisid, sest limit on ületatud. Õige koht on Structured Metadata (Loki 3.0+).
 
-    3) **Sildid** on indekseeritud, peavad olema madala kardinaalsusega, kasutatakse voogude valikuks. **Structured Metadata** on otsitav aga EI indekseeritud, sobib kõrge kardinaalsusega detailiks (trace_id, user_id). Sildid = dimensioonid, metadata = detailid.
+    3) Sildid on indekseeritud, peavad olema madala kardinaalsusega (kuni umbes sada unikaalset väärtust) ja neid kasutatakse voogude valikuks päringu alguses. Structured Metadata on otsitav ja kiire, aga ei indekseerita — seal võib olla kõrge kardinaalsus (trace-ID, kasutaja-ID). Reegel: sildid on dimensioonid (millises rakenduses, millises keskkonnas), Structured Metadata on detailid (milline konkreetne päring).
 
-    4) ~50 GB/päev, üks meeskond, K8s: **Monolithic** on piiripealne (~20 GB soovitus), aga 50 GB juures sobib ka Monolithic kui kasv on piiratud. Kui kasv ootuspärane, kavanda kohe Microservices Helm-chart'iga (`grafana/loki`).
+    4) Viiekümne gigabaidi juures päevas on monolithic piiripealne — ametlik soovitus on kuni kahekümne GB. Kui kasv on ootuspärane ja tahate paar aastat edasi minna, kavanda kohe microservices Helm-chart'iga (`grafana/loki`). Kui maht on stabiilne ja meeskond ei taha Kubernetese keerukust, jää monolithic'uga ja vajadusel migreerid hiljem.
 
-    5) SSD režiimi keerukus vs kasu pole enam paigas — Monolithic on lihtsam alustamiseks, Microservices skaleerib paremini. SSD vahepealne roll pole enam õigustatud. Grafana Labs soovitab otse ühelt teisele.
+    5) SSD oli vahepealne variant monolithic ja microservices vahel. Praktikas tuli välja, et ta on keerulisem kui monolithic (kolm rolli hallata) ja ei skaleeru nii hästi kui microservices (ei saa iga komponenti eraldi skaleerida). Kasu-keerukuse suhe ei õigusta teda enam, seetõttu Grafana Labs soovitab otse monolithicu ja microservices'i vahel hüpata.
 
     6) 
-       <div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sum by (app) (
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>  rate(
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    {job=&quot;nginx&quot;}
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>      | pattern `&lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;status&gt; &lt;_&gt;`
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>      | status =~ &quot;5..&quot;
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>      [5m]
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>  )
-</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>)
+       <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sum by (app) (
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  rate(
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    {job=&quot;nginx&quot;}
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      | pattern `&lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;_&gt; &lt;status&gt; &lt;_&gt;`
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      | status =~ &quot;5..&quot;
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      [5m]
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  )
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>)
 </span></code></pre></div>
 
-    7) **Loki:** operatiivne debug (tean rakendust, otsin põhjust), odavam logikiht, Grafana-integratsioon, Kubernetes. **ELK:** täisteksti/forensika, keerukamad otsingud, turvatiimi workflow, compliance mis nõuab täisteksti indekseerimist.
+    7) **Loki:** operatiivne silumine konkreetse rakenduse kontekstis, odavam logikiht piiratud eelarvega meeskondadele, Kubernetese natiivsus, Grafana-keskne stack. **ELK:** turvaforensika suvaliste mustrite järgi, keerukad agregatsioonid ja analüütika, mittetehnilise kasutaja UI Kibanaga, compliance-nõue täisteksti indekseerimiseks.
 
 </details>
 
@@ -2658,104 +1945,28 @@
 <h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
 <details class="note">
 <summary>Allikad (peida/ava)</summary>
-<p><strong>Ametlik dokumentatsioon</strong></p>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>URL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Grafana Loki dokumentatsioon</td>
-<td>https://grafana.com/docs/loki/latest/</td>
-</tr>
-<tr>
-<td>Loki arhitektuur</td>
-<td>https://grafana.com/docs/loki/latest/get-started/architecture/</td>
-</tr>
-<tr>
-<td>Loki paigaldusrežiimid</td>
-<td>https://grafana.com/docs/loki/latest/get-started/deployment-modes/</td>
-</tr>
-<tr>
-<td>LogQL</td>
-<td>https://grafana.com/docs/loki/latest/query/</td>
-</tr>
-<tr>
-<td>Siltide parimad tavad</td>
-<td>https://grafana.com/docs/loki/latest/get-started/labels/</td>
-</tr>
-<tr>
-<td>Structured Metadata</td>
-<td>https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/</td>
-</tr>
-<tr>
-<td>Grafana Alloy</td>
-<td>https://grafana.com/docs/alloy/latest/</td>
-</tr>
-<tr>
-<td>Helm chart (ametlik)</td>
-<td>https://github.com/grafana/loki/tree/main/production/helm/loki</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Teooria ja kontekst</strong></p>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>URL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>KubeCon 2018 Loki tutvustus (Tom Wilkie)</td>
-<td>https://www.youtube.com/results?search_query=loki+tom+wilkie+kubecon+2018</td>
-</tr>
-<tr>
-<td>Grafana Labs blog — Loki 3.0</td>
-<td>https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/</td>
-</tr>
-<tr>
-<td>"How we designed Loki" (Tom Wilkie)</td>
-<td>https://grafana.com/blog/2018/12/12/loki-prometheus-inspired-open-source-logging-for-cloud-natives/</td>
-</tr>
-<tr>
-<td>Promtail → Alloy migratsioon</td>
-<td>https://grafana.com/docs/alloy/latest/tasks/migrate/from-promtail/</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Praktiline</strong></p>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>URL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>LGTM demo (Docker Compose)</td>
-<td>https://github.com/grafana/intro-to-mltp</td>
-</tr>
-<tr>
-<td>Loki Canary</td>
-<td>https://grafana.com/docs/loki/latest/operations/loki-canary/</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Versioonid (testitud, aprill 2026):</strong></p>
+<p><strong>Ametlik dokumentatsioon:</strong></p>
 <ul>
-<li>Loki: <code>grafana/loki:3.7.1</code></li>
-<li>Grafana: <code>grafana/grafana:12.4.3</code></li>
-<li>Alloy: <code>grafana/alloy:v1.15.1</code></li>
+<li>Grafana Loki: <a href="https://grafana.com/docs/loki/latest/">https://grafana.com/docs/loki/latest/</a></li>
+<li>Loki arhitektuur: <a href="https://grafana.com/docs/loki/latest/get-started/architecture/">https://grafana.com/docs/loki/latest/get-started/architecture/</a></li>
+<li>Paigaldusrežiimid: <a href="https://grafana.com/docs/loki/latest/get-started/deployment-modes/">https://grafana.com/docs/loki/latest/get-started/deployment-modes/</a></li>
+<li>LogQL: <a href="https://grafana.com/docs/loki/latest/query/">https://grafana.com/docs/loki/latest/query/</a></li>
+<li>Siltide parimad tavad: <a href="https://grafana.com/docs/loki/latest/get-started/labels/">https://grafana.com/docs/loki/latest/get-started/labels/</a></li>
+<li>Structured Metadata: <a href="https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/">https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/</a></li>
+<li>Grafana Alloy: <a href="https://grafana.com/docs/alloy/latest/">https://grafana.com/docs/alloy/latest/</a></li>
+<li>Helm chart (ametlik): <a href="https://github.com/grafana/loki/tree/main/production/helm/loki">https://github.com/grafana/loki/tree/main/production/helm/loki</a></li>
 </ul>
+<p><strong>Teooria ja kontekst:</strong></p>
+<ul>
+<li>KubeCon 2018 Loki tutvustus (Tom Wilkie): <a href="https://www.youtube.com/results?search_query=loki+tom+wilkie+kubecon+2018">https://www.youtube.com/results?search_query=loki+tom+wilkie+kubecon+2018</a></li>
+<li>Loki 3.0 release post: <a href="https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/">https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/</a></li>
+<li>"How we designed Loki" (Tom Wilkie): <a href="https://grafana.com/blog/2018/12/12/loki-prometheus-inspired-open-source-logging-for-cloud-natives/">https://grafana.com/blog/2018/12/12/loki-prometheus-inspired-open-source-logging-for-cloud-natives/</a></li>
+<li>Promtail → Alloy migratsioon: <a href="https://grafana.com/docs/alloy/latest/tasks/migrate/from-promtail/">https://grafana.com/docs/alloy/latest/tasks/migrate/from-promtail/</a></li>
+</ul>
+<p><strong>Laboris testitud versioonid (aprill 2026):</strong> Loki 3.7.1, Grafana 12.4.3, Alloy 1.15.1.</p>
 </details>
 <hr />
-<p><em>Järgmine: <a href="../../../labs/02_zabbix_loki/loki_lab/">Labor: Loki</a> — ehitame Loki + Alloy + Grafana stacki ja teeme LogQL-i päringuid.</em></p>
+<p><em>Järgmine: <a href="../../../labs/02_zabbix_loki/loki_lab/">Labor: Loki</a> — ehitame Loki + Alloy + Grafana stacki ja teeme LogQL päringuid.</em></p>
 
 
 
@@ -2776,7 +1987,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 12:58:37 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 13:33:57 UTC">23. aprill 2026</span>
   </span>
 
     
