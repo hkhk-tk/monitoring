@@ -1,23 +1,24 @@
 # Päev 2: Zabbix — kõik-ühes seiresüsteem
 
-**Kursus:** Kaasaegne IT-süsteemide monitooring ja jälgitavus  
-**Kestus:** ~2,5 tundi (loeng) + labor  
-**Tase:** Kesktase — eeldame Linux CLI ja võrgunduse põhiteadmisi  
+**Kestus:** ~2,5 tundi iseseisvat lugemist  
+**Eeldused:** [Päev 1: Prometheus + Grafana](paev1-loeng.md) loetud, Linux CLI põhitõed, võrgunduse alused  
+**Versioonid laboris:** Zabbix 7.0.6 LTS, MySQL 8.0, Zabbix agent 2 (7.0+)  
+**Viited:** [zabbix.com/documentation/7.0](https://www.zabbix.com/documentation/7.0/en/manual) · [Zabbix 8.0 roadmap](https://www.zabbix.com/roadmap) · [Performance tuning](https://www.zabbix.com/documentation/current/en/manual/appendix/performance_tuning)
 
 ---
 
 ## Õpiväljundid
 
-Pärast seda loengut oskad:
+Pärast selle materjali läbitöötamist osaleja:
 
-- Selgitada Zabbixi arhitektuuri — server, agent, frontend, DB, proksi
-- Eristada Host, Item, Trigger ja Action ning näha kuidas need üksteist ehitavad
-- Valida aktiivse ja passiivse agendi vahel ning põhjendada miks
-- Selgitada mis vahe on History ja Trends vahel — ja miks History=0 tähendab "triggeritele headaega"
-- Teha NVPS-põhiseid mahuarvutusi ning hinnata oma andmebaasi suurust ette
-- Selgitada mis on housekeeper, miks ta suurte süsteemide puhul katki läheb, ja mis on partitioning
-- Kirjeldada proksi rolli, Zabbix 7.0+ proxy groupe ja HA klastri toimimist
-- Nimetada Zabbix 8 põhimuudatusi ja seostada neid vaatluse (observability) laiema liikumisega
+1. **Selgitab** Zabbixi arhitektuuri — server, agent, frontend, DB, proksi — ja iga komponendi vastutusala
+2. **Eristab** Host, Item, Trigger ja Action mõisteid ning näeb kuidas need matrjoškana üksteist ehitavad
+3. **Valib** aktiivse ja passiivse agendi vahel ning põhjendab valikut itemi tüübi ja tulemüüri kontekstist
+4. **Selgitab** History ja Trends vahet ning mõistab miks History=0 tähendab triggerite kadumist
+5. **Teostab** NVPS-põhiseid mahuarvutusi ja hindab andmebaasi suurust ette
+6. **Kirjeldab** housekeeperi töö, selle piiranguid ja partitsioneerimise rolli suurtes süsteemides
+7. **Analüüsib** proksi rolli, Zabbix 7.0+ proxy gruppe ning HA klastri toimimist ja piiranguid
+8. **Seostab** Zabbix 8 põhimuudatusi (OTel, log-observability, ClickHouse) laiema vaatluse (observability) liikumisega
 
 ---
 
@@ -317,7 +318,7 @@ Traditsioonilist IT-d jälgivad asutused ei pea valima "vana Zabbix vs uus kuum 
 
 ---
 
-## 10. Kokkuvõte — mis on täna tähtis
+## 11. Kokkuvõte
 
 Zabbix on suur süsteem, täna puudutasime pinda. Enne laborisse minekut jäta meelde viis asja:
 
@@ -332,6 +333,20 @@ Zabbix on suur süsteem, täna puudutasime pinda. Enne laborisse minekut jäta m
 **Zabbix 8 muudab süsteemi monitooringust täisvaatluse platvormiks.** OpenTelemetry, log korrelatsioon, ClickHouse, scatter plot. See seob Zabbixi kõige sellega, mida järgmistel päevadel vaatame.
 
 Zabbixit kritiseeritakse tihti tema "kitchen sink" lähenemise pärast — teeb kõike, aga eriti midagi. Tegelikult on see tema tugevus. Väga vähe tööriistu katab kogu infrastruktuuri spektrit ühest kohast, ühe konfiguratsiooniga, ühe skillsetiga. 8.0-ga astub ta ka vaatlemise territooriumile. Tulev kümmekond aastat on põnev.
+
+**Järgmine samm:** [Labor: Zabbix](../../labs/02_zabbix_loki/zabbix_lab.md) — ehita Zabbix stack üles, lisa host'id ja template'id, jookse läbi trigger-fire/resolve tsükkel.
+
+---
+
+## Enesekontrolli küsimused
+
+1. Mis vahe on Zabbixi push- ja pull-mudelil? Millal millist eelistada?
+2. Miks on history=0 triggerite jaoks kriitiline viga? Mida süsteem kogub ja mida ei kogu?
+3. Arvuta: 5000 itemi, iga uueneb 30 sekundi järel. Mis on NVPS? Kui palju ruumi vajab 30 päeva history numbriliste andmete jaoks?
+4. Mis on housekeeperi põhiprobleem suurtes keskkondades? Kuidas partitsioneerimine selle lahendab?
+5. Milles on Zabbix 7.0 proxy groupide piirangud? Nimeta vähemalt kaks.
+6. Kui su rakendus logib JSON-formaadis ja tahad trace id'de põhjal otsida — miks Zabbix ei sobi ja mis sobib paremini?
+7. Zabbix 8 toob OpenTelemetry natiivse toe. Mida see praktiliselt tähendab keskkonnas, kus on juba Prometheus?
 
 ---
 
@@ -381,4 +396,4 @@ Zabbixit kritiseeritakse tihti tema "kitchen sink" lähenemise pärast — teeb 
 
 ---
 
-*Järgmine: Labor 2 — Zabbix stack üles, agent + templates + triggers + dashboards*
+*Järgmine: [Labor: Zabbix](../../labs/02_zabbix_loki/zabbix_lab.md) — Zabbix stack üles, agent + templates + triggers + dashboards*

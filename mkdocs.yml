@@ -100,9 +100,10 @@ nav:
       - "Labor": labs/01_prometheus_grafana/lab.md
 
   - "Päev 2 — Zabbix + Loki":
-      - "Loeng: Zabbix": materials/lectures/paev2-zabbix-loeng.md
+      - "Loeng: Zabbix": materials/lectures/paev2-loeng.md
       - "Loeng: Loki": materials/lectures/paev2-loki-loeng.md
-      - "Labor": labs/02_zabbix_loki/lab.md
+      - "Labor: Zabbix": labs/02_zabbix_loki/zabbix_lab.md
+      - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 
   - "Päev 3 — ELK Stack":
       - "Labor": labs/03_elk_stack/lab.md
