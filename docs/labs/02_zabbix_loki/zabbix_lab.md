@@ -3,7 +3,7 @@
 **Kestus:** ~2 tundi (pool päev 2 laborist)  
 **Tase:** Keskaste  
 **VM:** sinu isiklik VM. Klassis `ssh <eesnimi>@192.168.35.12X`, VPN-ilt `ssh <eesnimi>@192.168.100.12X`.  
-**Eeldused:** [Päev 2: Zabbix loeng](../../materials/lectures/paev2-loeng.md) loetud. Päev 1 Docker Compose ja Grafana tuttav.
+**Eeldused:** [Päev 2: Zabbix loeng](../../materials/lectures/paev2-zabbix.md) loetud. Päev 1 Docker Compose ja Grafana tuttav.
 
 ---
 

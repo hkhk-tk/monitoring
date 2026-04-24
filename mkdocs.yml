@@ -111,8 +111,8 @@ nav:
   - "Koolitaja juhend": labs/01_prometheus_grafana/koolitaja-juhend.md
 
 - "Päev 2 — Zabbix + Loki":
-  - "Loeng: Zabbix": materials/lectures/paev2-zabbix-v2.md
-  - "Loeng: Loki": materials/lectures/paev2-loki-v2.md
+  - "Loeng: Zabbix": materials/lectures/paev2-zabbix.md
+  - "Loeng: Loki": materials/lectures/paev2-loki.md
   - "Labor: Zabbix": labs/02_zabbix_loki/zabbix_lab.md
   - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 

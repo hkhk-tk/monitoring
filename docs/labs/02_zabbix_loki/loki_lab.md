@@ -3,7 +3,7 @@
 **Kestus:** ~2 tundi (pool päev 2 laborist)  
 **Tase:** Keskaste  
 **VM:** Sama VM nagu Zabbix laboris. Klassis `ssh <eesnimi>@192.168.35.12X`, VPN-ilt `ssh <eesnimi>@192.168.100.12X`.  
-**Eeldused:** [Labor: Zabbix](zabbix_lab.md) läbitud (Zabbix stack, mon-target host, payment errors trigger). [Päev 2: Loki loeng](../../materials/lectures/paev2-loki-loeng.md) loetud.
+**Eeldused:** [Labor: Zabbix](zabbix_lab.md) läbitud (Zabbix stack, mon-target host, payment errors trigger). [Päev 2: Loki loeng](../../materials/lectures/paev2-loki.md) loetud.
 
 ---
 
