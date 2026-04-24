@@ -246,6 +246,9 @@ curl -s http://localhost:3100/ready
 
 Vastus `ready`. Kui ei — `docker compose logs loki`. Loki tagastab `ready` alles kui sisemine initsialiseerimine on läbi (tavaliselt 5–10s).
 
+!!! tip "Kui näed `Ingester not ready: waiting for 15s after being ready`"
+    See on tavapärane kohe pärast käivitust. Oota ~15 sekundit ja proovi `/ready` uuesti.
+
 Edasi ei lähe enne, kui see töötab. Kui järgmistes sammudes "ei näe logisid", on kiusatus süüdistada Alloy't — aga kui Loki pole ready, pole mõtet Alloy't süüdistada.
 
 ### 2.2 Log-generator — testandmed
