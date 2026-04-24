@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
 
   zabbix-server:
-    image: zabbix/zabbix-server-mysql:ubuntu-7.0.6
+    image: zabbix/zabbix-server-mysql:ubuntu-7.0.25
     container_name: zabbix-server
     depends_on:
       mysql:
@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
 
   zabbix-web:
-    image: zabbix/zabbix-web-nginx-mysql:ubuntu-7.0.6
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-7.0.25
     container_name: zabbix-web
     depends_on:
       mysql:
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   zabbix-agent:
-    image: zabbix/zabbix-agent:ubuntu-7.0.6
+    image: zabbix/zabbix-agent:ubuntu-7.0.25
     container_name: zabbix-agent
     depends_on:
       - zabbix-server
