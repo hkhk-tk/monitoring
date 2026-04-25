@@ -111,6 +111,7 @@ Lisa `services:` alla:
       - mysqld
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_bin
+      - --log-bin-trust-function-creators=1
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
