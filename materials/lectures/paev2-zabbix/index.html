@@ -875,10 +875,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#action-mis-juhtub-kui-trigger-laheb-tulele" class="md-nav__link">
+  <a href="#action-mis-juhtub-kui-trigger-kaivitub" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Action — mis juhtub, kui Trigger läheb tulele
+        Action — mis juhtub, kui trigger käivitub
       
     </span>
   </a>
@@ -902,10 +902,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-template-miks-ta-on-zabbixis-nii-tahtis" class="md-nav__link">
+  <a href="#4-template-miks-ta-zabbixis-nii-keskne-on" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Template — miks ta on Zabbixis nii tähtis
+        4. Template — miks ta Zabbixis nii keskne on
       
     </span>
   </a>
@@ -963,10 +963,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-proxy-millal-uks-server-enam-ei-piisa" class="md-nav__link">
+  <a href="#7-proxy-millal-uhest-serverist-ei-piisa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Proxy — millal üks Server enam ei piisa
+        7. Proxy — millal ühest Serverist ei piisa
       
     </span>
   </a>
@@ -1744,10 +1744,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#action-mis-juhtub-kui-trigger-laheb-tulele" class="md-nav__link">
+  <a href="#action-mis-juhtub-kui-trigger-kaivitub" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Action — mis juhtub, kui Trigger läheb tulele
+        Action — mis juhtub, kui trigger käivitub
       
     </span>
   </a>
@@ -1771,10 +1771,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-template-miks-ta-on-zabbixis-nii-tahtis" class="md-nav__link">
+  <a href="#4-template-miks-ta-zabbixis-nii-keskne-on" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Template — miks ta on Zabbixis nii tähtis
+        4. Template — miks ta Zabbixis nii keskne on
       
     </span>
   </a>
@@ -1832,10 +1832,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-proxy-millal-uks-server-enam-ei-piisa" class="md-nav__link">
+  <a href="#7-proxy-millal-uhest-serverist-ei-piisa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Proxy — millal üks Server enam ei piisa
+        7. Proxy — millal ühest Serverist ei piisa
       
     </span>
   </a>
@@ -1907,12 +1907,12 @@
 
 
 <h1 id="paev-2-zabbix">Päev 2: Zabbix<a class="headerlink" href="#paev-2-zabbix" title="Lingi sektsioonile">&para;</a></h1>
-<p><strong>Kursus:</strong> Kaasaegne IT-süsteemide monitooring ja jälgitavus
-<strong>Kestus:</strong> ~45 minutit lugemist
-<strong>Eeldused:</strong> Päev 1 (Prometheus + Grafana) läbitud</p>
+<p><strong>Kursus:</strong> Kaasaegne IT-süsteemide monitooring ja jälgitavus<br />
+<strong>Kestus:</strong> ~45 minutit lugemist<br />
+<strong>Eeldused:</strong> Päev 1 (Prometheus + Grafana) läbitud  </p>
 <hr />
 <h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
-<p>Pärast seda loengut oskad:</p>
+<p>Selle peatüki lõpuks oskad:</p>
 <ul>
 <li><strong>Selgitada</strong>, miks Zabbix on Eestis ja Lätis valdav seiretööriist</li>
 <li><strong>Nimetada</strong> Zabbixi kolm põhikomponenti ja nende rollid</li>
@@ -1926,143 +1926,145 @@
 <ol>
 <li>aastal kirjutas Läti Ülikooli tudeng Alexei Vladišev diplomitöö raames sisemise seiretööriista. Esimene avalik versioon ilmus 2001, esimene stabiilne 2004. Algus oli tagasihoidlik — Riia üks tudeng, üks idee.</li>
 </ol>
-<p>Nüüd, 25 aastat hiljem, on Zabbix üks maailma kasutatumaid avatud lähtekoodiga monitooringutööriistu. Ja kuna ta sündis Riias, on ta Baltikumis eriti kodus. Eestis kasutavad teda Telia, Swedbank, Maksu- ja Tolliamet, enamus riigiasutusi ja ülikoolid. Kui sa lähed Eesti IT-sse tööle, puutud Zabbixiga kokku — see pole küsimus "kas", see on küsimus "millal".</p>
-<p>Miks just tema? Kolm põhjust. <strong>Avatud lähtekood</strong> — kood on GitHubis, litsents on vaba (alates 7.0 AGPL-3.0). <strong>Lätlastest kogukond</strong> — lokaalne tugi, eestikeelne UI tugi, konverentsid siinsamas Riias. Ja <strong>kõikehaaravus</strong> — üks Zabbix jälgib nii Linux-servereid kui Cisco ruutereid kui vana HP printerit kui tänapäevaseid Docker-konteinereid. Sa ei vaja iga uue seadme jaoks uut tööriista.</p>
-<p>Eilesest teed võrdlust lihtsa vastandusega. <strong>Prometheus on loodud mikroteenuste ja Kubernetese maailma jaoks.</strong> Zabbix on loodud <strong>kogu infrastruktuuri jaoks</strong> — serverid, võrguseadmed, printerid, UPS-id. Need ei võistle — paljudes Eesti ettevõtetes töötavad nad kõrvuti: Zabbix jälgib taristut, Prometheus jälgib rakendusi, mõlemad voolavad samasse Grafanasse.</p>
+<p>Nüüd, 25 aastat hiljem, on Zabbix üks levinumaid avatud lähtekoodiga monitooringutööriistu. Kuna ta sündis Riias, on ta Baltikumis eriti kodus. Eestis kasutavad teda Telia, Swedbank, Maksu- ja Tolliamet, enamik riigiasutusi ja ülikoole. Kui sa lähed Eesti IT-sse tööle, puutud Zabbixiga tõenäoliselt kokku — pigem on küsimus "millal" kui "kas".</p>
+<p>Miks just tema? Kolm põhjust. <strong>Avatud lähtekood</strong> — kood on GitHubis, litsents on vaba (alates 7.0 AGPL-3.0). <strong>Lätlastest kogukond</strong> — lokaalne tugi, eestikeelne UI tugi, konverentsid siinsamas Riias. Ja <strong>lai haare</strong> — üks Zabbix jälgib nii Linux-servereid, Cisco ruutereid, vana HP printerit kui tänapäevaseid Docker-konteinereid. Iga uue seadme jaoks ei pea uut tööriista otsima.</p>
+<p>Eilsest saad võtta võrdluse lihtsa vastandusega. <strong>Prometheus on mikroteenuste ja Kubernetese maailma tööriist.</strong> Zabbix on mõeldud <strong>kogu infrastruktuuri jaoks</strong> — serverid, võrguseadmed, printerid, UPS-id. Need ei ole konkurendid: paljudes Eesti ettevõtetes töötavad nad koos. Zabbix jälgib taristut, Prometheus rakendusi, mõlema andmed jõuavad Grafanasse.</p>
 <hr />
 <h2 id="2-zabbixi-kolm-pohikomponenti">2. Zabbixi kolm põhikomponenti<a class="headerlink" href="#2-zabbixi-kolm-pohikomponenti" title="Lingi sektsioonile">&para;</a></h2>
-<p>Et Zabbix töötaks, on vaja kolme asja koos. See on kõige olulisem pilt, mida sa sellest loengust kaasa võtad — kui sa tead, kes mida teeb, on kõik järgnev loogiline.</p>
-<p><strong>Zabbix Server</strong> on aju. Ta võtab vastu mõõdikuid, otsustab, kas miski on viga, ja saadab häireid. Kui süsteemis midagi juhtub, teab seda esimesena Server.</p>
-<p><strong>Andmebaas</strong> on mälu. MySQL, MariaDB või PostgreSQL. Siin on <strong>kaks asja korraga</strong>: Zabbixi enda konfiguratsioon (milliseid seadmeid jälgid, millised on häirete reeglid) ja kogu ajalooline mõõtmisandmestik (mis CPU-koormus oli kolmapäeval kell 14:23).</p>
-<p><strong>Frontend</strong> on nägu. PHP veebirakendus, mida sa brauseris kasutad. Siit klikid nupule "lisa uus seade", vaatad graafikuid, seadistad häireid.</p>
-<p>Pane tähele üht huvitavat asja selle arhitektuuri juures: <strong>Frontend räägib otse andmebaasiga, mitte Server'iga.</strong> Kui sa UI-s midagi muudad, kirjutab Frontend muudatuse kohe DB-sse. Server märkab muudatust järgmisel korral kui ta oma konfiguratsiooni andmebaasist üle loeb. See tähendab, et Server ja Frontend saavad elada eraldi masinates, isegi eraldi andmekeskustes — nad ei vaja otsest ühendust, ainult sama DB-d.</p>
-<p>Kolme komponendi kõrval on <strong>veel kaks</strong>, mida me ka kohtame. Esiteks <strong>Agent</strong> — väike programm, mis jookseb jälgitaval seadmel (serveris, VM-is) ja saadab sealt mõõtmisi. Teiseks <strong>Proxy</strong> — abiline, kes kogub andmeid ühes võrgusegmendis ja edastab need Server'ile; teda kasutatakse suuremates paigaldustes. Proxy jätame §7 juurde, Agent võtame järgmises peatükis lahti.</p>
-<p>Üks punkt, mida tasub kohe kirja panna: <strong>Zabbix konfiguratsioon elab andmebaasis.</strong> Eile Prometheuses oli konfiguratsioon YAML-failis. Sa said selle Git-i panna, versioonihaldust teha. Zabbixis ei saa — kogu konfiguratsioon, iga host, iga template, iga trigger on DB-ridades. Sellel on tagajärjed:</p>
+<p>Et Zabbix töötaks, on vaja kolme komponenti korraga.</p>
+<p><strong>Zabbix Server</strong> on aju. Ta võtab vastu mõõdikuid, otsustab, kas miski on viga, ja saadab häireid. Kui süsteemis midagi juhtub, on tema see, kes sellest esimesena teadlik on.</p>
+<p><strong>Andmebaas</strong> on mälu. MySQL, MariaDB või PostgreSQL. Siin on koos kaks asja: Zabbixi enda konfiguratsioon (milliseid seadmeid jälgid, millised on häirete reeglid) ja kogu ajalooline mõõtmisandmestik (mis CPU koormus oli kolmapäeval kell 14:23).</p>
+<p><strong>Frontend</strong> on nägu. PHP veebirakendus, mida kasutad brauseris. Siit lisad uue seadme, vaatad graafikuid, seadistad häireid.</p>
+<p>Oluline nüanss: <strong>Frontend räägib otse andmebaasiga, mitte Serveriga.</strong> Kui UI-s midagi muudad, kirjutab Frontend muudatuse otse DB-sse. Server loeb oma konfiguratsiooni DB-st kindla intervalliga uuesti sisse. See tähendab, et Server ja Frontend võivad elada eri masinates, isegi eri andmekeskustes — neil on vaja ainult ligipääsu samale andmebaasile.</p>
+<p>Kolme põhikomponendi kõrval on <strong>veel kaks</strong>, millega puutud samuti kokku. <strong>Agent</strong> — väike programm, mis jookseb jälgitaval seadmel (server, VM) ja saadab sealt mõõdikuid. <strong>Proxy</strong> — abiline, kes kogub andmeid ühes võrgusegmendis ja edastab need Serverile; teda kasutatakse suuremates või jaotatud paigaldustes. Proxy juurde jõuame §7-s, Agentist räägime järgmisena.</p>
+<p>Üks asi, mis tasub kohe ära märkida: <strong>Zabbixi konfiguratsioon elab andmebaasis.</strong> Eile Prometheuses oli konfiguratsioon YAML-failis, mida said Git-i panna ja versioonihalduses hoida. Zabbixis on kogu konfiguratsioon — iga host, template, trigger — DB ridadena. Sellel on tagajärjed:</p>
 <ul>
-<li>Backup teed DB-dump-iga</li>
-<li>Kui Docker Compose'i juures unustad volume'i defineerida, kaotad kogu oma töö esimese <code>docker compose down</code> järel</li>
-<li>Versioonihaldust saab teha ainult eksport/import XML/JSON-ina (töövahend on olemas, aga see pole Git)</li>
+<li>Backup teed DB dump'iga</li>
+<li>Kui Docker Compose’i juures unustad volume’i defineerida, kaob esimese <code>docker compose down</code> järel kogu töö</li>
+<li>Versioonihaldust saab teha eksport/import mehhanismiga (XML/JSON), mitte otse Git-ist</li>
 </ul>
-<p>Laboris seepärast alustame <code>docker-compose.yml</code>-i faili esimese reaga, mis defineerib MySQL-i volume'i — et meie töö ei kaoks.</p>
+<p>Laboris alustame <code>docker-compose.yml</code> failis MySQL-i volume’ist — et sinu töö ei kaoks.</p>
 <hr />
 <h2 id="3-neli-moistet-host-item-trigger-action">3. Neli mõistet: Host → Item → Trigger → Action<a class="headerlink" href="#3-neli-moistet-host-item-trigger-action" title="Lingi sektsioonile">&para;</a></h2>
-<p>Siin tuleb Zabbixi süda. Kui sa tead neid nelja mõistet ja nende järjekorda, siis oled sa Zabbixi põhimõtteliselt aru saanud. Kõik muu on detailid.</p>
-<p>Ma seletan neid ahela kaudu — nii nagu nad päriselt omavahel suhtlevad kui mingi probleem tekib.</p>
+<p>Siin on Zabbixi südamik. Kui need neli mõistet ja nende seosed on selged, on põhimõte käes. Ülejäänu on peenhäälestus.</p>
+<p>Vaatame neid järjest, nii nagu probleemisituatsioonis päriselt juhtub.</p>
 <h3 id="host-mida-me-jalgime">Host — mida me jälgime<a class="headerlink" href="#host-mida-me-jalgime" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Host</strong> on asi, mida jälgitakse. Üks server. Üks virtuaalmasin. Üks ruuter. Üks andmebaas. Üks printer.</p>
-<p>Host'il on nimi (nt <code>mon-target</code>), IP-aadress või DNS-nimi (nt <code>192.168.35.140</code>) ja vähemalt üks viis, kuidas Server temaga räägib — nn <strong>interface</strong>. Interface ütleb: "kasuta Zabbix agent'i port 10050 kaudu" või "kasuta SNMP-d port 161 kaudu".</p>
-<p>Laboris loome kaks Host'i: <code>docker-agent</code> (Docker konteiner, kus jookseb Zabbix Agent) ja <code>mon-target</code> (päris virtuaalmasin).</p>
+<p><strong>Host</strong> on jälgitav asi. Üks server. Üks virtuaalmasin. Üks ruuter. Üks andmebaas. Üks printer.</p>
+<p>Hostil on nimi (nt <code>mon-target</code>), IP-aadress või DNS-nimi (nt <code>192.168.35.140</code>) ja vähemalt üks viis, kuidas Server temaga räägib — nn <strong>interface</strong>. Interface ütleb näiteks: "kasuta Zabbix agendi porti 10050" või "kasuta SNMP-d port 161".</p>
+<p>Laboris loome kaks hosti: <code>docker-agent</code> (Docker konteiner, kus jookseb Zabbix Agent) ja <code>mon-target</code> (virtuaalmasin).</p>
 <h3 id="item-uks-konkreetne-mootmine">Item — üks konkreetne mõõtmine<a class="headerlink" href="#item-uks-konkreetne-mootmine" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Item</strong> on üks konkreetne mõõdik ühe Host'i kohta. "CPU keskmine koormus viimase minuti jooksul." "Vaba mälu baitides." "Kas Nginx teenus töötab (1/0)." Iga selline number või jaatus-eitus on üks Item.</p>
-<p>Item'il on neli tähtsat asja: nimi (inimesele loetav — "CPU load (1min average)"), võti ehk key (Zabbixi jaoks — <code>system.cpu.load[all,avg1]</code>), tüüp (numbriline, tekstiline, loogiline) ja intervall (kui tihti uuendatakse — nt iga 60 sekundi tagant).</p>
-<p>Tüüpilisel Linux-serveril võib olla 100-300 Item'it. Sa ei tee neid käsitsi — selle eest hoolitseb <strong>Template</strong>, millest §4.</p>
+<p><strong>Item</strong> on üks mõõdik ühe hosti kohta. "CPU keskmine koormus viimase minuti jooksul." "Vaba mälu baitides." "Kas Nginx teenus töötab (1/0)." Iga selline number või tõeväärtus on eraldi item.</p>
+<p>Itemil on neli olulist omadust: nimi (inimloetav — "CPU load (1min average)"), võti ehk key (Zabbixi jaoks — <code>system.cpu.load[all,avg1]</code>), tüüp (numbriline, tekstiline, loogiline) ja intervall (kui tihti seda värskendatakse, nt iga 60 sekundi järel).</p>
+<p>Tüüpilisel Linux-serveril on 100–300 item’it. Neid ei looda käsitsi ükshaaval — selleks on <strong>Template</strong>, millest §4.</p>
 <h3 id="trigger-tingimus-mis-utleb-midagi-on-valesti">Trigger — tingimus, mis ütleb "midagi on valesti"<a class="headerlink" href="#trigger-tingimus-mis-utleb-midagi-on-valesti" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Trigger</strong> on tingimus Item'i väärtuste peal. Näiteks: "kui CPU keskmine koormus viimase 5 minuti jooksul on üle 90%, on midagi valesti".</p>
-<p>Trigger'il on <strong>avaldis</strong> — see matemaatiline-tõeväärtuslik tingimus. Meie näites:</p>
+<p><strong>Trigger</strong> on tingimus item’i väärtuste peal. Näiteks: "kui CPU keskmine koormus viimase 5 minuti jooksul on üle 90%, loeme selle probleemiks".</p>
+<p>Triggeril on <strong>avaldis</strong> — see loogiline/matemaatiline tingimus. Meie näide:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>avg(/mon-target/system.cpu.util,5m) &gt; 90
 </span></code></pre></div>
-<p>Loe nii: "mon-target'i CPU utilisatsiooni 5 minuti keskmine on suurem kui 90". Kui see on tõsi, läheb Trigger <strong>Firing</strong> olekusse. Kui mitte — <strong>Resolved</strong> või <strong>OK</strong>.</p>
-<p>Trigger'il on ka <strong>raskusaste</strong> — Information, Warning, Average, High, Disaster. See ütleb, kui tõsine asi on. Information on infoks, Disaster äratab öösel.</p>
-<h3 id="action-mis-juhtub-kui-trigger-laheb-tulele">Action — mis juhtub, kui Trigger läheb tulele<a class="headerlink" href="#action-mis-juhtub-kui-trigger-laheb-tulele" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Action</strong> on reegel selle kohta, mis juhtub, kui Trigger läheb Firing olekusse. Saada email. Saada Slack-sõnum. Helista telefoni PagerDuty kaudu. Käivita skript.</p>
-<p>Laboris me Action'it ei seadista — piisab kui näeme UI-s Trigger'i. Tootmises seadistad Action'i alati, sest monitooringust pole mõtet kui keegi ei saa teada, et midagi valesti on.</p>
+<p>Loe: "mon-target’i CPU utilisatsiooni 5 minuti keskmine on suurem kui 90". Kui see on tõsi, läheb trigger <strong>Firing</strong> olekusse. Kui tingimus enam ei kehti, on ta <strong>Resolved</strong> või <strong>OK</strong>.</p>
+<p>Triggeril on ka <strong>raskusaste</strong> — Information, Warning, Average, High, Disaster. See määrab, kui tõsine olukord on. Information on pigem teavituseks, Disaster on see, mis äratab öösel.</p>
+<h3 id="action-mis-juhtub-kui-trigger-kaivitub">Action — mis juhtub, kui trigger käivitub<a class="headerlink" href="#action-mis-juhtub-kui-trigger-kaivitub" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Action</strong> on reegel selle kohta, mida teha, kui trigger Firing olekusse läheb. Saada e-kiri. Saada Slacki sõnum. Helista PagerDuty kaudu telefoni. Käivita skript.</p>
+<p>Laboris me action’eid eraldi ei seadista — UI-s triggeri nägemisest piisab. Päriselus on action’id vältimatud; monitooringust pole kasu, kui keegi häireid ei näe.</p>
 <h3 id="ahel-kokku">Ahel kokku<a class="headerlink" href="#ahel-kokku" title="Lingi sektsioonile">&para;</a></h3>
-<p>Paneme kogu loo kokku konkreetse näitega:</p>
+<p>Paneme näite ritta:</p>
 <ol>
-<li><strong>Host</strong> on <code>mon-target</code> — virtuaalmasin IP-ga <code>192.168.35.140</code></li>
-<li><strong>Item</strong> on <code>system.cpu.util</code> — CPU utilisatsioon protsentides, uueneb iga 60 sekundi tagant</li>
-<li><strong>Trigger</strong> jälgib seda Item'it: kui 5-minuti keskmine ületab 90%, läheb tulele</li>
-<li><strong>Action</strong> saadab Trigger'i tulekul e-kirja: "mon-target on hädas"</li>
+<li><strong>Host</strong>: <code>mon-target</code> — virtuaalmasin IP-ga <code>192.168.35.140</code>  </li>
+<li><strong>Item</strong>: <code>system.cpu.util</code> — CPU utilisatsioon protsentides, uuendub iga 60 sekundi järel  </li>
+<li><strong>Trigger</strong>: jälgib seda item’it; kui 5 minuti keskmine ületab 90%, läheb käima  </li>
+<li><strong>Action</strong>: saadab triggeri käivitumisel e-kirja: "mon-target on hädas"</li>
 </ol>
-<p>See ahel — mõõdik → tingimus → reaktsioon — on kogu Zabbixi loogika. Iga üksik häire, mille sa tootmises näed, on sündinud sellest samast mustrist.</p>
+<p>See ahel — mõõdik → tingimus → reaktsioon — on Zabbixi loogika lühivorm. Iga tootmises nähtav häire on variatsioon sellest samast mustrist.</p>
 <hr />
-<h2 id="4-template-miks-ta-on-zabbixis-nii-tahtis">4. Template — miks ta on Zabbixis nii tähtis<a class="headerlink" href="#4-template-miks-ta-on-zabbixis-nii-tahtis" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kui sul on üks server, saad kõik Item'id käsitsi teha. Paar klõpsu, ongi korras. Aga tootmises on sul tavaliselt <strong>mitte üks server, vaid 50, 500 või 5000</strong>. Igaühele samu mõõdikuid käsitsi teha oleks võimatu.</p>
-<p><strong>Template</strong> lahendab selle. Template on <strong>valmis Item'ite, Trigger'ite ja graafikute komplekt</strong>, mis on loodud üks kord ja rakendub paljudele Host'idele.</p>
-<p>Protsess näeb välja nii. Keegi on kunagi loonud Template nimega <code>Linux by Zabbix agent</code>. Selles Template'is on ~300 Item'it (CPU, mälu, ketas, võrk, protsessid, teenused), ~50 Trigger'it ja paar valmisdashboard. Sina võtad oma serveri, lingid selle Template'iga — ja minuti pärast on serveril kõik 300 mõõdikut olemas, kõik 50 häire-tingimust olemas, dashboard valmis. Üks klõps.</p>
-<p>Kui sul on 500 serverit, lingid sama Template'i iga serveriga. Iga server saab need 300 mõõdikut ja 50 Trigger'it. Kui järgmine kuu avastad, et üks Trigger on liiga tundlik — muudad lävendi Template'is ja muudatus <strong>levib automaatselt kõigile 500-le serverile</strong>. Ilma Template'ita peaksid sa selle muudatuse tegema 500 korda ja ühe või kaks korda unustaksid ära.</p>
-<p>Zabbix tarnib umbes 300 valmistemplate'i — operatsioonisüsteemidele, võrguseadmetele (Cisco, MikroTik, HP, Juniper), andmebaasidele, rakendustele. See on üks põhjus, miks inimesed ütlevad, et Zabbixis saad midagi jälgima hakata "out of the box" — paned serverile agendi peale, lingid Template'i, 30 sekundi pärast näed graafikuid.</p>
-<p>Laboris kasutame <code>Linux by Zabbix agent</code> Template'i oma kahele Host'ile. Hiljem, osas 5, teeme <strong>oma Item'i</strong> (UserParameter kaudu) — sellest saab hiljem oma Template'i tükk, kui tahad seda korrutada mitmele serverile.</p>
+<h2 id="4-template-miks-ta-zabbixis-nii-keskne-on">4. Template — miks ta Zabbixis nii keskne on<a class="headerlink" href="#4-template-miks-ta-zabbixis-nii-keskne-on" title="Lingi sektsioonile">&para;</a></h2>
+<p>Ühe serveri puhul võiks kõik item’id käsitsi teha. Mõni klõps, ja töö on tehtud. Päriselus on sul aga <strong>mitu kümmet või sada</strong> serverit. Igaühele samu mõõdikuid käsitsi konfigureerida ei ole realistlik.</p>
+<p><strong>Template</strong> lahendab selle probleemi. Template on <strong>valmis item’ite, trigger’ite ja graafikute komplekt</strong>, mis on loodud ühe korra ja mida saab rakendada paljudele hostidele.</p>
+<p>Näide. Keegi on loonud template’i <code>Linux by Zabbix agent</code>. Selles on umbes 300 item’it (CPU, mälu, ketas, võrk, protsessid, teenused), umbes 50 trigger’it ja mõned valmis dashboard’id. Sina seod oma serveri selle template’iga — ja mõne minuti pärast on serveril kõik need mõõdikud ja häiretingimused olemas, graafikud koos.</p>
+<p>Kui sul on 500 serverit, seod sama template’i kõigiga. Iga server saab need samad 300 item’it ja 50 trigger’it. Kui kuu aja pärast selgub, et üks trigger on liiga tundlik, muudavad seda ühes kohas — template’is — ja muudatus jõuab automaatselt kõigi 500 serverini. Ilma template’ita peaksid sama muudatust tegema 500 korda käsitsi.</p>
+<p>Zabbixiga tuleb kaasa umbes 300 valmis template’it — operatsioonisüsteemide, võrguseadmete (Cisco, MikroTik, HP, Juniper), andmebaaside ja rakenduste jaoks. Seetõttu ongi tihti nii, et uue asja jälgimine käib väga kiiresti: paned agenti, seod template’i, ja graafikud ilmuvad.</p>
+<p>Laboris kasutame <code>Linux by Zabbix agent</code> template’it mõlema hosti peal. Hiljem, osas 5, teeme <strong>oma item’i</strong> (UserParameter’i kaudu) — sellest saaks hiljem üks kild sinu enda template’ist, kui tahad seda mitmel serveril korrata.</p>
 <hr />
 <h2 id="5-agent-kes-andmeid-kogub">5. Agent — kes andmeid kogub<a class="headerlink" href="#5-agent-kes-andmeid-kogub" title="Lingi sektsioonile">&para;</a></h2>
-<p>Agent on väike programm, mis jookseb jälgitaval masinal ja kogub sealt mõõdikuid. Meie labori virtuaalmasinatel on Agent juba paigaldatud — koolitaja pani Ansible'iga peale, seepärast alguses me teda ise ei install.</p>
-<p>Agendist tasub teada kahte asja. Esiteks, et neid on <strong>kaks versiooni</strong>. Teiseks, et Agent võib <strong>andmeid kaht moodi saata</strong>.</p>
+<p>Agent on väike programm, mis jookseb jälgitaval masinal ja kogub sealt mõõdikuid. Meie labori virtuaalmasinatel on agent juba olemas — koolitaja pani ta Ansible’iga peale, seega paigaldust me eraldi ei läbi.</p>
+<p>Agendi juures tasub teada kahte asja. Esiteks, et neid on <strong>kaks põlvkonda</strong>. Teiseks, et agent võib <strong>andmeid kahel viisil saata</strong>.</p>
 <h3 id="agent-1-ja-agent-2">Agent 1 ja Agent 2<a class="headerlink" href="#agent-1-ja-agent-2" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Agent 1</strong> on klassikaline versioon, C-keeles kirjutatud, olemas alates Zabbixi algusaegadest. Lihtne, stabiilne, väikese mäluvajadusega.</p>
-<p><strong>Agent 2</strong> on uuem (alates 2019), Go-keeles kirjutatud. Selle peamine eelis on <strong>pluginate süsteem</strong> — tal on sisseehitatud pluginad MySQL-ile, PostgreSQL-ile, Dockerile, Redisele, MongoDB-le jt. Agent 1 puhul pead välja mõtlema, kuidas MySQL-i statistikat koguda (tihti shell-skriptidega); Agent 2 teeb seda natiivselt üle ühe konfiguratsiooni.</p>
-<p>Standardse Linux-serveri jaoks töötavad mõlemad. Uutes paigaldustes eelistatakse Agent 2, sest see on tulevikukindlam ja vähem "nokitsemise" vajadusega integratsioonide puhul. Meie laboris kasutame <strong>Agent 2</strong>.</p>
+<p><strong>Agent 1</strong> on klassikaline versioon, C-keeles, olemas Zabbixi algusaegadest. Lihtne, stabiilne, väikese jalajäljega.</p>
+<p><strong>Agent 2</strong> on uuem (alates 2019), kirjutatud Go-s. Selle suur pluss on <strong>pluginate süsteem</strong> — sisseehitatud tugi MySQL-ile, PostgreSQL-ile, Dockerile, Redisele, MongoDB-le jne. Agent 1 puhul tuli näiteks MySQL-i statistika kogumiseks ise skripte kirjutada; Agent 2 oskab seda konfiguraatsiooni abil.</p>
+<p>Tavalise Linux-serveri jaoks töötavad mõlemad. Uutes paigaldustes eelistatakse tavaliselt Agent 2, sest see on paindlikum ja vajab vähem "nokitsemist" integratsioonide juures. Laboris kasutame <strong>Agent 2</strong>.</p>
 <h3 id="passiivne-ja-aktiivne-reziim">Passiivne ja aktiivne režiim<a class="headerlink" href="#passiivne-ja-aktiivne-reziim" title="Lingi sektsioonile">&para;</a></h3>
-<p>Siin tuleb üks kontseptsioon, mida paljud alguses segamini ajavad. Agent võib andmeid saata Server'ile kahel erineval moel.</p>
-<p><strong>Passiivne agent</strong> töötab nii: Server küsib, Agent vastab. Server ütleb "palun anna mulle CPU load", Agent vastab "0.45". Server küsib järgmise mõõdiku, Agent vastab. Algatus on Server'i käes.</p>
-<p><strong>Aktiivne agent</strong> töötab vastupidi: Agent küsib Server'ilt ühe korra "mida ma pean jälgima?", saab nimekirja, ja edasi kogub ja <strong>saadab ise</strong>. Algatus on Agent'i käes.</p>
-<p>Erinevus on oluline, sest <strong>tulemüür</strong>. Passiivne agent vajab, et Server pääseks tema juurde (Server → Agent suund avatud). See sobib sisevõrgus, kus kõik on samas segmendis. Aga kui Agent on näiteks DMZ-s, pilves või NAT-i taga, kuhu Server lihtsalt ei saa, siis peab Agent ise Server'i poole pöörduma (Agent → Server suund) — see on aktiivne režiim.</p>
-<p>Kuidas otsustada? Lihtne reegel: <strong>kui kõik on samas võrgus ja tulemüür ei sega, kasuta passiivset.</strong> Lihtsam nii Agent'i konfis (paar rida) kui Zabbixi UI-s. Kui võrk on keerulisem — NAT, DMZ, erinevad VPC-d — kasuta aktiivset. Üks erand, mida tasub mäletada: <strong>logifailide jälgimine käib ainult aktiivses režiimis</strong>, sest Agent peab hoidma lugemispositsiooni failis.</p>
-<p>Laboris kasutame <strong>passiivset</strong>. Meie labori virtuaalmasinad on kõik samas võrgus, tulemüür ei sega.</p>
+<p>Agent saab andmeid Serverile saata kahel moel.</p>
+<p><strong>Passiivne agent</strong>: Server küsib, Agent vastab. Server ütleb: "anna CPU koormus", Agent vastab <code>0.45</code>. Server küsib järgmise mõõdiku jne. Algatus on Serveri käes.</p>
+<p><strong>Aktiivne agent</strong>: Agent küsib Serverilt korra: "mida ma pean jälgima?" — saab nimekirja, ja hakkab siis ise regulaarselt tulemusi Serverile saatma. Algatus on agendi käes.</p>
+<p>Erinevus on oluline just <strong>tulemüüri</strong> mõttes. Passiivse agendi puhul peab Server saama Agentini (suund Server → Agent). See sobib sisevõrgus, kus kõik on samas segmendis ja tulemüür ei sega. Kui Agent on DMZ-s, pilves või NAT-i taga, kuhu Server otse ei pääse, peab Agent ise Serveri poole pöörduma (Agent → Server) — see ongi aktiivne režiim.</p>
+<p>Lihtne valikureegel: <strong>kui kõik on samas võrgus ja tulemüür ei sega, kasuta passiivset.</strong> Agent’i konfis ja UI-s on see veidi sirgjoonelisem. Kui võrk on keerulisem — NAT, DMZ, eraldi VPC-d — kasuta aktiivset. Üks erand, mida tasub meeles pidada: <strong>logifailide jälgimine käib ainult aktiivses režiimis</strong>, sest Agent peab pidama meeles, kust kohast failis lugemine pooleli jäi.</p>
+<p>Laboris kasutame <strong>passiivset</strong> režiimi. Labori virtuaalmasinad on samas võrgus ja tulemüür ei sega.</p>
 <hr />
 <h2 id="6-mida-zabbix-saab-ka-ilma-agendita">6. Mida Zabbix saab ka ilma agendita<a class="headerlink" href="#6-mida-zabbix-saab-ka-ilma-agendita" title="Lingi sektsioonile">&para;</a></h2>
-<p>Üks Zabbixi tugevusi on, et ta ei nõua igal seadmel agenti. Paljusid asju saab ta jälgida <strong>otse</strong>, sest need juba räägivad mingit standardset protokolli.</p>
-<p><strong>SNMP</strong> — võrguseadmete (ruuterid, switchid) ammune keel. Iga Cisco, MikroTik, HP, Juniper seade räägib SNMP-d. Zabbix küsib otse: "mis interfaceid sul on, palju liiklust läbi läks, mis uptime on?" Seadmele midagi installeerida ei ole vaja.</p>
-<p><strong>HTTP</strong> — kui rakendusel on endpoint, mis väljastab JSON-i või midagi parsitavat (nt Nginxi <code>/stub_status</code>), Zabbix küsib URL-i ja võtab vastusest välja numbrid.</p>
-<p><strong>IPMI</strong> — serveri enda riistvara BMC kaudu (temperatuur, toiteallika olek, ventilaatorid).</p>
-<p><strong>JMX</strong> — Java rakendused.</p>
-<p><strong>VMware API</strong> — vCenter ja ESXi hostid otse, ilma agendita.</p>
-<p>Miks see oluline on? Prometheuses on igaühe jaoks eraldi <strong>exporter</strong> — programm, mis tõlgib seadme keele Prometheuse keelde. Kui tahad jälgida Nginxi, jooksutad <code>nginx-prometheus-exporter</code>. Jälgid MySQL-i — <code>mysqld_exporter</code>. Jälgid ruutereid — <code>snmp_exporter</code>. Iga exporter on eraldi konteiner, eraldi asi mida hooldada, uuendada, ümber pöörata.</p>
-<p>Zabbixis on see kõik <strong>sisse ehitatud</strong>. Selle hinnaga, et Zabbixi Server ise on suurem, ja konfiguratsioon käib UI-s, mitte failides. Aga tüüpiline Zabbix-stack on komponente-arvuliselt <strong>väiksem</strong> kui vastav Prometheus-stack.</p>
-<p>Laboris kasutad seda osas 4 — Nginxi stub_status endpoint'i lood Zabbixi HTTP Agent tüüpi Item'iga, ilma eraldi exporter'ita.</p>
+<p>Zabbixi tugevus on ka see, et ta ei nõua igal seadmel agenti. Paljusid asju saab jälgida <strong>otse</strong>, sest need juba räägivad standardselt protokolli.</p>
+<p>Näited:</p>
+<ul>
+<li><strong>SNMP</strong> — võrguseadmete (ruuterid, switchid) klassikaline keel. Cisco, MikroTik, HP, Juniper — kõik oskavad SNMP-d. Zabbix küsib: "mis interface’id sul on, kui palju liiklust, mis uptime?" Seadmele midagi juurde installida ei ole vaja.</li>
+<li><strong>HTTP</strong> — kui rakendusel on endpoint, mis väljastab JSON-i või muud hästi parsitavat (nt Nginxi <code>/stub_status</code>), saab Zabbix sealt ise numbrid välja võtta.</li>
+<li><strong>IPMI</strong> — serveri riistvara BMC (temperatuur, toiteallika olek, ventilaatorid).</li>
+<li><strong>JMX</strong> — Java rakendused.</li>
+<li><strong>VMware API</strong> — vCenter ja ESXi hostid otse, ilma agendita.</li>
+</ul>
+<p>Prometheuse maailmas on iga sellise asja jaoks eraldi <strong>exporter</strong> — programm, mis tõlgib seadme keele Prometheuse mõõdikuteks. Nginxi jaoks <code>nginx-prometheus-exporter</code>, MySQL-i jaoks <code>mysqld_exporter</code>, ruuterite jaoks <code>snmp_exporter</code>. Iga exporter on eraldi protsess või konteiner, eraldi asi, mida haldada.</p>
+<p>Zabbixis on suur osa sellest <strong>Serverisse sisse ehitatud</strong>. Vastutasuks on Zabbix Server ise "raskem" ja konfigureerimine käib failide asemel UI kaudu. Aga tüüpiline Zabbixi stack on komponentide arvu mõttes <strong>lihtsam</strong> kui samaväärne Prometheuse stack.</p>
+<p>Laboris kasutad seda osas 4 — Nginxi <code>stub_status</code> endpoint’ist teed Zabbixi HTTP Agent tüüpi item’i, ilma eraldi exporter’ita.</p>
 <hr />
-<h2 id="7-proxy-millal-uks-server-enam-ei-piisa">7. Proxy — millal üks Server enam ei piisa<a class="headerlink" href="#7-proxy-millal-uks-server-enam-ei-piisa" title="Lingi sektsioonile">&para;</a></h2>
-<p>Üks Zabbix Server saab enamasti hakkama 1000-10000 Host'iga. Aga on kolm olukorda, kus tuleb käibele <strong>Proxy</strong> — ja need pole seotud suurusega, vaid <strong>võrgu kujuga</strong>.</p>
-<p><strong>Geograafiline kaugus.</strong> Peakontor Tallinnas, Server Tallinnas. Filiaal Tokyos, 50 seadet. Ilma Proxy'ta küsib Server iga mõne sekundi tagant iga Tokyo seadme käest andmeid — üle ookeani. Iga väike päring ja vastus peab WAN-i mööda rändama. Kulu kasvab, latency kasvab, Server tööhõive kasvab. <strong>Proxy Tokyos</strong> kogub andmeid lokaalselt, puhverdab ja saadab Server'ile <strong>kokku pandud pakidena</strong> harvemini. Ressursside sääst on märkimisväärne.</p>
-<p><strong>Eraldatud võrgusegmendid.</strong> DMZ-s on 50 seadet. Turvapoliitika ütleb: sisevõrgust DMZ-sse pääseb ainult teatud portidele, teatud IP-de jaoks. Kui iga seade peab eraldi Server'iga rääkima, tähendab see 50 tulemüürireeglit. Üks reegel seadme kohta, audit'i jaoks painaja. <strong>Proxy DMZ-s</strong> — üks tulemüürireegel (Proxy → Server). Agendid räägivad Proxy'ga lokaalselt, Proxy räägib Server'iga üle tulemüüri.</p>
-<p><strong>Offline-taluvus.</strong> Proxy'l on oma väike andmebaas. Kui WAN kukub 2 tunniks ära, Proxy jätkab andmete kogumist ja puhverdamist kohalikku DB-sse. Kui ühendus tuleb tagasi, saadab ta kogu puhverdatud ajaloo Server'ile — mitte midagi ei lähe kaduma. Ilma Proxy'ta oleks 2 tundi auku andmestikus.</p>
-<p>Proxy ei tee <strong>Trigger'ite hindamist</strong> — see jääb alati Server'i tööks. Proxy ainult kogub ja edastab. See on oluline mõista, sest kui tahad kauges asukohas ka <strong>lokaalset häiret</strong> ilma Server'ita, siis Proxy seda ei anna — selleks on vaja teisi tööriistu.</p>
-<p>Laboris Proxy't me kohe ei püsti pane — see on lisaülesanne. Aga saa aru: niipea kui sul on tootmises mitu võrgusegmenti või mitu asukohta, <strong>tuleb Proxy kohe käibele</strong>. See pole "suurtele" ettevõtetele reserveeritud, see on arhitektuurivalik.</p>
+<h2 id="7-proxy-millal-uhest-serverist-ei-piisa">7. Proxy — millal ühest Serverist ei piisa<a class="headerlink" href="#7-proxy-millal-uhest-serverist-ei-piisa" title="Lingi sektsioonile">&para;</a></h2>
+<p>Üks Zabbix Server saab tavaliselt jälgida kuskil 1000–10 000 hosti. Aga on kolm olukorda, kus on vaja lisada <strong>Proxy</strong> — ja need on seotud pigem võrgutopoloogiaga kui puhta mahuga.</p>
+<p><strong>Geograafiline kaugus.</strong> Peakontor Tallinnas, Server Tallinnas. Filiaal Tokyos, 50 seadet. Ilma Proxyta küsib Server iga mõne sekundi tagant iga Tokyo seadme käest andmeid üle ookeani. Iga väike päring ja vastus liigub WAN-i mööda. Latency, kulu ja Serveri koormus kasvavad. <strong>Proxy Tokyos</strong> kogub andmed kohapeal kokku, puhverdatud info saadetakse Serverile harvemini suuremate pakkidena.</p>
+<p><strong>Eraldatud võrgusegmendid.</strong> DMZ-s on 50 seadet. Turvapoliitika lubab sisevõrgust DMZ-sse ainult kindlad portid ja sihtkohad. Kui iga seade peaks eraldi Serveriga suhtlema, tähendaks see kümneid tulemüürireegleid. <strong>Proxy DMZ-s</strong> tähendab ühte reeglit (Proxy → Server). Agendid räägivad Proxyga lokaalselt, Proxy räägib Serveriga läbi tulemüüri.</p>
+<p><strong>Offline-taluvus.</strong> Proxy’l on oma väike andmebaas. Kui WAN kukub näiteks kaheks tunniks ära, kogub Proxy andmeid edasi ja salvestab need lokaalselt. Kui ühendus taastub, saadab Proxy puhverdatud ajaloo Serverile; andmetesse ei jää auke.</p>
+<p>Proxy ei tee <strong>triggerite hindamist</strong> — see jääb alati Serveri ülesandeks. Proxy kogub ja edastab. Kui on vaja kauges asukohas ka ilma Serverita kohapeal häiret tekitada, tuleb vaadata teisi tööriistu.</p>
+<p>Laboris Proxy’t kohe püsti ei pane — see on pigem lisaülesanne. Mõte on oluline: niipea kui tootmises tekivad eri võrgusegmendid või asukohad, on Proxy reaalne valik, mitte ainult "suurte" ettevõtete mure.</p>
 <hr />
 <h2 id="8-mida-teed-tanases-laboris">8. Mida teed tänases laboris<a class="headerlink" href="#8-mida-teed-tanases-laboris" title="Lingi sektsioonile">&para;</a></h2>
-<p>Teeme kõike, millest siin räägitud. Labor on <strong>kihtidena</strong> — iga kiht toob ühe uue asja lahti.</p>
-<p><strong>Osa 1</strong> — Ehitad stacki. MySQL → Server. Üks asi korraga, iga kiht testitud enne järgmist. See on tark harjumus, sest kui midagi valesti läheb, tead täpselt millises kihis.</p>
-<p><strong>Osa 2</strong> — Lisad Frontend'i ja esimese Agent'i. Saad brauserist Zabbixi sisse. Vaheta vaikimisi parool kohe — see on esimene tootmis-refleks.</p>
-<p><strong>Osa 3</strong> — Lisad kaks Host'i, lingid Template'i, vaatad kuidas Trigger läheb tulele ja naaseb. Kõik neli mõistet §3-st saavad lihast ja luust.</p>
-<p><strong>Osa 4</strong> — HTTP Agent + Dependent items. Üks URL-i päring, mitu mõõdikut välja võetud. See on muster, mida tootmises tihti kasutad.</p>
-<p><strong>Osa 5</strong> — Oma Item shell-käsust (UserParameter). Nüüd saad kõike, mida Linux shell oskab, Zabbixi mõõdikuks muuta. Lõpetame turbe-näitega — honeypot port 2222, iga puudutus on häire.</p>
-<p>Kõik neli §3 mõistet ja §4 Template-kontseptsioon tulevad päeva jooksul korduvalt tagasi. Passiivse Agent'i seadistus on osas 2. Ilma-agendita monitooring (HTTP) on osas 4. Proxy't labori põhiosas ei tee, aga lisaülesannetes on kirjeldatud.</p>
+<p>Labor kordab kõike, millest juttu oli, praktilise nurga alt. Ehitame <strong>kihtidena</strong> — iga kiht lisab ühe uue idee.</p>
+<p><strong>Osa 1</strong> — Ehitad stack’i. MySQL → Server. Üks komponent korraga, iga kiht enne järgmise lisamist läbi proovitud. Nii on vea puhul lihtne aru saada, kus see tekib.</p>
+<p><strong>Osa 2</strong> — Lisad Frontendi ja esimese Agendi. Pääsed brauserist Zabbixisse. Muudad kohe vaikimisi parooli — tüüpiline tootmisrefleks.</p>
+<p><strong>Osa 3</strong> — Lisad kaks hosti, seod template’i, vaatad, kuidas trigger käivitub ja maha rahuneb. Kõik neli mõistet §3-st muutuvad konkreetseks.</p>
+<p><strong>Osa 4</strong> — HTTP Agent + dependent items. Üks HTTP päring, mitu mõõdikut vastusest välja võetud. Muster, mida päriselus tihti kasutatakse.</p>
+<p><strong>Osa 5</strong> — Oma item shell-käsust (UserParameter). Kõik, mida Linuxi shell oskab, saab muuta Zabbixi mõõdikuks. Lõpus lihtne turbenäide — port 2222 kui honeypot, iga puudutus on häire.</p>
+<p>Kõik neli §3 mõistet ja §4 template’i idee korduvad päeva jooksul mitu korda. Passiivse agendi seadistus on osas 2. Ilma agendita monitooring (HTTP) on osas 4. Proxy tuleb mängu lisaülesannetes.</p>
 <hr />
 <h2 id="9-kokkuvote">9. Kokkuvõte<a class="headerlink" href="#9-kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
-<p>Viis asja, mida loengust kaasa võta:</p>
-<p><strong>1. Kolm komponenti.</strong> Zabbix Server (aju) + andmebaas (mälu) + Frontend (nägu). Frontend räägib DB-ga, mitte Server'iga — see on nüanss, mida paljud esmakordsed Zabbixi kasutajad ei märka.</p>
-<p><strong>2. Konfiguratsioon on DB-s.</strong> See on põhimõtteline erinevus Prometheusest. Backup on DB-dump. Docker Compose'i volume'it kaotades kaob kogu su töö.</p>
-<p><strong>3. Host → Item → Trigger → Action.</strong> Neli mõistet, mille ümber kogu Zabbix keerleb. Õpi need pähe.</p>
-<p><strong>4. Template on pääsemine.</strong> 500 serverit, 300 mõõdikut igaüks — ilma Template'ita tööd ei tee. Zabbix tarnib ~300 valmis-Template'i, sinu oma võid ise lisada.</p>
-<p><strong>5. Passiivne sisevõrgus, aktiivne keerulises võrgus.</strong> Agent saab mõlemad. Logifailide jälgimine on alati aktiivne.</p>
-<p>Nüüd laborisse.</p>
+<p>Viis asja, mis sellest loost meelde jätta:</p>
+<p><strong>1. Kolm komponenti.</strong> Zabbix Server (aju) + andmebaas (mälu) + Frontend (nägu). Frontend räägib DB-ga, mitte Serveriga — see lubab Serveri ja Frontendi eri masinatesse paigutada.</p>
+<p><strong>2. Konfiguratsioon on DB-s.</strong> See on põhiline erinevus Prometheusest. Backup tehakse DB dump’iga. Kui Docker Compose’i juures volume’i unustad, kaob kogu töö.</p>
+<p><strong>3. Host → Item → Trigger → Action.</strong> Neli mõistet, mille ümber Zabbix keerleb. Pane need endale selgelt paika.</p>
+<p><strong>4. Template hoiab sind elus.</strong> Sajad serverid ja sajad mõõdikud per server — ilma template’ita ei ole see hallatav. Zabbixiga tuleb kaasa hulk valmis template’e, oma võid ise juurde teha.</p>
+<p><strong>5. Passiivne sisevõrgus, aktiivne keerulisemas võrgus.</strong> Agent toetab mõlemat. Logifailide jälgimine on erand, mis nõuab alati aktiivset režiimi.</p>
 <hr />
 <h2 id="kusimused-enesetestiks">Küsimused enesetestiks<a class="headerlink" href="#kusimused-enesetestiks" title="Lingi sektsioonile">&para;</a></h2>
 <details>
 <summary><strong>Küsimused (vastused all)</strong></summary>
 
-1. Miks on Zabbix Baltikumis eriti levinud?
-2. Nimeta Zabbixi kolm põhikomponenti ja iga rolli ühe lausega.
-3. Miks Frontend räägib DB-ga, mitte Server'iga? Mis see annab?
-4. Selgita oma sõnadega Host → Item → Trigger → Action ahelat.
-5. Sul on 200 Linux-serverit, kõik vajavad sama 150 mõõdikut. Miks Template olemasolu on vajalik, mitte mugavusfunktsioon?
-6. Passiivne või aktiivne Agent: (a) server samas võrgus, (b) Agent DMZ-s, (c) logifaili jälgimine?
-7. Mis kolm olukorda sunnivad sind Proxy't lisama?
+1. Miks on Zabbix Baltikumis eriti levinud?  
+2. Nimeta Zabbixi kolm põhikomponenti ja kirjelda iga rolli ühe lausega.  
+3. Miks Frontend räägib DB-ga, mitte Serveriga? Mida see võimaldab?  
+4. Selgita oma sõnadega Host → Item → Trigger → Action ahelat.  
+5. Sul on 200 Linux-serverit, kõik vajavad sama 150 mõõdikut. Miks on template vajalik, mitte lihtsalt mugavusfunktsioon?  
+6. Passiivne või aktiivne agent: (a) server samas võrgus, (b) agent DMZ-s, (c) logifaili jälgimine?  
+7. Mis kolm olukorda toovad Proxy mängu?  
 
 ??? note "Vastused"
 
-    1) Ta sündis Riias (Alexei Vladišev, Läti Ülikool). Lokaalne tugi, eestikeelne UI tugi, geograafiline lähedus kogukonnaga. Eestis kasutavad teda Telia, Swedbank, Maksu- ja Tolliamet, enamus riigiasutusi.
+    1) Zabbix sündis Riias (Alexei Vladišev, Läti Ülikool). Lähedus annab tugevama kohaliku kogukonna, konverentsid, tõlked ja esimesed referentskliendid (Telia, Swedbank, MTA, riigiasutused).
 
-    2) **Server** võtab vastu mõõdikuid, hindab Trigger'eid, saadab häireid. **Andmebaas** hoiab konfiguratsiooni ja ajalugu. **Frontend** on veebiliides, kust klikiga seadistad ja vaatad.
+    2) **Server** võtab vastu mõõdikuid, hindab triggereid ja saadab häireid. **Andmebaas** hoiab konfiguratsiooni ja ajalugu. **Frontend** on veebiliides, kust seadistad ja vaatad seiret.
 
-    3) Frontend kirjutab muudatused DB-sse, Server loeb DB-st regulaarselt oma konfi üle. See annab paindlikkust: Frontend ja Server saavad elada eraldi masinates, isegi eraldi andmekeskustes. Suurtes keskkondades mitu Frontend'i load balancer'i taga.
+    3) Frontend kirjutab muudatused DB-sse, Server loeb oma konfiguratsiooni sealt aeg-ajalt uuesti sisse. Nii saavad Server ja Frontend olla eri masinates, neid võib skaleerida eraldi (nt mitu Frontendi load balanceri taga).
 
-    4) **Host** on jälgitav asi (server, ruuter). **Item** on üks konkreetne mõõdik sellel Host'il (CPU load). **Trigger** on tingimus Item'i peal (kui load > 90%). **Action** on reaktsioon Trigger'i tulekul (saada email). Ahel: mõõdik → tingimus → reaktsioon.
+    4) **Host** on jälgitav objekt (server, ruuter). **Item** on üks konkreetne mõõdik selle hosti kohta (nt CPU load). **Trigger** on tingimus item’i peal (nt kui load > 90%). **Action** on reageerimine (nt e-kiri). Ahel: mõõdik → tingimus → reaktsioon.
 
-    5) 200 × 150 = 30 000 Item'it. Käsitsi lisamine praktiliselt võimatu. Lisaks: kui lävendit ühel Trigger'il muudad, peaks 200 korral muutma → ühe unustad. Template'iga: lisad 1 kord, lingid 200-le, muudad ühes kohas, levib kõigile.
+    5) 200 × 150 = 30 000 item’it. Käsitsi lisamine on ebarealistlik. Lisaks: kui ühe triggeri lävendit muudad, peaksid seda tegema 200 korda — viga on garanteeritud. Template’iga muudad ühes kohas ja kõik 200 serverit saavad muudatuse.
 
-    6) (a) passiivne — lihtsam. (b) aktiivne — Server ei pääse DMZ-sse, Agent pöördub ise Server'i poole. (c) aktiivne — logifaili jälgimine käib ainult aktiivses režiimis, sest Agent peab hoidma lugemispositsiooni.
+    6) (a) passiivne — lihtsam ja otsekohesem. (b) aktiivne — Server ei pääse DMZ-sse, agent pöördub ise Serveri poole. (c) aktiivne — logifaili jälgimiseks peab agent ise faile lugema ja asukohta meeles pidama.
 
-    7) (1) Geograafiline kaugus — Proxy kogub lokaalselt, saadab pakkidena üle WAN-i. (2) Eraldatud võrgusegmendid (DMZ, pilv) — üks tulemüürireegel selle asemel, et iga Agent'i jaoks eraldi. (3) Offline-taluvus — Proxy puhverdab kui WAN kukub, saadab kõik tagasi kui ühendus taastub.
+    7) (1) Geograafiline kaugus — Proxy kogub andmeid kohapeal ja saadab need harvemini üle WAN-i. (2) Eraldatud võrgusegmendid (DMZ, pilv) — üks tulemüürireegel Proxyle, mitte kümneid reegleid iga agendi jaoks. (3) Offline-taluvus — Proxy puhverdab katkestuse ajal andmed ja saadab need hiljem Serverile.
 
 </details>
 
@@ -2125,7 +2127,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 15:22:43 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="25. aprill 2026 03:39:07 UTC">25. aprill 2026</span>
   </span>
 
     
