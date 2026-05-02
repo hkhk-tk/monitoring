@@ -626,6 +626,8 @@ Peab vastama numbriga (võib-olla 0, kui log-generator just ei ole juhuslikult p
 
 💡 **Kui `ZBX_NOTSUPPORTED`:** süntaksiviga konfis — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` ja kontrolli. Tavalised vead: `$1` asemel `\$1`, jutumärkides `[ERROR]` asemel `\[ERROR\]`, puuduv koma pärast võtit.
 
+💡 **Kui `Permission denied` või test käsurealt näitab, et `zabbix` ei loe `/var/log/app/app.log`:** mon-target on jagatud VM ja SELinux võib vaikimisi keelata agendi lugemisõiguse. Kursuse Ansible (`site.yml` → `common` roll) seab labi VM-id **permissive** — kui sa näed siiski keeldu, kontakteeru koolitajaga (sina ei pea ise `setenforce` käima).
+
 ### 5.4 Item ja trigger UI-s {#54-item-trigger}
 
 **Eesmärk:** UI-s on item mis salvestab `applog.errors[payment]` väärtust ja trigger mis läheb tulele kui väärtus > 10.
@@ -1091,6 +1093,7 @@ Järgnevad teemad on tootmiskeskkondadele. Iga teema on iseseisev — vali mis s
 | Host'i ZBX punane | 1) Host name UI-s **täpselt** = `ZBX_HOSTNAME` konfis. 2) Connect to DNS vs IP kontrolli |
 | `zabbix_get` ebaõnnestub | `docker exec zabbix-server ping zabbix-agent` — kas konteiner-nimega leiab? |
 | `ZBX_NOTSUPPORTED` | UserParameter süntaksiviga — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` |
+| `Permission denied` / applog ei loe | VM peal: `sudo -u zabbix tail -1 /var/log/app/app.log` — kui keelatud, ütle koolitajale (SELinux / labi ühtlustus) |
 | Trigger ei lähe `Firing` | *Latest data* — kas item väärtus tegelikult ületab lävendi? Oled unustanud oota-aega (pending period)? |
 | HTTP Agent timeout | `curl -v http://192.168.35.141:8080/stub_status` otse serverist — kas endpoint vastab üldse? |
 | Dependent item tühi | Master item *Test* nupp — kas master tagastab oodatud väljundi? Regex'i *Test value*-s kontrolli |
