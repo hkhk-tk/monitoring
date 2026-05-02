@@ -2813,6 +2813,7 @@ JSONPath on nagu XPath, aga JSON-ile. Regex'ist selgem, vähem vigu, ei murra ü
 <p>See käsk loeb ainult viimased 1000 rida. Kui logi kasvab kiiresti (nt 100 rida sekundis), võib reaalne veaarv olla palju suurem kui see, mida näed. Tootmises eelistatakse <a href="https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/log_items">Log monitoring</a> item-tüüpi, mis hoiab positsiooni ja loeb ainult uued read. UserParameter + grep on prototüüpkvaliteet.</p>
 </div>
 <p>💡 <strong>Kui <code>ZBX_NOTSUPPORTED</code>:</strong> süntaksiviga konfis — <code>sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf</code> ja kontrolli. Tavalised vead: <code>$1</code> asemel <code>\$1</code>, jutumärkides <code>[ERROR]</code> asemel <code>\[ERROR\]</code>, puuduv koma pärast võtit.</p>
+<p>💡 <strong>Kui <code>Permission denied</code> või test käsurealt näitab, et <code>zabbix</code> ei loe <code>/var/log/app/app.log</code>:</strong> mon-target on jagatud VM ja SELinux võib vaikimisi keelata agendi lugemisõiguse. Kursuse Ansible (<code>site.yml</code> → <code>common</code> roll) seab labi VM-id <strong>permissive</strong> — kui sa näed siiski keeldu, kontakteeru koolitajaga (sina ei pea ise <code>setenforce</code> käima).</p>
 <h3 id="54-item-trigger">5.4 Item ja trigger UI-s<a class="headerlink" href="#54-item-trigger" title="Lingi sektsioonile">&para;</a></h3>
 <p><strong>Eesmärk:</strong> UI-s on item mis salvestab <code>applog.errors[payment]</code> väärtust ja trigger mis läheb tulele kui väärtus &gt; 10.</p>
 <p><code>zabbix_get</code> tagastab nüüd numbri, aga <strong>Zabbix ei salvesta seda veel</strong> — pole item'it. Item ütleb Server'ile "hakka seda võtit regulaarselt küsima ja salvesta ajalugu". Trigger lisab tingimuse "ja kui väärtus ületab lävendi, löö häirele".</p>
@@ -3178,6 +3179,7 @@ Probleemi lahenemine: <code>last() &lt; 5</code></p>
 | Host'i ZBX punane | 1) Host name UI-s **täpselt** = `ZBX_HOSTNAME` konfis. 2) Connect to DNS vs IP kontrolli |
 | `zabbix_get` ebaõnnestub | `docker exec zabbix-server ping zabbix-agent` — kas konteiner-nimega leiab? |
 | `ZBX_NOTSUPPORTED` | UserParameter süntaksiviga — `sudo cat /etc/zabbix/zabbix_agentd.d/applog.conf` |
+| `Permission denied` / applog ei loe | VM peal: `sudo -u zabbix tail -1 /var/log/app/app.log` — kui keelatud, ütle koolitajale (SELinux / labi ühtlustus) |
 | Trigger ei lähe `Firing` | *Latest data* — kas item väärtus tegelikult ületab lävendi? Oled unustanud oota-aega (pending period)? |
 | HTTP Agent timeout | `curl -v http://192.168.35.141:8080/stub_status` otse serverist — kas endpoint vastab üldse? |
 | Dependent item tühi | Master item *Test* nupp — kas master tagastab oodatud väljundi? Regex'i *Test value*-s kontrolli |
@@ -3216,7 +3218,7 @@ Probleemi lahenemine: <code>last() &lt; 5</code></p>
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="25. aprill 2026 10:50:06 UTC">25. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2. mai 2026 09:19:47 UTC">2. mai 2026</span>
   </span>
 
     
