@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/labs/03_elk_stack/lab/">
       
       
-        <link rel="prev" href="../../02_zabbix_loki/loki_lab/">
+        <link rel="prev" href="../../../materials/lectures/paev3-elk-loeng/">
       
       
         <link rel="next" href="../../04_tick_keskne_logimine/tick_lab/">
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#paev-3-elastic-stack-labor" class="md-skip">
+        <a href="#paev-3-elastic-stack-opensearch-labor" class="md-skip">
           Keri sisuni
         </a>
       
@@ -292,13 +292,13 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../../../materials/lectures/paev3-elk-loeng/" class="md-tabs__link">
           
   
   
     
   
-  Päev 3 — ELK Stack
+  Päev 3 — ELK Stack & OpenSearch
 
         </a>
       </li>
@@ -859,6 +859,8 @@
       
         
       
+        
+      
     
     
     
@@ -885,7 +887,7 @@
   <span class="md-ellipsis">
     
   
-    Päev 3 — ELK Stack
+    Päev 3 — ELK Stack & OpenSearch
   
 
     
@@ -901,11 +903,39 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Päev 3 — ELK Stack
+    Päev 3 — ELK Stack & OpenSearch
   
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev3-elk-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: ELK & OS — kust tuli, kus on, kuhu läheb
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -974,10 +1004,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#eesmark" class="md-nav__link">
+  <a href="#opivaljundid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Eesmärk
+        🎯 Õpiväljundid
       
     </span>
   </a>
@@ -985,10 +1015,331 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#labistruktuur-skelett" class="md-nav__link">
+  <a href="#eeltoo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Labistruktuur (skelett)
+        Eeltöö
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-1-elasticsearch-ja-kibana-uksinda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 1 · Elasticsearch ja Kibana üksinda
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 1 · Elasticsearch ja Kibana üksinda">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-ainult-elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Ainult Elasticsearch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-loo-esimene-indeks-vaata-olekut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Loo esimene indeks, vaata olekut
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-lisa-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Lisa Kibana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-kql-otsing-discoveris" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 KQL otsing Discover'is
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-2-laienda-3-node-klastriks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 2 · Laienda 3-node klastriks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 2 · Laienda 3-node klastriks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-peata-ja-restruktureeri" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Peata ja restruktureeri
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-kaivita-3-node-klaster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Käivita 3-node klaster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-simuleeri-nodei-kadu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Simuleeri node'i kadu
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-too-node-tagasi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Too node tagasi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-testi-katkesta-2-nodei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Testi: katkesta 2 node'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-3-opensearch-korval-vordlus-es-iga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 3 · OpenSearch kõrval — võrdlus ES-iga
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 3 · OpenSearch kõrval — võrdlus ES-iga">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-peata-es-vabasta-ram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Peata ES, vabasta RAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-opensearch-klastri-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 OpenSearch klastri compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-kaivita-ja-kontrolli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Käivita ja kontrolli
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-os-dashboards-sarnasus-kibanaga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 OS Dashboards — sarnasus Kibanaga
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-vordle-rest-api-on-identne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Võrdle: REST API on identne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-mis-on-tegelikud-erinevused" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Mis on tegelikud erinevused?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-4-vector-search-maitseproov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 4 · Vector search — maitseproov
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 4 · Vector search — maitseproov">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-loo-indeks-vector-fieldiga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Loo indeks vector field'iga
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-saada-dokumente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Saada dokumente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-vector-paring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Vector päring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-mis-tulekul-ei-tehta-klassis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Mis tulekul (ei tehta klassis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lopukontroll-enesekontroll-verifitseeritav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Lõpukontroll (enesekontroll, verifitseeritav)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lisaulesanded-kes-jouab-ette" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Lisaülesanded (kes jõuab ette)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#veaotsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Veaotsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Allikad
       
     </span>
   </a>
@@ -1467,10 +1818,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#eesmark" class="md-nav__link">
+  <a href="#opivaljundid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Eesmärk
+        🎯 Õpiväljundid
       
     </span>
   </a>
@@ -1478,10 +1829,331 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#labistruktuur-skelett" class="md-nav__link">
+  <a href="#eeltoo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Labistruktuur (skelett)
+        Eeltöö
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-1-elasticsearch-ja-kibana-uksinda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 1 · Elasticsearch ja Kibana üksinda
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 1 · Elasticsearch ja Kibana üksinda">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-ainult-elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Ainult Elasticsearch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-loo-esimene-indeks-vaata-olekut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Loo esimene indeks, vaata olekut
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-lisa-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Lisa Kibana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-kql-otsing-discoveris" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 KQL otsing Discover'is
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-2-laienda-3-node-klastriks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 2 · Laienda 3-node klastriks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 2 · Laienda 3-node klastriks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-peata-ja-restruktureeri" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Peata ja restruktureeri
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-kaivita-3-node-klaster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Käivita 3-node klaster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-simuleeri-nodei-kadu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Simuleeri node'i kadu
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-too-node-tagasi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Too node tagasi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-testi-katkesta-2-nodei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Testi: katkesta 2 node'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-3-opensearch-korval-vordlus-es-iga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 3 · OpenSearch kõrval — võrdlus ES-iga
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 3 · OpenSearch kõrval — võrdlus ES-iga">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-peata-es-vabasta-ram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Peata ES, vabasta RAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-opensearch-klastri-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 OpenSearch klastri compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-kaivita-ja-kontrolli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Käivita ja kontrolli
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-os-dashboards-sarnasus-kibanaga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 OS Dashboards — sarnasus Kibanaga
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-vordle-rest-api-on-identne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Võrdle: REST API on identne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-mis-on-tegelikud-erinevused" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Mis on tegelikud erinevused?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-4-vector-search-maitseproov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 4 · Vector search — maitseproov
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 4 · Vector search — maitseproov">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-loo-indeks-vector-fieldiga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Loo indeks vector field'iga
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-saada-dokumente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Saada dokumente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-vector-paring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Vector päring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-mis-tulekul-ei-tehta-klassis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Mis tulekul (ei tehta klassis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lopukontroll-enesekontroll-verifitseeritav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Lõpukontroll (enesekontroll, verifitseeritav)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lisaulesanded-kes-jouab-ette" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Lisaülesanded (kes jõuab ette)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#veaotsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Veaotsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Allikad
       
     </span>
   </a>
@@ -1508,48 +2180,625 @@
   
 
 
-<h1 id="paev-3-elastic-stack-labor">Päev 3: Elastic Stack — Labor<a class="headerlink" href="#paev-3-elastic-stack-labor" title="Lingi sektsioonile">&para;</a></h1>
-<p><em>Tuleb 9. mail</em></p>
+<h1 id="paev-3-elastic-stack-opensearch-labor">Päev 3: Elastic Stack &amp; OpenSearch — Labor<a class="headerlink" href="#paev-3-elastic-stack-opensearch-labor" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>Kestus:</strong> 4 tundi (klassis ~3h, ülejäänu lisaülesannetena kodus)
+<strong>Tase:</strong> Kesk-edasijõudnud
+<strong>Eeldused:</strong> Päev 1 logimise põhialused, Docker Compose mitme-konteineri stack, Loki + Promtail (Päev 2)
+<strong>VM:</strong> sinu VM (<code>ssh &lt;eesnimi&gt;@192.168.35.12X</code> klassivõrgust või <code>192.168.100.12X</code> VPN-ist)</p>
 <hr />
-<div class="admonition info">
-<p class="admonition-title">Ettevalmistus</p>
-<p>Puhasta eelmine stack: <code>cd ~/paev2 &amp;&amp; docker compose down -v</code>
-ELK vajab rohkem mälu — VM RAM tõstetakse 6GB-le.</p>
-</div>
-<div class="admonition abstract">
-<p class="admonition-title">TL;DR</p>
-<p>Päev 3 eesmärk on ehitada ELK‑põhine logikiht ja võrrelda seda Loki lähenemisega (indeks, otsing, kulud, kasutusjuht).</p>
-</div>
-<hr />
-<h2 id="eesmark">Eesmärk<a class="headerlink" href="#eesmark" title="Lingi sektsioonile">&para;</a></h2>
-<p>Selle labori lõpuks osaleja:
-- seab ELK stacki üles ja näeb logisid Kibanas
-- teeb 2–3 tüüpilist otsingut/filtrit
-- oskab selgitada, millal ELK on õigustatud vs millal Loki on lihtsam/odavam</p>
-<hr />
-<h2 id="labistruktuur-skelett">Labistruktuur (skelett)<a class="headerlink" href="#labistruktuur-skelett" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="opivaljundid">🎯 Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Teadmised:</strong></p>
 <ol>
-<li>Keskkonna kontroll (VM RAM, Docker, kettaruum)</li>
-<li>Stack üles (compose)</li>
-<li>Logide sissevõtt (ingest)</li>
-<li>Otsing + visualiseerimine (Kibana)</li>
-<li>Võrdlus Lokiga (mille eest maksad / mida võidad)</li>
+<li>Selgitab, miks single-node Elasticsearch klaster näitab <code>YELLOW</code> olekut</li>
+<li>Eristab <code>master</code>, <code>data</code>, <code>coordinating</code> sõlmerolle ja nende koormust</li>
+<li>Põhjendab, miks production-klastris peab olema <strong>3</strong> master-kandidaati (quorum-matemaatika)</li>
+<li>Eristab Elasticsearchi ja OpenSearchi API ja UI tasandil</li>
+</ol>
+<p><strong>Oskused:</strong></p>
+<ol>
+<li>Käivitab Elasticsearch + Kibana stacki Docker Compose abil</li>
+<li>Laiendab single-node klastri 3-node klastriks ja jälgib shard'ide ümberpaigutust</li>
+<li>Simuleerib node'i kao (<code>docker compose stop</code>) ja vaatab recovery'd</li>
+<li>Käivitab OpenSearch + OS Dashboards ja võrdleb Kibanaga (REST API + UI)</li>
 </ol>
 <hr />
-<details>
-<summary><strong>Veaotsing + allikad (peida/ava)</strong></summary>
-
-## Veaotsing
-
-- Kui ELK ei käivitu, esimene kontroll: `docker compose ps` ja `docker compose logs <teenus>`
-- Kui mälu otsas, kontrolli `free -h` ja peata teised stackid
-
-## Allikad
-
-- Elastic Stack docs: <https://www.elastic.co/guide/index.html>
-- Kibana Query Language (KQL): <https://www.elastic.co/guide/en/kibana/current/kuery-query.html>
-
-</details>
+<h2 id="eeltoo">Eeltöö<a class="headerlink" href="#eeltoo" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päev 2 stack võtab RAM-i. Puhasta enne alustamist:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Päev 2 alla (Zabbix + Loki containerid lähevad alla — oodatud)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>~/paev2/zabbix<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>~/paev2/loki<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Kontrolli RAM-i</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>free<span class="w"> </span>-h
+</span></code></pre></div>
+<p><strong>Vaba RAM peaks olema vähemalt 5 GB.</strong> Kui pole, kontrolli mis veel jookseb: <code>docker ps</code>.</p>
+<p>Loo päev 3 töökaust:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/paev3/elk<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/paev3/elk
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">RAM piiri peal</p>
+<p>Sinu VM-il on 6 GB RAM. 3-node Elasticsearch klaster + Kibana + Filebeat samaaegselt = ~5–6 GB. Hoia <code>htop</code> või <code>free -h</code> jooksvalt teises terminalis lahti. Kui RAM saab täis, mõni container kukub OOM-killer'i alla.</p>
+</div>
+<hr />
+<h2 id="osa-1-elasticsearch-ja-kibana-uksinda">Osa 1 · Elasticsearch ja Kibana üksinda<a class="headerlink" href="#osa-1-elasticsearch-ja-kibana-uksinda" title="Lingi sektsioonile">&para;</a></h2>
+<p>Esmalt paneme <strong>ühe</strong> Elasticsearch node'i ja Kibana püsti. See on <strong>mitte</strong> production-setup — see on selleks, et näha, <strong>mida Kibana näitab esimese indeksi loomisega</strong>. Vastus on huvitav.</p>
+<h3 id="11-ainult-elasticsearch">1.1 Ainult Elasticsearch<a class="headerlink" href="#11-ainult-elasticsearch" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loo <code>docker-compose.yml</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">es01</span><span class="p">:</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/elasticsearch/elasticsearch:8.15.3</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es01</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node.name=es01</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=lab-cluster</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ES_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m&quot;</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">        </span><span class="nt">soft</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">        </span><span class="nt">hard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es01-data:/usr/share/elasticsearch/data</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="nt">es01-data</span><span class="p">:</span>
+</span></code></pre></div>
+<p><strong>Miks <code>ES_JAVA_OPTS=-Xms512m -Xmx512m</code></strong> — vähendame heap'i 512 MB peale per node, sest peagi tuleb klastris 3 node'i ja sinu 6 GB VM ei taluks vaikimisi 1 GB per node.</p>
+<p><strong>Miks <code>xpack.security.enabled=false</code></strong> — lab on isoleeritud, hoiame asju lihtsamana. Production-keskkonnas on see <strong>alati <code>true</code></strong>.</p>
+<p>Käivita ainult ES:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>es01
+</span></code></pre></div>
+<p>Oota ~30 s, kuni ES tõuseb. Kontrolli:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>http://localhost:9200
+</span></code></pre></div>
+<p>Vastus peaks olema JSON, mis ütleb klastri nime <code>lab-cluster</code> ja versiooni <code>8.15.x</code>. Kui ei tule midagi, oota veel 10 s — ES tõuseb aeglaselt.</p>
+<p>💡 <strong>Kui <code>curl</code> ütleb <code>Connection refused</code>:</strong> kontrolli <code>docker compose logs es01</code>. Otsi rida <code>"started"</code>. Kui näed <code>bootstrap check failed</code>, siis <code>vm.max_map_count</code> on liiga madal — käivita <code>sudo sysctl -w vm.max_map_count=262144</code>.</p>
+<h3 id="12-loo-esimene-indeks-vaata-olekut">1.2 Loo esimene indeks, vaata olekut<a class="headerlink" href="#12-loo-esimene-indeks-vaata-olekut" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loo indeks ja saada üks dokument:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/test-logs/_doc&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;esimene logi&quot;, &quot;level&quot;: &quot;info&quot;}&#39;</span>
+</span></code></pre></div>
+<p>Vaata indeksite olekut:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cat/indices?v&quot;</span>
+</span></code></pre></div>
+<p>Märkad veergu <strong><code>health</code></strong>, mille väärtus on <strong><code>yellow</code></strong>. <strong>Miks?</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cluster/health?pretty&quot;</span>
+</span></code></pre></div>
+<p>Vastus ütleb:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">&quot;status&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">&quot;unassigned_shards&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span></code></pre></div>
+<p><strong><code>unassigned_shards: 1</code></strong> — replica shard'il ei ole kohta. Default <code>number_of_replicas: 1</code> tähendab, et primary shard'ist tehakse 1 koopia. Koopia peab paiknema <strong>eri node'is</strong> kui primary. Sul on <strong>1 node</strong>, niisiis koopia jääb õhku rippuma.</p>
+<p>💭 <strong>Mõtle:</strong> Mis juhtub kui sa kustutad kogemata praeguse ainsa node'i? Vasta enne edasi lugemist.</p>
+<p>(Vastus: kogu indeks kaob. <code>replicas: 1</code> ei aita kui koopia pole <strong>eri node'il</strong>. See on miks production-klastrites on <strong>vähemalt 2 node'i</strong> ja replicas ≥ 1.)</p>
+<h3 id="13-lisa-kibana">1.3 Lisa Kibana<a class="headerlink" href="#13-lisa-kibana" title="Lingi sektsioonile">&para;</a></h3>
+<p><code>docker-compose.yml</code> lõppu, <strong>enne</strong> <code>volumes:</code> rida, lisa:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">  </span><span class="nt">kibana</span><span class="p">:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/kibana/kibana:8.15.3</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kibana</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es01</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ELASTICSEARCH_HOSTS=http://es01:9200</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5601:5601&quot;</span>
+</span></code></pre></div>
+<p>Käivita:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>kibana
+</span></code></pre></div>
+<p>Oota ~45 s. Ava brauser: <code>http://&lt;sinu-VM-IP&gt;:5601</code>. Klassist <code>192.168.35.12X</code>, VPN-ist <code>192.168.100.12X</code>.</p>
+<p>Kibanas vasakul üleval <code>☰</code> → <strong>Management</strong> → <strong>Stack Monitoring</strong> → <strong>Or, set up with self monitoring</strong> → enable.</p>
+<p>Seejärel <strong>Stack Monitoring</strong> näitab: klaster <code>lab-cluster</code>, <strong>olek YELLOW</strong>, 1 node, indeks <code>test-logs</code> <code>YELLOW</code> (1 replica unassigned).</p>
+<p>💡 <strong>Kui Kibana ütleb <code>Kibana server is not ready yet</code>:</strong> oota veel 30 s. Kibana vajab ES-i täielikult valmis enne kui tõuseb.</p>
+<h3 id="14-kql-otsing-discoveris">1.4 KQL otsing Discover'is<a class="headerlink" href="#14-kql-otsing-discoveris" title="Lingi sektsioonile">&para;</a></h3>
+<p>Vasakul <strong>Discover</strong> → loo data view (<code>test-logs*</code>) → ajaperioodiks "Last 24 hours".</p>
+<p>Saada veel paar dokumenti terminalist:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">for</span><span class="w"> </span>level<span class="w"> </span><span class="k">in</span><span class="w"> </span>info<span class="w"> </span>warn<span class="w"> </span>error<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/test-logs/_doc&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span>-d<span class="w"> </span><span class="s2">&quot;{\&quot;message\&quot;: \&quot;logi tüübiga </span><span class="nv">$level</span><span class="s2">\&quot;, \&quot;level\&quot;: \&quot;</span><span class="nv">$level</span><span class="s2">\&quot;}&quot;</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="nb">echo</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="k">done</span>
+</span></code></pre></div>
+<p>Vajuta Discover'is <strong>Refresh</strong>. Näed 4 dokumenti.</p>
+<p>Proovi KQL filtreid:</p>
+<div class="language-kql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">level</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;error&quot;</span>
+</span></code></pre></div>
+<div class="language-kql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">level</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;warn&quot;</span>
+</span></code></pre></div>
+<div class="language-kql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">message</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">*</span><span class="n">logi</span><span class="p">*</span>
+</span></code></pre></div>
+<p>💭 <strong>Mõtle:</strong> Praegune indeks on 1 primary + 1 replica (replica unassigned). Kui käivitad 1000 logi sekundis, kuhu need lähevad ja mis juhtub indekseerimise kiirusega kui replica oleks paigutatud eri node'is?</p>
+<hr />
+<h2 id="osa-2-laienda-3-node-klastriks">Osa 2 · Laienda 3-node klastriks<a class="headerlink" href="#osa-2-laienda-3-node-klastriks" title="Lingi sektsioonile">&para;</a></h2>
+<p>Osa 1 jättis sind YELLOW olekuga. Lahendus: lisa rohkem node'e samasse klastrisse. <strong>Production-mudel</strong> on <strong>3 dedicated master + N data</strong>, aga 6 GB RAM-iga teeme lihtsama versiooni: <strong>3 node'i, igaileks kõik rollid</strong>. Quorum-matemaatika töötab sama — vaatame kuidas.</p>
+<h3 id="21-peata-ja-restruktureeri">2.1 Peata ja restruktureeri<a class="headerlink" href="#21-peata-ja-restruktureeri" title="Lingi sektsioonile">&para;</a></h3>
+<p>Peata praegune setup:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>down
+</span></code></pre></div>
+<p>Andmed (volume <code>es01-data</code>) jäävad alles — me ei kustuta neid.</p>
+<p>Asenda kogu <code>docker-compose.yml</code> sisu uuega:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">es01</span><span class="p">:</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/elasticsearch/elasticsearch:8.15.3</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es01</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node.name=es01</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=lab-cluster</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.seed_hosts=es02,es03</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.initial_master_nodes=es01,es02,es03</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ES_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m&quot;</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> soft</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="nt"> hard</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es01-data:/usr/share/elasticsearch/data</span>
+</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>
+</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">  </span><span class="nt">es02</span><span class="p">:</span>
+</span><span id="__span-16-20"><a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/elasticsearch/elasticsearch:8.15.3</span>
+</span><span id="__span-16-21"><a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es02</span>
+</span><span id="__span-16-22"><a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-16-23"><a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node.name=es02</span>
+</span><span id="__span-16-24"><a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=lab-cluster</span>
+</span><span id="__span-16-25"><a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.seed_hosts=es01,es03</span>
+</span><span id="__span-16-26"><a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.initial_master_nodes=es01,es02,es03</span>
+</span><span id="__span-16-27"><a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+</span><span id="__span-16-28"><a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ES_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m&quot;</span>
+</span><span id="__span-16-29"><a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span>
+</span><span id="__span-16-30"><a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> soft</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="nt"> hard</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</span><span id="__span-16-31"><a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-16-32"><a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es02-data:/usr/share/elasticsearch/data</span>
+</span><span id="__span-16-33"><a id="__codelineno-16-33" name="__codelineno-16-33" href="#__codelineno-16-33"></a>
+</span><span id="__span-16-34"><a id="__codelineno-16-34" name="__codelineno-16-34" href="#__codelineno-16-34"></a><span class="w">  </span><span class="nt">es03</span><span class="p">:</span>
+</span><span id="__span-16-35"><a id="__codelineno-16-35" name="__codelineno-16-35" href="#__codelineno-16-35"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/elasticsearch/elasticsearch:8.15.3</span>
+</span><span id="__span-16-36"><a id="__codelineno-16-36" name="__codelineno-16-36" href="#__codelineno-16-36"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es03</span>
+</span><span id="__span-16-37"><a id="__codelineno-16-37" name="__codelineno-16-37" href="#__codelineno-16-37"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-16-38"><a id="__codelineno-16-38" name="__codelineno-16-38" href="#__codelineno-16-38"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node.name=es03</span>
+</span><span id="__span-16-39"><a id="__codelineno-16-39" name="__codelineno-16-39" href="#__codelineno-16-39"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=lab-cluster</span>
+</span><span id="__span-16-40"><a id="__codelineno-16-40" name="__codelineno-16-40" href="#__codelineno-16-40"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.seed_hosts=es01,es02</span>
+</span><span id="__span-16-41"><a id="__codelineno-16-41" name="__codelineno-16-41" href="#__codelineno-16-41"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.initial_master_nodes=es01,es02,es03</span>
+</span><span id="__span-16-42"><a id="__codelineno-16-42" name="__codelineno-16-42" href="#__codelineno-16-42"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+</span><span id="__span-16-43"><a id="__codelineno-16-43" name="__codelineno-16-43" href="#__codelineno-16-43"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ES_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m&quot;</span>
+</span><span id="__span-16-44"><a id="__codelineno-16-44" name="__codelineno-16-44" href="#__codelineno-16-44"></a><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span>
+</span><span id="__span-16-45"><a id="__codelineno-16-45" name="__codelineno-16-45" href="#__codelineno-16-45"></a><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> soft</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="nt"> hard</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</span><span id="__span-16-46"><a id="__codelineno-16-46" name="__codelineno-16-46" href="#__codelineno-16-46"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-16-47"><a id="__codelineno-16-47" name="__codelineno-16-47" href="#__codelineno-16-47"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es03-data:/usr/share/elasticsearch/data</span>
+</span><span id="__span-16-48"><a id="__codelineno-16-48" name="__codelineno-16-48" href="#__codelineno-16-48"></a>
+</span><span id="__span-16-49"><a id="__codelineno-16-49" name="__codelineno-16-49" href="#__codelineno-16-49"></a><span class="w">  </span><span class="nt">kibana</span><span class="p">:</span>
+</span><span id="__span-16-50"><a id="__codelineno-16-50" name="__codelineno-16-50" href="#__codelineno-16-50"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/kibana/kibana:8.15.3</span>
+</span><span id="__span-16-51"><a id="__codelineno-16-51" name="__codelineno-16-51" href="#__codelineno-16-51"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kibana</span>
+</span><span id="__span-16-52"><a id="__codelineno-16-52" name="__codelineno-16-52" href="#__codelineno-16-52"></a><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">es01</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">es02</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">es03</span><span class="p p-Indicator">]</span>
+</span><span id="__span-16-53"><a id="__codelineno-16-53" name="__codelineno-16-53" href="#__codelineno-16-53"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-16-54"><a id="__codelineno-16-54" name="__codelineno-16-54" href="#__codelineno-16-54"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ELASTICSEARCH_HOSTS=http://es01:9200</span>
+</span><span id="__span-16-55"><a id="__codelineno-16-55" name="__codelineno-16-55" href="#__codelineno-16-55"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-16-56"><a id="__codelineno-16-56" name="__codelineno-16-56" href="#__codelineno-16-56"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5601:5601&quot;</span>
+</span><span id="__span-16-57"><a id="__codelineno-16-57" name="__codelineno-16-57" href="#__codelineno-16-57"></a>
+</span><span id="__span-16-58"><a id="__codelineno-16-58" name="__codelineno-16-58" href="#__codelineno-16-58"></a><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-16-59"><a id="__codelineno-16-59" name="__codelineno-16-59" href="#__codelineno-16-59"></a><span class="w">  </span><span class="nt">es01-data</span><span class="p">:</span>
+</span><span id="__span-16-60"><a id="__codelineno-16-60" name="__codelineno-16-60" href="#__codelineno-16-60"></a><span class="w">  </span><span class="nt">es02-data</span><span class="p">:</span>
+</span><span id="__span-16-61"><a id="__codelineno-16-61" name="__codelineno-16-61" href="#__codelineno-16-61"></a><span class="w">  </span><span class="nt">es03-data</span><span class="p">:</span>
+</span></code></pre></div>
+<p>Märkad <strong>kolme uut muutujat</strong> võrreldes single-node setupiga:</p>
+<ul>
+<li><code>discovery.seed_hosts</code> — loend teistest node'idest, kellega ühenduda klastri leidmiseks</li>
+<li><code>cluster.initial_master_nodes</code> — algse klastri loomisel master-kandidaatide loend (kasutatakse <strong>AINULT</strong> esimesel käivitusel)</li>
+<li><code>discovery.type=single-node</code> on <strong>eemaldatud</strong> — me ei ole enam single-node</li>
+</ul>
+<p>Iga node on <code>master, data, ingest</code> rollis korraga (default kui pole <code>node.roles</code> määratud). See on <strong>lab-konfiguratsioon</strong>, mitte production. Production'is on master ja data eraldatud (vt loengu L2).</p>
+<h3 id="22-kaivita-3-node-klaster">2.2 Käivita 3-node klaster<a class="headerlink" href="#22-kaivita-3-node-klaster" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</span></code></pre></div>
+<p>Vaata RAM-i jälgides:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>free<span class="w"> </span>-h
+</span></code></pre></div>
+<p>Oota ~60 s. Kontrolli klastri olekut:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cluster/health?pretty&quot;</span>
+</span></code></pre></div>
+<p>Oodatav vastus:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">&quot;status&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nt">&quot;number_of_nodes&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="nt">&quot;number_of_data_nodes&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="nt">&quot;active_shards&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="nt">&quot;unassigned_shards&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span></code></pre></div>
+<p><strong>GREEN!</strong> Praegu replica <code>test-logs</code> indeksist sai koha (eri node'il kui primary). Vaata node'e:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cat/nodes?v&quot;</span>
+</span></code></pre></div>
+<p>Näed kolme node'i. Ühel on <code>master</code> veerus täht <code>*</code> — see on <strong>valitud master</strong>. Teised on master-kandidaadid.</p>
+<p>Ava Kibana <strong>Stack Monitoring</strong> — klaster nuumber näitab nuud GREEN, 3 node'i.</p>
+<p>💡 <strong>Kui klaster ei tule üles 60 s jooksul:</strong> <code>docker compose logs es01 | grep -i "master"</code>. Otsi <code>master node changed</code>. Kui näed <code>master not discovered yet</code>, oota veel — või kontrolli <code>vm.max_map_count</code>.</p>
+<h3 id="23-simuleeri-nodei-kadu">2.3 Simuleeri node'i kadu<a class="headerlink" href="#23-simuleeri-nodei-kadu" title="Lingi sektsioonile">&para;</a></h3>
+<p>Praegu klaster on terve. Simuleeri probleemi:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>stop<span class="w"> </span>es02
+</span></code></pre></div>
+<p>Kohe kontrolli:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cluster/health?pretty&quot;</span>
+</span></code></pre></div>
+<p>Näed:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">&quot;status&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nt">&quot;number_of_nodes&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nt">&quot;unassigned_shards&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span></code></pre></div>
+<p><strong>YELLOW</strong> — üks shard'i koopia kaotas oma node'i. Klaster otsib uut kohta. Oodake 60 s ja kontrolli uuesti:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>sleep<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cluster/health?pretty&quot;</span>
+</span></code></pre></div>
+<p>Nuud peaks olema <strong>GREEN</strong> uuesti — shard tehti ümber kahele allesjäänud node'ile. Vaata indeksite olekut:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cat/shards?v&quot;</span>
+</span></code></pre></div>
+<p>Iga shard (primary + replica) on nüüd ühel kahest järels jäänud node'ist.</p>
+<p>💡 <strong>Kui klaster jäi YELLOW:</strong> vaata kas <code>unassigned_shards &gt; 0</code> — ehk shard ei mahu (disk space). <code>curl localhost:9200/_cluster/allocation/explain?pretty</code> näitab miks.</p>
+<h3 id="24-too-node-tagasi">2.4 Too node tagasi<a class="headerlink" href="#24-too-node-tagasi" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>start<span class="w"> </span>es02
+</span></code></pre></div>
+<p>Oota 30 s, vaata uuesti:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cat/shards?v&quot;</span>
+</span></code></pre></div>
+<p>Näed, et mõned shard'id liiguvad tagasi es02-le. Klaster <strong>balansseerib uuesti</strong> — see on automaatne shard recovery. Kibanas Stack Monitoring näitab samuti.</p>
+<p>💭 <strong>Mõtle:</strong> Mis juhtub kui <strong>kaks</strong> node'i kaovad korraga? Kas klaster töötab edasi? Põhjus on <strong>quorum</strong> — vaata loengu L2 plokis "Cluster state ja quorum". (Vastus: ei tööta. 3 master-kandidaadi quorum = 2; ühe järgse 1 node'iga ei ole enamust, master-valimine peatub, klaster on <code>read-only</code> või kaotab oleku-juhtimise.)</p>
+<h3 id="25-testi-katkesta-2-nodei">2.5 Testi: katkesta 2 node'i<a class="headerlink" href="#25-testi-katkesta-2-nodei" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui sul on aega ja oled valmis nägema klastri sigatud:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>stop<span class="w"> </span>es02<span class="w"> </span>es03
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>sleep<span class="w"> </span><span class="m">10</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cluster/health?pretty&quot;</span>
+</span></code></pre></div>
+<p>Vastus näitab error või <code>master_not_discovered_exception</code>. Klaster ei suuda valida masterit, sest quorum (2) puudub.</p>
+<p>Töösta tagasi:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>start<span class="w"> </span>es02<span class="w"> </span>es03
+</span></code></pre></div>
+<p>Oota ~45 s, kontrolli uuesti — klaster taastub GREEN olekusse.</p>
+<p>💭 <strong>Mõtle:</strong> Kui sinu organisatsiooni production-klaster on 3 master + 5 data node ja üks AZ kukub (kustutab 1 master + 2 data), mis juhtub? Vasta loengu L2 "99.9% praktikas" tabeli põhjal.</p>
+<hr />
+<h2 id="osa-3-opensearch-korval-vordlus-es-iga">Osa 3 · OpenSearch kõrval — võrdlus ES-iga<a class="headerlink" href="#osa-3-opensearch-korval-vordlus-es-iga" title="Lingi sektsioonile">&para;</a></h2>
+<p>Nüüd vaatame teist külge. <strong>Sama tehniline alus 2021-st</strong> — OpenSearch hargnes Elasticsearch 7.10.2-st ja läks oma teed. Täna (2026) on mõlemad küpsed. Kõrvuti tegemine annab sulle kätte konkreetse võrdluse, mitte ainult vendor-turunduse.</p>
+<div class="admonition warning">
+<p class="admonition-title">RAM-piiri rikkumise oht</p>
+<p>3-node ES + 3-node OS + Kibana + OS Dashboards samaaegselt = ~9–10 GB. <strong>Sinu 6 GB VM ei pea seda üleval.</strong> <strong>Peata kindlasti ES klaster</strong> enne OpenSearchi käivitamist.</p>
+</div>
+<h3 id="31-peata-es-vabasta-ram">3.1 Peata ES, vabasta RAM<a class="headerlink" href="#31-peata-es-vabasta-ram" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>down
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>free<span class="w"> </span>-h
+</span></code></pre></div>
+<p>Vaata, et RAM oleks vaba (4–5 GB free). Andmed (volumes <code>es01-data</code> jne) jäävad, tuled hiljem tagasi.</p>
+<h3 id="32-opensearch-klastri-compose">3.2 OpenSearch klastri compose<a class="headerlink" href="#32-opensearch-klastri-compose" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loo uus kaust ja <code>docker-compose.yml</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/paev3/os<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/paev3/os
+</span></code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">  </span><span class="nt">os01</span><span class="p">:</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opensearchproject/opensearch:2.18.0</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os01</span>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-33-6"><a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node.name=os01</span>
+</span><span id="__span-33-7"><a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=lab-os-cluster</span>
+</span><span id="__span-33-8"><a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.seed_hosts=os02,os03</span>
+</span><span id="__span-33-9"><a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.initial_cluster_manager_nodes=os01,os02,os03</span>
+</span><span id="__span-33-10"><a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+</span><span id="__span-33-11"><a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_SECURITY_PLUGIN=true</span>
+</span><span id="__span-33-12"><a id="__codelineno-33-12" name="__codelineno-33-12" href="#__codelineno-33-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_INSTALL_DEMO_CONFIG=true</span>
+</span><span id="__span-33-13"><a id="__codelineno-33-13" name="__codelineno-33-13" href="#__codelineno-33-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;OPENSEARCH_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m&quot;</span>
+</span><span id="__span-33-14"><a id="__codelineno-33-14" name="__codelineno-33-14" href="#__codelineno-33-14"></a><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span>
+</span><span id="__span-33-15"><a id="__codelineno-33-15" name="__codelineno-33-15" href="#__codelineno-33-15"></a><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> soft</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="nt"> hard</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</span><span id="__span-33-16"><a id="__codelineno-33-16" name="__codelineno-33-16" href="#__codelineno-33-16"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-33-17"><a id="__codelineno-33-17" name="__codelineno-33-17" href="#__codelineno-33-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os01-data:/usr/share/opensearch/data</span>
+</span><span id="__span-33-18"><a id="__codelineno-33-18" name="__codelineno-33-18" href="#__codelineno-33-18"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-33-19"><a id="__codelineno-33-19" name="__codelineno-33-19" href="#__codelineno-33-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+</span><span id="__span-33-20"><a id="__codelineno-33-20" name="__codelineno-33-20" href="#__codelineno-33-20"></a>
+</span><span id="__span-33-21"><a id="__codelineno-33-21" name="__codelineno-33-21" href="#__codelineno-33-21"></a><span class="w">  </span><span class="nt">os02</span><span class="p">:</span>
+</span><span id="__span-33-22"><a id="__codelineno-33-22" name="__codelineno-33-22" href="#__codelineno-33-22"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opensearchproject/opensearch:2.18.0</span>
+</span><span id="__span-33-23"><a id="__codelineno-33-23" name="__codelineno-33-23" href="#__codelineno-33-23"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os02</span>
+</span><span id="__span-33-24"><a id="__codelineno-33-24" name="__codelineno-33-24" href="#__codelineno-33-24"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-33-25"><a id="__codelineno-33-25" name="__codelineno-33-25" href="#__codelineno-33-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node.name=os02</span>
+</span><span id="__span-33-26"><a id="__codelineno-33-26" name="__codelineno-33-26" href="#__codelineno-33-26"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=lab-os-cluster</span>
+</span><span id="__span-33-27"><a id="__codelineno-33-27" name="__codelineno-33-27" href="#__codelineno-33-27"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.seed_hosts=os01,os03</span>
+</span><span id="__span-33-28"><a id="__codelineno-33-28" name="__codelineno-33-28" href="#__codelineno-33-28"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.initial_cluster_manager_nodes=os01,os02,os03</span>
+</span><span id="__span-33-29"><a id="__codelineno-33-29" name="__codelineno-33-29" href="#__codelineno-33-29"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+</span><span id="__span-33-30"><a id="__codelineno-33-30" name="__codelineno-33-30" href="#__codelineno-33-30"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_SECURITY_PLUGIN=true</span>
+</span><span id="__span-33-31"><a id="__codelineno-33-31" name="__codelineno-33-31" href="#__codelineno-33-31"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_INSTALL_DEMO_CONFIG=true</span>
+</span><span id="__span-33-32"><a id="__codelineno-33-32" name="__codelineno-33-32" href="#__codelineno-33-32"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;OPENSEARCH_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m&quot;</span>
+</span><span id="__span-33-33"><a id="__codelineno-33-33" name="__codelineno-33-33" href="#__codelineno-33-33"></a><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span>
+</span><span id="__span-33-34"><a id="__codelineno-33-34" name="__codelineno-33-34" href="#__codelineno-33-34"></a><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> soft</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="nt"> hard</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</span><span id="__span-33-35"><a id="__codelineno-33-35" name="__codelineno-33-35" href="#__codelineno-33-35"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-33-36"><a id="__codelineno-33-36" name="__codelineno-33-36" href="#__codelineno-33-36"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os02-data:/usr/share/opensearch/data</span>
+</span><span id="__span-33-37"><a id="__codelineno-33-37" name="__codelineno-33-37" href="#__codelineno-33-37"></a>
+</span><span id="__span-33-38"><a id="__codelineno-33-38" name="__codelineno-33-38" href="#__codelineno-33-38"></a><span class="w">  </span><span class="nt">os03</span><span class="p">:</span>
+</span><span id="__span-33-39"><a id="__codelineno-33-39" name="__codelineno-33-39" href="#__codelineno-33-39"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opensearchproject/opensearch:2.18.0</span>
+</span><span id="__span-33-40"><a id="__codelineno-33-40" name="__codelineno-33-40" href="#__codelineno-33-40"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os03</span>
+</span><span id="__span-33-41"><a id="__codelineno-33-41" name="__codelineno-33-41" href="#__codelineno-33-41"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-33-42"><a id="__codelineno-33-42" name="__codelineno-33-42" href="#__codelineno-33-42"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node.name=os03</span>
+</span><span id="__span-33-43"><a id="__codelineno-33-43" name="__codelineno-33-43" href="#__codelineno-33-43"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=lab-os-cluster</span>
+</span><span id="__span-33-44"><a id="__codelineno-33-44" name="__codelineno-33-44" href="#__codelineno-33-44"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.seed_hosts=os01,os02</span>
+</span><span id="__span-33-45"><a id="__codelineno-33-45" name="__codelineno-33-45" href="#__codelineno-33-45"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.initial_cluster_manager_nodes=os01,os02,os03</span>
+</span><span id="__span-33-46"><a id="__codelineno-33-46" name="__codelineno-33-46" href="#__codelineno-33-46"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+</span><span id="__span-33-47"><a id="__codelineno-33-47" name="__codelineno-33-47" href="#__codelineno-33-47"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_SECURITY_PLUGIN=true</span>
+</span><span id="__span-33-48"><a id="__codelineno-33-48" name="__codelineno-33-48" href="#__codelineno-33-48"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_INSTALL_DEMO_CONFIG=true</span>
+</span><span id="__span-33-49"><a id="__codelineno-33-49" name="__codelineno-33-49" href="#__codelineno-33-49"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;OPENSEARCH_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m&quot;</span>
+</span><span id="__span-33-50"><a id="__codelineno-33-50" name="__codelineno-33-50" href="#__codelineno-33-50"></a><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span>
+</span><span id="__span-33-51"><a id="__codelineno-33-51" name="__codelineno-33-51" href="#__codelineno-33-51"></a><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> soft</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="nt"> hard</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</span><span id="__span-33-52"><a id="__codelineno-33-52" name="__codelineno-33-52" href="#__codelineno-33-52"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-33-53"><a id="__codelineno-33-53" name="__codelineno-33-53" href="#__codelineno-33-53"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os03-data:/usr/share/opensearch/data</span>
+</span><span id="__span-33-54"><a id="__codelineno-33-54" name="__codelineno-33-54" href="#__codelineno-33-54"></a>
+</span><span id="__span-33-55"><a id="__codelineno-33-55" name="__codelineno-33-55" href="#__codelineno-33-55"></a><span class="w">  </span><span class="nt">os-dashboards</span><span class="p">:</span>
+</span><span id="__span-33-56"><a id="__codelineno-33-56" name="__codelineno-33-56" href="#__codelineno-33-56"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opensearchproject/opensearch-dashboards:2.18.0</span>
+</span><span id="__span-33-57"><a id="__codelineno-33-57" name="__codelineno-33-57" href="#__codelineno-33-57"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os-dashboards</span>
+</span><span id="__span-33-58"><a id="__codelineno-33-58" name="__codelineno-33-58" href="#__codelineno-33-58"></a><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">os01</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">os02</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">os03</span><span class="p p-Indicator">]</span>
+</span><span id="__span-33-59"><a id="__codelineno-33-59" name="__codelineno-33-59" href="#__codelineno-33-59"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-33-60"><a id="__codelineno-33-60" name="__codelineno-33-60" href="#__codelineno-33-60"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENSEARCH_HOSTS=http://os01:9200</span>
+</span><span id="__span-33-61"><a id="__codelineno-33-61" name="__codelineno-33-61" href="#__codelineno-33-61"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_SECURITY_DASHBOARDS_PLUGIN=true</span>
+</span><span id="__span-33-62"><a id="__codelineno-33-62" name="__codelineno-33-62" href="#__codelineno-33-62"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-33-63"><a id="__codelineno-33-63" name="__codelineno-33-63" href="#__codelineno-33-63"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5601:5601&quot;</span>
+</span><span id="__span-33-64"><a id="__codelineno-33-64" name="__codelineno-33-64" href="#__codelineno-33-64"></a>
+</span><span id="__span-33-65"><a id="__codelineno-33-65" name="__codelineno-33-65" href="#__codelineno-33-65"></a><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-33-66"><a id="__codelineno-33-66" name="__codelineno-33-66" href="#__codelineno-33-66"></a><span class="w">  </span><span class="nt">os01-data</span><span class="p">:</span>
+</span><span id="__span-33-67"><a id="__codelineno-33-67" name="__codelineno-33-67" href="#__codelineno-33-67"></a><span class="w">  </span><span class="nt">os02-data</span><span class="p">:</span>
+</span><span id="__span-33-68"><a id="__codelineno-33-68" name="__codelineno-33-68" href="#__codelineno-33-68"></a><span class="w">  </span><span class="nt">os03-data</span><span class="p">:</span>
+</span></code></pre></div>
+<p><strong>Märkad erinevusi ES-iga:</strong></p>
+<ul>
+<li><code>cluster.initial_cluster_manager_nodes</code> (mitte <code>master_nodes</code>) — OpenSearch sai 2.0-st lahti sõnast "master", kasutab <code>cluster_manager</code>. <strong>Sama mõiste, eri nimi.</strong></li>
+<li>Pildi nimi <code>opensearchproject/opensearch:2.18.0</code> — versioon vastab AWS-i toetatud versioonile</li>
+<li><code>DISABLE_SECURITY_PLUGIN=true</code> — OpenSearch Security plugin on <strong>vaikimisi sees</strong> (erinevalt ES-ist), keelame labi jaoks</li>
+</ul>
+<h3 id="33-kaivita-ja-kontrolli">3.3 Käivita ja kontrolli<a class="headerlink" href="#33-kaivita-ja-kontrolli" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>sleep<span class="w"> </span><span class="m">60</span>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>free<span class="w"> </span>-h
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cluster/health?pretty&quot;</span>
+</span></code></pre></div>
+<p>Oodatud vastus on <strong>sama mõtega kui ES-il</strong>:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nt">&quot;cluster_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lab-os-cluster&quot;</span><span class="p">,</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="nt">&quot;status&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="nt">&quot;number_of_nodes&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+</span></code></pre></div>
+<p>💡 <strong>Kui näed <code>OpenSearch is not running</code> või <code>cluster manager not discovered</code>:</strong> oota veel 30–60 s. OS tuleb üles aeglasemalt kui ES, eriti kõva lõikamisega heap'iga.</p>
+<h3 id="34-os-dashboards-sarnasus-kibanaga">3.4 OS Dashboards — sarnasus Kibanaga<a class="headerlink" href="#34-os-dashboards-sarnasus-kibanaga" title="Lingi sektsioonile">&para;</a></h3>
+<p>Ava brauser: <code>http://&lt;sinu-VM-IP&gt;:5601</code>. OS Dashboards UI.</p>
+<p>Vasakul üleval <code>☰</code> → <strong>Discover</strong>. UI on <strong>80% identne</strong> Kibanaga. Sama navigatsioon, sama Discover-vaade, isegi sama Index Patterns mõiste (kuigi OS-is on need pakutud kui "index patterns").</p>
+<h3 id="35-vordle-rest-api-on-identne">3.5 Võrdle: REST API on identne<a class="headerlink" href="#35-vordle-rest-api-on-identne" title="Lingi sektsioonile">&para;</a></h3>
+<p>Saada sama dokument OS-i kui sa ES-i panid:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/test-logs/_doc&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;esimene logi OS-is&quot;, &quot;level&quot;: &quot;info&quot;}&#39;</span>
+</span></code></pre></div>
+<p>Vaata indeksit:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cat/indices?v&quot;</span>
+</span></code></pre></div>
+<p>Täpselt sama vorming, sama veerud, sama <code>health: green</code> (sest 3 node'i).</p>
+<p>KQL päringud Discover'is töötavad <strong>täpselt sama syntaxiga</strong>:</p>
+<div class="language-kql highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">level</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;info&quot;</span>
+</span></code></pre></div>
+<h3 id="36-mis-on-tegelikud-erinevused">3.6 Mis on tegelikud erinevused?<a class="headerlink" href="#36-mis-on-tegelikud-erinevused" title="Lingi sektsioonile">&para;</a></h3>
+<p>API ja UI tasandil vähesed. Erinevused tulevad neis kohtades, kus toode on <strong>2021+ arenenud</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Elasticsearch 8.x</th>
+<th>OpenSearch 2.x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Security plugin</td>
+<td>xpack (Elastic License)</td>
+<td>OpenSearch Security (Apache 2.0)</td>
+</tr>
+<tr>
+<td>Vector search</td>
+<td><code>dense_vector</code> + ELSER + <code>semantic_text</code></td>
+<td><code>knn_vector</code> + ML Commons + FAISS</td>
+</tr>
+<tr>
+<td>Litsents</td>
+<td>AGPL-3 / SSPL / Elastic License</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td>AWS integratsioon</td>
+<td>Marketplace'i kaudu</td>
+<td>Natiivne (Bedrock, SageMaker, IAM, KMS)</td>
+</tr>
+<tr>
+<td>Cluster manager / master</td>
+<td><code>master</code> täht</td>
+<td><code>cluster_manager</code> täht (samaväärne)</td>
+</tr>
+</tbody>
+</table>
+<p>💭 <strong>Mõtle:</strong> Sinu organisatsiooni keskkonnaga — kas eelistaks ES õi OS? Vasta L1.3 "Kus kumb sobib" raamile tuginedes.</p>
+<hr />
+<h2 id="osa-4-vector-search-maitseproov">Osa 4 · Vector search — maitseproov<a class="headerlink" href="#osa-4-vector-search-maitseproov" title="Lingi sektsioonile">&para;</a></h2>
+<p>L3 loengu osa rääkis BM25-st (lexical) ja vector otsingust. Praegune osa on <strong>lühike maitseproov</strong>, mitte täielik ELSER setup. Eesmärk: näed kuidas <code>knn_vector</code> field töötab praktikas, ilma et peaksid embedding-mudelit laadima.</p>
+<p>OS klaster on praegu üleval Osa 3 järel. Kasutame seda.</p>
+<h3 id="41-loo-indeks-vector-fieldiga">4.1 Loo indeks vector field'iga<a class="headerlink" href="#41-loo-indeks-vector-fieldiga" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span id="__span-39-4"><a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="s1">    &quot;settings&quot;: { &quot;index.knn&quot;: true },</span>
+</span><span id="__span-39-5"><a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="s1">    &quot;mappings&quot;: {</span>
+</span><span id="__span-39-6"><a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a><span class="s1">      &quot;properties&quot;: {</span>
+</span><span id="__span-39-7"><a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a><span class="s1">        &quot;message&quot;: { &quot;type&quot;: &quot;text&quot; },</span>
+</span><span id="__span-39-8"><a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a><span class="s1">        &quot;embedding&quot;: { &quot;type&quot;: &quot;knn_vector&quot;, &quot;dimension&quot;: 4 }</span>
+</span><span id="__span-39-9"><a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a><span class="s1">      }</span>
+</span><span id="__span-39-10"><a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a><span class="s1">    }</span>
+</span><span id="__span-39-11"><a id="__codelineno-39-11" name="__codelineno-39-11" href="#__codelineno-39-11"></a><span class="s1">  }&#39;</span>
+</span></code></pre></div>
+<p>Märkad <strong><code>knn_vector</code></strong> — OpenSearchi vector tyup. Reaalsuses on dimensioon 384, 768 või 1536. <strong>4 dimensiooni</strong> on selleks, et saaksime käsitsi vektoreid kirjutada ja vaadata mis juhtub.</p>
+<h3 id="42-saada-dokumente">4.2 Saada dokumente<a class="headerlink" href="#42-saada-dokumente" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kujutame, et need on logi-read, mille embedding-mudel on juba arvutanud vektorid (4-dim ruum). Kaks jätku-paari tähendusega:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="c1"># Database connection issues (sarnased vektorid)</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_doc&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;DB connection timeout&quot;, &quot;embedding&quot;: [0.9, 0.1, 0.0, 0.0]}&#39;</span>
+</span><span id="__span-40-4"><a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_doc&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-40-5"><a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;connection pool exhausted&quot;, &quot;embedding&quot;: [0.85, 0.15, 0.0, 0.0]}&#39;</span>
+</span><span id="__span-40-6"><a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_doc&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-40-7"><a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;psycopg2 OperationalError&quot;, &quot;embedding&quot;: [0.88, 0.12, 0.0, 0.0]}&#39;</span>
+</span><span id="__span-40-8"><a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a>
+</span><span id="__span-40-9"><a id="__codelineno-40-9" name="__codelineno-40-9" href="#__codelineno-40-9"></a><span class="c1"># Network-relateds (eraldi klaster)</span>
+</span><span id="__span-40-10"><a id="__codelineno-40-10" name="__codelineno-40-10" href="#__codelineno-40-10"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_doc&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-40-11"><a id="__codelineno-40-11" name="__codelineno-40-11" href="#__codelineno-40-11"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;network unreachable&quot;, &quot;embedding&quot;: [0.0, 0.0, 0.9, 0.1]}&#39;</span>
+</span><span id="__span-40-12"><a id="__codelineno-40-12" name="__codelineno-40-12" href="#__codelineno-40-12"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_doc&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-40-13"><a id="__codelineno-40-13" name="__codelineno-40-13" href="#__codelineno-40-13"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;route to host failed&quot;, &quot;embedding&quot;: [0.0, 0.0, 0.85, 0.15]}&#39;</span>
+</span></code></pre></div>
+<h3 id="43-vector-paring">4.3 Vector päring<a class="headerlink" href="#43-vector-paring" title="Lingi sektsioonile">&para;</a></h3>
+<p>Otsi midagi, mille vektor on <code>[0.9, 0.1, 0.0, 0.0]</code> (sarnane database-cluster'iga):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_search?pretty&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span id="__span-41-4"><a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a><span class="s1">    &quot;size&quot;: 5,</span>
+</span><span id="__span-41-5"><a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="s1">    &quot;query&quot;: {</span>
+</span><span id="__span-41-6"><a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a><span class="s1">      &quot;knn&quot;: {</span>
+</span><span id="__span-41-7"><a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="s1">        &quot;embedding&quot;: {</span>
+</span><span id="__span-41-8"><a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a><span class="s1">          &quot;vector&quot;: [0.9, 0.1, 0.0, 0.0],</span>
+</span><span id="__span-41-9"><a id="__codelineno-41-9" name="__codelineno-41-9" href="#__codelineno-41-9"></a><span class="s1">          &quot;k&quot;: 3</span>
+</span><span id="__span-41-10"><a id="__codelineno-41-10" name="__codelineno-41-10" href="#__codelineno-41-10"></a><span class="s1">        }</span>
+</span><span id="__span-41-11"><a id="__codelineno-41-11" name="__codelineno-41-11" href="#__codelineno-41-11"></a><span class="s1">      }</span>
+</span><span id="__span-41-12"><a id="__codelineno-41-12" name="__codelineno-41-12" href="#__codelineno-41-12"></a><span class="s1">    }</span>
+</span><span id="__span-41-13"><a id="__codelineno-41-13" name="__codelineno-41-13" href="#__codelineno-41-13"></a><span class="s1">  }&#39;</span>
+</span></code></pre></div>
+<p>Vastus järjestab kolm dokumenti <strong>kõige sarnasemast vektorist</strong>:</p>
+<ol>
+<li><code>DB connection timeout</code> (skoor ~1.0, täielik match)</li>
+<li><code>connection pool exhausted</code> (skoor ~0.99, väga sarnane)</li>
+<li><code>psycopg2 OperationalError</code> (skoor ~0.99, väga sarnane)</li>
+</ol>
+<p><strong>Märkad</strong> — BM25 ei oleks suutnud <code>connection pool exhausted</code> ja <code>psycopg2 OperationalError</code> siduda "database connection issues" mõistega, sest sona-tasandil pole nad sarnased. Vector mudel teadis (treenimise käigus oli näinud miljardit näidet), et need on <strong>tähenduselt</strong> sarnased.</p>
+<p>💭 <strong>Mõtle:</strong> Mis on selle setup'i piirangud reaalses keskkonnas?</p>
+<p>(Vastused: (1) vektorid pole reaalsed — vajame embedding-mudelit, mis arvutab <code>text → vector</code>; (2) 4-dim ruum on liiga väike täiendava tähenduse jaoks — reaalsus = 384+ dim; (3) production'is vajab ML node'i mudeli käivitamiseks.)</p>
+<h3 id="44-mis-tulekul-ei-tehta-klassis">4.4 Mis tulekul (ei tehta klassis)<a class="headerlink" href="#44-mis-tulekul-ei-tehta-klassis" title="Lingi sektsioonile">&para;</a></h3>
+<p>Täielik setup vajaks:</p>
+<ol>
+<li><strong>Embedding-mudel</strong> klastris (HuggingFace <code>sentence-transformers/all-MiniLM-L6-v2</code> või sarnane)</li>
+<li><strong>Ingest pipeline</strong> mis arvutab <code>message → embedding</code> automaatselt</li>
+<li><strong>Hybrid päring</strong> (BM25 + vector koos)</li>
+<li><strong>ML node</strong> — eraldi node ML tööle, et mitte koormata põhi-klastrit</li>
+</ol>
+<p>See on <strong>üksipikku tutorial</strong> OpenSearchi dokumentatsioonis (link allikates). Kodus saad proovida.</p>
+<hr />
+<h2 id="lopukontroll-enesekontroll-verifitseeritav">✅ Lõpukontroll (enesekontroll, verifitseeritav)<a class="headerlink" href="#lopukontroll-enesekontroll-verifitseeritav" title="Lingi sektsioonile">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Sinu <code>docker compose ps</code> ~/paev3/elk järel näitab 3 ES node + Kibana — kõik <code>healthy</code> või <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>curl http://localhost:9200/_cluster/health?pretty</code> näitab <code>status: green</code> ja <code>number_of_nodes: 3</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>curl http://localhost:9200/_cat/nodes?v</code> näitab kolme node'i, ühel <code>*</code> master veerus</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Kibana Stack Monitoring näitab GREEN klastri olekut</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Sa simuleerisid node'i kao (<code>docker stop es02</code>), klaster läks YELLOW ja taas GREEN ~60 s pärast</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> OpenSearchi klaster ~/paev3/os käivitub ja näitab <code>status: green</code> 3 node'iga</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> OS Dashboards UI on <strong>selgesti sarnane</strong> Kibanaga</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Vector päring <code>knn_vector</code> field'iga tagastab <code>DB connection timeout</code> ja <code>connection pool exhausted</code> kõige sarnasemate võtmetena, kuigi neil pole ühist sõna</li>
+</ul>
+<hr />
+<h2 id="lisaulesanded-kes-jouab-ette">🚀 Lisaülesanded (kes jõuab ette)<a class="headerlink" href="#lisaulesanded-kes-jouab-ette" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>A. ELSER mudel ja <code>semantic_text</code></strong> — Elastic ES klastris (peatuse OS, käivita ES):</p>
+<ol>
+<li>Laadi ELSER mudel: Kibana → Machine Learning → Trained Models → Download <code>.elser_model_2</code></li>
+<li>Deploy mudel</li>
+<li>Loo indeks <code>semantic_text</code> field'iga (vt loengu L3 koodi)</li>
+<li>Saada paar dokumenti, vaata kuidas Elastic automaatselt teeb BM25 + ELSER hybridit</li>
+</ol>
+<p><strong>B. Snapshot S3-le</strong> — simuleeri snapshot:</p>
+<ol>
+<li>Loo lokaalne kaust <code>mkdir -p ~/paev3/snapshots</code></li>
+<li>Lisa Compose'i <code>volumes: - ~/paev3/snapshots:/snapshots</code> kõigile ES node'idele</li>
+<li>Registreeri repository: <code>curl -X PUT localhost:9200/_snapshot/local -d '{"type":"fs","settings":{"location":"/snapshots"}}'</code></li>
+<li>Tee snapshot, kustuta indeks, taasta</li>
+</ol>
+<p><strong>C. Kafka kui ingest buffer</strong> — ehita Filebeat → Kafka → Logstash → ES pipeline (vt L2 "Andmevoog" Mermaid)</p>
+<hr />
+<h2 id="veaotsing">Veaotsing<a class="headerlink" href="#veaotsing" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Probleem</th>
+<th>Kontroll</th>
+<th>Lahendus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Connection refused</code> curl-il</td>
+<td><code>docker compose ps</code></td>
+<td>Container pole <code>Up</code>. <code>docker compose logs &lt;node&gt;</code></td>
+</tr>
+<tr>
+<td><code>bootstrap check failed</code> ES logis</td>
+<td><code>sysctl vm.max_map_count</code></td>
+<td><code>sudo sysctl -w vm.max_map_count=262144</code></td>
+</tr>
+<tr>
+<td>Container kukub OOMkill</td>
+<td><code>dmesg \| grep -i oom</code></td>
+<td>RAM piiril. Peata teised stack'id, või vähenda heap'i 256m peale</td>
+</tr>
+<tr>
+<td>Kibana <code>not ready yet</code> 2 min pärast</td>
+<td><code>docker logs kibana \| tail -50</code></td>
+<td>ES pole üleval. <code>curl localhost:9200</code> ENNE Kibana ootamist</td>
+</tr>
+<tr>
+<td>Klaster jäi YELLOW pärast node-tagasi-toomist</td>
+<td><code>curl localhost:9200/_cluster/allocation/explain?pretty</code></td>
+<td>Disk space, shard allocation rules</td>
+</tr>
+<tr>
+<td>OS Dashboards <code>OpenSearch is not running</code></td>
+<td><code>curl http://localhost:9200/_cluster/health</code></td>
+<td>OS klaster pole valmis. Oota 60 s</td>
+</tr>
+<tr>
+<td><code>master_not_discovered_exception</code></td>
+<td><code>docker logs es01 \| grep -i master</code></td>
+<td>2+ node maas. Quorum kadunud. Too node'id tagasi</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="allikad">📚 Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Allikas</th>
+<th>URL</th>
+<th>Miks oluline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elasticsearch ametlik docs</td>
+<td><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/">https://www.elastic.co/guide/en/elasticsearch/reference/current/</a></td>
+<td>Ainus autoriteetne allikas konfiguratsiooni jaoks</td>
+</tr>
+<tr>
+<td>OpenSearch ametlik docs</td>
+<td><a href="https://opensearch.org/docs/latest/">https://opensearch.org/docs/latest/</a></td>
+<td>Vastav OS dokumentatsioon</td>
+</tr>
+<tr>
+<td>Elastic semantic_text + ELSER</td>
+<td><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-text.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-text.html</a></td>
+<td>Lisaülesanne A kontekst</td>
+</tr>
+<tr>
+<td>OpenSearch k-NN ja neural search</td>
+<td><a href="https://opensearch.org/docs/latest/search-plugins/neural-search/">https://opensearch.org/docs/latest/search-plugins/neural-search/</a></td>
+<td>Vector search OS-is</td>
+</tr>
+<tr>
+<td>Elasticsearch Docker Compose example</td>
+<td><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html</a></td>
+<td>Production-sarnane multi-node setup</td>
+</tr>
+<tr>
+<td>OpenSearch Docker Compose</td>
+<td><a href="https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/">https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/</a></td>
+<td>OS multi-node setup</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1570,7 +2819,7 @@ ELK vajab rohkem mälu — VM RAM tõstetakse 6GB-le.</p>
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="17. mai 2026 20:31:45 UTC">17. mai 2026</span>
   </span>
 
     

@@ -12,13 +12,9 @@
         <meta name="author" content="Maria Talvik">
       
       
-        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/paev2-loki/">
+        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/paev3-vector-rag-lisalugemine/">
       
       
-        <link rel="prev" href="../paev2-zabbix/">
-      
-      
-        <link rel="next" href="../../../labs/02_zabbix_loki/zabbix_lab/">
       
       
         
@@ -29,7 +25,7 @@
     
     
       
-        <title>Loeng: Loki - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Päev 3 — Lisalugemine: Vector search, RAG ja AI monitooringus - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
@@ -82,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#paev-2-loki-logid-grafana-maailmas" class="md-skip">
+        <a href="#paev-3-lisalugemine-vector-search-rag-ja-ai-monitooringus" class="md-skip">
           Keri sisuni
         </a>
       
@@ -118,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Loeng: Loki
+              Päev 3 — Lisalugemine: Vector search, RAG ja AI monitooringus
             
           </span>
         </div>
@@ -264,12 +260,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../paev2-zabbix/" class="md-tabs__link">
           
   
@@ -667,10 +661,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -686,22 +678,21 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -719,7 +710,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -762,37 +753,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Loeng: Loki
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../paev2-loki/" class="md-nav__link">
         
   
   
@@ -808,258 +772,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#opivaljundid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Õpiväljundid
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#1-miks-logid-ei-mahu-zabbixisse" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Miks logid ei mahu Zabbixisse
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-loki-koht-lgtm-pildis" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Loki koht LGTM pildis
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-loki-pohiidee-nagu-prometheus-aga-logidele" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Loki põhiidee: "nagu Prometheus, aga logidele"
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-labelid-ja-logivood-moiste-mis-loki-kas-toole-paneb-voi-kinni-jookseb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Labelid ja logivood — mõiste, mis Loki kas tööle paneb või kinni jookseb
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Labelid ja logivood — mõiste, mis Loki kas tööle paneb või kinni jookseb">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mis-on-logivoog-log-stream" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Mis on logivoog (log stream)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kardinaalsus-logivoogude-arv" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kardinaalsus — logivoogude arv
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kus-asi-tuksi-laheb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kus asi tuksi läheb
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#reegel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reegel
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-logql-paringukeel-mis-meenutab-promql-i" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. LogQL — päringukeel, mis meenutab PromQL-i
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. LogQL — päringukeel, mis meenutab PromQL-i">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#lihtne-naide" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lihtne näide
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filter-sone-jargi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter sõne järgi
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parserid-neli-tukki" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parserid — neli tükki
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parseri-valik-luhidalt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parseri valik lühidalt
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-logidest-metrika-hupe-tekstist-numbriks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Logidest metrika — hüpe tekstist numbriks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-alloy-agent-mis-kogub-ja-saadab" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Alloy — agent, mis kogub ja saadab
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-praktiline-hoiatus-helm-charts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Praktiline hoiatus — Helm charts
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#9-kokkuvote" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. Kokkuvõte
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kusimused-enesetestiks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Küsimused enesetestiks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#allikad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Allikad
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1707,10 +1419,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#opivaljundid" class="md-nav__link">
+  <a href="#sisu" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Õpiväljundid
+        Sisu
       
     </span>
   </a>
@@ -1718,10 +1430,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-miks-logid-ei-mahu-zabbixisse" class="md-nav__link">
+  <a href="#miks-vector-search" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Miks logid ei mahu Zabbixisse
+        Miks vector search?
       
     </span>
   </a>
@@ -1729,77 +1441,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-loki-koht-lgtm-pildis" class="md-nav__link">
+  <a href="#vector-embedding-tahendus-numbritena" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Loki koht LGTM pildis
+        Vector embedding — tähendus numbritena
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-loki-pohiidee-nagu-prometheus-aga-logidele" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Loki põhiidee: "nagu Prometheus, aga logidele"
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-labelid-ja-logivood-moiste-mis-loki-kas-toole-paneb-voi-kinni-jookseb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Labelid ja logivood — mõiste, mis Loki kas tööle paneb või kinni jookseb
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Labelid ja logivood — mõiste, mis Loki kas tööle paneb või kinni jookseb">
+    <nav class="md-nav" aria-label="Vector embedding — tähendus numbritena">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mis-on-logivoog-log-stream" class="md-nav__link">
+  <a href="#probleem-kuidas-leida-lahemaid-vektoreid-kiiresti" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mis on logivoog (log stream)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kardinaalsus-logivoogude-arv" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kardinaalsus — logivoogude arv
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kus-asi-tuksi-laheb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kus asi tuksi läheb
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#reegel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reegel
+        Probleem: kuidas leida lähemaid vektoreid kiiresti
       
     </span>
   </a>
@@ -1812,22 +1469,77 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-logql-paringukeel-mis-meenutab-promql-i" class="md-nav__link">
+  <a href="#hnsw-algoritm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. LogQL — päringukeel, mis meenutab PromQL-i
+        HNSW algoritm
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="5. LogQL — päringukeel, mis meenutab PromQL-i">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faiss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FAISS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elastic-elser-semantic_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic ELSER + semantic_text
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opensearch-ml-commons-neural-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearch ML Commons + Neural Search
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rag-retrieval-augmented-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG — Retrieval-Augmented Generation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rag-monitooringus-5-kasutusjuhtu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG monitooringus — 5 kasutusjuhtu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RAG monitooringus — 5 kasutusjuhtu">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#lihtne-naide" class="md-nav__link">
+  <a href="#1-incident-response-ai-assistant" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Lihtne näide
+        1. Incident response AI assistant
       
     </span>
   </a>
@@ -1835,10 +1547,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#filter-sone-jargi" class="md-nav__link">
+  <a href="#2-runbook-otsing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Filter sõne järgi
+        2. Runbook-otsing
       
     </span>
   </a>
@@ -1846,10 +1558,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#parserid-neli-tukki" class="md-nav__link">
+  <a href="#3-alert-korrelatsioon-ja-summarization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parserid — neli tükki
+        3. Alert-korrelatsioon ja summarization
       
     </span>
   </a>
@@ -1857,10 +1569,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#parseri-valik-luhidalt" class="md-nav__link">
+  <a href="#4-semantic-log-pattern-matching" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parseri valik lühidalt
+        4. Semantic log pattern matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-postmortem-auto-draft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Postmortem auto-draft
       
     </span>
   </a>
@@ -1873,10 +1596,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-logidest-metrika-hupe-tekstist-numbriks" class="md-nav__link">
+  <a href="#hybrid-search-bm25-vector-koos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Logidest metrika — hüpe tekstist numbriks
+        Hybrid search — BM25 + vector koos
       
     </span>
   </a>
@@ -1884,10 +1607,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-alloy-agent-mis-kogub-ja-saadab" class="md-nav__link">
+  <a href="#otsustamise-raam-millal-mida-valida" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Alloy — agent, mis kogub ja saadab
+        Otsustamise raam — millal mida valida
       
     </span>
   </a>
@@ -1895,32 +1618,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-praktiline-hoiatus-helm-charts" class="md-nav__link">
+  <a href="#kokkuvote" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Praktiline hoiatus — Helm charts
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#9-kokkuvote" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. Kokkuvõte
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kusimused-enesetestiks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Küsimused enesetestiks
+        Kokkuvõte
       
     </span>
   </a>
@@ -1958,288 +1659,318 @@
   
 
 
-<h1 id="paev-2-loki-logid-grafana-maailmas">Päev 2: Loki — logid Grafana maailmas<a class="headerlink" href="#paev-2-loki-logid-grafana-maailmas" title="Lingi sektsioonile">&para;</a></h1>
-<p><strong>Kursus:</strong> Kaasaegne IT-süsteemide monitooring ja jälgitavus<br />
-<strong>Kestus:</strong> ~45 minutit lugemist<br />
-<strong>Eeldused:</strong> Päev 1 (Prometheus + Grafana), Zabbix loeng ja labor hommikul  </p>
-<hr />
-<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
-<p>Selle peatüki lõpuks suudad:</p>
-<ul>
-<li><strong>Selgitada</strong>, miks logid ei mahu enam Zabbixisse</li>
-<li><strong>Kirjeldada</strong> LGTM stacki lühidalt ja öelda, kuhu Loki selles sobitub</li>
-<li><strong>Seletada</strong> põhimõtet "label on sildi järgi, sisu on pakitud"</li>
-<li><strong>Selgitada</strong> kardinaalsust ühe lausega ja põhjendada, miks trace_id EI tohi olla label</li>
-<li><strong>Nimetada</strong> LogQL-i neli parserit ja öelda, millist millal kasutada</li>
-<li><strong>Kirjeldada</strong> Alloy rolli ja miks Promtail enam ei ole soovituslik</li>
-</ul>
-<hr />
-<h2 id="1-miks-logid-ei-mahu-zabbixisse">1. Miks logid ei mahu Zabbixisse<a class="headerlink" href="#1-miks-logid-ei-mahu-zabbixisse" title="Lingi sektsioonile">&para;</a></h2>
-<p>Hommikul ehitasid Zabbixi. Ta ütleb sulle "payment teenuses on liiga palju vigu" — trigger läheb tulele, sulle tuleb teade.</p>
-<p>Nüüd küsimus: <strong>mis on see viga täpselt?</strong> Mis päringud kukkusid? Mis klient? Mis ajal täpselt algas? Mis error message? Mis stack trace?</p>
-<p>Zabbix ei ütle. Ta loeb ainult numbri — "ERROR-ridu viimase 1000 rea hulgas" — aga ei näita ridu endid. Selleks, et vigu päriselt näha, pead SSH-ga minema serverisse, leidma õige logifaili, ja tegema <code>grep ERROR /var/log/app/app.log</code>.</p>
-<p>See töötab, kuni sul on <strong>üks</strong> server. Kui neid on <strong>50</strong> (erinevad mikroteenused, koopiad, keskkonnad), siis on iga kord vaja:</p>
-<ul>
-<li>Teada, kuhu SSH-da (millises serveris see teenus just praegu jookseb?)</li>
-<li>Teada, mis failis logid on (iga rakendus kirjutab enda kohta)</li>
-<li>Olla SSH-võime kõigis (production-is ei pruugi sul lihtsalt õigusi olla)</li>
-<li>Otsida mitmest failist paralleelselt</li>
-</ul>
-<p>See on tüütu ja ajakulukas. Sellepärast kasutatakse <strong>tsentraalseid logisüsteeme</strong> — kõik rakendused saadavad oma logid ühte kohta, sa otsid brauserist, filtreerid keskkonna ja teenuse järgi, ja leiad vajaliku sekunditega.</p>
-<p>Üks võimalus on <strong>Elasticsearch / ELK</strong> — olemas juba 2010-st, tugev otsing, aga kallis. Terabaiti logisid päevas → kümneid tuhandeid eurosid kuus, sest Elasticsearch indekseerib kogu logi teksti. Uuem konkurent on <strong>Loki</strong> — Grafana Labs-i tööriist, mis läheneb teistmoodi ja on oluliselt odavam. Täna tegeleme temaga.</p>
-<hr />
-<h2 id="2-loki-koht-lgtm-pildis">2. Loki koht LGTM pildis<a class="headerlink" href="#2-loki-koht-lgtm-pildis" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kursuse Grafana Stack readeri juures nägid <strong>LGTM</strong> akronüümi: <strong>L</strong>oki + <strong>G</strong>rafana + <strong>T</strong>empo + <strong>M</strong>imir. Korda kiirelt, mis on kes:</p>
-<ul>
-<li><strong>Grafana</strong> — UI, visualiseerija</li>
-<li><strong>Mimir</strong> — mõõdikud (Prometheus-ühilduv, skaleeruv)</li>
-<li><strong>Loki</strong> — logid</li>
-<li><strong>Tempo</strong> — trace'id (distributed tracing)</li>
-</ul>
-<p>Kõik neli on <strong>Grafana Labs-i</strong> tehtud, kõik <strong>avatud lähtekoodiga</strong>, kõik on ehitatud samale mõttele: indekseeri vähe, salvesta odavalt objektimälus (S3), skaleeru horisontaalselt.</p>
-<p>Loki roll on selge: <strong>ta on logiosa.</strong> Ta võtab logiridu vastu, salvestab need, ja Grafana UI kaudu saad neid pärida. Ta ei joonista graafikuid ise — selle teeb Grafana. Ta ei kogu logisid ise — selleks on <strong>Alloy</strong> (agent, vt §7).</p>
-<p>Kui paned LGTM stacki püsti, on sul kolm konteinerit: <strong>Loki</strong> (logisalv), <strong>Alloy</strong> (logide kogumise agent), <strong>Grafana</strong> (UI). Zabbix elab eraldi, oma maailmas. Ühel päeval on sul seega kaks erinevat vaadet: traditsiooniline seire (Zabbix) ja cloud-native observability (LGTM).</p>
-<div class="admonition tip">
-<p class="admonition-title">Loe ka</p>
-<p>Laiem pilt LGTM stackist on <a href="../../../resources/grafana-stack/">Grafana Stack — LGTM ülevaade</a> readeris. Vaata see enne laborit üle.</p>
-</div>
-<hr />
-<h2 id="3-loki-pohiidee-nagu-prometheus-aga-logidele">3. Loki põhiidee: "nagu Prometheus, aga logidele"<a class="headerlink" href="#3-loki-pohiidee-nagu-prometheus-aga-logidele" title="Lingi sektsioonile">&para;</a></h2>
-<p>Loki autori Tom Wilkie üks varasemaid lühikirjeldusi 2018. aastast:</p>
+<h1 id="paev-3-lisalugemine-vector-search-rag-ja-ai-monitooringus">Päev 3 — Lisalugemine: Vector search, RAG ja AI monitooringus<a class="headerlink" href="#paev-3-lisalugemine-vector-search-rag-ja-ai-monitooringus" title="Lingi sektsioonile">&para;</a></h1>
 <blockquote>
-<p>"Like Prometheus, but for logs."</p>
+<p><strong>Tase:</strong> Edasijõudnud. Eeldab, et Päev 3 põhi-loeng on läbi loetud (sõlmerollid, shardid, BM25 inverted index).<br />
+<strong>Kestus:</strong> ~25–30 min lugemist.<br />
+<strong>Miks see eraldi:</strong> kursuse põhi-teema on monitooring ja observability, mitte AI/RAG. Aga 2024+ on vector search ja RAG saanud osaks observability tööriistadest (Elastic AI Assistant, Splunk AI Assistant, AWS Bedrock + OpenSearch). Sellest peatükist saad ülevaate, <strong>kuidas see töötab ja kus monitooringus sobib</strong>, ilma et peaksid kursuse põhi-aega kulutama.</p>
 </blockquote>
-<p>Prometheus töötab nii: mõõdikud on <strong>sildistatud</strong> (nt <code>up{job="api", env="prod"}</code>), sildid on indekseeritud, väärtus ise on lihtsalt number. Sildid teevad otsingu kiireks.</p>
-<p>Loki kasutab sama mõtet logide puhul. Iga logirida tuleb koos <strong>siltidega</strong> (<code>app="nginx"</code>, <code>env="prod"</code>, <code>host="mon-target"</code>). Sildid lähevad indeksisse. <strong>Logirea sisu ise aga EI lähe indeksisse</strong> — see pakitakse ja salvestatakse objektimällu (S3, MinIO) tavalise failina.</p>
-<p>See on Loki peamine erinevus Elasticsearchist. Elasticsearch indekseerib <strong>kogu teksti</strong> — iga sõna igas logireas läheb hiiglaslikku indeksisse. Otsing on kiire ("otsi sõna <code>database</code> miljardist logireast sekundis"), aga indeks kasvab suuremaks kui andmed ise. Salvestus on SSD-l, ja see maksab.</p>
-<p>Loki indeks on <strong>megabaidid</strong>, mitte terabaidid, sest silte on vähe. Kogu mahukas logitekst on odavas objektimälus (S3 gigabait = sent kuus). Hind on selles, et otsing <strong>sisu järgi</strong> on aeglasem — Loki peab esmalt filtreerima sildi järgi, siis teksti läbi skännima. Kui aga kasutad silte mõistlikult (esmalt kitsendad rakenduse või teenuse järgi, alles siis otsid veateadet), on see praktikas piisavalt kiire.</p>
-<p>Paljud organisatsioonid, kes on Elasticsearchilt Lokile üle läinud, on suutnud logimise kulusid mitmekümne protsendi võrra vähendada.</p>
 <hr />
-<h2 id="4-labelid-ja-logivood-moiste-mis-loki-kas-toole-paneb-voi-kinni-jookseb">4. Labelid ja logivood — mõiste, mis Loki kas tööle paneb või kinni jookseb<a class="headerlink" href="#4-labelid-ja-logivood-moiste-mis-loki-kas-toole-paneb-voi-kinni-jookseb" title="Lingi sektsioonile">&para;</a></h2>
-<p>Siin on Loki jaoks <strong>kriitiline koht</strong>. Kui sildid on valesti valitud, ei tööta süsteem hästi. Kui sildid on paigas, on Loki väga tõhus.</p>
-<h3 id="mis-on-logivoog-log-stream">Mis on logivoog (log stream)<a class="headerlink" href="#mis-on-logivoog-log-stream" title="Lingi sektsioonile">&para;</a></h3>
-<p>Iga logirida Lokis kuulub <strong>logivoogu</strong>. Logivoog on ridade kogum, millel on <strong>täpselt samad sildid</strong>.</p>
-<p>Näiteks need kolm rida:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>{app=&quot;nginx&quot;, env=&quot;prod&quot;} &quot;GET /api/users 200&quot;
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>{app=&quot;nginx&quot;, env=&quot;prod&quot;} &quot;GET /api/orders 500&quot;
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>{app=&quot;nginx&quot;, env=&quot;prod&quot;} &quot;POST /api/login 200&quot;
-</span></code></pre></div>
-<p>...on <strong>kõik samas logivoos</strong>, sest nende siltide komplekt on sama: <code>app="nginx", env="prod"</code>.</p>
-<p>Kui aga ühel real oleks <code>env="dev"</code>, oleks see juba <strong>teine logivoog</strong>. Iga unikaalne siltide kombinatsioon = üks logivoog.</p>
-<h3 id="kardinaalsus-logivoogude-arv">Kardinaalsus — logivoogude arv<a class="headerlink" href="#kardinaalsus-logivoogude-arv" title="Lingi sektsioonile">&para;</a></h3>
-<p><strong>Kardinaalsus</strong> tähendab lihtsalt "mitu erinevat logivoogu sul on". Kui jälgid 5 rakendust 3 keskkonnas, on kardinaalsus 5 × 3 = 15 logivoogu. See on rahulik number.</p>
-<p>Loki tunneb end hästi kuni umbes <strong>100 000 logivooni</strong>. Sealt edasi hakkab indeks paisuma, päringud aeglustuvad, kirjutamine pidurdub. Loki on mõeldud <strong>vähesteks, suurteks vooludeks</strong>, mitte miljoniks pisikeseks.</p>
-<h3 id="kus-asi-tuksi-laheb">Kus asi tuksi läheb<a class="headerlink" href="#kus-asi-tuksi-laheb" title="Lingi sektsioonile">&para;</a></h3>
-<p>Kujuta ette, et paned sildiks <code>trace_id</code>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>{app=&quot;api&quot;, trace_id=&quot;abc123&quot;}
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>{app=&quot;api&quot;, trace_id=&quot;def456&quot;}
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>{app=&quot;api&quot;, trace_id=&quot;ghi789&quot;}
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>...
-</span></code></pre></div>
-<p>Iga päring tekitab uue <code>trace_id</code>, iga uus <code>trace_id</code> loob <strong>uue logivoo</strong>. Kui rakendus teeb päevas 1 miljon päringut, on sul päevas 1 miljon logivoogu. Sellise kardinaalsusega Loki enam ei toimi.</p>
-<p>Sama probleem tekib, kui sildiks panna:</p>
-<ul>
-<li>IP-aadress (iga klient = uus voog)</li>
-<li>Kasutaja ID (iga kasutaja = uus voog)</li>
-<li>Ajatempel (iga sekund = uus voog)</li>
-<li>Pordi number (iga ühendus = uus voog)</li>
-</ul>
-<h3 id="reegel">Reegel<a class="headerlink" href="#reegel" title="Lingi sektsioonile">&para;</a></h3>
-<p>Lihtne reegel: <strong>silt kirjeldab, kust logi tuleb. Logi sisu jääb logireale.</strong></p>
-<p>Head sildid kirjeldavad allikat ja on stabiilsed:</p>
-<ul>
-<li><code>app</code> (nginx, api, payment-service)</li>
-<li><code>env</code> (dev, staging, prod)</li>
-<li><code>host</code> või <code>instance</code></li>
-<li><code>namespace</code> (Kubernetes)</li>
-<li><code>region</code></li>
-</ul>
-<p>Halvad sildid on dünaamilised, potentsiaalselt piiramatud:</p>
-<ul>
-<li><code>trace_id</code>, <code>request_id</code>, <code>session_id</code></li>
-<li><code>user_id</code>, <code>email</code>, <code>ip</code></li>
-<li><code>order_id</code>, <code>transaction_id</code></li>
-</ul>
-<p>Kui on vaja neid dünaamilisi välju <strong>otsinguks</strong>, siis Loki 3.0-st (2024) alates on olemas <strong>Structured Metadata</strong>. See on eraldi kiht (sildid-indeksis — metadata-otsitav-ent-indekseerimata — logi sisu-pakitud). <code>trace_id</code> ja <code>user_id</code> sobivad sinna. Laboris sellest detaili ei vaja — piisab, kui jätad meelde: <strong>trace_id ei ole label</strong>.</p>
+<h2 id="sisu">Sisu<a class="headerlink" href="#sisu" title="Lingi sektsioonile">&para;</a></h2>
+<ol>
+<li>Miks vector search? — mida lexical otsing ei suuda</li>
+<li>Vector embedding — tähendus numbritena</li>
+<li>HNSW algoritm — kuidas leida lähemaid vektoreid kiiresti</li>
+<li>FAISS — Facebook AI Similarity Search</li>
+<li>Elastic ELSER + <code>semantic_text</code></li>
+<li>OpenSearch ML Commons + Neural Search</li>
+<li>RAG — Retrieval-Augmented Generation</li>
+<li>RAG monitooringus — 5 kasutusjuhtu</li>
+<li>Hybrid search — BM25 + vector koos</li>
+<li>Otsustamise raam — millal mida valida</li>
+<li>Allikad</li>
+</ol>
 <hr />
-<h2 id="5-logql-paringukeel-mis-meenutab-promql-i">5. LogQL — päringukeel, mis meenutab PromQL-i<a class="headerlink" href="#5-logql-paringukeel-mis-meenutab-promql-i" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kui Grafana UI-s küsid Lokist logisid, kirjutad <strong>LogQL</strong> päringu. Keel on tehtud PromQL-iga sarnaseks, et Prometheuse kogemus tuleks kasuks.</p>
-<h3 id="lihtne-naide">Lihtne näide<a class="headerlink" href="#lihtne-naide" title="Lingi sektsioonile">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>{app=&quot;nginx&quot;, env=&quot;prod&quot;}
-</span></code></pre></div>
-<p>Loe: "anna mulle kõik logivood, kus <code>app</code> on <code>nginx</code> ja <code>env</code> on <code>prod</code>". Tulemuseks on logiread. See on kõige lihtsam LogQL — ainult siltide filter.</p>
-<h3 id="filter-sone-jargi">Filter sõne järgi<a class="headerlink" href="#filter-sone-jargi" title="Lingi sektsioonile">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>{app=&quot;nginx&quot;, env=&quot;prod&quot;} |= &quot;error&quot;
-</span></code></pre></div>
-<p>Lisaks sildifiltrile kitsendame ridadeni, mis sisaldavad sõna "error". <code>|=</code> tähendab "sisaldab". Muud variandid: <code>!=</code> (ei sisalda), <code>|~</code> (regex).</p>
-<h3 id="parserid-neli-tukki">Parserid — neli tükki<a class="headerlink" href="#parserid-neli-tukki" title="Lingi sektsioonile">&para;</a></h3>
-<p>Siiani vaatasime logisid <strong>tavalise tekstina</strong>. Sageli on logid aga <strong>struktureeritud</strong> — JSON, logfmt, või kindla mustriga tekst. Parser võtab logirea osadeks ja annab väljad, mida saab eraldi filtreerida.</p>
-<p><strong>JSON parser.</strong> Kui logi on <code>{"level":"error","user":"ann","duration":42}</code>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>{app=&quot;api&quot;} | json | level = &quot;error&quot; and duration &gt; 100
-</span></code></pre></div>
-<p>JSON parser teeb <code>level</code> ja <code>duration</code> väljad otsitavaks. Üsna puhas variant, kui logid juba JSON-is.</p>
-<p><strong>Logfmt parser.</strong> Kui logi on <code>level=error user=ann duration=42ms</code>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>{app=&quot;api&quot;} | logfmt | level = &quot;error&quot;
-</span></code></pre></div>
-<p>Logfmt on Go-maailma "võti=väärtus" standard. Paljud Go-rakendused logivad nii.</p>
-<p><strong>Pattern parser.</strong> Kui logi on vabatekst <strong>stabiilse struktuuriga</strong> (nt <code>2026-04-25 10:23 ERROR user=ann request failed</code>):</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>{app=&quot;api&quot;} | pattern `&lt;_&gt; &lt;_&gt; &lt;level&gt; &lt;_&gt;` | level = &quot;ERROR&quot;
-</span></code></pre></div>
-<p><code>&lt;_&gt;</code> tähendab "jäta vahele", <code>&lt;level&gt;</code> tähendab "nimeta see väli level-iks". Pattern sobib hästi vanematele rakendustele, mis logivad vabateksti, aga alati samas formaadis.</p>
-<p><strong>Regexp parser.</strong> Täiesti ebastandardne tekst, kus pattern ei sobi. See jääb viimaseks valikuks — aeglasem ja tõrkealtim.</p>
-<h3 id="parseri-valik-luhidalt">Parseri valik lühidalt<a class="headerlink" href="#parseri-valik-luhidalt" title="Lingi sektsioonile">&para;</a></h3>
+<h2 id="miks-vector-search">Miks vector search?<a class="headerlink" href="#miks-vector-search" title="Lingi sektsioonile">&para;</a></h2>
+<p>Põhi-loengu L3-s kirjeldasin näidet, kus sa otsid logist <code>database connection problems</code> ja BM25 ei leia kirjeid, mis on sõnastatud teisiti — <code>pool exhausted</code>, <code>OperationalError</code>, <code>lost connection</code>. See on <strong>vocabulary mismatch</strong> — sinu mentaalne sõnastik ja logi-rea sõnastik on erinevad.</p>
+<p><strong>Vector otsing lahendab selle</strong>, sest ei võrdle sõnu, vaid <strong>tähendusi</strong>. Vaatame, kuidas see töötab.</p>
+<hr />
+<h2 id="vector-embedding-tahendus-numbritena">Vector embedding — tähendus numbritena<a class="headerlink" href="#vector-embedding-tahendus-numbritena" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Embedding mudel</strong> (nt sentence-transformer, OpenAI text-embedding, ELSER, BGE, E5) võtab teksti ja annab tagasi vektori — tüüpiliselt <strong>384 … 1536 dimensiooniga</strong> liugujuturuga arve. See vektor esindab teksti <strong>tähendust</strong> geomeetrilises ruumis.</p>
+<p>Näide (lihtsustatud, ainult 3 dimensiooni):</p>
 <table>
 <thead>
 <tr>
-<th>Logi formaat</th>
-<th>Parser</th>
+<th>Tekst</th>
+<th>Vector</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>{"level":"error"}</code></td>
-<td><code>json</code></td>
+<td>"DB timeout"</td>
+<td>[0.78, 0.10, 0.45]</td>
 </tr>
 <tr>
-<td><code>level=error duration=42ms</code></td>
-<td><code>logfmt</code></td>
+<td>"connection pool exhausted"</td>
+<td>[0.81, 0.09, 0.47]</td>
 </tr>
 <tr>
-<td>Vabatekst stabiilse struktuuriga</td>
-<td><code>pattern</code></td>
+<td>"lost connection to database"</td>
+<td>[0.79, 0.11, 0.44]</td>
 </tr>
 <tr>
-<td>Täiesti ebastandardne</td>
-<td><code>regexp</code></td>
+<td>"user logged in"</td>
+<td>[0.12, 0.85, 0.21]</td>
 </tr>
 <tr>
-<td>Ühekordne kiire otsing, struktuurita</td>
-<td><code>|=</code></td>
+<td>"successful authentication"</td>
+<td>[0.14, 0.83, 0.23]</td>
 </tr>
 </tbody>
 </table>
-<p>Laboris teed osas 1 need neli harjutust Grafana ametlikul simulaatoril — enne kui oma Loki üldse üles paned. Nii on lihtsam LogQL-i tunnetus kätte saada ilma, et peaks samal ajal infrastruktuuri pärast muretsema.</p>
+<p>Näha — kolm esimest (DB-probleemid) on <strong>lähedal</strong> üksteisele. Kaks viimast (login-tegevused) on <strong>lähedal</strong> üksteisele. DB-probleem ja login on <strong>kaugel</strong>.</p>
+<p>Mudel õppis selle treenimise käigus miljarditelt teksti-paaridelt.</p>
+<p>Päringu vektor <code>database connection problems</code> arvutatakse sama mudeli abil — saame teise vektori. Otsing leiab dokumendid, mille vektor on päringuvektorile <strong>kõige lähemal</strong> — ehk <code>DB timeout</code>, <code>pool exhausted</code>, <code>lost connection</code>.</p>
+<p><strong>Sarnasuse-meetrika:</strong> cosine similarity, dot product või euclidean distance. Cosine on kõige levinum normaliseeritud vektorite jaoks.</p>
+<h3 id="probleem-kuidas-leida-lahemaid-vektoreid-kiiresti">Probleem: kuidas leida lähemaid vektoreid kiiresti<a class="headerlink" href="#probleem-kuidas-leida-lahemaid-vektoreid-kiiresti" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui sul on <strong>1 miljon dokumenti</strong>, igaks 384-dimensiooniline vektor, ja küsid "leia 10 sarnasemat", <strong>täpne lahendus</strong> on:</p>
+<ol>
+<li>Arvuta päring → vektor</li>
+<li>Arvuta cosine similarity päring-vektori ja iga 1M dokumendi vektori vahel</li>
+<li>Järjesta</li>
+</ol>
+<p>See on <strong>brute force kNN</strong> (k Nearest Neighbors). 1M dokumendi puhul = miljon cosine-arvutust iga päringu kohta. <strong>Liiga aeglane.</strong></p>
+<p>Lahendus: <strong>ANN — Approximate Nearest Neighbors</strong>. Loobume väikese täpsuse-protsendi nimel kiirusest. Saame 95% "õigeid" tulemusi, aga 100–1000× kiiremini.</p>
 <hr />
-<h2 id="6-logidest-metrika-hupe-tekstist-numbriks">6. Logidest metrika — hüpe tekstist numbriks<a class="headerlink" href="#6-logidest-metrika-hupe-tekstist-numbriks" title="Lingi sektsioonile">&para;</a></h2>
-<p>Loki oskab teha asja, mida Elasticsearch tavaliselt ei tee. LogQL lubab sul <strong>logidest tuletada mõõdikuid</strong> — logiridadest saad tavalise PromQL-laadse numbri, mida saab panna Grafana graafikule või siduda häiretingimusega.</p>
-<p>Näide. Nginx logib iga päringu. Sind huvitab: <strong>mitu 500-veateadet sekundis tuleb?</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sum(rate({app=&quot;nginx&quot;} |= &quot;500&quot; [5m]))
+<h2 id="hnsw-algoritm">HNSW algoritm<a class="headerlink" href="#hnsw-algoritm" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Hierarchical Navigable Small World</strong> — algoritm, mida nii Elasticsearch (Lucene 9+ kaudu) kui OpenSearch kasutavad. Idee:</p>
+<ol>
+<li>Ehita <strong>graaf</strong>, kus iga sõlm = dokumendi vektor. Sõlm ühendatakse oma lähemate naabritega.</li>
+<li>Tee see graaf <strong>mitmel kihil</strong>: ülemine kiht vähe sõlmedega (kauged hüpped), alumine kiht kõik sõlmed (lähedased naabrid).</li>
+<li>Otsing: alusta ülemiselt kihilt suvaliselt sõlmelt, liigu alati lähema naabrini. Sample down kihtide kaupa.</li>
+</ol>
+<pre class="mermaid"><code>flowchart TD
+    subgraph L2["🔝 Kiht 2 — vähe sõlmesid, kauged hüpped"]
+        L2A(("A")) --- L2B(("B")) --- L2C(("C"))
+    end
+
+    subgraph L1["↗️ Kiht 1 — keskmiselt tihe"]
+        L1A(("A")) --- L1D(("D"))
+        L1B(("B")) --- L1E(("E"))
+        L1B --- L1A
+        L1C(("C")) --- L1F(("F"))
+        L1C --- L1B
+    end
+
+    subgraph L0["🔍 Kiht 0 — kõik dokumendid, tihe naabruskond"]
+        N1(("1")) --- N2(("2"))
+        N2 --- N3(("3"))
+        N3 --- N4(("4"))
+        N4 --- N5(("5"))
+        N5 --- N6(("6"))
+        N1 --- N4
+        N2 --- N5
+        N3 --- N6
+    end
+
+    Q["🎯 Päringu vektor q"] -.algus.-&gt; L2A
+    L2A -.alla.-&gt; L1A
+    L1A -.alla.-&gt; N4
+    N4 -.lähima naabrini.-&gt; N5
+
+    style Q fill:#fff59d
+    style N5 fill:#a5d6a7</code></pre>
+<p>Otsing jälgib <strong>logaritmilist teed</strong> — algab ülemiselt vähe-sõlme-kihilt suure hüppega, lihvitakse iga kihiga täpsemaks. Päring 1M-vektori kollektsioonis ~5ms, mitte 500ms.</p>
+<p><strong>Kompromiss:</strong> HNSW eelistab <strong>mälus</strong> vektoreid hoida (RAM kallis). Lucene HNSW kasutab graafe, mis on osa Lucene'i segment-failidest. <strong>Off-heap mälu nõue</strong> on suur — RAM-koormus 1 miljardi vektori puhul on märkimisväärne ja seda tuleb arvestada klastri dimensioneerimisel.</p>
+<hr />
+<h2 id="faiss">FAISS<a class="headerlink" href="#faiss" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Facebook AI Similarity Search Library</strong> — alternatiiv HNSW-le. OpenSearch ML Commons toetab nii <strong>NMSLIB HNSW</strong> kui <strong>FAISS</strong>'i (sh <strong>IVF</strong> ja <strong>PQ</strong> algoritmid).</p>
+<p>FAISS-i tugev külg on <strong>mälukasutuse vähendamine</strong> kompressiooniga (Product Quantization):</p>
+<ul>
+<li>IVF (Inverted File Index): jagab vektorid klastritesse, otsing puudutab ainult mõnda klastrit</li>
+<li>PQ (Product Quantization): kompressioon, mis kaotab pisut täpsust mälu säästmise nimel — väike täpsuse-langus, aga 4–8× väiksem mälukulu</li>
+</ul>
+<p>Suurte vector DB-de jaoks oluline. AWS Bedrock + OpenSearch Serverless kasutab FAISS-i sees.</p>
+<hr />
+<h2 id="elastic-elser-semantic_text">Elastic ELSER + <code>semantic_text</code><a class="headerlink" href="#elastic-elser-semantic_text" title="Lingi sektsioonile">&para;</a></h2>
+<p>Elastic-i strateegia on <strong>lihtne API</strong>.</p>
+<p><strong>ELSER</strong> (Elastic Learned Sparse EncodeR) — Elastic-i enda treenitud mudel, mis annab <strong>sparse</strong> vektoreid (mitte dense). Töötab pre-trained, ei pea fine-tune'ima. Esmane versioon on inglise keele, <strong>multilingual ELSER (e5-multilingual)</strong> lisandus 2024. Kasutamiseks lihtsalt download'id mudeli ja laed klastri.</p>
+<p><strong><code>semantic_text</code> field type</strong> (Elasticsearch 8.13+, 2024) — mapping-level abstraktsioon, mis teeb kaks asja korraga:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;mappings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;semantic_text&quot;</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="nt">&quot;inference_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-elser-endpoint&quot;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>Loe: "võta kõik nginx-logiread, filtreeri read, mis sisaldavad 500, loe need kokku viimase 5 minuti kohta ja jaga ajaga". Tulemus on <code>500</code>-vigu sekundis.</p>
-<p>See on <strong>sama tüüpi number kui Prometheus mõõdik</strong>. Sellest saab teha:</p>
+<p>Kui sa indekseerid dokumendi <code>content</code> väljaga, <strong>Elastic teeb automaatselt</strong>:</p>
+<ol>
+<li>BM25 inverted indeksi (lexical otsing)</li>
+<li>ELSER-i kaudu sparse vektori (semantic otsing)</li>
+</ol>
+<p>Päring:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">GET</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex/_search</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;semantic&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;database connection problems&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<p>Elastic teeb <strong>hybrid otsingu</strong> ja annab kombineeritud skoori. <strong>Üks API, kaks otsingumeetodit.</strong></p>
+<hr />
+<h2 id="opensearch-ml-commons-neural-search">OpenSearch ML Commons + Neural Search<a class="headerlink" href="#opensearch-ml-commons-neural-search" title="Lingi sektsioonile">&para;</a></h2>
+<p>OpenSearch on <strong>paindlikum, aga rohkem konfigureerimist</strong>.</p>
+<p><strong>ML Commons</strong> — plugin, mis lubab klastrisse laadida ja käivitada ML-mudeleid. Toetab:</p>
 <ul>
-<li>graafiku Grafanas ("vigade määr viimase tunni jooksul")</li>
-<li>häire (nt "kui üle 10/sekundis, anna teada")</li>
-<li>dashboard'i koos teiste mõõdikutega</li>
+<li>HuggingFace mudelid (text embedding)</li>
+<li>ONNX mudelid (custom)</li>
+<li>Remote inference: Amazon SageMaker, Bedrock, OpenAI, Cohere, DeepSeek</li>
 </ul>
-<p>Laboris teed seda osas 3 — võtad payment-teenuse logidest vigade määra, teed graafiku, ja paned <strong>ühele ekraanile</strong> Zabbixi triggeri (üleval, häire) ja Loki graafiku (all, logipõhine trend). Sama sündmus kahest küljest vaadatuna.</p>
+<p><strong>Neural Search plugin</strong> — high-level abstraktsioon, mis kasutab ML Commons'i sees. Sa konfigureerid <strong>ingest pipeline'i</strong>, mis lisab dokumentidele vektorid:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_i</span><span class="kc">n</span><span class="err">ges</span><span class="kc">t</span><span class="err">/pipeli</span><span class="kc">ne</span><span class="err">/</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="mf">-e</span><span class="err">mbeddi</span><span class="kc">n</span><span class="err">g</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;processors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">&quot;text_embedding&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-embedding-model&quot;</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">&quot;field_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content_embedding&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p">}]</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Seejärel: <code>neural</code> query type päringuks. <strong>Üle nelja sammu, mitte ühe — aga sa kontrollid iga sammu</strong> ja võid panna oma kohandatud mudeli, fine-tune'itud sinu spetsiifilisele andmekorpusele.</p>
 <hr />
-<h2 id="7-alloy-agent-mis-kogub-ja-saadab">7. Alloy — agent, mis kogub ja saadab<a class="headerlink" href="#7-alloy-agent-mis-kogub-ja-saadab" title="Lingi sektsioonile">&para;</a></h2>
-<p>Logid ei ilmu Lokisse iseenesest. Vaja on <strong>agenti</strong>, mis need kätte saab ja edasi saadab. Grafana ökosüsteemis on see <strong>Grafana Alloy</strong>.</p>
-<p>Kuni 2024 oli Loki ametlik agent <strong>Promtail</strong> — lihtne ja konkreetne, tegeles ainult logidega. Grafana Labs otsustas selle asemel teha ühe laiema agendi: <strong>Alloy</strong>.</p>
-<p>Alloy oskab:</p>
+<h2 id="rag-retrieval-augmented-generation">RAG — Retrieval-Augmented Generation<a class="headerlink" href="#rag-retrieval-augmented-generation" title="Lingi sektsioonile">&para;</a></h2>
+<p>Muster, kus LLM enne vastamist küsib <strong>relevante dokumente</strong> vector storage'st. Põhjus: LLM-i koolitusandmed on lõplikud (ja vananenud), aga sinu organisatsiooni dokumendid (runbookid, postmortemid, logid) on uued ja spetsiifilised.</p>
+<p>Tüüpiline RAG arhitektuur:</p>
+<pre class="mermaid"><code>flowchart TD
+    U["👤 Kasutaja küsimus&lt;br/&gt;'Kuidas configureerida X?'"] --&gt; E["Embedding mudel"]
+    E --&gt; QV["Küsimuse vektor&lt;br/&gt;[0.21, 0.85, ...]"]
+    QV --&gt; VDB[("Vector DB&lt;br/&gt;ES / OS&lt;br/&gt;HNSW indeks")]
+    VDB --&gt; TOP["Top 5 sarnasemat&lt;br/&gt;dokumenti"]
+    TOP --&gt; CTX["LLM context:&lt;br/&gt;[dokumendid] + [küsimus]"]
+    CTX --&gt; LLM["🤖 LLM&lt;br/&gt;(Claude / Llama / Titan)"]
+    LLM --&gt; ANS["💬 Vastus,&lt;br/&gt;põhistatud&lt;br/&gt;dokumentidel"]
+
+    style U fill:#e3f2fd
+    style ANS fill:#e8f5e9
+    style VDB fill:#fff3e0
+    style LLM fill:#f3e5f5</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Amazon Bedrock Knowledge Bases</p>
+<p>AWS-i ametlik RAG-mootor <strong>Bedrock Knowledge Bases</strong> kasutab <strong>Amazon OpenSearch Serverless'i</strong> vaikimisi vector DB-na alates 2024. Sa upload'id dokumente S3-le, valid mudeli (Claude, Llama, Titan, DeepSeek jne), ja AWS teeb embedding'u + indekseerimise + päringu-loogika automaatselt. See on <strong>viiteid arhitektuur</strong> AWS-i klientidele.</p>
+</div>
+<p>RAG <strong>ei asenda LLM-i koolitamist</strong> — ta annab LLM-ile kontekstit. LLM-il pole vaja teada sinu firma 2026 juhendid; ta saab need vector DB-st kontekstina, vastab nende baasil.</p>
+<hr />
+<h2 id="rag-monitooringus-5-kasutusjuhtu">RAG monitooringus — 5 kasutusjuhtu<a class="headerlink" href="#rag-monitooringus-5-kasutusjuhtu" title="Lingi sektsioonile">&para;</a></h2>
+<p>See osa on <strong>tähtis sysadminile</strong> — siin tulevad päris kasutusjuhud, mida Elastic AI Assistant ja Splunk AI Assistant 2024+ teevad:</p>
+<h3 id="1-incident-response-ai-assistant">1. Incident response AI assistant<a class="headerlink" href="#1-incident-response-ai-assistant" title="Lingi sektsioonile">&para;</a></h3>
+<p>Sa küsid <code>mis juhtus eile õhtul kell 19:00?</code>, AI Assistant leiab vector storage'st (sinu logid + traces + alerts) relevante andmed ja võtab kokku tõevi-mustri.</p>
+<p><strong>Elastic AI Assistant</strong> ja <strong>Splunk AI Assistant</strong> teevad täpselt seda 2024+. AI ei "leiuta" — ta leiab kontekstit sinu enda logidest.</p>
+<h3 id="2-runbook-otsing">2. Runbook-otsing<a class="headerlink" href="#2-runbook-otsing" title="Lingi sektsioonile">&para;</a></h3>
+<p>Sa küsid <code>kuidas taaskäivitada Redis cluster kui see kukub?</code>, AI leiab sinu organisatsiooni Confluence'ist või wiki-st konkreetse runbooki ja annab vastuse koos sammudega.</p>
+<p>Sobib, kui runbookid on tekstilised ja Confluence/Notion/Markdown-kujul. Pildid ja diagrammid läbivad halvemini.</p>
+<h3 id="3-alert-korrelatsioon-ja-summarization">3. Alert-korrelatsioon ja summarization<a class="headerlink" href="#3-alert-korrelatsioon-ja-summarization" title="Lingi sektsioonile">&para;</a></h3>
+<p>1000 alerti tuli ühe tunni jooksul, AI Assistant ütleb "kõik on seotud <code>cassandra-cluster-3</code> split-brain'iga, põhjus on võrgu-lüli <code>sw-rack-12</code>".</p>
+<p>See on <strong>alert fatigue lahendus</strong> — selle asemel, et SRE peab 1000 alertit käsitsi läbi vaatama, AI grupeerib ja annab juur-põhjuse.</p>
+<h3 id="4-semantic-log-pattern-matching">4. Semantic log pattern matching<a class="headerlink" href="#4-semantic-log-pattern-matching" title="Lingi sektsioonile">&para;</a></h3>
+<p>Sa küsid <code>leia kõik database connectivity issues</code>, vector otsing leiab nii:</p>
 <ul>
-<li>koguda logisid (nagu Promtail)</li>
-<li>koguda mõõdikuid (nagu Prometheus exporter)</li>
-<li>koguda trace'e (nagu OpenTelemetry collector)</li>
+<li><code>connection refused</code></li>
+<li><code>pool exhausted</code></li>
+<li><code>OperationalError</code></li>
+<li><code>lost connection to host</code></li>
+<li><code>Cannot acquire connection</code></li>
 </ul>
-<p>Üks binaar, üks konfig, üks protsess — kolme eraldi agendi asemel. <strong>Promtail on nüüd feature-freeze olekus</strong>, uusi võimekusi sinna juurde ei tehta. Uutes paigaldustes on eelistatud Alloy.</p>
-<p>Laboris kasutad Alloyd. Konfiguratsioon on sirgjooneline — mis faili lugeda, kuhu saata, mis sildid juurde panna. Mount'id host-masinast logifaili konteinerisse ja Alloy loeb seda pidevalt; iga uus logirida jõuab Loki-sse.</p>
-<p>Oluline nüanss hilisemate päevade jaoks: <strong>Alloy toetab OpenTelemetry standardit</strong>. OpenTelemetry (OTel) on cloud-native observability kasvav standard. Loki ja Alloy on OTel-valmis — kui rakendus kirjutab OTel-formaadis, saab Alloy selle otse vastu võtta.</p>
+<p>— isegi kui sa pole neid sõnu otsisõnas kasutanud. See on <strong>vocabulary mismatch problem'i lahendus</strong> sinu logides.</p>
+<h3 id="5-postmortem-auto-draft">5. Postmortem auto-draft<a class="headerlink" href="#5-postmortem-auto-draft" title="Lingi sektsioonile">&para;</a></h3>
+<p>Incident'i järel AI Assistant kirjutab esimese mustandi:</p>
+<blockquote>
+<p>19:03 alert tekkis <code>api-prod-3</code> host'il...<br />
+19:07 root cause oli <code>cassandra-cluster-3</code> split-brain...<br />
+19:15 lahendus oli network-switch reboot...</p>
+</blockquote>
+<p>Sinu ülesanne on üle vaadata, parandada faktid ja lisada lessons-learned osa. Mustand säästab ~70% kirjutamise aega.</p>
 <hr />
-<h2 id="8-praktiline-hoiatus-helm-charts">8. Praktiline hoiatus — Helm charts<a class="headerlink" href="#8-praktiline-hoiatus-helm-charts" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kui hakkad pärast kursust Kubernetesis Lokit paigaldama, satud üsna kiiresti Grafana Helm chart’ide otsa.</p>
-<p>Google otsing annab <strong>kolm erinevat Loki Helm chart'i</strong>:</p>
+<h2 id="hybrid-search-bm25-vector-koos">Hybrid search — BM25 + vector koos<a class="headerlink" href="#hybrid-search-bm25-vector-koos" title="Lingi sektsioonile">&para;</a></h2>
+<p>Praktikas ei vali sa "lexical või vector" — <strong>kõige paremad tulemused tulevad mõlema kombineerimisest</strong>. Sellepärast on Elasticsearchi <code>semantic_text</code> ja OpenSearchi hybrid search query disainitud nii, et nad annavad <strong>mol-skoori</strong>: BM25 osa + vector cosine osa, kaalutud kokku.</p>
+<p><strong>Miks kombineerida monitooringus?</strong></p>
 <ul>
-<li><code>grafana/loki</code> — <strong>see on 2026. aastal kasutatav variant</strong></li>
-<li><code>grafana/loki-stack</code> — aegunud, enam ei uuendata</li>
-<li><code>grafana/loki-distributed</code> — samuti aegunud</li>
+<li><strong>BM25 on kõva match'iga täpne</strong> — kui otsid <code>error code 1023</code>, leiad logid, kus see konkreetselt esineb. Vector mudel ei pruugi numbri-koodi seostada.</li>
+<li><strong>Vector on tähenduse-poolt täpne</strong> — kui otsid <code>slow database</code>, leiad logid, kus on <code>performance degradation in PostgreSQL</code>, <code>query timeout</code>, <code>slow response time</code>. BM25 ei seostaks.</li>
 </ul>
-<p>Paljud vanemad blogipostitused ja videod viitavad neile kõigile. Pärast koristustööde tegemist on seis lihtne: <strong>kasuta <code>grafana/loki</code> chart’i</strong>. See on ametlik ja hooldatud.</p>
-<p>Sama mõte kehtib Alloy kohta — <code>grafana/alloy</code> (<strong>mitte</strong> <code>grafana/agent</code>, mis oli vana nimi).</p>
+<p>Kaalud (typical default): 0.3 × BM25 + 0.7 × vector — aga see oleneb kasutusjuhust ja sa kalibreerid neid testidega.</p>
 <hr />
-<h2 id="9-kokkuvote">9. Kokkuvõte<a class="headerlink" href="#9-kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
-<p>Viis asja, mis tasub sellest peatükist meelde jätta:</p>
-<p><strong>1. Loki = logid + sildid.</strong> Indekseerib ainult sildid, mitte sisu. Sellepärast on ta märgatavalt odavam kui Elasticsearch, aga sisu järgi otsimine on aeglasem.</p>
-<p><strong>2. Silt kirjeldab, kust logi tuleb.</strong> App, env, host, namespace. <strong>Mitte</strong> trace_id, user_id, IP — need kuuluvad logirea sisu, mitte labelite hulka.</p>
-<p><strong>3. LogQL on PromQL-ile lähedane.</strong> Siltide filter (<code>{app="nginx"}</code>) + tekstifilter (<code>|= "error"</code>) + parser (<code>json</code>, <code>logfmt</code>, <code>pattern</code>).</p>
-<p><strong>4. LogQL-st saab ka mõõdikuid.</strong> <code>rate({app="nginx"} |= "500" [5m])</code> annab 500-vigade määra sekundis — sobib graafikuks ja häireks.</p>
-<p><strong>5. Alloy on uus vaikimisi agent.</strong> Üks agent logide, mõõdikute ja trace'ide jaoks. Promtail jääb ajalukku.</p>
-<p>Laupäeva teine pool kuulub Lokile. Osa 1 on LogQL brauseris, osa 2 on Loki + Alloy + Grafana stack, osa 3 on logist tuletatud mõõdik + finaal koos Zabbixiga.</p>
+<h2 id="otsustamise-raam-millal-mida-valida">Otsustamise raam — millal mida valida<a class="headerlink" href="#otsustamise-raam-millal-mida-valida" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Monitooringu kasutusjuhus</th>
+<th>Soovitus</th>
+<th>Miks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operatiivlogid (<code>error</code>, <code>host=X</code>, <code>timeout</code>)</td>
+<td><strong>BM25 (lexical)</strong></td>
+<td>Sa tead sõna, otsid sõna. Vector lisab kulu ilma kasuta.</td>
+</tr>
+<tr>
+<td>Audit / compliance logid (<code>kes muutis seda 6 kuud tagasi?</code>)</td>
+<td><strong>BM25 + filtrid</strong></td>
+<td>Sa tahad täpset matchi. Audit-logide jaoks vector on isegi <strong>valeoht</strong> — ei tohi anda "sarnast" tulemust, kui küsija tahab täpset.</td>
+</tr>
+<tr>
+<td>Wiki / runbook / Confluence otsing</td>
+<td><strong>Hybrid</strong></td>
+<td>Kasutaja sõnastik ≠ dokumendi sõnastik</td>
+</tr>
+<tr>
+<td>Incident-investigation ("mis juhtus eile?")</td>
+<td><strong>Vector + RAG</strong></td>
+<td>Vajab semantic matchi üle logide ja traces</td>
+</tr>
+<tr>
+<td>Pattern matching error-logides (<code>database issues</code>)</td>
+<td><strong>Vector</strong></td>
+<td>Kasutaja küsib mustrit, leiab seoseid eri formuleeringutes</td>
+</tr>
+<tr>
+<td>Alert-korrelatsioon ja root cause</td>
+<td><strong>Vector + RAG</strong></td>
+<td>LLM korrelats mitut alerti ja annab juur-põhjuse</td>
+</tr>
+<tr>
+<td>Runbook AI Assistant</td>
+<td><strong>Vector + RAG (Bedrock või <code>semantic_text</code>)</strong></td>
+<td>Standard RAG-setup</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="kusimused-enesetestiks">Küsimused enesetestiks<a class="headerlink" href="#kusimused-enesetestiks" title="Lingi sektsioonile">&para;</a></h2>
-<details>
-<summary><strong>Küsimused (vastused all)</strong></summary>
-
-1. Miks Zabbix ei asenda logiteenust?  
-2. Selgita oma sõnadega: kuidas Loki erineb Elasticsearchist?  
-3. Mis on logivoog (log stream) ja miks on nende arv oluline?  
-4. Miks `trace_id` EI saa olla Loki silt?  
-5. Sul on JSON-logi. Mis LogQL parser sobib? Kirjuta näidispäring.  
-6. Sul on logi kujul `2026-04-25 10:23 ERROR user=ann`. Mis parser sobib?  
-7. Miks Alloy, mitte Promtail?  
-
-??? note "Vastused"
-
-    1) Zabbix loeb arve, mitte ridu. Ta ütleb "vigu on liiga palju", aga ei näita milliseid. Tsentraalne logiteenus (Loki, Elasticsearch) salvestab logid tervelt ja otsid sealt ridu, mitte ainult loendit. Need täiendavad üksteist.
-
-    2) Elasticsearch indekseerib kogu teksti — iga sõna igas logireas läheb indeksisse. Otsing on väga kiire, aga kallis (indeks võib kasvada suuremaks kui andmed). Loki indekseerib ainult sildid, sisu pakitakse ja läheb odavasse objektimällu. Sisu järgi otsimine on aeglasem, aga kogukulu väiksem.
-
-    3) Logivoog = logiridade kogum, millel on sama siltide komplekt. Kardinaalsus = logivoogude arv. Loki töötab hästi kuni ~100 000 voolu; sealt edasi läheb indeks liiga suureks, päringud ja kirjutamine aeglustuvad.
-
-    4) `trace_id` on iga päringu jaoks erinev. Kui rakendus teeb 1 miljon päringut päevas, tekitab see 1 miljon logivoogu. See maht on Lokile liiast: indeks kasvab üle pea, päringud aeglustuvad. `trace_id` sobib Structured Metadata kihti, mitte labeliks.
-
-    5) `json` parser. Näide: `{app="api"} | json | level = "error"`.
-
-    6) `pattern` parser. Näide: `{app="api"} | pattern \`<_> <_> <level> <_>\` | level = "ERROR"`.
-
-    7) Alloy kogub ühe agendina logisid, mõõdikuid ja trace'e. Promtail tegeles ainult logidega. Alloy asendab Promtaili, Grafana Agenti ja OpenTelemetry Collectori ühe binaarina. Grafana Labs enam Promtaili ei arenda, uusi paigalduseid tehakse Alloyga.
-
-</details>
-
+<h2 id="kokkuvote">Kokkuvõte<a class="headerlink" href="#kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
+<p>Lexical (BM25) on <strong>kiire, täpne, soodne</strong> — logide ja täpse-matchi-otsingu jaoks parim. Vector on <strong>tähenduselt täpne, kallim resurssidelt</strong> — RAG, runbook-otsingu ja semantic pattern matching'u jaoks parim. <strong>Hybrid kombineerib mõlemad</strong> ja annab tavaliselt parima tulemuse RAG kasutusjuhtudes.</p>
+<p>ELSER + <code>semantic_text</code> Elastic'is on lihtsam, OpenSearch ML Commons + Neural Search + FAISS on paindlikum.</p>
+<p><strong>Sinu monitooringu igapäevatöös:</strong></p>
+<ul>
+<li>Logide otsing Kibana Discover'is = BM25, kasuta nagu praegu</li>
+<li>AI Assistant (Elastic AI Assistant, Splunk AI Assistant) = vector + RAG taustal</li>
+<li>Anomaalia-tuvastus ja alert-korrelatsioon = vector + LLM, kui sinu vendor seda toetab</li>
+<li>Postmortem auto-draft = RAG, kui sa upload'id postmortemid vector DB-sse</li>
+</ul>
 <hr />
 <h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Allikas</th>
-<th>URL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Grafana Loki docs</td>
-<td><a href="https://grafana.com/docs/loki/latest/">https://grafana.com/docs/loki/latest/</a></td>
-</tr>
-<tr>
-<td>Labels best practices</td>
-<td><a href="https://grafana.com/docs/loki/latest/get-started/labels/bp-labels/">https://grafana.com/docs/loki/latest/get-started/labels/bp-labels/</a></td>
-</tr>
-<tr>
-<td>Cardinality</td>
-<td><a href="https://grafana.com/docs/loki/latest/get-started/labels/cardinality/">https://grafana.com/docs/loki/latest/get-started/labels/cardinality/</a></td>
-</tr>
-<tr>
-<td>LogQL</td>
-<td><a href="https://grafana.com/docs/loki/latest/query/">https://grafana.com/docs/loki/latest/query/</a></td>
-</tr>
-<tr>
-<td>Grafana Alloy</td>
-<td><a href="https://grafana.com/docs/alloy/latest/">https://grafana.com/docs/alloy/latest/</a></td>
-</tr>
-<tr>
-<td>Loki 3.0 release</td>
-<td><a href="https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/">https://grafana.com/blog/2024/04/09/grafana-loki-3.0-release/</a></td>
-</tr>
-<tr>
-<td>Structured Metadata</td>
-<td><a href="https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/">https://grafana.com/docs/loki/latest/get-started/labels/structured-metadata/</a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Versioonid:</strong> Loki 3.7.1, Grafana Alloy 1.15.1, Grafana 12.4.3.</p>
-<hr />
-<p><em>Järgmine: <a href="../../../labs/02_zabbix_loki/loki_lab/">Labor: Loki</a></em></p>
+<p><strong>Vector search ja embeddings:</strong></p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/dense-vector.html">Elasticsearch <code>dense_vector</code> field</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-text.html">Elasticsearch <code>semantic_text</code> field</a></li>
+<li><a href="https://opensearch.org/docs/latest/search-plugins/neural-search/">OpenSearch Neural Search plugin</a></li>
+<li><a href="https://opensearch.org/docs/latest/ml-commons-plugin/">OpenSearch ML Commons</a></li>
+<li><a href="https://github.com/facebookresearch/faiss">Facebook AI Similarity Search (FAISS)</a></li>
+<li><a href="https://arxiv.org/abs/1603.09320">HNSW: Hierarchical Navigable Small World</a> — algupärane teadusartikkel</li>
+</ul>
+<p><strong>RAG ja AI Assistant:</strong></p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html">Amazon Bedrock Knowledge Bases + OpenSearch Serverless</a></li>
+<li><a href="https://www.elastic.co/observability/ai-assistant">Elastic AI Assistant — Observability</a></li>
+<li><a href="https://www.splunk.com/en_us/products/splunk-ai.html">Splunk AI Assistant for SPL</a></li>
+</ul>
+<p><strong>Üldine kontekst:</strong></p>
+<ul>
+<li><a href="https://coralogix.com/guides/elasticsearch/elasticsearch-vs-opensearch-key-differences/">Coralogix: ES vs OS — Key Differences</a></li>
+<li><a href="https://www.tecracer.com/blog/opensearch-vs-elasticsearch-2024/">tecRacer: OpenSearch vs Elasticsearch 2024</a></li>
+</ul>
 
 
 
@@ -2260,7 +1991,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="25. aprill 2026 03:39:07 UTC">25. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="17. mai 2026 20:31:45 UTC">17. mai 2026</span>
   </span>
 
     

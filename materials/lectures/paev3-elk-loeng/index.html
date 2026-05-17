@@ -1,0 +1,4379 @@
+
+<!doctype html>
+<html lang="et" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026">
+      
+      
+        <meta name="author" content="Maria Talvik">
+      
+      
+        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/paev3-elk-loeng/">
+      
+      
+        <link rel="prev" href="../../../labs/02_zabbix_loki/loki_lab/">
+      
+      
+        <link rel="next" href="../../../labs/03_elk_stack/lab/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Loeng: ELK & OS — kust tuli, kus on, kuhu läheb - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.v2.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#paev-3-elastic-stack-opensearch-kust-tuli-kus-on-kuhu-laheb" class="md-skip">
+          Keri sisuni
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Päis">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Monitooring ja Jälgitavus — Täienduskoolitus
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Loeng: ELK & OS — kust tuli, kus on, kuhu läheb
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Tume teema"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Tume teema" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Hele teema"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Hele teema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Otsi" placeholder="Otsi" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Otsing">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Lähtesta" aria-label="Lähtesta" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Otsingu lähtestamine
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hkhk-tk/monitoring" title="Ava repositooriumis" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hkhk-tk/monitoring
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Vaheleht" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Avaleht
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../paev1-kava/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 1 — Prometheus + Grafana
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../paev2-zabbix/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 2 — Zabbix + Loki
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 3 — ELK Stack & OpenSearch
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../labs/04_tick_keskne_logimine/tick_lab/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 4 — TICK + Kesksed logimissüsteemid
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../labs/05_tempo_otel/lab/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 5 — Tempo + OTel + Kokkuvõte
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../resources/vm-access/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Ressursid
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Monitooring ja Jälgitavus — Täienduskoolitus
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hkhk-tk/monitoring" title="Ava repositooriumis" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hkhk-tk/monitoring
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Avaleht
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 1 — Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 1 — Prometheus + Grafana
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../paev1-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev1-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 1: Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev1-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 2: Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Koolitaja juhend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 2 — Zabbix + Loki
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 2 — Zabbix + Loki
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev2-zabbix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Zabbix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev2-loki/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Loki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor: Zabbix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor: Loki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 3 — ELK Stack & OpenSearch
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 3 — ELK Stack & OpenSearch
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: ELK & OS — kust tuli, kus on, kuhu läheb
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: ELK & OS — kust tuli, kus on, kuhu läheb
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l10-zabbixilt-andmehaldusele-paradigm-shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.0 — Zabbixilt andmehaldusele: paradigm shift
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.0 — Zabbixilt andmehaldusele: paradigm shift">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kaks-paradigmat-korvuti" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kaks paradigmat kõrvuti
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-cloud-native-host-pole-enam-stabiilne-entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Cloud-native — host pole enam stabiilne entity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-andmemahud-on-kasvanud-100x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Andmemahud on kasvanud 100x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-otsingu-ja-korrelatsiooni-vajadus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Otsingu ja korrelatsiooni vajadus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-ai-ja-ml-noue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. AI ja ML nõue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pilt-2026-mitte-uks-asendab-teist-vaid-koos-tootavad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pilt 2026 — mitte "üks asendab teist", vaid "koos töötavad"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l11-maastik-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.1 — Maastik 2026
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.1 — Maastik 2026">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#konsolideerimise-laine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Konsolideerimise laine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-source-vastureaktsioon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open source vastureaktsioon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opentelemetry-on-voitnud-instrumenteerimise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenTelemetry on võitnud instrumenteerimise
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#andmesalvestuse-standard-tulemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Andmesalvestuse standard tulemas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-poore-vector-search-ja-bedrock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI-pööre — vector search ja Bedrock
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l12-ajalugu-kust-me-siia-joudsime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.2 — Ajalugu, kust me siia jõudsime
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.2 — Ajalugu, kust me siia jõudsime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1999-apache-lucene-sund" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1999 — Apache Lucene sünd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2010-shay-banon-ja-elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2010 — Shay Banon ja Elasticsearch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2013-elk-stack-sund" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2013 — ELK Stack sünd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2015-beats-lisandub-aws-astub-sisse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015 — Beats lisandub, AWS astub sisse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2019-kohtuvaidlus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2019 — kohtuvaidlus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2021-litsentsi-drama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2021 — litsentsi-drama
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-vector-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023 — vector search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-kaks-paralleelset-uudist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024 — kaks paralleelset uudist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2026-kus-me-oleme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026 — kus me oleme
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l13-elasticsearch-vs-opensearch-tana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.3 — Elasticsearch vs OpenSearch täna
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.3 — Elasticsearch vs OpenSearch täna">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#komponendid-peaaegu-identsed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Komponendid — peaaegu identsed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-siin-algab-erinevus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security — siin algab erinevus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aws-integratsioon-os-i-tugevaim-eelis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AWS integratsioon — OS-i tugevaim eelis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#machine-learning-ja-vector-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Machine learning ja vector search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-ja-managed-teenused" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cloud ja managed teenused
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skaala-arvud-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skaala arvud (2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hinnad-ja-tco-millest-tegelikult-koosneb-arve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hinnad ja TCO — millest tegelikult koosneb arve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#litsents-luhidalt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Litsents — lühidalt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kus-kumb-sobib-sysadmin-perspektiivist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kus kumb sobib — sysadmin perspektiivist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l2-arhitektuur-solmed-shardid-quorum-999" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2 — Arhitektuur: sõlmed, shardid, quorum, 99.9%
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L2 — Arhitektuur: sõlmed, shardid, quorum, 99.9%">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solmerollid-neli-rolli-sama-binary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sõlmerollid — neli rolli, sama binary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shardid-primary-ja-replica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shardid — primary ja replica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-state-ja-quorum-miks-kolm-master-nodei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster state ja quorum — miks kolm master node'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#999-ja-9999-praktikas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        99.9% (ja 99.99%) praktikas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshots-ainus-tegelik-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Snapshots — ainus tegelik backup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ccr-cross-cluster-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CCR — Cross-Cluster Replication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#andmevoog-ja-kafka-kui-ingest-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Andmevoog ja Kafka kui ingest buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indeksite-elutsukkel-ilm-ja-hotwarmcold-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indeksite elutsükkel — ILM ja Hot/Warm/Cold tiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l2-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L2-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l3-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L3 — Otsing: lexical (BM25) vs vector, ja kuidas need töötavad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L3 — Otsing: lexical (BM25) vs vector, ja kuidas need töötavad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lexical-otsing-inverted-index-bm25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexical otsing: inverted index + BM25
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bm25-relevantsi-algoritm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BM25 — relevantsi algoritm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kus-lexical-otsing-kukub-labi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kus lexical otsing kukub läbi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edasine-areng-vector-search-ja-rag-monitooringus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Edasine areng — vector search ja RAG monitooringus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l3-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probleem-kuidas-leida-lahemaid-vektoreid-kiiresti" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Probleem: kuidas leida lähemaid vektoreid kiiresti
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hnsw-hierarchical-navigable-small-world" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HNSW — Hierarchical Navigable Small World
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastici-kaik-elser-semantic_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic'i käik: ELSER + semantic_text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opensearchi-kaik-ml-commons-neural-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearch'i käik: ML Commons + Neural Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rag-retrieval-augmented-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG — Retrieval-Augmented Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hybrid-search-bm25-vector-koos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid search — BM25 + vector koos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otsustamise-raam-millal-mida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Otsustamise raam: millal mida?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l3-st_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cheat-sheet-vota-too-juurde-kaasa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Cheat sheet — võta töö juurde kaasa
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Cheat sheet — võta töö juurde kaasa">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-otsus-elasticsearch-voi-opensearch-ja-missugune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ① Otsus: Elasticsearch või OpenSearch — ja missugune?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-otsus-klastri-dimensioneerimine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ② Otsus: klastri-dimensioneerimine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-otsus-lexical-vector-voi-hybrid-otsing-monitooringu-kontekstis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ③ Otsus: lexical, vector või hybrid otsing? (monitooringu kontekstis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-otsus-hinnamudel-ja-tco-eelarve-aluseks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ④ Otsus: hinnamudel ja TCO eelarve-aluseks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#refleksioon-ja-enesetest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refleksioon ja enesetest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allikad
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/03_elk_stack/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 4 — TICK + Kesksed logimissüsteemid
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 4 — TICK + Kesksed logimissüsteemid
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TICK labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ülevaade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 5 — Tempo + OTel + Kokkuvõte
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 5 — Tempo + OTel + Kokkuvõte
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/05_tempo_otel/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/05_tempo_otel/trendid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trendid 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ressursid
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ressursid
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/vm-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VM ligipääs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/grafana-stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana Stack — LGTM ülevaade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/material-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materjalide stiilijuhend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l10-zabbixilt-andmehaldusele-paradigm-shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.0 — Zabbixilt andmehaldusele: paradigm shift
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.0 — Zabbixilt andmehaldusele: paradigm shift">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kaks-paradigmat-korvuti" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kaks paradigmat kõrvuti
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-cloud-native-host-pole-enam-stabiilne-entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Cloud-native — host pole enam stabiilne entity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-andmemahud-on-kasvanud-100x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Andmemahud on kasvanud 100x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-otsingu-ja-korrelatsiooni-vajadus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Otsingu ja korrelatsiooni vajadus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-ai-ja-ml-noue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. AI ja ML nõue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pilt-2026-mitte-uks-asendab-teist-vaid-koos-tootavad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pilt 2026 — mitte "üks asendab teist", vaid "koos töötavad"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l11-maastik-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.1 — Maastik 2026
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.1 — Maastik 2026">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#konsolideerimise-laine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Konsolideerimise laine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-source-vastureaktsioon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open source vastureaktsioon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opentelemetry-on-voitnud-instrumenteerimise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenTelemetry on võitnud instrumenteerimise
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#andmesalvestuse-standard-tulemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Andmesalvestuse standard tulemas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-poore-vector-search-ja-bedrock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI-pööre — vector search ja Bedrock
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l12-ajalugu-kust-me-siia-joudsime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.2 — Ajalugu, kust me siia jõudsime
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.2 — Ajalugu, kust me siia jõudsime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1999-apache-lucene-sund" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1999 — Apache Lucene sünd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2010-shay-banon-ja-elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2010 — Shay Banon ja Elasticsearch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2013-elk-stack-sund" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2013 — ELK Stack sünd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2015-beats-lisandub-aws-astub-sisse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015 — Beats lisandub, AWS astub sisse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2019-kohtuvaidlus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2019 — kohtuvaidlus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2021-litsentsi-drama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2021 — litsentsi-drama
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-vector-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023 — vector search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-kaks-paralleelset-uudist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024 — kaks paralleelset uudist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2026-kus-me-oleme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026 — kus me oleme
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l13-elasticsearch-vs-opensearch-tana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.3 — Elasticsearch vs OpenSearch täna
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.3 — Elasticsearch vs OpenSearch täna">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#komponendid-peaaegu-identsed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Komponendid — peaaegu identsed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-siin-algab-erinevus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security — siin algab erinevus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aws-integratsioon-os-i-tugevaim-eelis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AWS integratsioon — OS-i tugevaim eelis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#machine-learning-ja-vector-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Machine learning ja vector search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-ja-managed-teenused" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cloud ja managed teenused
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skaala-arvud-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skaala arvud (2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hinnad-ja-tco-millest-tegelikult-koosneb-arve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hinnad ja TCO — millest tegelikult koosneb arve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#litsents-luhidalt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Litsents — lühidalt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kus-kumb-sobib-sysadmin-perspektiivist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kus kumb sobib — sysadmin perspektiivist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l2-arhitektuur-solmed-shardid-quorum-999" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2 — Arhitektuur: sõlmed, shardid, quorum, 99.9%
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L2 — Arhitektuur: sõlmed, shardid, quorum, 99.9%">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solmerollid-neli-rolli-sama-binary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sõlmerollid — neli rolli, sama binary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shardid-primary-ja-replica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shardid — primary ja replica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-state-ja-quorum-miks-kolm-master-nodei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster state ja quorum — miks kolm master node'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#999-ja-9999-praktikas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        99.9% (ja 99.99%) praktikas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshots-ainus-tegelik-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Snapshots — ainus tegelik backup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ccr-cross-cluster-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CCR — Cross-Cluster Replication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#andmevoog-ja-kafka-kui-ingest-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Andmevoog ja Kafka kui ingest buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indeksite-elutsukkel-ilm-ja-hotwarmcold-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indeksite elutsükkel — ILM ja Hot/Warm/Cold tiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l2-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L2-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l3-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L3 — Otsing: lexical (BM25) vs vector, ja kuidas need töötavad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L3 — Otsing: lexical (BM25) vs vector, ja kuidas need töötavad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lexical-otsing-inverted-index-bm25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexical otsing: inverted index + BM25
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bm25-relevantsi-algoritm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BM25 — relevantsi algoritm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kus-lexical-otsing-kukub-labi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kus lexical otsing kukub läbi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edasine-areng-vector-search-ja-rag-monitooringus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Edasine areng — vector search ja RAG monitooringus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l3-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probleem-kuidas-leida-lahemaid-vektoreid-kiiresti" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Probleem: kuidas leida lähemaid vektoreid kiiresti
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hnsw-hierarchical-navigable-small-world" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HNSW — Hierarchical Navigable Small World
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastici-kaik-elser-semantic_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic'i käik: ELSER + semantic_text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opensearchi-kaik-ml-commons-neural-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearch'i käik: ML Commons + Neural Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rag-retrieval-augmented-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG — Retrieval-Augmented Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hybrid-search-bm25-vector-koos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid search — BM25 + vector koos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otsustamise-raam-millal-mida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Otsustamise raam: millal mida?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l3-st_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cheat-sheet-vota-too-juurde-kaasa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Cheat sheet — võta töö juurde kaasa
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Cheat sheet — võta töö juurde kaasa">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-otsus-elasticsearch-voi-opensearch-ja-missugune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ① Otsus: Elasticsearch või OpenSearch — ja missugune?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-otsus-klastri-dimensioneerimine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ② Otsus: klastri-dimensioneerimine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-otsus-lexical-vector-voi-hybrid-otsing-monitooringu-kontekstis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ③ Otsus: lexical, vector või hybrid otsing? (monitooringu kontekstis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-otsus-hinnamudel-ja-tco-eelarve-aluseks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ④ Otsus: hinnamudel ja TCO eelarve-aluseks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#refleksioon-ja-enesetest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refleksioon ja enesetest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allikad
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="paev-3-elastic-stack-opensearch-kust-tuli-kus-on-kuhu-laheb">Päev 3: Elastic Stack &amp; OpenSearch — kust tuli, kus on, kuhu läheb<a class="headerlink" href="#paev-3-elastic-stack-opensearch-kust-tuli-kus-on-kuhu-laheb" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>Kursus:</strong> Kaasaegne IT-süsteemide monitooring ja jälgitavus
+<strong>Kestus:</strong> ~60 min loengut, hajutatud läbi päeva — L1 (30 min) avamisel, L2 (15 min) enne klastri-laienemist, L3 (15 min) enne vector-osa
+<strong>Tase:</strong> Kesktase → kesk-edasijõudnud. Eeldame, et logimine on selge (Päev 2, Loki), Docker mitme-konteineri stack on selge
+<strong>Eeldused:</strong> Päev 1 (observability kolm sammast, Prometheus pull-mudel) · Päev 2 (Zabbix host-tsentriline, Loki + Promtail, label vs sisu indekseerimine)</p>
+<hr />
+<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p>Pärast seda loengut oskad:</p>
+<ul>
+<li><strong>Selgitada</strong>, kuidas tööstus liikus klassikalisest host-tsentrilisest seirest (Zabbix) andme-tsentrilisele observability'le ja milline jõud seda muutust ajas</li>
+<li><strong>Eristada</strong> Elasticsearchi ja OpenSearchi: kust ühine tüvi, miks lahkuminek 2021, kuidas seis 2026</li>
+<li><strong>Kirjeldada</strong> Elasticsearchi sõlmerolle (master, data, ingest, coordinating) ja kuidas shardid + replica'd päringut teenindavad</li>
+<li><strong>Põhjendada</strong>, miks tõsiselt mõeldud klastris on vähemalt 3 dedicated master sõlme ja mis on quorum</li>
+<li><strong>Eristada</strong> lexical otsingut (BM25 inverted index'iga) ja vector otsingut (HNSW lähimnaaber-graafiga)</li>
+<li><strong>Selgitada</strong>, mis on ELSER, <code>semantic_text</code>, OpenSearch neural search, FAISS ja RAG muster</li>
+<li><strong>Otsustada</strong>, millal valida Elastic Cloud, Elasticsearch on-prem, Amazon OpenSearch Service, OpenSearch Serverless või OpenSearch on-prem</li>
+</ul>
+<hr />
+<h2 id="l10-zabbixilt-andmehaldusele-paradigm-shift">L1.0 — Zabbixilt andmehaldusele: paradigm shift<a class="headerlink" href="#l10-zabbixilt-andmehaldusele-paradigm-shift" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 0</strong>, kohe peale õpiväljundeid. ~5 min, enne L1.1 maastiku osa.<br />
+<strong>Miks see sulle oluline:</strong> annab sulle argumendi managementile — miks Zabbixist (mis on klassikaline ja stabiilne) üksi enam ei piisa ja milleks teie organisatsioonis ELK / OpenSearch / Loki kihiks vaja läheb.</p>
+</blockquote>
+<p>Eile tutvusid Zabbixiga. Sa nägid neli mõistet ahelas — <strong>Host → Item → Trigger → Action</strong>. See on klassikaline arhitektuur, mis on töötanud 25 aastat: sa tead, <strong>mis hostid</strong> sul on, <strong>mida nendelt mõõdad</strong> ja <strong>mis tingimustel hoiatust saadetakse</strong>. Iga element on eeldefineeritud, schema on jäik.</p>
+<p>Pärastlõunal lisasid sinna Loki. Loki tõi logide tsentraliseerimise — sa ei pea enam SSH-ga 50 serverisse logima, et <code>grep ERROR</code> teha. See näeb välja lihtsalt mugavusena. Aga see on tegelikult <strong>palju enamat</strong> — see on osa <strong>paradigm shift'ist</strong>, mida tööstus on viimase 10 aasta jooksul teinud.</p>
+<h3 id="kaks-paradigmat-korvuti">Kaks paradigmat kõrvuti<a class="headerlink" href="#kaks-paradigmat-korvuti" title="Lingi sektsioonile">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Klassikaline (Zabbix)</th>
+<th>Andme-tsentriline (ELK / OS / TICK / Loki)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Põhi-küsimus</strong></td>
+<td>"Mu host on X, mida ma sellelt mõõdan?"</td>
+<td>"Mul on andmed, mida ma neilt küsida saan?"</td>
+</tr>
+<tr>
+<td><strong>Andmemudel</strong></td>
+<td>Schemaful (Item = nimi + tüüp + intervall)</td>
+<td>Schema-less (dünaamiline mapping, JSON-id)</td>
+</tr>
+<tr>
+<td><strong>Päringud</strong></td>
+<td><strong>Eeldefineeritud</strong> (Trigger avaldis)</td>
+<td><strong>Ad-hoc</strong> (jooksvalt loodud KQL, ESQL, LogQL)</td>
+</tr>
+<tr>
+<td><strong>Skaala suund</strong></td>
+<td>Rohkem hoste, rohkem agente</td>
+<td>Rohkem andmesõlmi, rohkem shardide</td>
+</tr>
+<tr>
+<td><strong>Sa tead</strong></td>
+<td><strong>ette</strong>, mida sa otsid</td>
+<td><strong>avastad</strong> mustreid andmetest</td>
+</tr>
+</tbody>
+</table>
+<p>See ei ole tehnoloogiline mood, vaid vastus reaalsetele probleemidele. Neli jõudu, mis selle pöörde tekitasid.</p>
+<h3 id="1-cloud-native-host-pole-enam-stabiilne-entity">1. Cloud-native — host pole enam stabiilne entity<a class="headerlink" href="#1-cloud-native-host-pole-enam-stabiilne-entity" title="Lingi sektsioonile">&para;</a></h3>
+<p>Zabbix eeldab, et <strong><code>host</code> on stabiilne objekt</strong> — sa lood selle UI-s, seod template'iga ja jälgid kuid või aastaid. Kubernetes maailmas ei toimi see. Pod tuleb ja kaob iga 4 minuti tagant, IP-aadress muutub, replica arv skaleerub 3-st 30-le ja tagasi. Kui sa lood Zabbixi host'i iga pod'i kohta, oled hommikul 5000 surnud host'iga.</p>
+<p>K8s-mõtteviis on hoopis: <strong>"andmed on entity"</strong>. Pod kirjutab logisid ja metricsid stdout'ile, agent kogub kõik, paneb sildid külge (<code>namespace=prod, app=api, pod=api-7d4f</code>), saadab tsentraalsesse storage'sse. Pärast saab päringuga küsida <code>{app="api", namespace="prod"}</code> — pole tähtis, mis IP, mis pod, mis hetkest mis hetkeni. Andmed räägivad ise.</p>
+<h3 id="2-andmemahud-on-kasvanud-100x">2. Andmemahud on kasvanud 100x<a class="headerlink" href="#2-andmemahud-on-kasvanud-100x" title="Lingi sektsioonile">&para;</a></h3>
+<p>10 aastat tagasi: tüüpiline keskmise suurusega ettevõte genereeris ~10 GB logisid päevas. Täna: sama suurusega ettevõte mikroteenuste arhitektuuriga genereerib <strong>1–10 TB logisid päevas</strong>. Suuremad SaaS-ettevõtted ja telekomid liiguvad <strong>50–500 TB/päev</strong> suunas. Datadogi 2024 "State of Cloud Costs" raport <sup id="fnref:datadog2024"><a class="footnote-ref" href="#fn:datadog2024">1</a></sup> näitab, et <strong>observability andmemahud kasvavad keskmiselt 20–30% aastas</strong> ettevõtetel, mis migreeruvad pilve ja mikroteenustele.</p>
+<p>Zabbixi MySQL/PostgreSQL andmebaas saab koormatud — Zabbix on hostide ja itemite jaoks loodud, mitte miljardite sündmuste salvestamiseks.</p>
+<p>ELK, OpenSearch, Loki, Splunk on <strong>algusest peale</strong> ehitatud horisontaalselt skaleeruva andmehoidlana. Shardid, replica'd, object storage. Andmetagavara kasv lahendatakse rohkem sõlmede lisamisega.</p>
+<h3 id="3-otsingu-ja-korrelatsiooni-vajadus">3. Otsingu ja korrelatsiooni vajadus<a class="headerlink" href="#3-otsingu-ja-korrelatsiooni-vajadus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Zabbix vastab küsimusele: <strong>"kas miski on katki?"</strong> — kena, aga see ei ole alati piisav. Kui kasutaja kaebab "API on aeglane esmaspäeval pärast kella 14:00", tahad sa küsida:</p>
+<ul>
+<li>Mis päringud olid sel ajal aeglased? (logid)</li>
+<li>Mis SQL-päringud sel ajal andmebaasi koormasid? (logid)</li>
+<li>Mis hosti pealt päringud tulid? (logid + trace'id)</li>
+<li>Kas mingi deploy juhtus äsja enne? (audit-logid)</li>
+<li>Kas seda mustrit on varem nähtud? (ajalooline agregeerimine)</li>
+</ul>
+<p>Need on <strong>ad-hoc päringud</strong>, mis avastavad mustreid. Zabbix Trigger ei oska seda — ta vastab ainult sellele, mille jaoks ta on eelnevalt seadistatud. ELK / OS Kibana Discover, OpenSearch Dashboards, Loki Explore — kõik on disainitud just selliseid avastamise-päringuid teha.</p>
+<h3 id="4-ai-ja-ml-noue">4. AI ja ML nõue<a class="headerlink" href="#4-ai-ja-ml-noue" title="Lingi sektsioonile">&para;</a></h3>
+<p>Anomaalia-tuvastus, root cause analysis, klastri-mustri leidmine, ennustav alerting — kõik need vajavad <strong>andmebaasi</strong>, mille peal saab agregeerida, statistikat teha, ML-mudeleid sõita. Threshold-trigger ("kui CPU &gt; 80%, hoiata") on lihtne reegel; "ennusta järgmise 2 tunni põhjal, kas süsteem kukub" on hoopis teine asi.</p>
+<p>Lisaks 2024–26 lisandus uus mõõde: <strong>semantic search ja RAG</strong> (vt L3 hiljem). LLM-id vajavad relevante dokumente ette anda — ja need dokumendid tulevad ELK / OS-st kui vector storage'st. Zabbix Item ei sobi RAG-ile.</p>
+<h3 id="pilt-2026-mitte-uks-asendab-teist-vaid-koos-tootavad">Pilt 2026 — mitte "üks asendab teist", vaid "koos töötavad"<a class="headerlink" href="#pilt-2026-mitte-uks-asendab-teist-vaid-koos-tootavad" title="Lingi sektsioonile">&para;</a></h3>
+<p>Pärast seda pööret ei kao Zabbix kuhugi. <strong>Ta elab edasi seal, kus klassikaline seire on õige tööriist:</strong></p>
+<ul>
+<li>Infrastruktuur (host CPU, mälu, ketas, võrk)</li>
+<li>Võrguseadmed (Cisco / MikroTik / HP SNMP-ga)</li>
+<li>Hardware-monitooring (IPMI, ventilaatorid, temperatuur, UPS)</li>
+<li>Stabiilsed pikaajalised teenused (PostgreSQL master, Nginx LB)</li>
+</ul>
+<p><strong>ELK / OpenSearch / Loki / TICK on lisaks</strong> — andmehalduse kihid, mis tegelevad:</p>
+<ul>
+<li>Logidega (struktureeritud ja mitte)</li>
+<li>Forensikaga (mis konkreetselt juhtus tunni X jooksul)</li>
+<li>Full-text otsinguga (kasutaja kogemus)</li>
+<li>Semantic search'iga ja RAG-iga (uus 2024+)</li>
+<li>Multi-source korrelatsiooniga (metrics + logs + traces ühes vaates)</li>
+</ul>
+<p>Tüüpiline modernne monitooringu-stack aastal 2026 koosneb mitmest kihist, mis teevad eri tööd:</p>
+<ul>
+<li><strong>Zabbix</strong> — võrguseadmed, hardware, klassikaline host-monitooring</li>
+<li><strong>Prometheus + Grafana</strong> — Kubernetes ja mikroteenuste mõõdikud</li>
+<li><strong>Loki</strong> — operatiivsed logid Grafana Explore'is (kerge, odav)</li>
+<li><strong>Elasticsearch või OpenSearch</strong> — forensika, audit-logid, full-text otsing, semantic search</li>
+<li><strong>Tempo + OpenTelemetry</strong> — traces (Päev 5)</li>
+</ul>
+<p>Niisiis täna ei õpi sa Zabbixi asendust — õpid täiendavat tööriistakihti, mis tegeleb teistsuguste probleemidega kui Zabbix.</p>
+<div class="admonition tip">
+<p class="admonition-title">💭 Mõtle hetk — enne edasilugemist</p>
+<p>Sinu praeguse töökeskkonna logide ja sündmuste haldamine — kumb paradigma on sees? Klassikaline (host → item → trigger Zabbix-stiilis) või andme-tsentriline (logid kogutakse ühte storage'sse, päringud jooksvalt)? Või mõlemad korraga?</p>
+<p>Kui mõlemad — milline rahvas üle sinu meeskonna teeb kumba? Kas need on samad inimesed või eraldatud rollid?</p>
+</div>
+<hr />
+<h2 id="l11-maastik-2026">L1.1 — Maastik 2026<a class="headerlink" href="#l11-maastik-2026" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 1, hajutuse 1. plokk.</strong> ~10 min, jätkub kohe L1.0 järel.<br />
+<strong>Miks see sulle oluline:</strong> aitab sul aru saada, millisesse ökosüsteemi tasub praegu panustada — Elastic-i suunda, OpenSearchi suunda, või Grafana LGTM suunda. Iga otsus lukustab sind aastateks.</p>
+</blockquote>
+<p>Eelnev tabel ütleb mis paradigma muutus on. Aga miks just <strong>praegu</strong> on selle paradigma esindajad — Elastic Stack ja OpenSearch — sellised nagu nad on? Sest 2024–26 on observability-turul olnud rohkesti mängumuutuseid.</p>
+<h3 id="konsolideerimise-laine">Konsolideerimise laine<a class="headerlink" href="#konsolideerimise-laine" title="Lingi sektsioonile">&para;</a></h3>
+<p>Viimase paari aasta jooksul on suured tegijad ostnud teisi suuri tegijaid:</p>
+<ul>
+<li><strong>Palo Alto Networks ostis Splunki</strong> (sept 2024, ~$28 miljardit) <sup id="fnref:palo-splunk"><a class="footnote-ref" href="#fn:palo-splunk">10</a></sup> — Splunk muutub osaks security platvormist</li>
+<li><strong>Cisco</strong> üritas Splunki osta, tehing ütleti 2024 alguses üles, Palo Alto astus sisse</li>
+<li><strong>IBM ostis HashiCorpi</strong> (2024) — Terraform, Vault, Consul tulevad IBM-i pärandi alla</li>
+<li><strong>Datadog</strong> kasvab agressiivselt, ostab väiksemaid (Codiac, Eppo, Voltron)</li>
+<li><strong>Grafana Labs</strong> kasvab orgaaniliselt, hoiab open source'i ja paneb suure panuse LGTM stackile</li>
+</ul>
+<p>Mida see sysadminile tähendab? <strong>Vendor lock-in</strong> on tagasi tulekul, isegi observability-ruumis, kus open source on olnud tugev. Iga kord, kui sa valid vendori, vaata litsentsi ja edasine ostumuster.</p>
+<h3 id="open-source-vastureaktsioon">Open source vastureaktsioon<a class="headerlink" href="#open-source-vastureaktsioon" title="Lingi sektsioonile">&para;</a></h3>
+<p>Iga litsentsi-muutus tekitas forki:</p>
+<ul>
+<li>HashiCorpi Terraform → <strong>OpenTofu</strong> (Linux Foundation, 2023)</li>
+<li>HashiCorpi Vault → <strong>OpenBao</strong> (Linux Foundation, 2024)</li>
+<li>Elasticsearch → <strong>OpenSearch</strong> (AWS taga, <strong>Linux Foundation septembris 2024</strong> — OpenSearch Software Foundation moodustati neutraalse koduriigiga)</li>
+<li>MongoDB → ei ole tugevat forki (litsents jäi)</li>
+</ul>
+<p>OpenSearch on 2026-l küpsuses: OpenSearch Foundationi raportite põhjal <strong>sajad miljonid allalaadimised</strong>, kümned tuhanded pull request'id ja kümned partnerid — see on üks suurimaid avatud otsingumootori projekte maailmas <sup id="fnref:os-foundation"><a class="footnote-ref" href="#fn:os-foundation">11</a></sup>. AWS panustab sellesse jätkuvalt suuresti, aga ka Aiven, Logz.io, Oracle ja teised kontribueerivad.</p>
+<p>2024 lõpus muutis Elastic litsentsi tagasi — lisas AGPL-i olemasolevatele SSPL + Elastic License valikutele. Shay Banon (Elastic-i looja) kirjutas blogiposti pealkirjaga "Elasticsearch is Open Source, Again". Hea PR, aga reaalsus on, et OpenSearch eksisteerib edasi ja kasvab.</p>
+<h3 id="opentelemetry-on-voitnud-instrumenteerimise">OpenTelemetry on võitnud instrumenteerimise<a class="headerlink" href="#opentelemetry-on-voitnud-instrumenteerimise" title="Lingi sektsioonile">&para;</a></h3>
+<p>Üks asi, mis 2024–25 on selgelt välja kujunenud: <strong>OpenTelemetry on muutunud de facto standardiks</strong> rakenduste instrumenteerimisel. Datadog, Splunk, Elastic, Grafana, New Relic ja Dynatrace pakuvad kõigil OTel-põhist sisendit. See tähendab, et <strong>rakenduse instrumenteerimine ei lukusta sind enam vendorile</strong> — kui kirjutad oma rakenduse OTel SDK-ga, saad ükskõik kuhu eksportida.</p>
+<p>See on tähtsam kui tundub. Tähendab, et tänapäeva mõistlik arhitektuur on: OTel rakenduses → OTel Collector → ükskõik mis backend (Datadog, Tempo, Jaeger, Elastic APM, OpenSearch). Sa saad vendori vahetada ilma rakenduse koodi puutumata.</p>
+<h3 id="andmesalvestuse-standard-tulemas">Andmesalvestuse standard tulemas<a class="headerlink" href="#andmesalvestuse-standard-tulemas" title="Lingi sektsioonile">&para;</a></h3>
+<p>Vähem tuntud, aga sysadminile oluline: <strong>Apache Iceberg</strong> on kiiresti kujunemas üheks standardseks tabeliformaadiks logi- ja turbeandmete andmejärvedes. Splunk Federated Search/Analytics, Snowflake, Databricks ja teised platvormid lisavad tuge Iceberg-tabelitele, mis lubab hoida logisid ühises objektisalvestuses (S3) ja teha päringuid mitme tööriistaga. Praegu on see veel uuem suund, aga tasub teada.</p>
+<h3 id="ai-poore-vector-search-ja-bedrock">AI-pööre — vector search ja Bedrock<a class="headerlink" href="#ai-poore-vector-search-ja-bedrock" title="Lingi sektsioonile">&para;</a></h3>
+<p>Ja siis on <strong>AI-pööre</strong>. Ei "agentic AI päästab kõik" turundus, vaid praktilised muutused:</p>
+<ul>
+<li><strong>Vector search</strong> on saanud nõudeks. Elasticsearch 8.x lisas <code>dense_vector</code> field 2022, ELSER 2023, <code>semantic_text</code> 2024.</li>
+<li><strong>OpenSearch 2.x</strong> sisaldab <strong>neural search</strong> ja <strong>ML Commons</strong> plugin'it, integreerib <strong>FAISS</strong>'i (Facebook AI Similarity Search) ja toetab Amazon SageMakeri ja Bedrocki mudeleid.</li>
+<li><strong>Amazon OpenSearch Serverless</strong> on Bedrock Knowledge Bases'i peamine ja tihedalt integreeritud vector-backend; AWS-i referentsarhitektuur RAG-lahendustele kasutab seda vaikimisi.</li>
+<li><strong>RAG</strong> (Retrieval-Augmented Generation) — muster, kus LLM enne vastamist küsib relevante dokumente vector storage'st. ELK ja OS on selleks andmebaasiks.</li>
+</ul>
+<p>Klientidele ei piisa enam "leia logist sõna error" — nad tahavad semantic similarity, AI-powered alerting, hybrid search. Day 3 lõpuks vaatame <code>semantic_text</code> ja neural search praktikas. Aga enne — kust me siia jõudsime?</p>
+<hr />
+<h2 id="l12-ajalugu-kust-me-siia-joudsime">L1.2 — Ajalugu, kust me siia jõudsime<a class="headerlink" href="#l12-ajalugu-kust-me-siia-joudsime" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 1, hajutuse 2. plokk.</strong> ~8 min, jätkub samas blokis.<br />
+<strong>Miks see sulle oluline:</strong> aitab sul mõista, miks täna ELK ja OpenSearch ON kaks paralleelset projekti, kumb nendest on sinu olukorraga lähemal, ja miks järgmine sarnane litsentsi-drama tuleb tagasi (kui seda ei oska näha).</p>
+</blockquote>
+<pre class="mermaid"><code>timeline
+    title Elasticsearch &amp; OpenSearch — võtmesündmused
+    1999 : Apache Lucene&lt;br/&gt;(Doug Cutting, inverted index)
+    2010 : Elasticsearch sünd&lt;br/&gt;(Shay Banon)
+    2013 : ELK Stack&lt;br/&gt;(Elasticsearch + Logstash + Kibana)
+    2015 : Beats lisandub&lt;br/&gt;Amazon ES Service käivitub
+    2019 : Elastic vs AWS&lt;br/&gt;kohtuvaidlus + kompromiss
+    2021 : Litsentsi-drama&lt;br/&gt;SSPL + Elastic License&lt;br/&gt;AWS forkib OpenSearchi (1.0)
+    2023 : Vector search&lt;br/&gt;ES dense_vector + OS neural search&lt;br/&gt;FAISS integratsioon
+    2024 : AGPL-3 lisandub Elasticile&lt;br/&gt;OpenSearch Software Foundation&lt;br/&gt;(Linux Foundation)&lt;br/&gt;semantic_text field&lt;br/&gt;Bedrock Knowledge Bases + OS Serverless
+    2026 : Mõlemad open source&lt;br/&gt;mõlemad tootmiskolblikud&lt;br/&gt;valik = kontekst + meeskond</code></pre>
+<h3 id="1999-apache-lucene-sund">1999 — Apache Lucene sünd<a class="headerlink" href="#1999-apache-lucene-sund" title="Lingi sektsioonile">&para;</a></h3>
+<p>Doug Cutting (sama mees, kes hiljem Hadoopi kirjutas) avaldab Java otsingulibrary nimega Lucene. Põhi-algoritm: <strong>inverted index</strong>. Sõna → dokumentide nimekiri, kus see sõna esineb. Sama põhi-idee, mis Elasticsearch'is tänapäeval kasutusel.</p>
+<p>Lucene oli library, mitte server — programmeerija pidi selle oma rakendusse põimima.</p>
+<h3 id="2010-shay-banon-ja-elasticsearch">2010 — Shay Banon ja Elasticsearch<a class="headerlink" href="#2010-shay-banon-ja-elasticsearch" title="Lingi sektsioonile">&para;</a></h3>
+<p>Shay Banon, Iisraeli arendaja, kirjutas oma naise toidu-retseptide otsingusüsteemi jaoks Lucene peale REST API ja distribuiable klastri. Tegi sellest open source'i — Elasticsearch sünnib.</p>
+<p>Asi võttis hoogu kiiresti — 2012 asutati Elastic NV (firma) Hollandis. Esimene major release 1.0 — 2014.</p>
+<h3 id="2013-elk-stack-sund">2013 — ELK Stack sünd<a class="headerlink" href="#2013-elk-stack-sund" title="Lingi sektsioonile">&para;</a></h3>
+<p>Logstash (alates 2009) ja Kibana (alates 2011) liideti samasse ökosüsteemi. Sünnib <strong>ELK Stack</strong> — Elasticsearch + Logstash + Kibana. Mängumuutja logide jaoks. Enne ELK-i oli logide tsentraliseerimine kallis (Splunk) või kohutavalt valus (syslog + grep). ELK demokrastiseeris logide kogumise.</p>
+<h3 id="2015-beats-lisandub-aws-astub-sisse">2015 — Beats lisandub, AWS astub sisse<a class="headerlink" href="#2015-beats-lisandub-aws-astub-sisse" title="Lingi sektsioonile">&para;</a></h3>
+<p>Logstash oli raske (JVM, suur RAM). Lisandusid kerged agendid Go-s: <strong>Filebeat</strong> (failidest logid), <strong>Metricbeat</strong> (süsteemi mõõdikud), <strong>Auditbeat</strong> (audit-logid), <strong>Packetbeat</strong> (võrgupaketid). ELK saab "Elastic Stack"-iks.</p>
+<p>Samal aastal käivitas Amazon <strong>Amazon Elasticsearch Service</strong>'i — managed Elasticsearch AWS-is. See oli kaubanduslik edu, aga ka tüli algus.</p>
+<h3 id="2019-kohtuvaidlus">2019 — kohtuvaidlus<a class="headerlink" href="#2019-kohtuvaidlus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elastic NV süüdistas Amazonit kaubamärgi-rikkumises ja eksitavas turunduses, esitas hagi. <a href="https://www.elastic.co/blog/elastic-and-amazon-reach-agreement-on-trademark-infringement-lawsuit">Kohtuvaidlus lõppes 2019 kompromissiga</a>, aga <strong>tehnoloogiline ja ärilise pinge jäi</strong>.</p>
+<h3 id="2021-litsentsi-drama">2021 — litsentsi-drama<a class="headerlink" href="#2021-litsentsi-drama" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elastic NV ei näinud AWS-i Amazon ES teenusest tulu. Argument: AWS müüb meie tööd, meie ei saa midagi tagasi.</p>
+<p><strong>Jaanuaris 2021</strong> Elastic muudab versioonis <strong>7.11</strong> litsentsi: <strong>Apache 2.0 → SSPL (Server Side Public License) + Elastic License</strong>. SSPL nõuab, et kui sa pakud SSPL-tarkvara teenusena, peab kogu sinu teenuse stack ka avatud lähtekoodiga olema. <strong>Open Source Initiative (OSI) ei tunnista SSPL-i open source litsentsina.</strong></p>
+<p>Praktikas: AWS ei saa enam Apache 2.0 tingimustel Elasticsearchi managed teenusena pakkuda.</p>
+<p>Vastus tuli kiiresti. AWS fork-is <strong>viimase Apache 2.0 versiooni — Elasticsearch 7.10.2</strong> — aprillis 2021. Koos Logz.io, Aiveni jt-ga moodustub <strong>OpenSearch projekt</strong> — Apache 2.0 all, AWS-i taga. Mai 2021 — esimene OpenSearch 1.0 release.</p>
+<p>See oli <strong>valuline lõik</strong>. Kahe aasta jooksul oli ökosüsteem segaduses — millisel litsentsil mis versioon, kas Logstash on ELK või OpenSearchi osa (mõlema, Logstash jäi Apache 2.0-le), kas Kibana saab kasutada OpenSearchiga (algselt jah, hiljem ei).</p>
+<h3 id="2023-vector-search">2023 — vector search<a class="headerlink" href="#2023-vector-search" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elasticsearch 8.x lisab <code>dense_vector</code> field type, kNN otsingu, transformer-mudelite integratsiooni (Hugging Face). OpenSearch 2.x lisab neural search plugin'i ja FAISS integratsiooni.</p>
+<h3 id="2024-kaks-paralleelset-uudist">2024 — kaks paralleelset uudist<a class="headerlink" href="#2024-kaks-paralleelset-uudist" title="Lingi sektsioonile">&para;</a></h3>
+<p>Augustis 2024 kirjutab Shay Banon blogiposti <strong>"Elasticsearch is Open Source, Again"</strong>. Lisatakse <strong>AGPL-3</strong> kui kolmas litsents-valik (senise SSPL + Elastic License kõrvale). AGPL on OSI heaks kiidetud — niisiis Elasticsearch on tehniliselt jälle open source.</p>
+<p>Septembris 2024 — <strong>Linux Foundation kuulutab välja OpenSearch Software Foundation'i</strong>. AWS andis OpenSearch projekti üle neutraalsele koduriigile. Kontribuendid: AWS, Aiven, Logz.io, Oracle ja teised. <strong>OpenSearch ei kao</strong> — eksisteerib edasi paralleelse projekti kujul.</p>
+<h3 id="2026-kus-me-oleme">2026 — kus me oleme<a class="headerlink" href="#2026-kus-me-oleme" title="Lingi sektsioonile">&para;</a></h3>
+<p>Mõlemad on open source. Mõlemad lisavad AI-võimekust agressiivselt. Mõlemad on tootmiskõlblikud. Valik on <strong>kontekst- ja meeskonna-põhine</strong>, mitte tehniline. Aga sa pead teadma, <strong>mis nendega täna teha saab</strong>. Selle juurde läheme nüüd.</p>
+<hr />
+<h2 id="l13-elasticsearch-vs-opensearch-tana">L1.3 — Elasticsearch vs OpenSearch täna<a class="headerlink" href="#l13-elasticsearch-vs-opensearch-tana" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 1, hajutuse 3. plokk.</strong> ~12 min, jätkub samas blokis kuni L1 lõpuni.<br />
+<strong>Miks see sulle oluline:</strong> otsustamise raam, mille järgi valida Elastic Cloud, Elasticsearch on-prem, Amazon OpenSearch Service, OpenSearch Serverless või OpenSearch on-prem — koos hinnamudelite ja TCO komponentidega, mida CFO sinult küsib.</p>
+</blockquote>
+<h3 id="komponendid-peaaegu-identsed">Komponendid — peaaegu identsed<a class="headerlink" href="#komponendid-peaaegu-identsed" title="Lingi sektsioonile">&para;</a></h3>
+<p>Sama tüvi 2021-st tähendab, et komponendid kannavad sageli sama nime ja teevad sama asja. Esmalt vaatame <strong>Elastic Stack</strong> terviklikult, siis kõrval OpenSearchi vasted.</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph S["📊 Andmeallikad"]
+        H["Host: CPU, RAM,&lt;br/&gt;disk, network"]
+        A["Rakendused"]
+        L["Logifailid&lt;br/&gt;(nginx, app, syslog)"]
+        N["Võrgupaketid"]
+    end
+
+    subgraph B["📦 Beats (kerged Go agendid)"]
+        FB["Filebeat"]
+        MB["Metricbeat"]
+        AB["Auditbeat"]
+        PB["Packetbeat"]
+    end
+
+    LS["⚙️ Logstash&lt;br/&gt;parse • enrich • filter"]
+
+    subgraph ES_C["🗄️ Elasticsearch klaster"]
+        ES["master + data + ingest + coord&lt;br/&gt;storage • search • ML"]
+    end
+
+    KB["📈 Kibana&lt;br/&gt;dashboards • alerts • APM • SIEM"]
+
+    H --&gt; MB
+    A --&gt; FB
+    A --&gt; MB
+    L --&gt; FB
+    N --&gt; PB
+
+    FB --&gt; LS
+    MB --&gt; LS
+    AB --&gt; LS
+    PB --&gt; LS
+
+    LS --&gt; ES
+    FB -. "võib käia ka&lt;br/&gt;otse, ilma Logstashita" .-&gt; ES
+
+    ES &lt;--&gt; KB
+
+    style ES fill:#fff3e0
+    style KB fill:#e3f2fd
+    style LS fill:#f3e5f5</code></pre>
+<p><strong>Õkosüsteemide vaste — sama rollid, eri nimed:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Roll</th>
+<th>Elastic Stack</th>
+<th>OpenSearch ökosüsteem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distribuiable otsingumootor + dokumendisalvestus</td>
+<td>Elasticsearch</td>
+<td>OpenSearch</td>
+</tr>
+<tr>
+<td>UI ja dashboardid</td>
+<td>Kibana</td>
+<td>OpenSearch Dashboards</td>
+</tr>
+<tr>
+<td>Andmevoog (pipeline'id, parse, transform)</td>
+<td>Logstash</td>
+<td>Logstash <em>(sama, Apache 2.0)</em> + Data Prepper (OS-spetsiifiline)</td>
+</tr>
+<tr>
+<td>Kerged agendid</td>
+<td>Beats (Filebeat, Metricbeat, Auditbeat...)</td>
+<td>Beats + Data Prepper</td>
+</tr>
+<tr>
+<td>APM / tracing</td>
+<td>Elastic APM</td>
+<td>OpenSearch trace analytics</td>
+</tr>
+</tbody>
+</table>
+<p>Kibana ja OpenSearch Dashboards näevad <strong>80% identsed</strong> välja — sama tüvi 2021-st. Sa avad ühe ja vaatad teist, vahel on raske ütelda, kummaga töötad. Erinevused tekivad seal, kus toode on 2021+ arenenud.</p>
+<p><strong>Mida diagramm süsadminile ütleb:</strong></p>
+<ul>
+<li><strong>Beats</strong> on kerged Go-agendid host'idel — kogu raske töö (parse, enrich) toimub mujal</li>
+<li><strong>Logstash</strong> on <strong>valikuline</strong> — lihtsate kasutusjuhtude jaoks Beats saadab otse ES-i. Logstash tuleb juurde kui vaja keerukamaid pipeline'e (grok parsing, geoIP, lookup tabelid)</li>
+<li><strong>Elasticsearch klaster</strong> on südamik — sealsamas elavad nii <strong>logid</strong>, <strong>mol metrics</strong>, <strong>APM traçeid</strong> kui <strong>vector embeddings</strong></li>
+<li><strong>Kibana</strong> ei ole "ainult dashboardid" — ta on <strong>kogu Elastic Stack'i UI</strong>, sh APM, SIEM (security), Observability, Machine Learning kasutajaliidesed</li>
+</ul>
+<h3 id="security-siin-algab-erinevus">Security — siin algab erinevus<a class="headerlink" href="#security-siin-algab-erinevus" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Elastic xpack</strong> (osa Elastic License) on Elastici enda security stack. RBAC, doc-level security, field masking, audit-log, SSO, krüpteerimine. Põhilised asjad on tasuta (Basic license), edasijõudnud (SAML SSO, audit) kommerts (Platinum+).</p>
+<p><strong>OpenSearch Security plugin</strong> (Apache 2.0) on <strong>vaba</strong>. Teeb sama asju: RBAC, doc-level, field masking, audit. Konfiguratsioon erineb (YAML failid vs API), aga võimekus on sageli <strong>rikastam vabas versioonis</strong> kui Elastic xpack basic.</p>
+<h3 id="aws-integratsioon-os-i-tugevaim-eelis">AWS integratsioon — OS-i tugevaim eelis<a class="headerlink" href="#aws-integratsioon-os-i-tugevaim-eelis" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Amazon OpenSearch Service</strong> on disainitud AWS-i ökosüsteemis natiivselt töötama:</p>
+<ul>
+<li><strong>IAM, Cognito, SAML, KMS</strong> — autentimine ja krüpteerimine läbi AWS-i identity-süsteemi</li>
+<li><strong>CloudWatch, CloudTrail</strong> — sisseehitatud monitooring ja audit</li>
+<li><strong>Zero-ETL integratsioonid</strong> — CloudWatch Logs, DynamoDB, DocumentDB, S3, Security Lake andmed otseselt OS-i ilma eraldi pipeline'ita</li>
+<li><strong>Bedrock + SageMaker + OpenAI / Cohere / DeepSeek</strong> — vector mudelite integratsioon klikiga</li>
+<li><strong>Cross-AZ data transfer included</strong> — kuluvõit Multi-AZ klastritele</li>
+<li><strong>Graviton ja OR1 instances</strong> — cost-effective AWS-i enda hardware</li>
+</ul>
+<p>Kui sul on AWS-i keskkond, OpenSearch on pärisilmas tihti <strong>lihtsam ja odavam</strong> kui Elasticsearch Cloud Marketplace'i kaudu.</p>
+<h3 id="machine-learning-ja-vector-search">Machine learning ja vector search<a class="headerlink" href="#machine-learning-ja-vector-search" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Elastic</strong> pakub kahte asja, mis on praktikas väga lihtsalt kasutatavad:</p>
+<ul>
+<li><strong>ELSER</strong> (Elastic Learned Sparse EncodeR) — Elastic-i enda treenitud sparse retrieval mudel. Pre-trained, töötab inglise keeles. Lisaks toetab Elastic teisi embedding-mudeleid (nt e5-põhised multilingual mudelid), mida saab <code>semantic_text</code> väljaga siduda.</li>
+<li><strong><code>semantic_text</code> field</strong> (alates 8.13, 2024) — sa lisad oma indeksisse semantic_text-tüüpi välja, Elastic indekseerib selle automaatselt nii BM25-ga (sõnaline) kui ELSER-iga (semantiline). Päring annab hübriid-skoori. <strong>Üks API, kaks otsingumeetodit korraga.</strong></li>
+</ul>
+<p><strong>OpenSearch</strong> pakub kahte komplementaarset võimalust:</p>
+<ul>
+<li><strong>ML Commons plugin</strong> — sa registreerid oma mudeli (HuggingFace, ONNX, custom). Rohkem konfigureerimist, aga rohkem paindlikkust.</li>
+<li><strong>Neural search plugin</strong> — high-level abstraktsioon, mis kasutab ML Commons'i sees.</li>
+<li><strong>FAISS integratsioon</strong> — Facebook AI Similarity Search Library, optimeeritud vector indekseerimine.</li>
+<li><strong>OpenSearch Serverless vector database</strong> — alates 2024 on see <strong>default vector DB Amazon Bedrock Knowledge Bases'i jaoks</strong>. AWS-i ametlik RAG-infrastruktuur.</li>
+</ul>
+<p>Praktikas — Elastic on <strong>välja-kastist</strong> lihtsam (<code>semantic_text</code> on üks rida), OpenSearch on <strong>paindlikum ja AWS-iga sügavalt integreeritud</strong> (oma mudel, oma fine-tuning).</p>
+<h3 id="cloud-ja-managed-teenused">Cloud ja managed teenused<a class="headerlink" href="#cloud-ja-managed-teenused" title="Lingi sektsioonile">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pakkuja</th>
+<th>Toode</th>
+<th>Tähelepanekud</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elastic NV</td>
+<td>Elastic Cloud (AWS, GCP, Azure)</td>
+<td>täisteenus, 14-päevane trial krediitkaardiga</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td>Amazon OpenSearch Service</td>
+<td>kõige populaarsem managed OS, AWS-natiivne</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td><strong>Amazon OpenSearch Serverless</strong></td>
+<td>auto-scaled, vector DB Bedrock Knowledge Bases'i default</td>
+</tr>
+<tr>
+<td>Aiven</td>
+<td>OpenSearch managed</td>
+<td>multi-cloud, ei lukusta AWS-i</td>
+</tr>
+<tr>
+<td>Logz.io</td>
+<td>OpenSearch-põhine SaaS</td>
+<td>spetsialiseerunud logidele</td>
+</tr>
+<tr>
+<td>Bonsai, Elastic.co</td>
+<td>Väiksemad managed pakkujad</td>
+<td>startup'idele</td>
+</tr>
+</tbody>
+</table>
+<h3 id="skaala-arvud-2026">Skaala arvud (2026)<a class="headerlink" href="#skaala-arvud-2026" title="Lingi sektsioonile">&para;</a></h3>
+<p>Amazon OpenSearch Service'i raamid annavad arusaama, mida need süsteemid praktikas tähendavad <sup id="fnref:aws-os-quotas"><a class="footnote-ref" href="#fn:aws-os-quotas">12</a></sup>:</p>
+<ul>
+<li><strong>25 PB</strong> hot data ühes klastris</li>
+<li><strong>15 PB</strong> warm data lisaks</li>
+<li><strong>1000 data node'i</strong> maksimum</li>
+<li><strong>200 coordinator node'i</strong> lisaks</li>
+<li><strong>99.99% availability</strong> Multi-AZ + standby arhitektuuri korral</li>
+<li><strong>Trillions of requests per month</strong> — agregeeritud kõik AWS-i kliendid</li>
+</ul>
+<p>Need ei ole tüüpilised numbrid, mida sa oma keskkonnas kohtad — aga need näitavad, et tehnoloogia ei ole <strong>see</strong> piirang. Piirang on tüüpiliselt eelarve ja arendaja-aeg.</p>
+<h3 id="hinnad-ja-tco-millest-tegelikult-koosneb-arve">Hinnad ja TCO — millest tegelikult koosneb arve<a class="headerlink" href="#hinnad-ja-tco-millest-tegelikult-koosneb-arve" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui CFO küsib "miks Splunk on nii kallis ja kas saaks ELK-le üle minna?", siis vajad sa raami, kuidas neid võrrelda. Pole ühte "oige" hinda — on <strong>kolm fundamentaalselt erinevat hinnamudel</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Hinnamudel</th>
+<th>Kes kasutab</th>
+<th>Mis on kulu juur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Per-GB-ingested</strong></td>
+<td>Splunk Cloud <sup id="fnref:splunk-pricing"><a class="footnote-ref" href="#fn:splunk-pricing">6</a></sup>, Datadog Logs <sup id="fnref:datadog-pricing"><a class="footnote-ref" href="#fn:datadog-pricing">7</a></sup></td>
+<td>Iga GB sissetulev logi maksab. Lihtne arvutada, aga <strong>karistab logi-mahtu</strong> — sundib sind logimist vähendama.</td>
+</tr>
+<tr>
+<td><strong>Instance-based (resource)</strong></td>
+<td>Amazon OpenSearch Service <sup id="fnref:aws-os-pricing"><a class="footnote-ref" href="#fn:aws-os-pricing">8</a></sup>, self-hosted ES/OS</td>
+<td>Maksad <strong>node'ide eest</strong> (RAM × CPU × ketas), mitte logi-mahtude eest. Kasv on ennustatav, aga sa pead <strong>ise dimensioneerima</strong>.</td>
+</tr>
+<tr>
+<td><strong>Tier'i-põhine</strong></td>
+<td>Elastic Cloud (Standard/Gold/Platinum/Enterprise) <sup id="fnref:elastic-pricing"><a class="footnote-ref" href="#fn:elastic-pricing">9</a></sup>, Confluent Cloud</td>
+<td>Vali tier (RAM/CPU/storage komplekt) + add-ons. Tasakaal lihtsuse ja paindlikkuse vahel.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Praktilised suurused</strong> (avalike hinnakirjade põhjal, 2026 alguses):</p>
+<ul>
+<li><strong>AWS OpenSearch Service</strong>, 3-node klaster <code>r6g.large.search</code> (2 vCPU, 16 GB RAM, 100 GB EBS gp3): umbes <strong>$260–320/kuu</strong> on-demand + storage + transfer. Reserved Instances annab 30–50% allahindlust 1–3 aasta lepingul.</li>
+<li><strong>Elastic Cloud</strong>, Standard tier, väike production setup (4 GB RAM hot + 60 GB storage): umbes <strong>$95–110/kuu</strong>. Skaleerub lineaarselt tier'idega.</li>
+<li><strong>Splunk Cloud</strong>, ajaloolised hinnad olid <code>$1500–2000/GB/päev</code> tier; 2024+ uus "Workload Pricing" mudel on paindlikum, aga <strong>suurusjärk on sama</strong> — 100 GB/päev = 5–6-kohaline aastane arve.</li>
+<li><strong>Loki + Grafana Cloud</strong> (Day 2 katsetatud) on <strong>3–10× odavam</strong> per-GB ELK-st, sest indekseerib ainult silte, mitte täisteksti. Compromiss — vähem otsingu-paindlikkust.</li>
+</ul>
+<p><strong>TCO komponendid, mis sageli unustatakse:</strong></p>
+<ol>
+<li><strong>Cross-AZ data transfer</strong> — AWS-is maksab data liikumine AZ'ide vahel ($0.01–0.02/GB). 1 TB/päev kolme AZ'i vahel = ~$30/päev. <strong>Amazon OpenSearch Service includes seda</strong> — see on suur nähtamatu eelis. Self-managed ES Multi-AZ EC2-l peab kasutaja seda maksma.</li>
+<li><strong>RAM kui peamine kulutaja</strong> — ES/OS armastab heap-mälu (vector search'iga eriti, HNSW graafid mälus). 32 GB RAM node maksab tihti rohkem kui 1 TB SSD.</li>
+<li><strong>Operations overhead</strong> — self-hosted on "tasuta tarkvara", aga DevOps-tunde on vaja. SaaS = 2–3× tarkvara-hind, aga DevOps-aega ei kulu.</li>
+<li><strong>Search workload</strong> — vector search on <strong>CPU-intensiivne</strong>. ELSER mudel + 1M dokumenti = märgatav CPU-löik klastri kogu-koormusele. Planeeri <strong>eraldi node'id ML tööle</strong>, kui plaanid AI-funktsioone.</li>
+</ol>
+<p><strong>Mõistlik harjutus:</strong> võta oma praeguse seire-eelarve, jaga see klassi <code>[tarkvara, hardware/cloud, personali-aeg, andmeedastus]</code> kategooriasse. Kui sa lihtsalt vahetad Splunki ELK vastu, <strong>personali-aeg tõenaoliselt kasvab</strong> ja seda tuleb arvestada otsuses.</p>
+<div class="admonition tip">
+<p class="admonition-title">💭 Mõtle hetk — enne edasilugemist</p>
+<p>Sinu organisatsiooni praegune logimine — kumb hinnamudel on aluseks? Per-GB-ingested (Splunk, Datadog), instance-based (ES/OS on-prem või AWS) või SaaS-tier?</p>
+<p>Kui sa ei tea — see ise on signaal: keegi sinu finants- või operatsiooni-rollis teab seda, aga see info ei jõua sinuni. Esmaspäeval tasub küsida.</p>
+</div>
+<h3 id="litsents-luhidalt">Litsents — lühidalt<a class="headerlink" href="#litsents-luhidalt" title="Lingi sektsioonile">&para;</a></h3>
+<ul>
+<li><strong>Elasticsearch</strong> = AGPL-3 <strong>või</strong> SSPL <strong>või</strong> Elastic License (kolmest valida)</li>
+<li><strong>OpenSearch</strong> = Apache 2.0 (lihtne, vaba)</li>
+</ul>
+<p>Kui sa pakud teenust kommertsiaalselt ja tahad vältida juriidilist debatti — OpenSearch on lihtsam. Kui sul on lihtsalt sisemine kasutus, Elasticsearchi kõik kolm litsentsi on okei.</p>
+<h3 id="kus-kumb-sobib-sysadmin-perspektiivist">Kus kumb sobib — sysadmin perspektiivist<a class="headerlink" href="#kus-kumb-sobib-sysadmin-perspektiivist" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Vali Elastic Cloud / Elasticsearch on-prem kui:</strong></p>
+<ul>
+<li>Sul on kommertsiaalne nõue (sertifitseerimine, 24/7 support)</li>
+<li>AI / semantic search on prio ja sa tahad lihtsat API-d (<code>semantic_text</code>)</li>
+<li>Sa kasutad Elastic APM-i (Elastic on siin tugevam kui OpenSearch)</li>
+<li>Sa pole AWS-is</li>
+</ul>
+<p><strong>Vali Amazon OpenSearch Service kui:</strong></p>
+<ul>
+<li>Sa oled AWS-i keskkonnas</li>
+<li>Vendor lock-in vältimine on prio (Apache 2.0)</li>
+<li>Tahad Multi-AZ + standby out-of-the-box (99.99%)</li>
+<li>AWS-i Bedrock-integratsioon ja RAG on tee</li>
+</ul>
+<p><strong>Vali OpenSearch Serverless kui:</strong></p>
+<ul>
+<li>Sa ehitad RAG-rakendust Bedrock Knowledge Bases'iga</li>
+<li>Vector DB peaks auto-skaleeruma (mitte fixed-size klaster)</li>
+<li>Operational overhead peab olema null</li>
+</ul>
+<p><strong>Vali OpenSearch on-prem kui:</strong></p>
+<ul>
+<li>Suur self-hosted klaster, vaba security plugin on tähtis</li>
+<li>Andmed ei tohi AWS-i lahkuda (compliance, GDPR)</li>
+<li>Sa tahad oma ML mudelid laadida (ML Commons paindlikkus)</li>
+</ul>
+<p>Sellega oleme valmis labi alustama. <strong>Osa 1</strong>: paneme Elasticsearchi ja Kibana single-node klastrina püsti. Vaata, mis juhtub esimese indeksi loomisega ja miks Kibana näitab klastri olekut <strong>kollasena</strong>.</p>
+<hr />
+<h2 id="l2-arhitektuur-solmed-shardid-quorum-999">L2 — Arhitektuur: sõlmed, shardid, quorum, 99.9%<a class="headerlink" href="#l2-arhitektuur-solmed-shardid-quorum-999" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 2.</strong> ~15 min, hajutuse 2. plokk — enne Osa 2 (3-node klastri laienemine).<br />
+<strong>Miks see sulle oluline:</strong> aitab sul dimensioneerida klastrit, mis ei kuku ootamatult — mitu master node'i, kui palju RAM-i, kus on backup'id, kuidas Kafka puhverdab koormust, ja millal mis indeks tier'isse läheb.</p>
+</blockquote>
+<p>Osa 1 lõpus nägid sa midagi, mis võib esimese pilguga tunduda imelik: lõid indeksi, läksid Kibanasse, ja <strong>klastri olek näitas kollasena</strong>. Andmed olid sees, otsing töötas, aga oleku-tuli oli kollane. Miks?</p>
+<p>Vastus on <strong>replica shardides</strong> ja sellega, et single-node klastris pole võimalik neid kuhugi paigutada. Selle teema raames vaatame, kuidas Elasticsearch (ja OpenSearch — identne arhitektuur) on <strong>päriselt</strong> ehitatud, et mõista, miks production-klaster näeb välja teistsugune kui Osa 1 setup.</p>
+<h3 id="solmerollid-neli-rolli-sama-binary">Sõlmerollid — neli rolli, sama binary<a class="headerlink" href="#solmerollid-neli-rolli-sama-binary" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elasticsearchi node ja OpenSearchi node on sama binary, aga konfiguratsioonis saab määrata, mis <strong>rolli</strong> see node täidab. Üks node võib täita mitut rolli korraga (väikeses klastris üks node täidab kõike). Aga tootmiskeskkondades <strong>eraldatakse rollid</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Roll</th>
+<th>Mida teeb</th>
+<th>Resurssi-profiil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>master</strong></td>
+<td>Hoiab klastri olekut (mis indeksid, mis shardid, mis node-id), võtab vastu cluster-tasemel päringuid (indeksi loomine, shard'i liigutamine)</td>
+<td>Vähe CPU, vähe mälu, kiired diskid</td>
+</tr>
+<tr>
+<td><strong>data</strong></td>
+<td>Hoiab tegelikke shardide andmeid, indeksib uusi dokumente, vastab otsingu-päringutele</td>
+<td>Palju CPU, palju mälu (heap + page cache), kiired diskid</td>
+</tr>
+<tr>
+<td><strong>ingest</strong></td>
+<td>Käivitab ingest pipeline'e (grok, geoIP, rename, script processor jne) enne dokumendi salvestamist</td>
+<td>Palju CPU</td>
+</tr>
+<tr>
+<td><strong>coordinating</strong></td>
+<td>Võtab vastu klientide päringuid, jagab need data node'idele, koondab tulemused</td>
+<td>Vähe diski, keskmine CPU/mälu</td>
+</tr>
+</tbody>
+</table>
+<p>Iga node on <strong>vaikimisi kõik neli rolli</strong> (default). Tootmises eraldad neid:</p>
+<ul>
+<li>3 × dedicated master (väikesed, ainult master)</li>
+<li>N × data nodes (suured, palju mälu)</li>
+<li>2+ × coordinating-only nodes load balancer rollis (suure päringukoormuse korral)</li>
+<li>ingest võib olla data node'il kaasas või eraldi</li>
+</ul>
+<p><strong>Miks eraldada?</strong> Sest master peab klastri olekut hoidma <strong>stabiilselt</strong>. Kui sama node teeb ka data tööd ja saab raske päringu — GC pause, OOM, ülekoormus — kogu klastri olekuhaldus läheb maha. Eraldatud master-only node on <strong>väike ja vaikne</strong>, ainult olekut hoiab.</p>
+<p>Visuaalselt näeb production-klaster välja umbes nii:</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph KL["🌐 Klient / app / Logstash / Beats"]
+        APP["Rakendus saadab päringuid"]
+    end
+
+    APP --&gt; LB["Öle LB / DNS"]
+
+    subgraph C["Coordinating-only nodes"]
+        C1["coord-1"]
+        C2["coord-2"]
+    end
+
+    subgraph M["👑 Master-only nodes (3) — quorum"]
+        M1["master-1"]
+        M2["master-2"]
+        M3["master-3"]
+    end
+
+    subgraph D["💾 Data nodes (N, koos ingest rolliga)"]
+        D1["data-1&lt;br/&gt;shard A1, B2 replica"]
+        D2["data-2&lt;br/&gt;shard A2, B1 replica"]
+        D3["data-3&lt;br/&gt;shard B1, B2, A2 replica"]
+    end
+
+    LB --&gt; C1
+    LB --&gt; C2
+    C1 -. cluster state .-&gt; M
+    C2 -. cluster state .-&gt; M
+    C1 --&gt; D1
+    C1 --&gt; D2
+    C1 --&gt; D3
+    C2 --&gt; D1
+    C2 --&gt; D2
+    C2 --&gt; D3
+    M -. juhib shard'ide paigutust .-&gt; D
+
+    style M fill:#ffe0b2
+    style D fill:#c8e6c9
+    style C fill:#bbdefb</code></pre>
+<p>Klient ei pea teadma, kus mis shard on — coordinator teab seda master'i cluster state'ist ja teeb routing'u ära.</p>
+<h3 id="shardid-primary-ja-replica">Shardid — primary ja replica<a class="headerlink" href="#shardid-primary-ja-replica" title="Lingi sektsioonile">&para;</a></h3>
+<p>Indeks Elasticsearchis on <strong>loogiline konteiner</strong>. Füüsiliselt jaotub ta <strong>shardideks</strong> — Lucene-indeksid, mis paiknevad data node'idel.</p>
+<p>Indeksi loomisel määrad kaks numbrit:</p>
+<ul>
+<li><strong><code>number_of_shards</code></strong> (primary) — mitmeks tükiks indeks jaotub. Vaikimisi 1. Hilisem muutmine on raske (reindex), niisiis vali ette.</li>
+<li><strong><code>number_of_replicas</code></strong> — mitu koopiat igast primary shardist tehakse. Vaikimisi 1. Saab jooksvalt muuta.</li>
+</ul>
+<p>Näide: indeks <code>logs-2026.05</code> <code>number_of_shards: 3</code> ja <code>number_of_replicas: 1</code> = <strong>3 primary + 3 replica = 6 shardi kokku</strong>. Kui sul on 3 data node'i, paigutab Elasticsearch shardid nii, et iga primary ja tema replica on <strong>eri node'idel</strong> — muidu node'i kadu kaotaks andmed.</p>
+<p><strong>Roll päringus:</strong></p>
+<ul>
+<li>Indekseerimine: dokument läheb <strong>primary</strong>'sse, sealt <strong>replica</strong>'sse (synchronous, mitte fire-and-forget). Kui replica ei kinnita, primary käsib master'il replica märkida <code>STALE</code>.</li>
+<li>Otsing: koordinaator vaatab, kus iga shardi koopia on, ja saadab päringu <strong>ühele neist</strong> (round-robin, mitte kõigile). Replica niisiis pole ainult HA, vaid ka <strong>päringu-koormuse jagaja</strong>.</li>
+</ul>
+<p><strong>Tagasi Osa 1 kollase oleku juurde:</strong> single-node klaster. <code>number_of_replicas: 1</code> (default). Replica peab paiknema <strong>erinevas node'is</strong> kui primary. Erinevat node'i pole. Replica jääb <strong>unassigned</strong>. Klastri olek = <strong>YELLOW</strong> ("toimib, aga pole redundantne"). Lisa teine node → replica paigutub → GREEN. See on Osa 2 esimene samm.</p>
+<h3 id="cluster-state-ja-quorum-miks-kolm-master-nodei">Cluster state ja quorum — miks <strong>kolm</strong> master node'i<a class="headerlink" href="#cluster-state-ja-quorum-miks-kolm-master-nodei" title="Lingi sektsioonile">&para;</a></h3>
+<p>Master node hoiab <strong>cluster state</strong>'i: tabelit, mis loetleb iga indeksi, shardi, node-i ja nende staatuse. See on üks autoriteetne allikas — ja see peab olema <strong>järjepidev kõigil masteri-kandidaatidel</strong>.</p>
+<p>Probleem tekib siis, kui võrk lahkneb (network partition). Kujuta ette: 2 master node'i, võrk lahkneb pooleks.</p>
+<ul>
+<li>Node A arvab: "B kadus, mina olen ainus, ma olen master"</li>
+<li>Node B arvab: "A kadus, mina olen ainus, mina olen master"</li>
+<li>Klastri olek lahkneb kaheks. Ühel pool kirjutatakse indeksisse X, teisel pool kirjutatakse indeksisse Y. Võrk taastub — <strong>konflikt</strong>, andmed on ebajärjepidevad. See on <strong>split-brain</strong>.</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+    subgraph L["AZ-1 / Datacenter 1"]
+        A["👑 master-1&lt;br/&gt;(arvab: olen ainus)"]
+        DA["data-1"]
+    end
+
+    subgraph R["AZ-2 / Datacenter 2"]
+        B["👑 master-2&lt;br/&gt;(arvab: olen ainus)"]
+        DB["data-2"]
+    end
+
+    A -. ❌ kadunud .-x B
+    A --&gt; DA
+    B --&gt; DB
+    DA -. kirjutab indeks X .-&gt; DA
+    DB -. kirjutab indeks Y .-&gt; DB
+
+    style A fill:#ffcdd2
+    style B fill:#ffcdd2</code></pre>
+<p>Kaks master'it korraga, mõlemad võtavad kirjutusi vastu — võrk taastub, <strong>kumb on "õige" andmeseis?</strong></p>
+<p>Lahendus: <strong>quorum</strong>. Master valitakse ainult siis, kui <strong>enamus</strong> master-kandidaatidest nõustub. Enamus tekib ainult ühel pool partitsiooni.</p>
+<p>Matemaatika: kui sul on <strong>N</strong> master-kandidaati, quorum = <strong>⌊N/2⌋ + 1</strong>.</p>
+<ul>
+<li>N=2 → quorum=2 → kui üks kaob, klaster peatub. Halvem kui üks node!</li>
+<li>N=3 → quorum=2 → üks võib kaduda, klaster töötab edasi. ✅</li>
+<li>N=5 → quorum=3 → kaks võib kaduda. Suurematele klastritele.</li>
+</ul>
+<p><strong>Niisiis tõsiselt mõeldud klaster algab 3 dedicated master node'iga.</strong> Mitte sellepärast et "3 on hea arv", vaid sellepärast et quorum-matemaatika nõuab paaritut arvu ja vähem kui 3 ei talu ühtegi kadu.</p>
+<h3 id="999-ja-9999-praktikas">99.9% (ja 99.99%) praktikas<a class="headerlink" href="#999-ja-9999-praktikas" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>99.9% uptime</strong> = ~8.7 tundi downtime aastas. <strong>99.99%</strong> = ~52 minutit aastas. <strong>99.999%</strong> ("viis üheksat") = ~5 minutit aastas. Igale lisanduvale üheksale kasvab kulu eksponentsiaalselt.</p>
+<p>Mida need numbrid praktikas nõuavad:</p>
+<table>
+<thead>
+<tr>
+<th>SLA</th>
+<th>Mida nõuab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>99.5% (best-effort)</td>
+<td>1 node võib jooksta, restart on okei.</td>
+</tr>
+<tr>
+<td>99.9%</td>
+<td>3-node klaster, replica=1, automaatne shard recovery. Master + data eraldatud või kombineeritud. Plaaniline hooldus nädalavahetustel.</td>
+</tr>
+<tr>
+<td>99.99%</td>
+<td><strong>Multi-AZ</strong> (3 erinevat data-keskust või AWS Availability Zone'i). 3 dedicated master üle AZ'ide. Replica üle AZ-ide. Snapshot-de regulaarne testimine.</td>
+</tr>
+<tr>
+<td>99.999%</td>
+<td>Multi-region + CCR (Cross-Cluster Replication). Reaalselt vähesed väljärakendused nõuavad seda.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Multi-AZ + standby</strong> (AWS OpenSearch Service erijuhtum): 3 master + 3 data üle 3 AZ-i, lisaks <strong>standby data nodes</strong> ühes AZ-is, mis ei võta päringuid vastu, aga hoiavad replicaid. AZ kao korral standby võtab koormuse üle ilma rebalancing'uta. See on AWS-i ametlik <strong>99.99% mudel</strong>.</p>
+<h3 id="snapshots-ainus-tegelik-backup">Snapshots — ainus tegelik backup<a class="headerlink" href="#snapshots-ainus-tegelik-backup" title="Lingi sektsioonile">&para;</a></h3>
+<p>Replica ei ole backup. Kui keegi kustutab <code>_delete_by_query</code> valega õla, replica sai sama käsu — andmed kadusid mõlemast. Backup tähendab <strong>snapshot</strong>'i, mis on sõltumatu point-in-time koopia välises storage'is.</p>
+<p>Elasticsearch ja OpenSearch toetavad snapshot'e mitmesse repositooriumisse:</p>
+<ul>
+<li><strong>S3</strong> (kõige levinum) või S3-ühilduvad (MinIO, Ceph)</li>
+<li><strong>Azure Blob, GCS</strong></li>
+<li><strong>Shared filesystem</strong> (NFS) — testimiseks ok, tootmisse mitte</li>
+<li><strong>HDFS</strong> — vanad keskkonnad</li>
+</ul>
+<div class="language-http highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="err">PUT _snapshot/my_s3_repo</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="err">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="err">  &quot;type&quot;: &quot;s3&quot;,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="err">  &quot;settings&quot;: { &quot;bucket&quot;: &quot;my-elasticsearch-backups&quot;, &quot;region&quot;: &quot;eu-north-1&quot; }</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="err">}</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="err">PUT _snapshot/my_s3_repo/snapshot_2026_05_17</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="err">{ &quot;indices&quot;: &quot;logs-*&quot;, &quot;include_global_state&quot;: false }</span>
+</span></code></pre></div>
+<p><strong>Snapshot Lifecycle Management (SLM)</strong> automatiseerib: igapäevased snapshotid, 30 päeva säilitamine, vana kustutamine. <strong>Aga —</strong> ja see on oluline — <strong>testi restore</strong>'i regulaarselt. Snapshot, mida pole kunagi taastatud, ei ole backup.</p>
+<h3 id="ccr-cross-cluster-replication">CCR — Cross-Cluster Replication<a class="headerlink" href="#ccr-cross-cluster-replication" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kahe klastri vahel: üks <strong>leader</strong>, teine <strong>follower</strong>. Leader'i indeksid replikeeritakse follower'isse asynkroonselt. Kasutusjuhtumid:</p>
+<ul>
+<li><strong>Disaster recovery</strong> — teine klaster teises piirkonnas, leader'i kao korral follower võtab üle</li>
+<li><strong>Geo-distribuited reads</strong> — Euroopa, USA, APAC klastrid replikeerivad samad andmed, kliendid otsivad kõige lähemast</li>
+<li><strong>Andmete eristamine</strong> — production indeksid replikeeritakse analytics-klastrisse, kus DBA-d teevad raskeid päringuid ilma tootmist mojutamata</li>
+</ul>
+<p>Elasticsearchis on CCR <strong>Platinum-licence</strong> feature. OpenSearchis on <strong>cross-cluster replication</strong> plugin <strong>vaba</strong>. See on üks koht, kus OpenSearch licens-strateegia paistab välja sysadminile.</p>
+<h3 id="andmevoog-ja-kafka-kui-ingest-buffer">Andmevoog ja Kafka kui ingest buffer<a class="headerlink" href="#andmevoog-ja-kafka-kui-ingest-buffer" title="Lingi sektsioonile">&para;</a></h3>
+<p>Reaalses tootmiskeskkonnas ei voola logid otse <code>Filebeat → Elasticsearch</code>. Vahel on <strong>buffer</strong>, mis lahendab kolm konkreetset probleemi:</p>
+<ol>
+<li><strong>Peak hours</strong> — logide maht ei ole ühtlane. Black Friday õhtu = 10× tavakoormus. Kui ES on selle jaoks dimensioneerimata, ingest queue üleujutub, dokumendid kaovad.</li>
+<li><strong>ES downtime</strong> — plaaniline uuendus või unplanned outage. Agendid (Filebeat, Vector, Fluent Bit) saadavad andmeid kuhugi, kuhu peavad. Kui ES ei vasta, agent peab kas pufferdama lokaalselt või kaotama.</li>
+<li><strong>Multi-consumer</strong> — sama logivoog läheb ES-i (operatiivne), S3 Iceberg'sse (analytics), Splunki (security), Loki-sse (Grafana). Iga konsument ei pea iseseisvalt agendiga rääkima.</li>
+</ol>
+<p><strong>Apache Kafka</strong> <sup id="fnref:kafka"><a class="footnote-ref" href="#fn:kafka">2</a></sup> on de facto standard selle puhverdamise jaoks. Tüüpiline pipeline:</p>
+<pre class="mermaid"><code>flowchart LR
+    A["📜 Rakendused&lt;br/&gt;Filebeat / Vector / Fluent Bit"] --&gt; K[("Kafka&lt;br/&gt;topic: logs-raw")]
+    K --&gt; L1["Logstash&lt;br/&gt;(parse, enrich)"]
+    K --&gt; S3["S3 / Iceberg&lt;br/&gt;(long-term)"]
+    K --&gt; SP["Splunk / SIEM"]
+    L1 --&gt; ES[("Elasticsearch / OpenSearch")]
+
+    style K fill:#fff3e0
+    style ES fill:#c8e6c9</code></pre>
+<p><strong>Komponendid, mida tasub teada:</strong></p>
+<ul>
+<li><strong>Kafka Connect</strong> — sisseehitatud konnektorid: source (Filebeat-laadne) ja sink (<code>elasticsearch-sink-connector</code>). Konfiguratsioonifail, mitte koodi-kirjutamine.</li>
+<li><strong>Schema Registry</strong> (Confluent) — hoiab Avro/Protobuf schemasid, et tootja ja tarbija ei lahkneks. Oluline kui logid on struktureeritud.</li>
+<li><strong>Confluent Platform</strong> — kommertspakkuja Apache Kafka peal (Confluent Cloud, Confluent Server). Apache Kafka ise on tasuta, Confluent-i lisand on enterprise-features (RBAC, audit, multi-region).</li>
+<li><strong>Amazon MSK</strong> ja <strong>Aiven for Apache Kafka</strong> — managed Kafka pilves.</li>
+</ul>
+<p>Suur küsimus mille peale komistab paljud setup'id: <strong>mis on retention?</strong> Kafka topic'us hoitakse sõnumeid määratud aeg (default 7 päeva) või määratud mõõtani (näiteks 100 GB topic'u kohta). Pikem retention = rohkem disk. Lyhem = kui ES on maas üle retention'i, kaotad andmeid.</p>
+<p>Netflix, Uber ja Booking.com on avalikult kirjutanud oma <code>Kafka → Elasticsearch</code> pipeline'idest. Tüüpiline skaala: <strong>kümned kuni sajad miljardid sõnumeid päevas</strong>, mis lähevad puhvrist mitmesse konsumendisse. <sup id="fnref:netflix-kafka"><a class="footnote-ref" href="#fn:netflix-kafka">3</a></sup></p>
+<h3 id="indeksite-elutsukkel-ilm-ja-hotwarmcold-tiers">Indeksite elutsükkel — ILM ja Hot/Warm/Cold tiers<a class="headerlink" href="#indeksite-elutsukkel-ilm-ja-hotwarmcold-tiers" title="Lingi sektsioonile">&para;</a></h3>
+<p>Log-indeksid on <strong>time-series</strong>: tehakse iga päev (<code>logs-2026.05.17</code>), kirjutatakse ainult üks päev, päringuid tehakse vähem aja jooksul. Kui sa hoiad neid kõik <strong>kuum-tasemel</strong> (kiired SSD-d, replicas, RAM-cache), satud kahel viisil:</p>
+<ul>
+<li><strong>Kulu</strong> — kiired diskid on kallid. 6 kuu kõik indeksid kuumal SSD-l = nDC eelarve.</li>
+<li><strong>Klastri rõhk</strong> — iga avatud indeks tarbib heap-mälu, file descriptoreid, segmente. Tuhandeid avatud indekseid ühes klastris lööb master node'i.</li>
+</ul>
+<p>Lahendus: <strong>Index Lifecycle Management (ILM)</strong> Elasticsearchis <sup id="fnref:ilm-es"><a class="footnote-ref" href="#fn:ilm-es">4</a></sup>, ehk <strong>Index State Management (ISM)</strong> OpenSearchis <sup id="fnref:ism-os"><a class="footnote-ref" href="#fn:ism-os">5</a></sup>. Mõlemad teevad sama asja — indeksid läbivad <strong>tier'eid</strong> vananedes:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Tüüpiline vanus</th>
+<th>Hardware</th>
+<th>Replicas</th>
+<th>Operatsioon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>🔥 Hot</strong></td>
+<td>0–7 p</td>
+<td>Kiire SSD, palju RAM</td>
+<td>1–2</td>
+<td>Kirjutamine + päringud, hoitakse RAM-is</td>
+</tr>
+<tr>
+<td><strong>🌡️ Warm</strong></td>
+<td>7–30 p</td>
+<td>Aeglasem SSD või kiired HDD</td>
+<td>1</td>
+<td>Ainult päringud, force-merge tehtud</td>
+</tr>
+<tr>
+<td><strong>❄️ Cold</strong></td>
+<td>30–90 p</td>
+<td>HDD, vähem RAM</td>
+<td>0–1</td>
+<td>Päringud aeglased aga toimivad</td>
+</tr>
+<tr>
+<td><strong>🧊 Frozen</strong></td>
+<td>90+ p</td>
+<td><strong>S3 / object store</strong></td>
+<td>0 (searchable_snapshot)</td>
+<td>Päringud toimivad, aga eraldi cache-st, sekundid kuni minutid</td>
+</tr>
+<tr>
+<td><strong>🚮 Delete</strong></td>
+<td>365+ p</td>
+<td>—</td>
+<td>—</td>
+<td>Indeks kustutatakse või jäetakse ainult snapshot S3-s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Searchable snapshots</strong> (mol Elastic ja OpenSearch) on võtmetehnoloogia frozen-tier'i jaoks: indeks elab <strong>ainult S3-s</strong>, mitte data node'i kettal. Klaster hoiab väiksed metadata-fragmendid, päring läheb S3-le. Kulu kukub <strong>10–20×</strong> (S3 on odav), aga päringu latentsus kasvab.</p>
+<p>Tüüpiline ILM-policy näide (Elastic JSON):</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_ilm/policy/logs</span><span class="mi">-</span><span class="err">policy</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">&quot;phases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">&quot;hot&quot;</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;rollover&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50gb&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">&quot;warm&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7d&quot;</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;forcemerge&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_num_segments&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;set_priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">&quot;cold&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;30d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;freeze&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">&quot;frozen&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;90d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;searchable_snapshot&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;snapshot_repository&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_s3_repo&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">&quot;delete&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;365d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;delete&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>Rollover</strong> — vahetatakse kirjutus-indeks (<code>logs-000001</code> → <code>logs-000002</code>) kui jooksev indeks jõuab 7 päeva või 50 GB. Vana indeks suletakse kirjutamisele, läheb warm-tier'isse väikselt ootama. <strong>Data streams</strong> (Elasticsearch 7.9+, OpenSearch 1.2+) automatiseerib selle — sa kirjutad data-stream'i <code>logs</code>, ES halduskeel määrab õige backing indeksi.</p>
+<p><strong>Tier'ide praktiline jagamine</strong> ei pea olema kõikiidne. Väike klaster (3 data node) võib hoida hot + warm samadel node'idel, ja cold + frozen on S3. Suur klaster (50+ data node) eraldab tier'id node-rollidega (<code>node.roles: [data_hot]</code>, <code>data_warm</code>, <code>data_cold</code>, <code>data_frozen</code>).</p>
+<h3 id="kokkuvote-l2-st">Kokkuvõte L2-st<a class="headerlink" href="#kokkuvote-l2-st" title="Lingi sektsioonile">&para;</a></h3>
+<p>Production-klaster 2026 koosneb: <strong>3 dedicated master + N data + 2+ coordinating-only</strong>, kus N sõltub indeksite ja päringukoormuse mahust. Shardide arv valitakse ette indeksi loomisel. Replicad jagavad päringukoormust ja annavad HA. Quorum nõuab paaritu arvu master-kandidaate, miinimum 3. 99.9% on saavutatav 3-node klastris, 99.99% nõuab Multi-AZ + standby, 99.999% Multi-region + CCR. Snapshot S3-le on ainus tegelik backup — ja seda tuleb testida.</p>
+<p>Osa 2 lab'is laiendad single-node klastri 3-node klastriks ja vaatad, kuidas oleku-tuli muutub YELLOW → GREEN, ning katsetad, mis juhtub kui ühe node'i tapad.</p>
+<hr />
+<h2 id="l3-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad">L3 — Otsing: lexical (BM25) vs vector, ja kuidas need töötavad<a class="headerlink" href="#l3-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 3.</strong> ~15 min, hajutuse 3. plokk — enne Osa 4 (semantic_text + kNN demo).<br />
+<strong>Miks see sulle oluline:</strong> aitab sul otsustada, kas sinu kasutusjuhul (logide otsing, audit, klienditugi, dokumentatsioon) on vector search või RAG vajalik — või piisab klassikalisest BM25-st. Vector pole alati õige lahendus.</p>
+</blockquote>
+<p>Logi-otsing on Elasticsearchi põhi-kasutusjuhtum, mida köik teavad. Aga 2024+ on otsing <strong>kaheks haru ajunenud</strong>: klassikaline <strong>lexical</strong> (sõnapotsing) ja moderne <strong>vector / semantic</strong> (tähendus-otsing). Mõlema all on <strong>algoritmid</strong> mida tasub tunda — mitte sellepärast et sa neid käsitsi implementeeriks, vaid sellepärast et sa pead mõistma, <strong>miks</strong> üks või teine sobib või mitte.</p>
+<h3 id="lexical-otsing-inverted-index-bm25">Lexical otsing: inverted index + BM25<a class="headerlink" href="#lexical-otsing-inverted-index-bm25" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Inverted index</strong> on Lucene'i (ja seega ka Elasticsearch / OpenSearch) põhi-andmestruktuur. Idee on lihtne: tagurpidi tavalisest dokument-→-sõnade-suunast on <strong>sõna-→-dokumentide</strong> suund.</p>
+<p>Dokumendid:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>doc1: &quot;the quick brown fox&quot;
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>doc2: &quot;the lazy dog&quot;
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>doc3: &quot;the quick blue ocean&quot;
+</span></code></pre></div></p>
+<p>Inverted index:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>the   → [doc1, doc2, doc3]
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>quick → [doc1, doc3]
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>brown → [doc1]
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>fox   → [doc1]
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>lazy  → [doc2]
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>dog   → [doc2]
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>blue  → [doc3]
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>ocean → [doc3]
+</span></code></pre></div></p>
+<p>Päring <code>quick brown</code> → vaatame mis dokumentides on <code>quick</code> (doc1, doc3), mis dokumentides on <code>brown</code> (doc1). Eeldades AND-loogikat: doc1. Eeldades OR-loogikat: doc1 ja doc3.</p>
+<p>See on <strong>kiire</strong> (otsiba sõna hash-tabelist, mitte kõigi dokumentide läbivaatamine) ja <strong>täpne</strong> (kui sõna on samas vormis, leitakse).</p>
+<p>Aga "kiire ja täpne" pole <strong>piisav</strong>. Vaja on <strong>järjestada</strong> — milline dokument on <strong>kõige relevantsem</strong> päringule?</p>
+<h3 id="bm25-relevantsi-algoritm">BM25 — relevantsi algoritm<a class="headerlink" href="#bm25-relevantsi-algoritm" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>BM25</strong> (Best Matching 25, Okapi BM25 perekond) on Lucene'is vaikimisi kasutusel olev relevantsuse-algoritm — versioonist 5.0 alates Elasticsearchis (varem TF-IDF). Skoor sõltub kolmest jouust:</p>
+<ol>
+<li><strong>Term frequency (TF)</strong> — mitu korda otsisõna dokumendis esineb? Rohkem = parem, aga <strong>küllastusega</strong> (10 esinemist on parem kui 1, aga 100 ei ole oluliselt parem kui 10).</li>
+<li><strong>Inverse document frequency (IDF)</strong> — kui haruldane on otsisõna kogu korpuses? <code>the</code> on igas dokumendis, <strong>madala IDF-iga</strong> (ei aita eristada). <code>quorum</code> on harva, <strong>kõrge IDF</strong>.</li>
+<li><strong>Field length normalization</strong> — lyhike dokument, kus sõna esineb, on tihti relevantsem kui pikk dokument, kus sama sõna esineb.</li>
+</ol>
+<p>Matemaatiliselt: <code>score(D, Q) = Σ IDF(qi) · (TF(qi, D) · (k₁ + 1)) / (TF(qi, D) + k₁ · (1 - b + b · |D|/avgdl))</code></p>
+<p>Sinu ülesanne ei ole seda valemi peäst teada. Sinu ülesanne on mõista, <strong>mida BM25 mootor järjestab</strong>: dokumendid, mis sisaldavad päringus olevaid sõnu <strong>sageli, haruldastes kohtades ja lühikestes lõikudes</strong>.</p>
+<h3 id="kus-lexical-otsing-kukub-labi">Kus lexical otsing kukub läbi<a class="headerlink" href="#kus-lexical-otsing-kukub-labi" title="Lingi sektsioonile">&para;</a></h3>
+<p>Proovi monitooringu-perspektiivist võtta — oled hommikul kontoris, dashboard näitab et <strong>API on aeglane</strong>, ja sa otsid logist <code>database connection problems</code>. Mida BM25 tähistab? Dokumendid, kus on sõnad <strong>"database"</strong>, <strong>"connection"</strong> ja <strong>"problems"</strong>.</p>
+<p>Aga mida sina <strong>tegelikult otsid</strong>? Läbi viimase 24 tunni logide on neid kirjeid sellistel kujudel:</p>
+<ul>
+<li><code>ERROR: DB timeout after 30s</code></li>
+<li><code>Connection pool exhausted, waiting 5s</code></li>
+<li><code>Lost connection to database server, retrying</code></li>
+<li><code>SQLException: Cannot acquire connection</code></li>
+<li><code>psycopg2.OperationalError: server closed the connection</code></li>
+</ul>
+<p><strong>Ükski neist ei sisalda sõna "problems".</strong> Tihti ei sisalda isegi "database". BM25 ei leia neid. See on <strong>vocabulary mismatch problem</strong> — sinu mentaalne sõnastik ("database connection problems") ja logi-rea sõnastik (<code>pool exhausted</code>, <code>OperationalError</code>) on erinevad.</p>
+<p>Praktikas tähendab see, et incident response võtab kauem — sa pead läbi proovima 5–10 erinevat otsisõna, enne kui leiad selle, mis su logides kasutusel on.</p>
+<p>Lahendus: <strong>vector otsing</strong>, mis ei võrdle sõnu, vaid <strong>tähendusi</strong>.</p>
+<h3 id="edasine-areng-vector-search-ja-rag-monitooringus">Edasine areng — vector search ja RAG monitooringus<a class="headerlink" href="#edasine-areng-vector-search-ja-rag-monitooringus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Alates 2024-st on Elasticsearch ja OpenSearch lisanud <strong>vector search</strong> ja <strong>RAG (Retrieval-Augmented Generation)</strong> võimekuse. Tänu sellele toimivad:</p>
+<ul>
+<li><strong>Elastic AI Assistant</strong> ja <strong>Splunk AI Assistant</strong> — sa küsid <code>mis juhtus eile õhtul kell 19:00?</code>, AI leiab vector storage'st (sinu logid + traces + alerts) konteksti ja vastab.</li>
+<li><strong>Semantic log pattern matching</strong> — <code>leia kõik database connectivity issues</code> leiab nii <code>pool exhausted</code>, <code>OperationalError</code>, <code>lost connection</code>.</li>
+<li><strong>Alert-korrelatsioon</strong> — 1000 alerti grupeeritakse mustrite järgi ja antakse juur-põhjus.</li>
+<li><strong>Runbook-otsing</strong> — <code>kuidas taaskäivitada Redis cluster?</code> leiab vastuse sinu organisatsiooni wiki-st.</li>
+<li><strong>Postmortem auto-draft</strong> — AI kirjutab esmase mustandi incident'i kohta.</li>
+</ul>
+<p>Tänase loengu põhi-fookus on <strong>logide-otsing klassikaliselt</strong> (BM25), sest see on igapäevatöö Kibana Discoveri ja OpenSearch Dashboards'i Discover'i lahtris. Vector search ja RAG-i tehniline pool — embedding mudelid, HNSW algoritm, FAISS, ELSER, <code>semantic_text</code>, ML Commons, hybrid search — on <strong>eraldi lisalugemises</strong>:</p>
+<div class="admonition abstract">
+<p class="admonition-title">📖 Lisalugemine</p>
+<p>Vt eraldi peatükk <strong><a href="../paev3-vector-rag-lisalugemine/">Päev 3 — Lisalugemine: Vector search, RAG ja AI monitooringus</a></strong> — ~25 min lugemist, sobib süvenemiseks AI-suuna huvilisele.</p>
+</div>
+<h3 id="kokkuvote-l3-st">Kokkuvõte L3-st<a class="headerlink" href="#kokkuvote-l3-st" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lexical (BM25) on <strong>logide-otsingu standard</strong> — kiire, täpne, soodne. Sinu igapäevatöö Kibana Discover'is ja OS Dashboards Discover'is on <strong>see</strong>. Vector search ja RAG on <strong>edasine areng</strong>, mis 2024+ ilmub AI Assistant tööriistadesse — detailid lisalugemises.</p>
+<div class="admonition tip">
+<p class="admonition-title">💭 Mõtle hetk — enne edasilugemist</p>
+<p>Sinu organisatsioonis — mis on <strong>igapäevane otsingu-muster</strong> logides? Kas piisab "otsi <code>ERROR</code>" lihtsast tekstist (BM25), või tahaksid küsida "leia kõik database-probleemid" loomuliku keelega (vector + RAG)?</p>
+<p>Esmaspäeval — vaata Kibana Discoveris (või samaväärses), mis on need 3–5 otsisõna, mida sa kasutad kõige sagedamini. Need on sinu <strong>BM25 sword'id</strong>.</p>
+</div>
+<p>Osa 4 lab'is kasutate Kibana Discover'i ja OS Dashboards Discover'it logide otsimiseks BM25 ja KQL-i abil.</p>
+<hr />
+<p><strong>Embedding mudel</strong> (nt sentence-transformer, OpenAI text-embedding, ELSER, BGE, E5) võtab teksti ja annab tagasi vektori — tüüpiliselt <strong>384 … 1536 dimensiooniga</strong> liugujuturuga arve. See vektor esindab teksti <strong>tähendust</strong> geomeetrilises ruumis.</p>
+<p>Näide (lihtsustatud, ainult 3 dimensiooni):</p>
+<table>
+<thead>
+<tr>
+<th>Tekst</th>
+<th>Vector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"king"</td>
+<td>[0.21, 0.85, 0.12]</td>
+</tr>
+<tr>
+<td>"kuningas"</td>
+<td>[0.23, 0.83, 0.11]</td>
+</tr>
+<tr>
+<td>"jalats"</td>
+<td>[0.78, 0.10, 0.45]</td>
+</tr>
+<tr>
+<td>"sneaker"</td>
+<td>[0.81, 0.09, 0.47]</td>
+</tr>
+</tbody>
+</table>
+<p>Nägemine — "king" ja "kuningas" on <strong>lähedal</strong> (rojaalsuse-ruumis). "jalats" ja "sneaker" on <strong>lähedal</strong> (jalanõu-ruumis). Kuid "king" (rojaalsus) ja "sneaker" on <strong>kaugel</strong>. Mudel õppis selle treenimise käigus miljarditelt teksti-paaridelt.</p>
+<p>Päringu vektor <code>tossud kontorisse</code> arvutatakse sama mudeli abil — saame teise vektori. Otsing leidab dokumendid, mille vektor on päringuvektorile <strong>kõige lähemal</strong>.</p>
+<p><strong>Sarnasuse-meetrika:</strong> cosine similarity, dot product või euclidean distance. Cosine on kõige levinum normaliseeritud vektorite jaoks.</p>
+<h3 id="probleem-kuidas-leida-lahemaid-vektoreid-kiiresti">Probleem: kuidas leida lähemaid vektoreid kiiresti<a class="headerlink" href="#probleem-kuidas-leida-lahemaid-vektoreid-kiiresti" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui sul on <strong>1 miljon dokumenti</strong>, igaks 384-dimensiooniline vektor, ja küsid "leia 10 sarnasemat", <strong>täpne lahendus</strong> on:</p>
+<ol>
+<li>Arvuta päring → vektor</li>
+<li>Arvuta cosine similarity päring-vektori ja iga 1M dokumendi vektori vahel</li>
+<li>Järjesta</li>
+</ol>
+<p>See on <strong>brute force kNN</strong> (k Nearest Neighbors). 1M dokumendi puhul = miljon cosine-arvutust iga päringu kohta. <strong>Liiga aeglane</strong>.</p>
+<p>Lahendus: <strong>ANN — Approximate Nearest Neighbors</strong>. Loobume väikese täpsuse-protsendi nimel kiirusest. Saame 95% "õigeid" tulemusi, aga 1000× kiiremini.</p>
+<h3 id="hnsw-hierarchical-navigable-small-world">HNSW — Hierarchical Navigable Small World<a class="headerlink" href="#hnsw-hierarchical-navigable-small-world" title="Lingi sektsioonile">&para;</a></h3>
+<p>Algoritm, mida nii Elasticsearch (Lucene 9+ kaudu) kui OpenSearch kasutavad. Idee:</p>
+<ol>
+<li>Ehita <strong>graaf</strong>, kus iga sole = dokumendi vektor. Sole ühendatakse oma õlalt lähemate naabritega.</li>
+<li>Tee see graaf <strong>mitmel kihil</strong>: ülemine kiht vähe sole'tega (kaughelmed), alumine kiht ühine kõik sole'd (lähihelmed).</li>
+<li>Otsing: alusta ülemiselt kihilt suvaliselt sole'lt, liigu "siia" alati lähema naabrini. Sample down kihtide kaupa.</li>
+</ol>
+<pre class="mermaid"><code>flowchart TD
+    subgraph L2["🔝 Kiht 2 — vähe sole'sid, kauged hupped"]
+        L2A(("A")) --- L2B(("B")) --- L2C(("C"))
+    end
+
+    subgraph L1["↗️ Kiht 1 — keskmiselt tihe"]
+        L1A(("A")) --- L1D(("D"))
+        L1B(("B")) --- L1E(("E"))
+        L1B --- L1A
+        L1C(("C")) --- L1F(("F"))
+        L1C --- L1B
+    end
+
+    subgraph L0["🔍 Kiht 0 — kõik dokumendid, tihe naabruskond"]
+        N1(("1")) --- N2(("2"))
+        N2 --- N3(("3"))
+        N3 --- N4(("4"))
+        N4 --- N5(("5"))
+        N5 --- N6(("6"))
+        N1 --- N4
+        N2 --- N5
+        N3 --- N6
+    end
+
+    Q["🎯 Päringu vektor q"] -.algus.-&gt; L2A
+    L2A -.alla.-&gt; L1A
+    L1A -.alla.-&gt; N4
+    N4 -.lähima naabrini.-&gt; N5
+
+    style Q fill:#fff59d
+    style N5 fill:#a5d6a7</code></pre>
+<p>Otsing jälgib <strong>logaritmilist teed</strong> — algab ülemiselt vähe-sole-kihilt suure hüppega, lihvitakse iga kihiga täpsemaks. Päring 1M-vektori kollektsioonis ~5ms, mitte 500ms.</p>
+<p>Kompromiss: HNSW eelistab <strong>mälus</strong> vektoreid hoida (RAM kallis). Lucene HNSW kasutab graafe, mis on osa Lucene'i segment-failidest. <strong>Off-heap mälu nous</strong> on suur — RAM-koormus 1 miljardi vektori puhul on märkimisväärne ja seda tuleb arvestada.</p>
+<p><strong>FAISS</strong> — Facebook AI Similarity Search Library — on alternatiiv HNSW-le. OpenSearch ML Commons toetab nii <strong>NMSLIB HNSW</strong> kui <strong>FAISS</strong>'i (sh <strong>IVF</strong> ja <strong>PQ</strong> algoritmid). FAISS-i tugev külg on <strong>mälukasutuse vähendamine</strong> kompressiooniga (Product Quantization) — väike täpsuse-langus, aga 4-8× väiksem mälukulu. Suurte vector DB-de jaoks oluline.</p>
+<h3 id="elastici-kaik-elser-semantic_text">Elastic'i käik: ELSER + <code>semantic_text</code><a class="headerlink" href="#elastici-kaik-elser-semantic_text" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elastic-i strateegia on <strong>lihtne API</strong>.</p>
+<p><strong>ELSER</strong> (Elastic Learned Sparse EncodeR) — Elastic-i enda treenitud mudel, mis annab <strong>sparse</strong> vektoreid (mitte dense). Töötab pre-trained, ei pea fine-tune'ima. Esmane versioon on inglise keele, <strong>multilingual ELSER (e5-multilingual)</strong> lisandus 2024. Kasutamiseks lihtsalt download'id mudeli ja laed klastri.</p>
+<p><strong><code>semantic_text</code> field type</strong> (Elasticsearch 8.13+, 2024) — mapping-level abstraktsioon, mis teeb kaks asja korraga:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;mappings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;semantic_text&quot;</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;inference_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-elser-endpoint&quot;</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Kui sa indekseerid dokumendi <code>content</code> väljaga, <strong>Elastic teeb automaatselt</strong>:</p>
+<ol>
+<li>BM25 inverted indeksi (lexical otsing)</li>
+<li>ELSER-i kaudu sparse vektori (semantic otsing)</li>
+</ol>
+<p>Päring:
+<div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="err">GET</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex/_search</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;semantic&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tossud kontorisse&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div></p>
+<p>Elastic teeb <strong>hybrid otsingu</strong> ja annab kombineeritud skoori. <strong>Üks API, kaks otsingumeetodit.</strong></p>
+<h3 id="opensearchi-kaik-ml-commons-neural-search">OpenSearch'i käik: ML Commons + Neural Search<a class="headerlink" href="#opensearchi-kaik-ml-commons-neural-search" title="Lingi sektsioonile">&para;</a></h3>
+<p>OpenSearch on <strong>paindlikum, aga rohkem konfigureerimist</strong>.</p>
+<p><strong>ML Commons</strong> — plugin, mis lubab klastrisse laadida ja käivitada ML-mudeleid. Toetab nii lokaalseid mudeleid (Hugging Face transformers, ONNX) kui ka väliseid inference-teenuseid üle HTTP API: Amazon SageMaker, Amazon Bedrock ja teised mudeli-API-d.</p>
+<p><strong>Neural Search plugin</strong> — high-level abstraktsioon, mis kasutab ML Commons'i sees. Sa konfigureerid <strong>ingest pipeline'i</strong>, mis lisab dokumentidele vektorid:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_i</span><span class="kc">n</span><span class="err">ges</span><span class="kc">t</span><span class="err">/pipeli</span><span class="kc">ne</span><span class="err">/</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="mf">-e</span><span class="err">mbeddi</span><span class="kc">n</span><span class="err">g</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;processors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&quot;text_embedding&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-embedding-model&quot;</span><span class="p">,</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">      </span><span class="nt">&quot;field_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content_embedding&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="p">}]</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Seejärel: <code>neural</code> query type päringuks. <strong>Üle nelja sammu, mitte ühe — aga sa kontrollid iga sammu</strong> ja võid panna oma kohandatud mudeli, fine-tune'itud sinu spetsiifilisele andmekorpusele.</p>
+<h3 id="rag-retrieval-augmented-generation">RAG — Retrieval-Augmented Generation<a class="headerlink" href="#rag-retrieval-augmented-generation" title="Lingi sektsioonile">&para;</a></h3>
+<p>Muster, kus LLM enne vastamist küsib <strong>relevante dokumente</strong> vector storage'st. Põhjus: LLM-i koolitusandmed on lõplikud (ja vananenud), aga sinu organisatsiooni dokumendid on uued ja spetsiifilised.</p>
+<p>Tüüpiline RAG arhitektuur:</p>
+<pre class="mermaid"><code>flowchart TD
+    U["👤 Kasutaja küsimus&lt;br/&gt;'Kuidas configureerida X?'"] --&gt; E["Embedding mudel"]
+    E --&gt; QV["Küsimuse vektor&lt;br/&gt;[0.21, 0.85, ...]"]
+    QV --&gt; VDB[("Vector DB&lt;br/&gt;ES / OS&lt;br/&gt;HNSW indeks")]
+    VDB --&gt; TOP["Top 5 sarnasemat&lt;br/&gt;dokumenti"]
+    TOP --&gt; CTX["LLM context:&lt;br/&gt;[dokumendid] + [küsimus]"]
+    CTX --&gt; LLM["🤖 LLM&lt;br/&gt;(Claude / Llama / Titan)"]
+    LLM --&gt; ANS["💬 Vastus,&lt;br/&gt;põhistatud&lt;br/&gt;dokumentidel"]
+
+    style U fill:#e3f2fd
+    style ANS fill:#e8f5e9
+    style VDB fill:#fff3e0
+    style LLM fill:#f3e5f5</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Amazon Bedrock Knowledge Bases</p>
+<p>AWS-i ametlik RAG-mootor <strong>Bedrock Knowledge Bases</strong> kasutab <strong>Amazon OpenSearch Serverless'i</strong> vaikimisi vector DB-na alates 2024. Sa upload'id dokumente S3-le, valid mudeli (Claude, Llama, Titan, DeepSeek jne), ja AWS teeb embedding'u + indekseerimise + päringu-loogika automaatselt. See on <strong>viiteid arhitektuur</strong> AWS-i klientidele.</p>
+</div>
+<p><strong>RAG monitooringu kontekstis — sinu igapäevatöö SREna:</strong></p>
+<ul>
+<li><strong>Incident response AI assistant</strong> — sa küsid <code>mis juhtus eile õhtul kell 19:00?</code>, AI Assistant leiab vector storage'st (sinu logid + traces + alerts) relevante andmed ja võtab kokku töevi-mustri. <strong>Elastic AI Assistant</strong> ja <strong>Splunk AI Assistant</strong> positsioneerivad end just selliste kasutusjuhtude peale 2024+.</li>
+<li><strong>Runbook-otsing</strong> — sa küsid <code>kuidas taaskäivitada Redis cluster kui see kukub?</code>, AI leiab sinu organisatsiooni Confluence'ist või wiki-st konkreetse runbooki ja annab vastuse koos sammudega.</li>
+<li><strong>Alert-korrelatsioon ja summarization</strong> — 1000 alerti tuli ühe tunni jooksul, AI Assistant ütleb "kõik on seotud <code>cassandra-cluster-3</code> split-brain'iga, põhjus on võrgu-lüli <code>sw-rack-12</code>".</li>
+<li><strong>Semantic log pattern matching</strong> — sa küsid <code>leia kõik database connectivity issues</code>, vector otsing leiab nii <code>connection refused</code>, <code>pool exhausted</code>, <code>OperationalError</code> kui <code>lost connection to host</code> — isegi kui sa pole neid sõnu otsisõnas kasutanud.</li>
+<li><strong>Postmortem auto-draft</strong> — incident'i järel AI Assistant kirjutab esimese mustandi: "19:03 alert tekkis... 19:07 root cause oli... 19:15 lahendus oli..." — sinu ülesanne on üle vaadata ja parandada.</li>
+</ul>
+<p>RAG <strong>ei asenda LLM-i koolitamist</strong> — ta annab LLM-ile kontekstit. LLM-il pole vaja teada sinu firma 2026 juhendid; ta saab need vector DB-st kontekstina, vastab nende baasil.</p>
+<div class="admonition tip">
+<p class="admonition-title">💭 Mõtle hetk — enne edasilugemist</p>
+<p>Sinu organisatsioonis — on mõni koht, kus RAG (LLM + vector DB) annaks reaalset väärtust? Näiteks: sisemine dokumendi-otsing, IT-toe esmaste vastuste automaatika, regulatiivsete dokumentide-otsing, koodibaasi-navigeerimine?</p>
+<p>Või vastupidi: kuhu see <strong>ei sobi</strong> — kus on ainult täpne vastus oodatud (audit, finants, juriidilised vastused)?</p>
+</div>
+<h3 id="hybrid-search-bm25-vector-koos">Hybrid search — BM25 + vector koos<a class="headerlink" href="#hybrid-search-bm25-vector-koos" title="Lingi sektsioonile">&para;</a></h3>
+<p>Praktikas ei vali sa "lexical või vector" — <strong>kõige paremad tulemused tulevad mõlema kombineerimisest</strong>. Sellepärast on Elasticsearchi <code>semantic_text</code> ja OpenSearchi hybrid search query molemad disainitud nii, et nad annavad <strong>mol-skoori</strong>: BM25 osa + vector cosine osa, kaalutud kokku.</p>
+<p><strong>Miks kombineerida?</strong></p>
+<ul>
+<li>BM25 on <strong>kõva match'iga täpne</strong> — kui kasutaja otsib <code>error code 1023</code>, leiad dokumendid, kus see konkreetselt esineb. Vector mudel ei pruugi numbri-koodi seostada.</li>
+<li>Vector on <strong>tähenduse-poolt täpne</strong> — kui kasutaja otsib <code>slow database</code>, leiad dokumendid, kus on "performance degradation in PostgreSQL". BM25 ei seostaks.</li>
+</ul>
+<p>Kaalud (näide): 0.3 × BM25 + 0.7 × vector — õiged kaalud leiad katsetamisega, see oleneb kasutusjuhtust ja andmestikust.</p>
+<h3 id="otsustamise-raam-millal-mida">Otsustamise raam: millal mida?<a class="headerlink" href="#otsustamise-raam-millal-mida" title="Lingi sektsioonile">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Kasutusjuhus</th>
+<th>Soovitus</th>
+<th>Miks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operatiivlogide otsing (<code>error</code>, <code>timeout</code>, <code>host=X</code>)</td>
+<td><strong>BM25 (lexical)</strong></td>
+<td>Sa tead sõna, otsid sõna. Vector lisab ülekulu, mis pole vajalik.</td>
+</tr>
+<tr>
+<td>Audit / compliance / juriidiline otsing</td>
+<td><strong>BM25 + filtrid</strong></td>
+<td>Sa tahad täpset matchi, mitte sarnast. Audit-logide jaoks vector on isegi <strong>valeoht</strong> — ei tohi anda "sarnast" tulemust.</td>
+</tr>
+<tr>
+<td>Dokumentatsiooni / wiki / runbook'ide otsing</td>
+<td><strong>Hybrid</strong></td>
+<td>Insenerid otsivad mõtteid ("kuidas Redis taaskäivitada"), mitte sõna-vorme.</td>
+</tr>
+<tr>
+<td>Incident response / RCA päringud ("mis juhtus eile 19:00?")</td>
+<td><strong>Hybrid + RAG</strong></td>
+<td>Vajab semantilist seost logide / traces / alerts vahel.</td>
+</tr>
+<tr>
+<td>Semantic log pattern matching (<code>database connectivity issues</code>)</td>
+<td><strong>Vector</strong></td>
+<td>BM25 ei leia <code>pool exhausted</code>, <code>OperationalError</code> kui otsisõnas neid pole.</td>
+</tr>
+<tr>
+<td>Anomaalia-tuvastus logides ja metrikus</td>
+<td><strong>ML-mudelid</strong> (Elastic ML / OS Anomaly Detection)</td>
+<td>Eraldi ML pipeline, mitte otsing. Vector võib täiendada.</td>
+</tr>
+<tr>
+<td>Alert-korrelatsioon ja postmortem-mustandid</td>
+<td><strong>Vector + RAG</strong> (AI Assistant)</td>
+<td>Kogub kontekstit mitmest allikast, LLM võtab kokku.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kokkuvote-l3-st_1">Kokkuvõte L3-st<a class="headerlink" href="#kokkuvote-l3-st_1" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lexical (BM25) on <strong>kiire, täpne, soodne</strong> — logide ja täpse-matchi-otsingu jaoks parim. Vector on <strong>tähenduselt täpne, kallim resurssidelt</strong> — dokumentatsiooni, klienditoe ja RAG-i jaoks parim. <strong>Hybrid kombineerib mõlemad</strong> ja annab tavaliselt parima tulemuse. ELSER + <code>semantic_text</code> Elastic'is on lihtsam, OpenSearch ML Commons + Neural Search + FAISS on paindlikum.</p>
+<p>Osa 4 lab'is töötate Elasticsearchi <code>semantic_text</code> väljaga ja kNN päringuga, ning vaatate OpenSearch'is neural search'i. Sama log-source mõlemasse — võrdle tulemusi.</p>
+<hr />
+<h2 id="cheat-sheet-vota-too-juurde-kaasa">🎯 Cheat sheet — võta töö juurde kaasa<a class="headerlink" href="#cheat-sheet-vota-too-juurde-kaasa" title="Lingi sektsioonile">&para;</a></h2>
+<p>Need neli kompaktset tabelit on mõeldud <strong>igapäevaseks otsuseks</strong>, mitte loengu meeldejätmiseks. Prindi välja või hoia kuvarinurkas.</p>
+<h3 id="1-otsus-elasticsearch-voi-opensearch-ja-missugune">① Otsus: Elasticsearch või OpenSearch — ja missugune?<a class="headerlink" href="#1-otsus-elasticsearch-voi-opensearch-ja-missugune" title="Lingi sektsioonile">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Sinu olukord</th>
+<th>Vali</th>
+<th>Miks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS-i keskkond + vendor lock-in vältimine</td>
+<td><strong>Amazon OpenSearch Service</strong></td>
+<td>Apache 2.0, Multi-AZ + standby kaasas, Cross-AZ transfer kaasas</td>
+</tr>
+<tr>
+<td>AWS + RAG / Bedrock Knowledge Bases</td>
+<td><strong>OpenSearch Serverless</strong></td>
+<td>Default vector DB Bedrock-ile, auto-scale, null ops overhead</td>
+</tr>
+<tr>
+<td>Self-hosted, GDPR/compliance, andmed ei lähe AWS-i</td>
+<td><strong>OpenSearch on-prem</strong></td>
+<td>Apache 2.0, vaba security plugin, ML Commons paindlik</td>
+</tr>
+<tr>
+<td>AI / semantic search prio + lihtne API</td>
+<td><strong>Elastic Cloud</strong></td>
+<td><code>semantic_text</code> field = üks rida = lexical + vector korraga</td>
+</tr>
+<tr>
+<td>Kommertsiaalne tugi + Elastic APM</td>
+<td><strong>Elasticsearch on-prem (Platinum)</strong></td>
+<td>24/7 SLA, APM tugevam kui OS-il</td>
+</tr>
+<tr>
+<td>Väike sisekasutus, eelarve madal</td>
+<td><strong>OpenSearch on-prem</strong> (1–3 node)</td>
+<td>Apache 2.0, ei pea litsentsi kontrollima</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-otsus-klastri-dimensioneerimine">② Otsus: klastri-dimensioneerimine<a class="headerlink" href="#2-otsus-klastri-dimensioneerimine" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>UPTIME NÕUE         →  KLASTRI-DISAIN
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>─────────────────────────────────────────────────────
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>99.5%  (best-effort) →  1 node, restart OK
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>99.9%  (8.7h/aastas) →  3 master + N data, replicas=1, snapshots S3
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>99.99% (52min/aastas)→  3 master + N data üle 3 AZ-i + standby AZ
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>99.999% (5min/aastas) →  Multi-region + CCR (harva vajalik)
+</span></code></pre></div>
+<p><strong>Checklist enne tootmist:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 3 dedicated master node'i (mitte 1, mitte 2)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Data node'idel <code>heap = pool RAM-ist</code>, max 31 GB (compressed OOPs)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>number_of_replicas ≥ 1</code> kõikidele indeksitele</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Snapshot S3-le (SLM / ISM policy)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Restore testitud</strong> vähemalt 1 kord</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> ILM-policy hot → warm → cold → frozen → delete</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Kafka või sarnane buffer kui logi-maht &gt; 100 GB/päev</li>
+</ul>
+<h3 id="3-otsus-lexical-vector-voi-hybrid-otsing-monitooringu-kontekstis">③ Otsus: lexical, vector või hybrid otsing? (monitooringu kontekstis)<a class="headerlink" href="#3-otsus-lexical-vector-voi-hybrid-otsing-monitooringu-kontekstis" title="Lingi sektsioonile">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Kasutusjuhus</th>
+<th>Vali</th>
+<th>Märkus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operatiivlogid (<code>error</code>, <code>timeout</code>, <code>host=X</code>)</td>
+<td><strong>BM25 (lexical)</strong></td>
+<td>Vector lisab kulu ilma kasuta</td>
+</tr>
+<tr>
+<td>Audit / compliance / juriidiline</td>
+<td><strong>BM25 + filtrid</strong></td>
+<td>Vector võib anda "sarnase" — <strong>valeoht</strong> auditi jaoks</td>
+</tr>
+<tr>
+<td>Runbook / wiki / dokumentatsiooni otsing</td>
+<td><strong>Hybrid</strong></td>
+<td>Inseneri sõnastik ≠ dokumendi sõnastik</td>
+</tr>
+<tr>
+<td>Incident response ("mis juhtus eile 19:00?")</td>
+<td><strong>Hybrid + RAG</strong></td>
+<td>Vajab konteksti mitmest allikast</td>
+</tr>
+<tr>
+<td>Pattern matching (<code>db connection issues</code>)</td>
+<td><strong>Vector</strong></td>
+<td>BM25 ei leia sarnaseid väljendusi</td>
+</tr>
+<tr>
+<td>Anomaalia-tuvastus aegridades</td>
+<td><strong>ML-mudelid</strong> (Elastic ML / OS AD)</td>
+<td>Eraldi pipeline, mitte otsing</td>
+</tr>
+<tr>
+<td>Postmortem auto-draft, alert-summarization</td>
+<td><strong>Vector + RAG</strong> (AI Assistant)</td>
+<td>LLM võtab kokku konteksti</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-otsus-hinnamudel-ja-tco-eelarve-aluseks">④ Otsus: hinnamudel ja TCO eelarve-aluseks<a class="headerlink" href="#4-otsus-hinnamudel-ja-tco-eelarve-aluseks" title="Lingi sektsioonile">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Mudel</th>
+<th>Toode</th>
+<th>Hoia silm peal</th>
+<th>Salakulud</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per-GB-ingested</td>
+<td>Splunk, Datadog Logs</td>
+<td>Logi-mahu kasv → arve kasv</td>
+<td>Sundib logimist vähendama</td>
+</tr>
+<tr>
+<td>Instance-based</td>
+<td>AWS OpenSearch, ES/OS on-prem</td>
+<td>Node-arv × RAM × ketas</td>
+<td><strong>Cross-AZ transfer</strong> (self-hosted)</td>
+</tr>
+<tr>
+<td>Tier-põhine</td>
+<td>Elastic Cloud, Confluent Cloud</td>
+<td>Tier-piir, add-on'id</td>
+<td>Add-on'id võivad märgatavalt kasvada</td>
+</tr>
+<tr>
+<td>Hybrid (logi-osa odav)</td>
+<td>Grafana Cloud + Loki</td>
+<td>Loki = sildid indekseeritakse</td>
+<td>Vähem otsingu-paindlikkust kui ELK-l</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TCO komponendid, mis sageli unustatakse:</strong></p>
+<ul>
+<li><strong>Personali-aeg</strong> — self-hosted vajab DevOps-i, see on eelarves</li>
+<li><strong>Cross-AZ transfer</strong> — self-managed Multi-AZ EC2-l \$0.01–0.02/GB</li>
+<li><strong>RAM</strong> — vector search kahekordistab heap-vajaduse</li>
+<li><strong>ML node'id</strong> — ELSER + 1M dokumenti = eraldi node mõistlik</li>
+</ul>
+<hr />
+<h2 id="refleksioon-ja-enesetest">Refleksioon ja enesetest<a class="headerlink" href="#refleksioon-ja-enesetest" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päeva lõpus, enne kui klassist välja lähed, mõtle läbi:</p>
+<ol>
+<li>Mille poolest erineb <strong>schema-on-write</strong> (Zabbix) ja <strong>schema-on-read</strong> (ELK / OS)? Miks see vahe muudab arhitektuurseid otsusi?</li>
+<li>Sinul on 3 master + 5 data node klaster. Üks AZ kaob (1 master + 2 data). Mis juhtub klastri olekuga ja andmetega?</li>
+<li>Sinu mõte 3 erinevat olukorda, kus eelistaksid lexical otsingut vector otsingule.</li>
+<li><strong>Otsus</strong>: ettevotte audit-keskkonna jaoks vali Elasticsearch on-prem või OpenSearch on-prem. Miks?</li>
+<li><strong>Mis küsimus jäi õhku?</strong> — kirjuta see üles. Hommepool tule tagasi.</li>
+</ol>
+<hr />
+<h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Ametlik dokumentatsioon:</strong></p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">Elasticsearch ametlik dokumentatsioon</a></li>
+<li><a href="https://opensearch.org/docs/latest/">OpenSearch ametlik dokumentatsioon</a></li>
+<li><a href="https://aws.amazon.com/opensearch-service/">Amazon OpenSearch Service</a></li>
+<li><a href="https://lucene.apache.org/">Apache Lucene</a></li>
+<li><a href="https://github.com/facebookresearch/faiss">Facebook AI Similarity Search (FAISS)</a></li>
+</ul>
+<p><strong>Litsentsi-drama 2021:</strong></p>
+<ul>
+<li><a href="https://www.elastic.co/blog/why-license-change-aws">Elastic: "Doubling Down on Open"</a> — Elastic-i positsioon</li>
+<li><a href="https://aws.amazon.com/blogs/opensource/stepping-up-for-a-truly-open-source-elasticsearch/">AWS: "Stepping Up for a Truly Open Source Elasticsearch"</a> — AWS-i vastus</li>
+<li><a href="https://www.elastic.co/blog/elasticsearch-is-open-source-again">Shay Banon: "Elasticsearch is Open Source, Again"</a> — 2024 AGPL-i lisamine</li>
+<li><a href="https://www.linuxfoundation.org/press/aws-and-the-linux-foundation-establish-the-opensearch-software-foundation">Linux Foundation: OpenSearch Software Foundation kuulutus</a> — sept 2024</li>
+</ul>
+<p><strong>Võrdlused (sissejuhatuse jaoks):</strong></p>
+<ul>
+<li><a href="https://coralogix.com/guides/elasticsearch/elasticsearch-vs-opensearch-key-differences/">Coralogix: Elasticsearch vs OpenSearch — Key Differences</a></li>
+<li><a href="https://www.tecracer.com/blog/opensearch-vs-elasticsearch-2024/">tecRacer: OpenSearch vs Elasticsearch 2024</a></li>
+<li><a href="https://medium.com/@sonishubham65/getting-started-with-elasticsearch-opensearch-aws-b7cdd7e8cafa">Getting Started with Elasticsearch &amp; OpenSearch AWS</a> — Medium</li>
+</ul>
+<p><strong>Otsing ja AI:</strong></p>
+<ul>
+<li><a href="https://lucene.apache.org/core/8_0_0/core/org/apache/lucene/search/similarities/BM25Similarity.html">Lucene BM25 algorithm</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-text.html">Elasticsearch semantic_text field</a></li>
+<li><a href="https://opensearch.org/docs/latest/search-plugins/neural-search/">OpenSearch Neural Search plugin</a></li>
+<li><a href="https://opensearch.org/docs/latest/ml-commons-plugin/">OpenSearch ML Commons</a></li>
+<li><a href="https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html">Amazon Bedrock Knowledge Bases + OpenSearch Serverless</a></li>
+<li><a href="https://arxiv.org/abs/1603.09320">HNSW: Hierarchical Navigable Small World</a> — algupärane teadusartikkel</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:datadog2024">
+<p>Datadog, "State of Cloud Costs 2024" — <a href="https://www.datadoghq.com/state-of-cloud-costs/">https://www.datadoghq.com/state-of-cloud-costs/</a>. Observability andmemahtude kasvu mõõdab Datadog oma 30 000+ kliendi anonymized telemetria põhjal.&#160;<a class="footnote-backref" href="#fnref:datadog2024" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:kafka">
+<p>Apache Kafka ametlik dokumentatsioon — <a href="https://kafka.apache.org/documentation/">https://kafka.apache.org/documentation/</a>. Kafka Connect: <a href="https://kafka.apache.org/documentation/#connect">https://kafka.apache.org/documentation/#connect</a>.&#160;<a class="footnote-backref" href="#fnref:kafka" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:netflix-kafka">
+<p>Netflix Technology Blog, mitmed artiklid Kafka + Elasticsearch pipeline'ist alates 2018 — <a href="https://netflixtechblog.com/tagged/kafka">https://netflixtechblog.com/tagged/kafka</a>. Uber Engineering, "uReplicator" projekt — <a href="https://eng.uber.com/ureplicator-apache-kafka-replicator/">https://eng.uber.com/ureplicator-apache-kafka-replicator/</a>.&#160;<a class="footnote-backref" href="#fnref:netflix-kafka" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:ilm-es">
+<p>Elastic, Index Lifecycle Management — <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-lifecycle-management.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/index-lifecycle-management.html</a>.&#160;<a class="footnote-backref" href="#fnref:ilm-es" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:ism-os">
+<p>OpenSearch, Index State Management — <a href="https://opensearch.org/docs/latest/im-plugin/ism/index/">https://opensearch.org/docs/latest/im-plugin/ism/index/</a>.&#160;<a class="footnote-backref" href="#fnref:ism-os" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:splunk-pricing">
+<p>Splunk hinnakiri ja Workload Pricing — <a href="https://www.splunk.com/en_us/products/pricing.html">https://www.splunk.com/en_us/products/pricing.html</a>. Ajaloolised per-GB tier'id on dokumenteeritud Splunki community foorumites ja IDC/Forrester analyytikute raportites.&#160;<a class="footnote-backref" href="#fnref:splunk-pricing" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:datadog-pricing">
+<p>Datadog hinnakiri — <a href="https://www.datadoghq.com/pricing/">https://www.datadoghq.com/pricing/</a>. Logs sektsioon: per-GB indexed + retention.&#160;<a class="footnote-backref" href="#fnref:datadog-pricing" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:aws-os-pricing">
+<p>Amazon OpenSearch Service hinnakiri — <a href="https://aws.amazon.com/opensearch-service/pricing/">https://aws.amazon.com/opensearch-service/pricing/</a>. Instance-pohine arvelduse mudel, Reserved Instance allahindlused 30–50%.&#160;<a class="footnote-backref" href="#fnref:aws-os-pricing" title="Jump back to footnote 8 in the text">&#8617;</a></p>
+</li>
+<li id="fn:elastic-pricing">
+<p>Elastic Cloud hinnakiri — <a href="https://www.elastic.co/pricing">https://www.elastic.co/pricing</a>. Standard / Gold / Platinum / Enterprise tier'id koos add-on'idega.&#160;<a class="footnote-backref" href="#fnref:elastic-pricing" title="Jump back to footnote 9 in the text">&#8617;</a></p>
+</li>
+<li id="fn:palo-splunk">
+<p>Palo Alto Networks pressiteade tehingu sulgemise kohta (märts 2024) — <a href="https://www.paloaltonetworks.com/company/press/2024/palo-alto-networks-completes-acquisition-of-talon-cyber-security">https://www.paloaltonetworks.com/company/press/2024/palo-alto-networks-completes-acquisition-of-talon-cyber-security</a>. Tehingu suurus avalikustati 2023 sept teate ajal — <a href="https://investors.splunk.com/news-releases/news-release-details/palo-alto-networks-acquire-splunk">https://investors.splunk.com/news-releases/news-release-details/palo-alto-networks-acquire-splunk</a>.&#160;<a class="footnote-backref" href="#fnref:palo-splunk" title="Jump back to footnote 10 in the text">&#8617;</a></p>
+</li>
+<li id="fn:os-foundation">
+<p>Linux Foundation, "AWS and the Linux Foundation Establish the OpenSearch Software Foundation" — <a href="https://www.linuxfoundation.org/press/aws-and-the-linux-foundation-establish-the-opensearch-software-foundation">https://www.linuxfoundation.org/press/aws-and-the-linux-foundation-establish-the-opensearch-software-foundation</a>. Numbrid (200M+ downloads jms) on OpenSearch projekti enda 2024 aastaraportist — <a href="https://opensearch.org">https://opensearch.org</a>.&#160;<a class="footnote-backref" href="#fnref:os-foundation" title="Jump back to footnote 11 in the text">&#8617;</a></p>
+</li>
+<li id="fn:aws-os-quotas">
+<p>AWS OpenSearch Service service quotas ja arhitektuuri-piirid — <a href="https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html">https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html</a>. Multi-AZ + standby mudel: <a href="https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html">https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html</a>.&#160;<a class="footnote-backref" href="#fnref:aws-os-quotas" title="Jump back to footnote 12 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Viimane uuendus">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="17. mai 2026 20:31:45 UTC">17. mai 2026</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Üles
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 Maria Talvik · Haapsalu Kutsehariduskeskus
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
