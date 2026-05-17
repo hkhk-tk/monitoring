@@ -116,7 +116,8 @@ nav:
   - "Labor: Zabbix": labs/02_zabbix_loki/zabbix_lab.md
   - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 
-- "Päev 3 — ELK Stack":
+- "Päev 3 — ELK Stack & OpenSearch":
+  - "Loeng: ELK & OS — kust tuli, kus on, kuhu läheb": materials/lectures/paev3-elk-loeng.md
   - "Labor": labs/03_elk_stack/lab.md
 
 - "Päev 4 — TICK + Kesksed logimissüsteemid":
