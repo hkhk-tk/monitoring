@@ -1,0 +1,68 @@
+services:
+  os01:
+    image: opensearchproject/opensearch:2.18.0
+    container_name: os01
+    environment:
+      - node.name=os01
+      - cluster.name=lab-os-cluster
+      - discovery.seed_hosts=os02,os03
+      - cluster.initial_cluster_manager_nodes=os01,os02,os03
+      - bootstrap.memory_lock=true
+      - DISABLE_SECURITY_PLUGIN=true
+      - DISABLE_INSTALL_DEMO_CONFIG=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    volumes:
+      - os01-data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+
+  os02:
+    image: opensearchproject/opensearch:2.18.0
+    container_name: os02
+    environment:
+      - node.name=os02
+      - cluster.name=lab-os-cluster
+      - discovery.seed_hosts=os01,os03
+      - cluster.initial_cluster_manager_nodes=os01,os02,os03
+      - bootstrap.memory_lock=true
+      - DISABLE_SECURITY_PLUGIN=true
+      - DISABLE_INSTALL_DEMO_CONFIG=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    volumes:
+      - os02-data:/usr/share/opensearch/data
+
+  os03:
+    image: opensearchproject/opensearch:2.18.0
+    container_name: os03
+    environment:
+      - node.name=os03
+      - cluster.name=lab-os-cluster
+      - discovery.seed_hosts=os01,os02
+      - cluster.initial_cluster_manager_nodes=os01,os02,os03
+      - bootstrap.memory_lock=true
+      - DISABLE_SECURITY_PLUGIN=true
+      - DISABLE_INSTALL_DEMO_CONFIG=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    volumes:
+      - os03-data:/usr/share/opensearch/data
+
+  os-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.18.0
+    container_name: os-dashboards
+    depends_on: [os01, os02, os03]
+    environment:
+      - OPENSEARCH_HOSTS=http://os01:9200
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=true
+    ports:
+      - "5601:5601"
+
+volumes:
+  os01-data:
+  os02-data:
+  os03-data:
