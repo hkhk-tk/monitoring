@@ -15,6 +15,10 @@
         <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/paev3-vector-rag-lisalugemine/">
       
       
+        <link rel="prev" href="../paev3-elk-loeng/">
+      
+      
+        <link rel="next" href="../../../labs/03_elk_stack/lab/">
       
       
         
@@ -25,7 +29,7 @@
     
     
       
-        <title>Päev 3 — Lisalugemine: Vector search, RAG ja AI monitooringus - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Lisalugemine: Vector search, RAG ja AI - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
@@ -114,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Päev 3 — Lisalugemine: Vector search, RAG ja AI monitooringus
+              Lisalugemine: Vector search, RAG ja AI
             
           </span>
         </div>
@@ -282,11 +286,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../paev3-elk-loeng/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../paev3-kava/" class="md-tabs__link">
           
   
   
@@ -844,10 +850,16 @@
       
   
   
+    
   
   
+  
     
     
+      
+        
+      
+        
       
         
       
@@ -857,21 +869,22 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -889,7 +902,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -899,6 +912,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../paev3-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -923,6 +964,302 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lisalugemine: Vector search, RAG ja AI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lisalugemine: Vector search, RAG ja AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sisu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sisu
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#miks-vector-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Miks vector search?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vector-embedding-tahendus-numbritena" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vector embedding — tähendus numbritena
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector embedding — tähendus numbritena">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#probleem-kuidas-leida-lahemaid-vektoreid-kiiresti" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Probleem: kuidas leida lähemaid vektoreid kiiresti
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hnsw-algoritm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HNSW algoritm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faiss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FAISS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elastic-elser-semantic_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic ELSER + semantic_text
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opensearch-ml-commons-neural-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearch ML Commons + Neural Search
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rag-retrieval-augmented-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG — Retrieval-Augmented Generation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rag-monitooringus-5-kasutusjuhtu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG monitooringus — 5 kasutusjuhtu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RAG monitooringus — 5 kasutusjuhtu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-incident-response-ai-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Incident response AI assistant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-runbook-otsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Runbook-otsing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-alert-korrelatsioon-ja-summarization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Alert-korrelatsioon ja summarization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-semantic-log-pattern-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Semantic log pattern matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-postmortem-auto-draft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Postmortem auto-draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hybrid-search-bm25-vector-koos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid search — BM25 + vector koos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#otsustamise-raam-millal-mida-valida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Otsustamise raam — millal mida valida
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kokkuvote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allikad
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1653,6 +1990,59 @@
               <article class="md-content__inner md-typeset">
                 
                   
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <span class="md-tag">AI</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Day3</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Elasticsearch</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Lisalugemine</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">OpenSearch</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">RAG</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">VectorSearch</span>
+      
+    
+  </nav>
 
 
   

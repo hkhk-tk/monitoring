@@ -15,10 +15,10 @@
         <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/paev3-elk-loeng/">
       
       
-        <link rel="prev" href="../../../labs/02_zabbix_loki/loki_lab/">
+        <link rel="prev" href="../../paev3-kava/">
       
       
-        <link rel="next" href="../../../labs/03_elk_stack/lab/">
+        <link rel="next" href="../paev3-vector-rag-lisalugemine/">
       
       
         
@@ -292,7 +292,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../../paev3-kava/" class="md-tabs__link">
           
   
   
@@ -861,6 +861,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -908,6 +912,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../paev3-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1258,15 +1290,214 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#l13-elasticsearch-vs-opensearch-tana" class="md-nav__link">
+  <a href="#l13-dokumendi-mudel-json-indeksid-mappings-data-streams" class="md-nav__link">
     <span class="md-ellipsis">
       
-        L1.3 — Elasticsearch vs OpenSearch täna
+        L1.3 — Dokumendi-mudel: JSON, indeksid, mappings, data streams
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="L1.3 — Elasticsearch vs OpenSearch täna">
+    <nav class="md-nav" aria-label="L1.3 — Dokumendi-mudel: JSON, indeksid, mappings, data streams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logist-saab-dokument" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logist saab dokument
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indeks-sql-i-indeks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indeks ≠ SQL-i indeks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-valjade-sonastik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping — väljade sõnastik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#index-template-schema-mis-tootab-tulevikku" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index template — schema, mis töötab tulevikku
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#index-alias-uks-nimi-mitu-indeksit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index alias — üks nimi, mitu indeksit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-stream-modernne-abstraktsioon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data stream — modernne abstraktsioon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l13-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L1.3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l14-stack-ingestion-kuidas-logid-jouavad-klasterisse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.4 — Stack ingestion: kuidas logid jõuavad klasterisse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.4 — Stack ingestion: kuidas logid jõuavad klasterisse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beats-kerged-shippers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beats — kerged shippers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logstash-raskekoige-transform-mootor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logstash — raskekõige transform-mootor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-agent-fleet-moderne-tee-2022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic Agent + Fleet — moderne tee (2022+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#andmevoog-uldine-pilt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Andmevoog (üldine pilt)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opensearch-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearch ingestion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opentelemetry-collector-tulevik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenTelemetry Collector — tulevik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otsustamise-raam-mis-ingestion-tooriist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Otsustamise raam: mis ingestion-tööriist?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l14-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L1.4-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l15-elasticsearch-vs-opensearch-tana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.5 — Elasticsearch vs OpenSearch täna
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.5 — Elasticsearch vs OpenSearch täna">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1281,10 +1512,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#security-siin-algab-erinevus" class="md-nav__link">
+  <a href="#security" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Security — siin algab erinevus
+        Security
       
     </span>
   </a>
@@ -1478,6 +1709,238 @@
     <span class="md-ellipsis">
       
         Kokkuvõte L2-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l23-apm-ja-traces-kolmas-observability-sammas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2.3 — APM ja traces: kolmas observability sammas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L2.3 — APM ja traces: kolmas observability sammas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kolmas-sammas-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kolmas sammas — traces
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-apm-kups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic APM — küps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apm-klaster-vs-logide-klaster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APM-klaster vs logide-klaster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opensearchi-vaste-vahem-kups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearchi vaste — vähem küps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opentelemetry-kui-sild" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenTelemetry kui sild
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paev-5-uhendus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Päev 5 ühendus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l23-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L2.3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l24-kibana-monitooringule-discover-dashboards-alerting-ml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2.4 — Kibana monitooringule: Discover, Dashboards, Alerting, ML
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L2.4 — Kibana monitooringule: Discover, Dashboards, Alerting, ML">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kibana-on-rohkem-kui-dashboardid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kibana on rohkem kui dashboardid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discover-sinu-igapaevane-toovahend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discover — sinu igapäevane töövahend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lens-kaasaegne-visualisatsiooni-ehitaja" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lens — kaasaegne visualisatsiooni-ehitaja
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-kombineeritud-lens-visualisatsioonid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard — kombineeritud Lens-visualisatsioonid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stack-monitoring-klastri-eneseseire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stack Monitoring — klastri eneseseire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observability-ui-unified-vaade-8x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability UI — unified vaade (8.x+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alerting-rules-modern-vs-watcher-legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alerting — Rules (modern) vs Watcher (legacy)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ml-anomaly-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ML Anomaly Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#canvas-noc-seinad-ja-exec-dashboardid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Canvas — NOC-seinad ja exec dashboard'id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maps-geo-visualisatsioonid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maps — geo-visualisatsioonid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l24-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L2.4-st
       
     </span>
   </a>
@@ -1736,6 +2199,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev3-vector-rag-lisalugemine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lisalugemine: Vector search, RAG ja AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2514,15 +3005,214 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#l13-elasticsearch-vs-opensearch-tana" class="md-nav__link">
+  <a href="#l13-dokumendi-mudel-json-indeksid-mappings-data-streams" class="md-nav__link">
     <span class="md-ellipsis">
       
-        L1.3 — Elasticsearch vs OpenSearch täna
+        L1.3 — Dokumendi-mudel: JSON, indeksid, mappings, data streams
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="L1.3 — Elasticsearch vs OpenSearch täna">
+    <nav class="md-nav" aria-label="L1.3 — Dokumendi-mudel: JSON, indeksid, mappings, data streams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logist-saab-dokument" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logist saab dokument
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indeks-sql-i-indeks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indeks ≠ SQL-i indeks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-valjade-sonastik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping — väljade sõnastik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#index-template-schema-mis-tootab-tulevikku" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index template — schema, mis töötab tulevikku
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#index-alias-uks-nimi-mitu-indeksit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index alias — üks nimi, mitu indeksit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-stream-modernne-abstraktsioon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data stream — modernne abstraktsioon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l13-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L1.3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l14-stack-ingestion-kuidas-logid-jouavad-klasterisse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.4 — Stack ingestion: kuidas logid jõuavad klasterisse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.4 — Stack ingestion: kuidas logid jõuavad klasterisse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beats-kerged-shippers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beats — kerged shippers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logstash-raskekoige-transform-mootor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logstash — raskekõige transform-mootor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-agent-fleet-moderne-tee-2022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic Agent + Fleet — moderne tee (2022+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#andmevoog-uldine-pilt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Andmevoog (üldine pilt)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opensearch-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearch ingestion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opentelemetry-collector-tulevik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenTelemetry Collector — tulevik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otsustamise-raam-mis-ingestion-tooriist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Otsustamise raam: mis ingestion-tööriist?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l14-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L1.4-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l15-elasticsearch-vs-opensearch-tana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1.5 — Elasticsearch vs OpenSearch täna
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L1.5 — Elasticsearch vs OpenSearch täna">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2537,10 +3227,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#security-siin-algab-erinevus" class="md-nav__link">
+  <a href="#security" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Security — siin algab erinevus
+        Security
       
     </span>
   </a>
@@ -2734,6 +3424,238 @@
     <span class="md-ellipsis">
       
         Kokkuvõte L2-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l23-apm-ja-traces-kolmas-observability-sammas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2.3 — APM ja traces: kolmas observability sammas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L2.3 — APM ja traces: kolmas observability sammas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kolmas-sammas-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kolmas sammas — traces
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-apm-kups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic APM — küps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apm-klaster-vs-logide-klaster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APM-klaster vs logide-klaster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opensearchi-vaste-vahem-kups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenSearchi vaste — vähem küps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opentelemetry-kui-sild" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenTelemetry kui sild
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paev-5-uhendus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Päev 5 ühendus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l23-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L2.3-st
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l24-kibana-monitooringule-discover-dashboards-alerting-ml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2.4 — Kibana monitooringule: Discover, Dashboards, Alerting, ML
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="L2.4 — Kibana monitooringule: Discover, Dashboards, Alerting, ML">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kibana-on-rohkem-kui-dashboardid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kibana on rohkem kui dashboardid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discover-sinu-igapaevane-toovahend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discover — sinu igapäevane töövahend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lens-kaasaegne-visualisatsiooni-ehitaja" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lens — kaasaegne visualisatsiooni-ehitaja
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-kombineeritud-lens-visualisatsioonid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard — kombineeritud Lens-visualisatsioonid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stack-monitoring-klastri-eneseseire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stack Monitoring — klastri eneseseire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observability-ui-unified-vaade-8x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability UI — unified vaade (8.x+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alerting-rules-modern-vs-watcher-legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alerting — Rules (modern) vs Watcher (legacy)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ml-anomaly-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ML Anomaly Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#canvas-noc-seinad-ja-exec-dashboardid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Canvas — NOC-seinad ja exec dashboard'id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maps-geo-visualisatsioonid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maps — geo-visualisatsioonid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokkuvote-l24-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte L2.4-st
       
     </span>
   </a>
@@ -3003,24 +3925,67 @@
                 
                   
 
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <span class="md-tag">AI</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Day3</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Elasticsearch</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">OpenSearch</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">VectorSearch</span>
+      
+    
+  </nav>
+
 
   
   
 
 
 <h1 id="paev-3-elastic-stack-opensearch-kust-tuli-kus-on-kuhu-laheb">Päev 3: Elastic Stack &amp; OpenSearch — kust tuli, kus on, kuhu läheb<a class="headerlink" href="#paev-3-elastic-stack-opensearch-kust-tuli-kus-on-kuhu-laheb" title="Lingi sektsioonile">&para;</a></h1>
-<p><strong>Kursus:</strong> Kaasaegne IT-süsteemide monitooring ja jälgitavus
-<strong>Kestus:</strong> ~60 min loengut, hajutatud läbi päeva — L1 (30 min) avamisel, L2 (15 min) enne klastri-laienemist, L3 (15 min) enne vector-osa
-<strong>Tase:</strong> Kesktase → kesk-edasijõudnud. Eeldame, et logimine on selge (Päev 2, Loki), Docker mitme-konteineri stack on selge
-<strong>Eeldused:</strong> Päev 1 (observability kolm sammast, Prometheus pull-mudel) · Päev 2 (Zabbix host-tsentriline, Loki + Promtail, label vs sisu indekseerimine)</p>
+<p><strong>Kursus:</strong> Kaasaegne IT-süsteemide monitooring ja jälgitavus</p>
+<p><strong>Kestus:</strong> ~120 min loengut, jaotatud läbi 4-tunnise päeva — L1 (~65 min) avamisel, L2 (~50 min) klastri + APM + Kibana ploki kohas, L3 (~15 min) enne vector-osa</p>
+<p><strong>Tase:</strong> Kesktase → kesk-edasijõudnud. Eeldame, et logimine on selge (Päev 2, Loki), Docker mitme-konteineri stack on selge</p>
+<p><strong>Eeldused:</strong> Päev 1 (observability kolm sammast, Prometheus pull-mudel) · Päev 2 (Zabbix host-tsentriline, Loki + Promtail, label vs sisu indekseerimine)</p>
 <hr />
 <h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
 <p>Pärast seda loengut oskad:</p>
 <ul>
 <li><strong>Selgitada</strong>, kuidas tööstus liikus klassikalisest host-tsentrilisest seirest (Zabbix) andme-tsentrilisele observability'le ja milline jõud seda muutust ajas</li>
 <li><strong>Eristada</strong> Elasticsearchi ja OpenSearchi: kust ühine tüvi, miks lahkuminek 2021, kuidas seis 2026</li>
+<li><strong>Selgitada</strong>, miks logide salvestus JSON-dokumentidena teeb võimalikuks structured search ja mille poolest see erineb tekstifaili <code>grep</code>-ist</li>
+<li><strong>Eristada</strong> Beats, Logstash, Elastic Agent ja OpenSearch ingestion-tööriistu (Data Prepper, Fluent Bit) ning otsustada, milline neist kuhu sobib</li>
 <li><strong>Kirjeldada</strong> Elasticsearchi sõlmerolle (master, data, ingest, coordinating) ja kuidas shardid + replica'd päringut teenindavad</li>
 <li><strong>Põhjendada</strong>, miks tõsiselt mõeldud klastris on vähemalt 3 dedicated master sõlme ja mis on quorum</li>
+<li><strong>Kirjeldada</strong> APM-i rolli Elastic Stack'is (kolmas observability sammas — traces) ja kuidas see erineb logide-klastrist</li>
+<li><strong>Loetleda</strong> Kibana monitooringu-funktsioone (Discover, Dashboards, Stack Monitoring, Alerting, ML Anomaly Detection) ja nende OpenSearch-vasted</li>
 <li><strong>Eristada</strong> lexical otsingut (BM25 inverted index'iga) ja vector otsingut (HNSW lähimnaaber-graafiga)</li>
 <li><strong>Selgitada</strong>, mis on ELSER, <code>semantic_text</code>, OpenSearch neural search, FAISS ja RAG muster</li>
 <li><strong>Otsustada</strong>, millal valida Elastic Cloud, Elasticsearch on-prem, Amazon OpenSearch Service, OpenSearch Serverless või OpenSearch on-prem</li>
@@ -3028,11 +3993,11 @@
 <hr />
 <h2 id="l10-zabbixilt-andmehaldusele-paradigm-shift">L1.0 — Zabbixilt andmehaldusele: paradigm shift<a class="headerlink" href="#l10-zabbixilt-andmehaldusele-paradigm-shift" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Loengu osa 0</strong>, kohe peale õpiväljundeid. ~5 min, enne L1.1 maastiku osa.<br />
-<strong>Miks see sulle oluline:</strong> annab sulle argumendi managementile — miks Zabbixist (mis on klassikaline ja stabiilne) üksi enam ei piisa ja milleks teie organisatsioonis ELK / OpenSearch / Loki kihiks vaja läheb.</p>
+<p><strong>Loengu osa 0</strong>, kohe peale õpiväljundeid. ~5 min, enne L1.1 maastiku osa.</p>
+<p><strong>Miks see sulle oluline:</strong> annab sulle argumendi managementile — miks Zabbixist (mis on klassikaline ja stabiilne) üksi enam ei piisa ja milleks teie organisatsioonis ELK / OpenSearch / Loki kihiks vaja läheb.</p>
 </blockquote>
-<p>Eile tutvusid Zabbixiga. Sa nägid neli mõistet ahelas — <strong>Host → Item → Trigger → Action</strong>. See on klassikaline arhitektuur, mis on töötanud 25 aastat: sa tead, <strong>mis hostid</strong> sul on, <strong>mida nendelt mõõdad</strong> ja <strong>mis tingimustel hoiatust saadetakse</strong>. Iga element on eeldefineeritud, schema on jäik.</p>
-<p>Pärastlõunal lisasid sinna Loki. Loki tõi logide tsentraliseerimise — sa ei pea enam SSH-ga 50 serverisse logima, et <code>grep ERROR</code> teha. See näeb välja lihtsalt mugavusena. Aga see on tegelikult <strong>palju enamat</strong> — see on osa <strong>paradigm shift'ist</strong>, mida tööstus on viimase 10 aasta jooksul teinud.</p>
+<p>Ennem tutvusid Zabbixiga. Sa nägid neli mõistet ahelas — <strong>Host → Item → Trigger → Action</strong>. See on arhitektuur, mis on töötanud 25 aastat: sa tead, <strong>mis hostid</strong> sul on, <strong>mida nendelt mõõdad</strong> ja <strong>mis tingimustel hoiatust saadetakse</strong>. Iga element on eeldefineeritud, schema on jäik.</p>
+<p>Siis lisasid sinna Loki. Sa ei pea enam SSH-ga 50 serverisse logima, et <code>grep ERROR</code> teha. Mugavusena tundub vähe, aga selle taga on suurem nihe: tööstus liigub viimase 10 aasta jooksul host-tsentriliselt seirelt andme-tsentrilisele.</p>
 <h3 id="kaks-paradigmat-korvuti">Kaks paradigmat kõrvuti<a class="headerlink" href="#kaks-paradigmat-korvuti" title="Lingi sektsioonile">&para;</a></h3>
 <table>
 <thead>
@@ -3070,7 +4035,7 @@
 </tr>
 </tbody>
 </table>
-<p>See ei ole tehnoloogiline mood, vaid vastus reaalsetele probleemidele. Neli jõudu, mis selle pöörde tekitasid.</p>
+<p>Neli jõudu seda nihet ajavad.</p>
 <h3 id="1-cloud-native-host-pole-enam-stabiilne-entity">1. Cloud-native — host pole enam stabiilne entity<a class="headerlink" href="#1-cloud-native-host-pole-enam-stabiilne-entity" title="Lingi sektsioonile">&para;</a></h3>
 <p>Zabbix eeldab, et <strong><code>host</code> on stabiilne objekt</strong> — sa lood selle UI-s, seod template'iga ja jälgid kuid või aastaid. Kubernetes maailmas ei toimi see. Pod tuleb ja kaob iga 4 minuti tagant, IP-aadress muutub, replica arv skaleerub 3-st 30-le ja tagasi. Kui sa lood Zabbixi host'i iga pod'i kohta, oled hommikul 5000 surnud host'iga.</p>
 <p>K8s-mõtteviis on hoopis: <strong>"andmed on entity"</strong>. Pod kirjutab logisid ja metricsid stdout'ile, agent kogub kõik, paneb sildid külge (<code>namespace=prod, app=api, pod=api-7d4f</code>), saadab tsentraalsesse storage'sse. Pärast saab päringuga küsida <code>{app="api", namespace="prod"}</code> — pole tähtis, mis IP, mis pod, mis hetkest mis hetkeni. Andmed räägivad ise.</p>
@@ -3115,7 +4080,7 @@
 <li><strong>Elasticsearch või OpenSearch</strong> — forensika, audit-logid, full-text otsing, semantic search</li>
 <li><strong>Tempo + OpenTelemetry</strong> — traces (Päev 5)</li>
 </ul>
-<p>Niisiis täna ei õpi sa Zabbixi asendust — õpid täiendavat tööriistakihti, mis tegeleb teistsuguste probleemidega kui Zabbix.</p>
+<p>Täna sa ei õpi Zabbixi asendust. Õpid täiendavat kihti, mis lahendab probleeme, mida Zabbix lahendada ei suuda.</p>
 <div class="admonition tip">
 <p class="admonition-title">💭 Mõtle hetk — enne edasilugemist</p>
 <p>Sinu praeguse töökeskkonna logide ja sündmuste haldamine — kumb paradigma on sees? Klassikaline (host → item → trigger Zabbix-stiilis) või andme-tsentriline (logid kogutakse ühte storage'sse, päringud jooksvalt)? Või mõlemad korraga?</p>
@@ -3124,8 +4089,8 @@
 <hr />
 <h2 id="l11-maastik-2026">L1.1 — Maastik 2026<a class="headerlink" href="#l11-maastik-2026" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Loengu osa 1, hajutuse 1. plokk.</strong> ~10 min, jätkub kohe L1.0 järel.<br />
-<strong>Miks see sulle oluline:</strong> aitab sul aru saada, millisesse ökosüsteemi tasub praegu panustada — Elastic-i suunda, OpenSearchi suunda, või Grafana LGTM suunda. Iga otsus lukustab sind aastateks.</p>
+<p><strong>Loengu osa 1, hajutuse 1. plokk.</strong> ~10 min, jätkub kohe L1.0 järel.</p>
+<p><strong>Miks see sulle oluline:</strong> aitab sul aru saada, millisesse ökosüsteemi tasub praegu panustada — Elastic-i suunda, OpenSearchi suunda, või Grafana LGTM suunda. Iga otsus lukustab sind aastateks.</p>
 </blockquote>
 <p>Eelnev tabel ütleb mis paradigma muutus on. Aga miks just <strong>praegu</strong> on selle paradigma esindajad — Elastic Stack ja OpenSearch — sellised nagu nad on? Sest 2024–26 on observability-turul olnud rohkesti mängumuutuseid.</p>
 <h3 id="konsolideerimise-laine">Konsolideerimise laine<a class="headerlink" href="#konsolideerimise-laine" title="Lingi sektsioonile">&para;</a></h3>
@@ -3150,7 +4115,7 @@
 <p>2024 lõpus muutis Elastic litsentsi tagasi — lisas AGPL-i olemasolevatele SSPL + Elastic License valikutele. Shay Banon (Elastic-i looja) kirjutas blogiposti pealkirjaga "Elasticsearch is Open Source, Again". Hea PR, aga reaalsus on, et OpenSearch eksisteerib edasi ja kasvab.</p>
 <h3 id="opentelemetry-on-voitnud-instrumenteerimise">OpenTelemetry on võitnud instrumenteerimise<a class="headerlink" href="#opentelemetry-on-voitnud-instrumenteerimise" title="Lingi sektsioonile">&para;</a></h3>
 <p>Üks asi, mis 2024–25 on selgelt välja kujunenud: <strong>OpenTelemetry on muutunud de facto standardiks</strong> rakenduste instrumenteerimisel. Datadog, Splunk, Elastic, Grafana, New Relic ja Dynatrace pakuvad kõigil OTel-põhist sisendit. See tähendab, et <strong>rakenduse instrumenteerimine ei lukusta sind enam vendorile</strong> — kui kirjutad oma rakenduse OTel SDK-ga, saad ükskõik kuhu eksportida.</p>
-<p>See on tähtsam kui tundub. Tähendab, et tänapäeva mõistlik arhitektuur on: OTel rakenduses → OTel Collector → ükskõik mis backend (Datadog, Tempo, Jaeger, Elastic APM, OpenSearch). Sa saad vendori vahetada ilma rakenduse koodi puutumata.</p>
+<p>Praktikas: OTel rakenduses → OTel Collector → ükskõik mis backend (Datadog, Tempo, Jaeger, Elastic APM, OpenSearch). Vendori vahetad ilma rakenduse koodi puutumata.</p>
 <h3 id="andmesalvestuse-standard-tulemas">Andmesalvestuse standard tulemas<a class="headerlink" href="#andmesalvestuse-standard-tulemas" title="Lingi sektsioonile">&para;</a></h3>
 <p>Vähem tuntud, aga sysadminile oluline: <strong>Apache Iceberg</strong> on kiiresti kujunemas üheks standardseks tabeliformaadiks logi- ja turbeandmete andmejärvedes. Splunk Federated Search/Analytics, Snowflake, Databricks ja teised platvormid lisavad tuge Iceberg-tabelitele, mis lubab hoida logisid ühises objektisalvestuses (S3) ja teha päringuid mitme tööriistaga. Praegu on see veel uuem suund, aga tasub teada.</p>
 <h3 id="ai-poore-vector-search-ja-bedrock">AI-pööre — vector search ja Bedrock<a class="headerlink" href="#ai-poore-vector-search-ja-bedrock" title="Lingi sektsioonile">&para;</a></h3>
@@ -3165,8 +4130,8 @@
 <hr />
 <h2 id="l12-ajalugu-kust-me-siia-joudsime">L1.2 — Ajalugu, kust me siia jõudsime<a class="headerlink" href="#l12-ajalugu-kust-me-siia-joudsime" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Loengu osa 1, hajutuse 2. plokk.</strong> ~8 min, jätkub samas blokis.<br />
-<strong>Miks see sulle oluline:</strong> aitab sul mõista, miks täna ELK ja OpenSearch ON kaks paralleelset projekti, kumb nendest on sinu olukorraga lähemal, ja miks järgmine sarnane litsentsi-drama tuleb tagasi (kui seda ei oska näha).</p>
+<p><strong>Loengu osa 1, hajutuse 2. plokk.</strong> ~8 min, jätkub samas blokis.</p>
+<p><strong>Miks see sulle oluline:</strong> aitab sul mõista, miks täna ELK ja OpenSearch ON kaks paralleelset projekti, kumb nendest on sinu olukorraga lähemal, ja miks järgmine sarnane litsentsi-drama tuleb tagasi (kui seda ei oska näha).</p>
 </blockquote>
 <pre class="mermaid"><code>timeline
     title Elasticsearch &amp; OpenSearch — võtmesündmused
@@ -3186,7 +4151,7 @@
 <p>Shay Banon, Iisraeli arendaja, kirjutas oma naise toidu-retseptide otsingusüsteemi jaoks Lucene peale REST API ja distribuiable klastri. Tegi sellest open source'i — Elasticsearch sünnib.</p>
 <p>Asi võttis hoogu kiiresti — 2012 asutati Elastic NV (firma) Hollandis. Esimene major release 1.0 — 2014.</p>
 <h3 id="2013-elk-stack-sund">2013 — ELK Stack sünd<a class="headerlink" href="#2013-elk-stack-sund" title="Lingi sektsioonile">&para;</a></h3>
-<p>Logstash (alates 2009) ja Kibana (alates 2011) liideti samasse ökosüsteemi. Sünnib <strong>ELK Stack</strong> — Elasticsearch + Logstash + Kibana. Mängumuutja logide jaoks. Enne ELK-i oli logide tsentraliseerimine kallis (Splunk) või kohutavalt valus (syslog + grep). ELK demokrastiseeris logide kogumise.</p>
+<p>Logstash (2009) ja Kibana (2011) liideti samasse ökosüsteemi. Sünnib ELK Stack: Elasticsearch + Logstash + Kibana. Enne seda olid kaks valikut — Splunk (kallis) või syslog + grep (valus). ELK pakkus kolmandat: tasuta, tsentraalne, otsitav.</p>
 <h3 id="2015-beats-lisandub-aws-astub-sisse">2015 — Beats lisandub, AWS astub sisse<a class="headerlink" href="#2015-beats-lisandub-aws-astub-sisse" title="Lingi sektsioonile">&para;</a></h3>
 <p>Logstash oli raske (JVM, suur RAM). Lisandusid kerged agendid Go-s: <strong>Filebeat</strong> (failidest logid), <strong>Metricbeat</strong> (süsteemi mõõdikud), <strong>Auditbeat</strong> (audit-logid), <strong>Packetbeat</strong> (võrgupaketid). ELK saab "Elastic Stack"-iks.</p>
 <p>Samal aastal käivitas Amazon <strong>Amazon Elasticsearch Service</strong>'i — managed Elasticsearch AWS-is. See oli kaubanduslik edu, aga ka tüli algus.</p>
@@ -3197,7 +4162,7 @@
 <p><strong>Jaanuaris 2021</strong> Elastic muudab versioonis <strong>7.11</strong> litsentsi: <strong>Apache 2.0 → SSPL (Server Side Public License) + Elastic License</strong>. SSPL nõuab, et kui sa pakud SSPL-tarkvara teenusena, peab kogu sinu teenuse stack ka avatud lähtekoodiga olema. <strong>Open Source Initiative (OSI) ei tunnista SSPL-i open source litsentsina.</strong></p>
 <p>Praktikas: AWS ei saa enam Apache 2.0 tingimustel Elasticsearchi managed teenusena pakkuda.</p>
 <p>Vastus tuli kiiresti. AWS fork-is <strong>viimase Apache 2.0 versiooni — Elasticsearch 7.10.2</strong> — aprillis 2021. Koos Logz.io, Aiveni jt-ga moodustub <strong>OpenSearch projekt</strong> — Apache 2.0 all, AWS-i taga. Mai 2021 — esimene OpenSearch 1.0 release.</p>
-<p>See oli <strong>valuline lõik</strong>. Kahe aasta jooksul oli ökosüsteem segaduses — millisel litsentsil mis versioon, kas Logstash on ELK või OpenSearchi osa (mõlema, Logstash jäi Apache 2.0-le), kas Kibana saab kasutada OpenSearchiga (algselt jah, hiljem ei).</p>
+<p>Kaks järgnevat aastat oli ökosüsteem segane. Millisel litsentsil mis versioon. Kas Logstash on ELK või OpenSearchi osa (mõlema — Logstash jäi Apache 2.0-le). Kas Kibana saab kasutada OpenSearchiga (algselt jah, hiljem ei).</p>
 <h3 id="2023-vector-search">2023 — vector search<a class="headerlink" href="#2023-vector-search" title="Lingi sektsioonile">&para;</a></h3>
 <p>Elasticsearch 8.x lisab <code>dense_vector</code> field type, kNN otsingu, transformer-mudelite integratsiooni (Hugging Face). OpenSearch 2.x lisab neural search plugin'i ja FAISS integratsiooni.</p>
 <h3 id="2024-kaks-paralleelset-uudist">2024 — kaks paralleelset uudist<a class="headerlink" href="#2024-kaks-paralleelset-uudist" title="Lingi sektsioonile">&para;</a></h3>
@@ -3206,10 +4171,388 @@
 <h3 id="2026-kus-me-oleme">2026 — kus me oleme<a class="headerlink" href="#2026-kus-me-oleme" title="Lingi sektsioonile">&para;</a></h3>
 <p>Mõlemad on open source. Mõlemad lisavad AI-võimekust agressiivselt. Mõlemad on tootmiskõlblikud. Valik on <strong>kontekst- ja meeskonna-põhine</strong>, mitte tehniline. Aga sa pead teadma, <strong>mis nendega täna teha saab</strong>. Selle juurde läheme nüüd.</p>
 <hr />
-<h2 id="l13-elasticsearch-vs-opensearch-tana">L1.3 — Elasticsearch vs OpenSearch täna<a class="headerlink" href="#l13-elasticsearch-vs-opensearch-tana" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="l13-dokumendi-mudel-json-indeksid-mappings-data-streams">L1.3 — Dokumendi-mudel: JSON, indeksid, mappings, data streams<a class="headerlink" href="#l13-dokumendi-mudel-json-indeksid-mappings-data-streams" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Loengu osa 1, hajutuse 3. plokk.</strong> ~12 min, jätkub samas blokis kuni L1 lõpuni.<br />
-<strong>Miks see sulle oluline:</strong> otsustamise raam, mille järgi valida Elastic Cloud, Elasticsearch on-prem, Amazon OpenSearch Service, OpenSearch Serverless või OpenSearch on-prem — koos hinnamudelite ja TCO komponentidega, mida CFO sinult küsib.</p>
+<p><strong>Loengu osa 1, hajutuse 4. plokk.</strong> ~15 min, jätkub L1.2 järel.</p>
+<p><strong>Miks see sulle oluline:</strong> see on <strong>alus</strong>, millele kogu Elastic Stacki monitooring on ehitatud. Kui sa ei mõista, mis on dokument ja kuidas indeks töötab, lähevad kõik järgnevad otsused (shard'id, mappings, ILM) sinust mööda.</p>
+</blockquote>
+<h3 id="logist-saab-dokument">Logist saab dokument<a class="headerlink" href="#logist-saab-dokument" title="Lingi sektsioonile">&para;</a></h3>
+<p>Klassikaline Linux logi: tekstirida failis.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>May 22 19:03:14 web-prod-01 nginx: 10.0.42.7 - - [22/May/2026:19:03:14 +0000] &quot;GET /api/orders HTTP/1.1&quot; 500 142 &quot;-&quot; &quot;Mozilla/5.0&quot;
+</span></code></pre></div>
+<p>Mida saab sellelt küsida? <strong>Ainult <code>grep</code>-iga otsida</strong>: "leia kõik read kus on <code>500</code>". Aga sa ei saa küsida: "leia kõik 5xx vastused, kus latentsus oli &gt; 200ms, kasutaja oli sisselõginud ja see toimus tunni jooksul". Tekstirida ei tea, <strong>mis on mis</strong>.</p>
+<p>Elasticsearch teisendab sama logi <strong>JSON-dokumendiks</strong>:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;@timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-22T19:03:14.000Z&quot;</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;host.name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;web-prod-01&quot;</span><span class="p">,</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;service.name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;nginx&quot;</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;client.ip&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10.0.42.7&quot;</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;http.request.method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;url.path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/api/orders&quot;</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;http.response.status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;http.response.body.bytes&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">142</span><span class="p">,</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;user_agent.original&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mozilla/5.0&quot;</span><span class="p">,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">&quot;event.duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">234000000</span><span class="p">,</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">&quot;user.id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alice@example.com&quot;</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Noud sa saad küsida täiesti teistsuguseid päringuid:</p>
+<ul>
+<li><code>http.response.status_code: [500 TO 599] AND event.duration &gt; 200000000</code></li>
+<li><code>host.name: web-prod-* AND user.id: *@example.com</code></li>
+<li>Aggregeerida: "top 10 client.ip, kes said 5xx vastuseid viimase tunni jooksul"</li>
+</ul>
+<p>See on <strong>structured logging</strong>. Iga väli on <strong>eraldi otsitav</strong>, <strong>filterdataav</strong>, <strong>agregeeritav</strong>. See on põhjus, miks tootmissysteemid lasevad logid <strong>JSON-ina</strong> välja, mitte vabas tekstis.</p>
+<div class="admonition tip">
+<p class="admonition-title">💡 ECS — Elastic Common Schema</p>
+<p>Logidel on <strong>standardiseeritud väljanimed</strong> — <code>host.name</code>, <code>service.name</code>, <code>http.response.status_code</code> jne. See on <strong>Elastic Common Schema</strong>, mille Elastic avaldas 2019 ja mis on muutunud de facto standardiks. OpenSearch töötab samade väljanimedega. Kui sa kasutad ECS-i, on sinu dashboardid ülekantavad teise süsteemi.</p>
+</div>
+<h3 id="indeks-sql-i-indeks">Indeks ≠ SQL-i indeks<a class="headerlink" href="#indeks-sql-i-indeks" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui sul on SQL-taust, <strong>unusta</strong> see sõna hetkeks. SQL-is on "index" optimiseerimis-struktuur (B-tree või sarnane). Elasticsearchis on <strong>indeks</strong> loogiline <strong>dokumentide kollektsioon</strong> — nagu SQL-i <strong>tabel</strong> või MongoDB <strong>collection</strong>.</p>
+<p>Nimetus tuli sellest, et iga sellise kollektsiooni all istub <strong>Lucene'i inverted index</strong> (mis on optimiseerimis-struktuur). Aga <strong>ES-i indeks</strong> on andmete-kollektsioon, mitte struktuur.</p>
+<p>Monitooringus on indeksid <strong>enamasti time-based</strong>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>logs-nginx-2026.05.20
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>logs-nginx-2026.05.21
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>logs-nginx-2026.05.22  ← täna siia kirjutatakse
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>metrics-host-2026.05.20
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>metrics-host-2026.05.21
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>metrics-host-2026.05.22
+</span></code></pre></div>
+<p><strong>Miks päeva-kaupa?</strong> Sest:</p>
+<ul>
+<li>Vana päev (eile) on <strong>immutable</strong> — sinna ei lisandu enam. Saab teha optimisat (force merge, snapshot).</li>
+<li>Vana päev saab <strong>kolida odavamale storage'le</strong> ilma täna-indeksit puudutamata (Hot → Warm → Cold).</li>
+<li>Vana päeva saab <strong>kustutada</strong> (delete index) ilma keerulise SQL <code>DELETE WHERE timestamp &lt; ...</code> päringuta.</li>
+</ul>
+<h3 id="mapping-valjade-sonastik">Mapping — väljade sõnastik<a class="headerlink" href="#mapping-valjade-sonastik" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Mapping</strong> on indeksi schema — mis väljad indeksis on ja mis tüüpi. ES saab mappingu <strong>automaatselt</strong> ära arvata (dynamic mapping), aga production'is mõistlikult <strong>määrad ise</strong>.</p>
+<p><strong>Olulisemad välja-tüübid monitooringus:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tüüp</th>
+<th>Kasutus</th>
+<th>Miks oluline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>Full-text otsing ("error message" → tokeniseeritakse)</td>
+<td>KQL <code>message: error</code> leiab; aga ei saa täpset matchi</td>
+</tr>
+<tr>
+<td><code>keyword</code></td>
+<td>Exact match ("host.name": "web-prod-01")</td>
+<td>Filter, aggregation, sort</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>Ajaline väli</td>
+<td><code>@timestamp</code> päringuteks, range filter</td>
+</tr>
+<tr>
+<td><code>long</code>, <code>double</code></td>
+<td>Numbrid</td>
+<td>Latentsus, baidid, count'id</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td>true/false</td>
+<td>Filter</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>IP-aadress</td>
+<td>CIDR päringud: <code>client.ip: 10.0.0.0/8</code></td>
+</tr>
+<tr>
+<td><code>geo_point</code></td>
+<td>Latitude/longitude</td>
+<td>Kaardi-visualisatsioonid</td>
+</tr>
+<tr>
+<td><code>keyword</code> (multi)</td>
+<td>Tagid, kategooriad</td>
+<td>terms aggregation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lugu, mille pärast see oluline on:</strong> sa indekseerid logi <code>"host.name": "web-prod-01"</code>. Dynamic mapping otsustab et see on <code>text</code> (mitte <code>keyword</code>). Nüüd:</p>
+<ul>
+<li>KQL <code>host.name: "web-prod-01"</code> — <strong>ei tööta</strong> korralikult (text väli tokeniseeritakse, <code>web-prod-01</code> jaguneb)</li>
+<li>Aggregation <strong>terms</strong> <code>host.name</code> peale — ei luba seda (text väljade peal terms agg vaikimisi keelatud)</li>
+<li>Kibana Visualize ütleb "this field is not aggregatable"</li>
+</ul>
+<p>Lahendus: määra <code>host.name: { "type": "keyword" }</code> enne esimest dokumenti. Selleks on <strong>index template</strong>.</p>
+<h3 id="index-template-schema-mis-tootab-tulevikku">Index template — schema, mis töötab tulevikku<a class="headerlink" href="#index-template-schema-mis-tootab-tulevikku" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui sa kirjutad iga päeva uue indeksi (<code>logs-nginx-2026.05.22</code>, <code>logs-nginx-2026.05.23</code>...), sa ei taha määrata mapping'ut iga indeksi jaoks eraldi. <strong>Index template</strong> ütleb: "kui keegi loob indeksi, mis vastab mustrile <code>logs-nginx-*</code>, rakenda neid seadeid ja mapping'ut".</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_i</span><span class="kc">n</span><span class="err">dex_</span><span class="kc">te</span><span class="err">mpla</span><span class="kc">te</span><span class="err">/logs</span><span class="mi">-</span><span class="kc">n</span><span class="err">gi</span><span class="kc">n</span><span class="err">x</span><span class="mi">-</span><span class="kc">te</span><span class="err">mpla</span><span class="kc">te</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;index_patterns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;logs-nginx-*&quot;</span><span class="p">],</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">&quot;template&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">&quot;settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">&quot;number_of_shards&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nt">&quot;number_of_replicas&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="nt">&quot;mappings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="nt">&quot;@timestamp&quot;</span><span class="p">:</span><span class="w">              </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;date&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="nt">&quot;host.name&quot;</span><span class="p">:</span><span class="w">               </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="nt">&quot;client.ip&quot;</span><span class="p">:</span><span class="w">               </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ip&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="nt">&quot;http.response.status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;short&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="nt">&quot;event.duration&quot;</span><span class="p">:</span><span class="w">          </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;long&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>No igapäevane uus indeks saab automaatselt õiged seaded ja schema.</p>
+<h3 id="index-alias-uks-nimi-mitu-indeksit">Index alias — üks nimi, mitu indeksit<a class="headerlink" href="#index-alias-uks-nimi-mitu-indeksit" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui rakendus tahab öelda "kirjuta uus logi siia", see ei taha teada, mis on tänane kuupäev. <strong>Alias</strong> on loogiline pseudõnim:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>logs-nginx-current  →  logs-nginx-2026.05.22
+</span></code></pre></div>
+<p>Homme öösel toimub alias-rotation — <code>logs-nginx-current</code> osutab nuud <code>logs-nginx-2026.05.23</code> peale, atomic-operatsioon, rakendus ei märka muutust.</p>
+<h3 id="data-stream-modernne-abstraktsioon">Data stream — modernne abstraktsioon<a class="headerlink" href="#data-stream-modernne-abstraktsioon" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elasticsearch 7.9+ (ja OpenSearch) toetab <strong>data stream'i</strong> — see varjab alias'eid ja templates'eid ühe nime taha. Sa kirjutad <code>logs-nginx</code>, ES haldab rotatsiooni, hot/warm üleminekut, ILM-i — kõik on data stream'i sees.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>logs-nginx  (data stream)
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>└─ .ds-logs-nginx-2026.05.20-000001  (Hot, kirjutamiseks)
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>└─ .ds-logs-nginx-2026.05.20-000002  (Warm)
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>└─ .ds-logs-nginx-2026.05.20-000003  (Cold)
+</span></code></pre></div>
+<p>Kaasaegne soovitus: <strong>kasuta data streams logide jaoks</strong>, klassikaline alias + template-lähenemine on backward-compatible.</p>
+<div class="admonition info">
+<p class="admonition-title">OpenSearch-i vasted</p>
+<p>OpenSearch toetab samu kontseptsioone teiste nimedega ja üksikute erinevustega:</p>
+<ul>
+<li><strong>Index</strong> = sama</li>
+<li><strong>Mapping</strong> = sama</li>
+<li><strong>Index template</strong> = sama</li>
+<li><strong>Index alias</strong> = sama</li>
+<li><strong>Data stream</strong> = OpenSearch 1.2+ toetab data streams analoogiliselt</li>
+<li><strong>ECS</strong> = OpenSearch kasutab oma <strong>OpenSearch Observability Schema (OOS)</strong> või samu ECS välju (sageli kasutatakse ECS-i)</li>
+</ul>
+</div>
+<h3 id="kokkuvote-l13-st">Kokkuvõte L1.3-st<a class="headerlink" href="#kokkuvote-l13-st" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elasticsearch ja OpenSearch on <strong>dokumendi-baasidatel</strong> — logi on JSON-dokument, mille iga väli on otsitav. Mapping määrab välja-tüübi (<code>text</code> vs <code>keyword</code> on monitooringu jaoks kriitilise tähtsusega). Indeks on dokumentide kollektsioon, mitte SQL-i indeks. Time-based indeksid (<code>logs-nginx-2026.05.22</code>) võimaldavad rotatsiooni, ILM-i ja kustutamist ilma SQL-stiilis DELETE-deta. Template + alias + data stream on operatiivsed tööriistad, mida sa <strong>igapäevases monitooring-stackis kasutad</strong>.</p>
+<hr />
+<h2 id="l14-stack-ingestion-kuidas-logid-jouavad-klasterisse">L1.4 — Stack ingestion: kuidas logid jõuavad klasterisse<a class="headerlink" href="#l14-stack-ingestion-kuidas-logid-jouavad-klasterisse" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 1, hajutuse 5. plokk.</strong> ~15 min, jätkub L1.3 järel.</p>
+<p><strong>Miks see sulle oluline:</strong> Elasticsearch ise ei lae logisid — ta hoiab neid ja teeb päringuid. Vahel rakenduse ja klastri vahel istub <strong>ingestion-kiht</strong>, mis loeb logifaile, parsib neid, lisab kontekstit ja saadab klastrisse. See valik (Beats vs Logstash vs Elastic Agent vs OTel) <strong>mõjutab sinu igapäevast tööd</strong> rohkem kui klastri-konfiguratsioon ise.</p>
+</blockquote>
+<h3 id="beats-kerged-shippers">Beats — kerged shippers<a class="headerlink" href="#beats-kerged-shippers" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Beats</strong> on <strong>Go-s kirjutatud kerged data shippers</strong>, igaks andmetüübiks oma. Installeeritakse igale hostile (server, konteiner, VM), nad loevad oma andmeid ja saadavad otse ES-i või Logstash'i / Kafka kaudu.</p>
+<table>
+<thead>
+<tr>
+<th>Beat</th>
+<th>Mida shippib</th>
+<th>Näide kasutuses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Filebeat</strong></td>
+<td>Logifailid (<code>/var/log/*</code>, app logid)</td>
+<td>Iga nginx, sshd, app server</td>
+</tr>
+<tr>
+<td><strong>Metricbeat</strong></td>
+<td>Süsteemi + app meetrikud</td>
+<td>CPU, mälu, ketas, MySQL päringud, Redis-i memory</td>
+</tr>
+<tr>
+<td><strong>Auditbeat</strong></td>
+<td>Linux audit logid</td>
+<td>Failimuutuste jälgimine, kasutaja-tegevused</td>
+</tr>
+<tr>
+<td><strong>Heartbeat</strong></td>
+<td>Uptime checks (HTTP/TCP/ICMP)</td>
+<td>Kas API on üleval? Kas SSL-sert kehtib?</td>
+</tr>
+<tr>
+<td><strong>Packetbeat</strong></td>
+<td>Võrgu-pakettide analyys</td>
+<td>DNS, HTTP, Cassandra protokolli-tasemel</td>
+</tr>
+<tr>
+<td><strong>Winlogbeat</strong></td>
+<td>Windows Events</td>
+<td>AD logimine, security events</td>
+</tr>
+<tr>
+<td><strong>Functionbeat</strong></td>
+<td>Cloud function logid</td>
+<td>AWS Lambda, GCP Functions</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Plus:</strong> kerge (10–20 MB RAM per beat), kiire, lihtne konfigureerida.</p>
+<p><strong>Miinus:</strong> iga andmetüübi jaoks eraldi beat = <strong>mitu serviceit</strong>. Suuremas keskkonnas (1000+ hosti) on <strong>konfiguratsiooni-haldus</strong> valus.</p>
+<h3 id="logstash-raskekoige-transform-mootor">Logstash — raskekõige transform-mootor<a class="headerlink" href="#logstash-raskekoige-transform-mootor" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Logstash</strong> on <strong>JRuby-l põhinev pipeline</strong> (<code>input → filter → output</code>), mis suudab teha keerulisi transformatsioone. Klassikaline kasutus: <strong>unstructured logi parsing</strong>.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>input {
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  beats { port =&gt; 5044 }
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>}
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>filter {
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  grok {
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    match =&gt; { &quot;message&quot; =&gt; &quot;%{IPORHOST:client.ip} %{HTTPDATE:[@timestamp]} \&quot;%{WORD:http.request.method} %{URIPATH:url.path}&quot; }
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  }
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  geoip { source =&gt; &quot;client.ip&quot; }
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  date { match =&gt; [ &quot;[@timestamp]&quot;, &quot;dd/MMM/yyyy:HH:mm:ss Z&quot; ] }
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>}
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>output {
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  elasticsearch {
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    hosts =&gt; [&quot;https://es01:9200&quot;]
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    index =&gt; &quot;logs-nginx-%{+YYYY.MM.dd}&quot;
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>  }
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>}
+</span></code></pre></div>
+<p><strong>Tugev kus:</strong></p>
+<ul>
+<li><strong>Grok</strong> — regex-põhine parsing unstructured logidele (kus rakendus ei suuda JSON-i väljastada)</li>
+<li><strong>Enrichment</strong>: GeoIP (IP → riik/linn), DNS lookup, user_agent parse</li>
+<li><strong>Mitu sisendit / väljundit korraga</strong>: ES + Kafka + S3</li>
+<li><strong>Conditional logic</strong>: "kui status_code &gt;= 500, saada ka Slack'i"</li>
+</ul>
+<p><strong>Nõrk kus:</strong></p>
+<ul>
+<li><strong>Raske</strong> — JVM, 1–2 GB RAM, installüss + haldus</li>
+<li><strong>Sundjada toimkonda</strong> — vahel pole tegelik vajadus</li>
+</ul>
+<p><strong>Tavaline disain</strong>: Beats hostidel → Logstash (kesksena, 1–3 instantsi) → ES. Logstash teeb "raskem" töö (parsing, enrichment), Beats teevad "kõva" töö (lugemine + saatmine).</p>
+<h3 id="elastic-agent-fleet-moderne-tee-2022">Elastic Agent + Fleet — moderne tee (2022+)<a class="headerlink" href="#elastic-agent-fleet-moderne-tee-2022" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elastic võttis 2022 vastu valikuotsuse: <strong>mitme erineva Beat'i asemel üks Agent</strong>.</p>
+<p><strong>Elastic Agent</strong> on <strong>üks binary</strong>, mis suudab teha kõike, mida Beats teevad eraldi:</p>
+<ul>
+<li>Loeb logifaile (nagu Filebeat)</li>
+<li>Kogub metrikuid (nagu Metricbeat)</li>
+<li>Audit logid (nagu Auditbeat)</li>
+<li>Uptime checks (nagu Heartbeat)</li>
+</ul>
+<p>Konfiguratsioon ei toimu hostis (YAML failina), vaid <strong>Fleet'is</strong> — Kibana sisene UI, kust haldad kõiki agente keskselt.</p>
+<p><strong>Integration'id</strong> — valmis-konfiguratsioonid spetsiifilistele teenustele: nginx, Apache, MySQL, PostgreSQL, Redis, Kafka, Kubernetes, AWS, Azure, GCP, Docker, Fortinet, Cisco jne. Kõik koos dashboardide, alertide, ECS-mappingutega.</p>
+<p><strong>Soovitus:</strong> <strong>uutele deployment'idele kasuta Elastic Agent + Fleet'i</strong>. Olemasolev Beats setup töötab edasi, aga migreerumine on mõtlik.</p>
+<h3 id="andmevoog-uldine-pilt">Andmevoog (üldine pilt)<a class="headerlink" href="#andmevoog-uldine-pilt" title="Lingi sektsioonile">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+  subgraph Hosts["🖥️ Hostid / kõik kohad, kus logid tekivad"]
+    H1["Filebeat /&lt;br/&gt;Elastic Agent"]
+    H2["Metricbeat /&lt;br/&gt;Elastic Agent"]
+    H3["App OTel SDK"]
+  end
+
+  H1 --&gt; KAFKA[("Kafka või Redis&lt;br/&gt;buffer&lt;br/&gt;vali oluliselt")]
+  H2 --&gt; KAFKA
+  H3 --&gt; OTEL["OTel&lt;br/&gt;Collector"]
+  OTEL --&gt; KAFKA
+
+  KAFKA --&gt; LS["Logstash&lt;br/&gt;parsing / enrichment"]
+  LS --&gt; ES[("Elasticsearch /&lt;br/&gt;OpenSearch&lt;br/&gt;klaster")]
+
+  FLEET["Fleet UI&lt;br/&gt;(Kibanas)"] -.haldab.-&gt; H1
+  FLEET -.haldab.-&gt; H2
+
+  ES --&gt; K["Kibana /&lt;br/&gt;OS Dashboards"]
+
+  style KAFKA fill:#ffe0b2
+  style ES fill:#bbdefb
+  style K fill:#c5e1a5
+  style FLEET fill:#f8bbd0</code></pre>
+<p><strong>Kafka või Redis vahel</strong> on tihti vajalik, kui logide-maht on &gt; ~100 GB/päev või klaster maintenance'i ajal ei tohi logisid kaotada.</p>
+<h3 id="opensearch-ingestion">OpenSearch ingestion<a class="headerlink" href="#opensearch-ingestion" title="Lingi sektsioonile">&para;</a></h3>
+<p>OpenSearchil ei ole Elastic-i Beats'idega ühilduvat ökosüsteemi (alates 2021 fork'i ajast Beats jäi Elastic'iga). OpenSearch'i tavaline ingestion-stack:</p>
+<table>
+<thead>
+<tr>
+<th>Komponent</th>
+<th>Kirjeldus</th>
+<th>Vaste Elastic'is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data Prepper</strong></td>
+<td>OpenSearchi natiivne pipeline (Java, sarnane Logstashile)</td>
+<td>Logstash</td>
+</tr>
+<tr>
+<td><strong>Fluent Bit</strong></td>
+<td>Kerge log shipper, vendor-neutral, kõige populaarsem OS-iga</td>
+<td>Filebeat</td>
+</tr>
+<tr>
+<td><strong>Fluentd</strong></td>
+<td>Raskem variant Fluent Bit'ist, Ruby-põhine</td>
+<td>Logstash (osaliselt)</td>
+</tr>
+<tr>
+<td><strong>Vector</strong></td>
+<td>Datadog'i avatud-kood log shipper, Rust, kiire</td>
+<td>Filebeat / Logstash kombineeritud</td>
+</tr>
+<tr>
+<td><strong>OpenSearch Ingestion</strong> (AWS)</td>
+<td>AWS-i hallatud Data Prepper teenus</td>
+<td>Elastic Cloud ingestion</td>
+</tr>
+</tbody>
+</table>
+<h3 id="opentelemetry-collector-tulevik">OpenTelemetry Collector — tulevik<a class="headerlink" href="#opentelemetry-collector-tulevik" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>OpenTelemetry Collector</strong> (OTel Collector) on <strong>vendor-neutraalne</strong> ingestion-lüli. Aktsepteerib <strong>metrikuid, traceid ja logisid</strong> (logid newer-feature), väljastab kuhu tahad: ES, OS, Tempo, Prometheus, Loki, Splunk, Datadog — kõik korraga või valikuliselt.</p>
+<p><strong>Miks oluline:</strong> kui sa instrumenteerid oma rakenduse OTel SDK-ga, sinu vendor-valik jääb <strong>avatuks</strong>. Saad migreeruda ES → OS, või välja-lülitada Splunk'i ühes regioonis, ilma rakenduse-koodi muutmata.</p>
+<h3 id="otsustamise-raam-mis-ingestion-tooriist">Otsustamise raam: mis ingestion-tööriist?<a class="headerlink" href="#otsustamise-raam-mis-ingestion-tooriist" title="Lingi sektsioonile">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Olukord</th>
+<th>Vali</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uus Elastic Stack deployment</td>
+<td><strong>Elastic Agent + Fleet</strong></td>
+</tr>
+<tr>
+<td>Olemasolev Beats setup, ei taha migreerida</td>
+<td>Beats edasi, lisa Logstash kui vaja parsing'ut</td>
+</tr>
+<tr>
+<td>Vajab kompleks-parsing'ut unstructured logide jaoks</td>
+<td>Filebeat → <strong>Logstash</strong> → ES</td>
+</tr>
+<tr>
+<td>OpenSearch deployment</td>
+<td><strong>Fluent Bit + Data Prepper</strong> või <strong>OTel Collector</strong></td>
+</tr>
+<tr>
+<td>Vendor-neutral, multi-backend (ES + Splunk + Tempo)</td>
+<td><strong>OTel Collector</strong></td>
+</tr>
+<tr>
+<td>Logide-maht &gt; 100 GB/päev, klaster on "värske"</td>
+<td>Lisa <strong>Kafka</strong> vahele puhvriks (sama L2 "Kafka" osa)</td>
+</tr>
+<tr>
+<td>Cloud-native (Kubernetes-natiivne)</td>
+<td><strong>Fluent Bit</strong> (sidecar / DaemonSet) või <strong>OTel Collector</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">💡 Mõtle hetk</p>
+<p>Mis sinu organisatsioonis on praegu ingestion-kihiks? Kui see on "app kirjutab faili, syslog-ng saadab kuhugi", siis migreerumine <strong>Filebeat'ile või Elastic Agent'ile</strong> võtab järjepideva nadalavahetuse, aga vahetab teie monitooring-võimekuse täiesti ümber.</p>
+</div>
+<h3 id="kokkuvote-l14-st">Kokkuvõte L1.4-st<a class="headerlink" href="#kokkuvote-l14-st" title="Lingi sektsioonile">&para;</a></h3>
+<p>Ingestion-kiht otsustab, mis kvaliteediga logid klastrisse jõuavad ja kui palju vaeva võtab nende haldamine. <strong>Beats</strong> on klassikaline (üks-andmetüüp-üks-beat), <strong>Logstash</strong> on raskem transform-mootor, <strong>Elastic Agent + Fleet</strong> on modern unified lähenemine. <strong>OpenTelemetry Collector</strong> on vendor-neutraalne tulevik. OpenSearchi vasted: Data Prepper, Fluent Bit, Vector. <strong>Sinu valik mõjutab igapäevast tööd rohkem kui klastri-konfiguratsioon.</strong></p>
+<hr />
+<h2 id="l15-elasticsearch-vs-opensearch-tana">L1.5 — Elasticsearch vs OpenSearch täna<a class="headerlink" href="#l15-elasticsearch-vs-opensearch-tana" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 1, hajutuse 3. plokk.</strong> ~12 min, jätkub samas blokis kuni L1 lõpuni.</p>
+<p><strong>Miks see sulle oluline:</strong> otsustamise raam, mille järgi valida Elastic Cloud, Elasticsearch on-prem, Amazon OpenSearch Service, OpenSearch Serverless või OpenSearch on-prem — koos hinnamudelite ja TCO komponentidega, mida CFO sinult küsib.</p>
 </blockquote>
 <h3 id="komponendid-peaaegu-identsed">Komponendid — peaaegu identsed<a class="headerlink" href="#komponendid-peaaegu-identsed" title="Lingi sektsioonile">&para;</a></h3>
 <p>Sama tüvi 2021-st tähendab, et komponendid kannavad sageli sama nime ja teevad sama asja. Esmalt vaatame <strong>Elastic Stack</strong> terviklikult, siis kõrval OpenSearchi vasted.</p>
@@ -3300,7 +4643,7 @@
 <li><strong>Elasticsearch klaster</strong> on südamik — sealsamas elavad nii <strong>logid</strong>, <strong>mol metrics</strong>, <strong>APM traçeid</strong> kui <strong>vector embeddings</strong></li>
 <li><strong>Kibana</strong> ei ole "ainult dashboardid" — ta on <strong>kogu Elastic Stack'i UI</strong>, sh APM, SIEM (security), Observability, Machine Learning kasutajaliidesed</li>
 </ul>
-<h3 id="security-siin-algab-erinevus">Security — siin algab erinevus<a class="headerlink" href="#security-siin-algab-erinevus" title="Lingi sektsioonile">&para;</a></h3>
+<h3 id="security">Security<a class="headerlink" href="#security" title="Lingi sektsioonile">&para;</a></h3>
 <p><strong>Elastic xpack</strong> (osa Elastic License) on Elastici enda security stack. RBAC, doc-level security, field masking, audit-log, SSO, krüpteerimine. Põhilised asjad on tasuta (Basic license), edasijõudnud (SAML SSO, audit) kommerts (Platinum+).</p>
 <p><strong>OpenSearch Security plugin</strong> (Apache 2.0) on <strong>vaba</strong>. Teeb sama asju: RBAC, doc-level, field masking, audit. Konfiguratsioon erineb (YAML failid vs API), aga võimekus on sageli <strong>rikastam vabas versioonis</strong> kui Elastic xpack basic.</p>
 <h3 id="aws-integratsioon-os-i-tugevaim-eelis">AWS integratsioon — OS-i tugevaim eelis<a class="headerlink" href="#aws-integratsioon-os-i-tugevaim-eelis" title="Lingi sektsioonile">&para;</a></h3>
@@ -3318,7 +4661,7 @@
 <p><strong>Elastic</strong> pakub kahte asja, mis on praktikas väga lihtsalt kasutatavad:</p>
 <ul>
 <li><strong>ELSER</strong> (Elastic Learned Sparse EncodeR) — Elastic-i enda treenitud sparse retrieval mudel. Pre-trained, töötab inglise keeles. Lisaks toetab Elastic teisi embedding-mudeleid (nt e5-põhised multilingual mudelid), mida saab <code>semantic_text</code> väljaga siduda.</li>
-<li><strong><code>semantic_text</code> field</strong> (alates 8.13, 2024) — sa lisad oma indeksisse semantic_text-tüüpi välja, Elastic indekseerib selle automaatselt nii BM25-ga (sõnaline) kui ELSER-iga (semantiline). Päring annab hübriid-skoori. <strong>Üks API, kaks otsingumeetodit korraga.</strong></li>
+<li><code>semantic_text</code> field (8.13+, 2024): lisad indeksisse semantic_text-tüüpi välja, Elastic indekseerib selle automaatselt nii BM25-ga (sõnaline) kui ELSER-iga (semantiline). Päring annab hübriid-skoori.</li>
 </ul>
 <p><strong>OpenSearch</strong> pakub kahte komplementaarset võimalust:</p>
 <ul>
@@ -3466,8 +4809,8 @@
 <hr />
 <h2 id="l2-arhitektuur-solmed-shardid-quorum-999">L2 — Arhitektuur: sõlmed, shardid, quorum, 99.9%<a class="headerlink" href="#l2-arhitektuur-solmed-shardid-quorum-999" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Loengu osa 2.</strong> ~15 min, hajutuse 2. plokk — enne Osa 2 (3-node klastri laienemine).<br />
-<strong>Miks see sulle oluline:</strong> aitab sul dimensioneerida klastrit, mis ei kuku ootamatult — mitu master node'i, kui palju RAM-i, kus on backup'id, kuidas Kafka puhverdab koormust, ja millal mis indeks tier'isse läheb.</p>
+<p><strong>Loengu osa 2.</strong> ~15 min, hajutuse 2. plokk — enne Osa 2 (3-node klastri laienemine).</p>
+<p><strong>Miks see sulle oluline:</strong> aitab sul dimensioneerida klastrit, mis ei kuku ootamatult — mitu master node'i, kui palju RAM-i, kus on backup'id, kuidas Kafka puhverdab koormust, ja millal mis indeks tier'isse läheb.</p>
 </blockquote>
 <p>Osa 1 lõpus nägid sa midagi, mis võib esimese pilguga tunduda imelik: lõid indeksi, läksid Kibanasse, ja <strong>klastri olek näitas kollasena</strong>. Andmed olid sees, otsing töötas, aga oleku-tuli oli kollane. Miks?</p>
 <p>Vastus on <strong>replica shardides</strong> ja sellega, et single-node klastris pole võimalik neid kuhugi paigutada. Selle teema raames vaatame, kuidas Elasticsearch (ja OpenSearch — identne arhitektuur) on <strong>päriselt</strong> ehitatud, et mõista, miks production-klaster näeb välja teistsugune kui Osa 1 setup.</p>
@@ -3642,14 +4985,14 @@
 <li><strong>Shared filesystem</strong> (NFS) — testimiseks ok, tootmisse mitte</li>
 <li><strong>HDFS</strong> — vanad keskkonnad</li>
 </ul>
-<div class="language-http highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="err">PUT _snapshot/my_s3_repo</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="err">{</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="err">  &quot;type&quot;: &quot;s3&quot;,</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="err">  &quot;settings&quot;: { &quot;bucket&quot;: &quot;my-elasticsearch-backups&quot;, &quot;region&quot;: &quot;eu-north-1&quot; }</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="err">}</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="err">PUT _snapshot/my_s3_repo/snapshot_2026_05_17</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="err">{ &quot;indices&quot;: &quot;logs-*&quot;, &quot;include_global_state&quot;: false }</span>
+<div class="language-http highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="err">PUT _snapshot/my_s3_repo</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="err">{</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="err">  &quot;type&quot;: &quot;s3&quot;,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="err">  &quot;settings&quot;: { &quot;bucket&quot;: &quot;my-elasticsearch-backups&quot;, &quot;region&quot;: &quot;eu-north-1&quot; }</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="err">}</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="err">PUT _snapshot/my_s3_repo/snapshot_2026_05_17</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="err">{ &quot;indices&quot;: &quot;logs-*&quot;, &quot;include_global_state&quot;: false }</span>
 </span></code></pre></div>
 <p><strong>Snapshot Lifecycle Management (SLM)</strong> automatiseerib: igapäevased snapshotid, 30 päeva säilitamine, vana kustutamine. <strong>Aga —</strong> ja see on oluline — <strong>testi restore</strong>'i regulaarselt. Snapshot, mida pole kunagi taastatud, ei ole backup.</p>
 <h3 id="ccr-cross-cluster-replication">CCR — Cross-Cluster Replication<a class="headerlink" href="#ccr-cross-cluster-replication" title="Lingi sektsioonile">&para;</a></h3>
@@ -3743,18 +5086,18 @@
 </table>
 <p><strong>Searchable snapshots</strong> (mol Elastic ja OpenSearch) on võtmetehnoloogia frozen-tier'i jaoks: indeks elab <strong>ainult S3-s</strong>, mitte data node'i kettal. Klaster hoiab väiksed metadata-fragmendid, päring läheb S3-le. Kulu kukub <strong>10–20×</strong> (S3 on odav), aga päringu latentsus kasvab.</p>
 <p>Tüüpiline ILM-policy näide (Elastic JSON):</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_ilm/policy/logs</span><span class="mi">-</span><span class="err">policy</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">&quot;phases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">&quot;hot&quot;</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;rollover&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50gb&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">&quot;warm&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7d&quot;</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;forcemerge&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_num_segments&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;set_priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">&quot;cold&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;30d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;freeze&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">&quot;frozen&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;90d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;searchable_snapshot&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;snapshot_repository&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_s3_repo&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">&quot;delete&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;365d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;delete&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_ilm/policy/logs</span><span class="mi">-</span><span class="err">policy</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="p">{</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">&quot;phases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">      </span><span class="nt">&quot;hot&quot;</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;rollover&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50gb&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">      </span><span class="nt">&quot;warm&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7d&quot;</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;forcemerge&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_num_segments&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;set_priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">      </span><span class="nt">&quot;cold&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;30d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;freeze&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">      </span><span class="nt">&quot;frozen&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;90d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;searchable_snapshot&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;snapshot_repository&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_s3_repo&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">      </span><span class="nt">&quot;delete&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min_age&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;365d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;delete&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><strong>Rollover</strong> — vahetatakse kirjutus-indeks (<code>logs-000001</code> → <code>logs-000002</code>) kui jooksev indeks jõuab 7 päeva või 50 GB. Vana indeks suletakse kirjutamisele, läheb warm-tier'isse väikselt ootama. <strong>Data streams</strong> (Elasticsearch 7.9+, OpenSearch 1.2+) automatiseerib selle — sa kirjutad data-stream'i <code>logs</code>, ES halduskeel määrab õige backing indeksi.</p>
 <p><strong>Tier'ide praktiline jagamine</strong> ei pea olema kõikiidne. Väike klaster (3 data node) võib hoida hot + warm samadel node'idel, ja cold + frozen on S3. Suur klaster (50+ data node) eraldab tier'id node-rollidega (<code>node.roles: [data_hot]</code>, <code>data_warm</code>, <code>data_cold</code>, <code>data_frozen</code>).</p>
@@ -3762,28 +5105,170 @@
 <p>Production-klaster 2026 koosneb: <strong>3 dedicated master + N data + 2+ coordinating-only</strong>, kus N sõltub indeksite ja päringukoormuse mahust. Shardide arv valitakse ette indeksi loomisel. Replicad jagavad päringukoormust ja annavad HA. Quorum nõuab paaritu arvu master-kandidaate, miinimum 3. 99.9% on saavutatav 3-node klastris, 99.99% nõuab Multi-AZ + standby, 99.999% Multi-region + CCR. Snapshot S3-le on ainus tegelik backup — ja seda tuleb testida.</p>
 <p>Osa 2 lab'is laiendad single-node klastri 3-node klastriks ja vaatad, kuidas oleku-tuli muutub YELLOW → GREEN, ning katsetad, mis juhtub kui ühe node'i tapad.</p>
 <hr />
+<h2 id="l23-apm-ja-traces-kolmas-observability-sammas">L2.3 — APM ja traces: kolmas observability sammas<a class="headerlink" href="#l23-apm-ja-traces-kolmas-observability-sammas" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 2, hajutuse 3. plokk.</strong> ~10 min, jätkub L2 järel.</p>
+<p><strong>Miks see sulle oluline:</strong> APM on <strong>Elastic Stacki kõige sügavam diferentseerija</strong> OpenSearchi kõrval ja peamine põhjus, miks paljud monitooring-tiimid valivad Elastic'u. APM-klastri sizing <strong>ei võrdu</strong> logide-klastri sizing'uga — kui sa segad need kokku, kukub klaster tasapisi alla.</p>
+</blockquote>
+<h3 id="kolmas-sammas-traces">Kolmas sammas — traces<a class="headerlink" href="#kolmas-sammas-traces" title="Lingi sektsioonile">&para;</a></h3>
+<p>Päev 1 rääkis observability kolmest sambast: <strong>logs</strong>, <strong>metrics</strong>, <strong>traces</strong>. Päev 2 + Päev 3 esimene pool keskendub logidele. <strong>APM = traces.</strong></p>
+<p>Trace on <strong>ühe päringu täielik teekond</strong> läbi süsteemi: kasutaja klikib "osta" → frontend pärib API-d → API pärib auth-teenuse → auth pärib andmebaasi → API pärib makse-teenuse → makse-teenus pärib krediitkaardi-API-d. Kõik need on <strong>spans</strong> ühes trace'is. Sa näed waterfall vaates kus aeg kulus, kus error tekkis, milline service oli pudelikael.</p>
+<p>Iga span = <strong>mis teenus, mis operatsioon, kui kaua võttis, mis tulemus</strong>. Kogu pilt (trace) annab response-time'i jaotuse mikroteenuste vahel.</p>
+<h3 id="elastic-apm-kups">Elastic APM — küps<a class="headerlink" href="#elastic-apm-kups" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elastic ostis Opbeat'i 2017 ja töötas selle Elastic APM'iks. Tänu sellele on Elastic-i APM-pakk <strong>küps</strong>:</p>
+<ul>
+<li><strong>Auto-instrumentation agendid</strong>: Java, .NET, Node.js, Python, Go, Ruby, PHP — paned agendi rakendusse, ta instrumenteerib automaatselt veebi-raamistiku, andmebaasi-driver'id, HTTP klientid, message queues</li>
+<li><strong>APM Server</strong> — võtab agentidelt vastu, valideerib, kirjutab ES-i. <strong>2022+ konsolideeritud Elastic Agent'i sisse</strong></li>
+<li><strong>Kibana APM UI</strong> — Service map (kus mis teenus teisega räägib), Transactions (latentsus, p95/p99), Errors (mis exception'id), Traces (waterfall)</li>
+</ul>
+<h3 id="apm-klaster-vs-logide-klaster">APM-klaster vs logide-klaster<a class="headerlink" href="#apm-klaster-vs-logide-klaster" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>APM tekitab väga palju andmeid</strong>, palju rohkem kui logid:</p>
+<table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Logide-klaster</th>
+<th>APM-klaster</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dokumendi-maht</td>
+<td>1 logi-rida = 1 dokument</td>
+<td>1 päring = <strong>10–50 span'i</strong> = 10–50 dokumenti</td>
+</tr>
+<tr>
+<td>Tüüpiline maht</td>
+<td>100 GB/päev</td>
+<td>1–10 TB/päev</td>
+</tr>
+<tr>
+<td>Retention</td>
+<td>30–90 päeva (audit)</td>
+<td>7–14 päeva (debugging)</td>
+</tr>
+<tr>
+<td>Otsingu-muster</td>
+<td>Tagasivaade incidentidele</td>
+<td>Reaalajas dashboardid + alerting</td>
+</tr>
+</tbody>
+</table>
+<p>Logide-klaster = 3 master + 4–6 data node. APM-klaster võib olla <strong>eraldi</strong>, optimeeritud lühema retention'i ja kõrgema ingest rate'i jaoks.</p>
+<h3 id="opensearchi-vaste-vahem-kups">OpenSearchi vaste — vähem küps<a class="headerlink" href="#opensearchi-vaste-vahem-kups" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>OpenSearch Observability</strong> + <strong>Trace Analytics</strong> + <strong>Data Prepper</strong>. Toimib, AGA:</p>
+<ul>
+<li>UI vähem viimistletud kui Kibana APM</li>
+<li><strong>Agentide perekond on väiksem</strong> — OS soovitab OpenTelemetry SDK-d, oma natiivseid agente ei toodeta</li>
+<li>Data Prepper asendab APM Server'i — toimib, konfiguratsioon on rohkem käsitööd</li>
+</ul>
+<p>See on suuremate observability tiimide jaoks Elastic'u poole arvestatav argument.</p>
+<h3 id="opentelemetry-kui-sild">OpenTelemetry kui sild<a class="headerlink" href="#opentelemetry-kui-sild" title="Lingi sektsioonile">&para;</a></h3>
+<p>Nii Elastic kui OpenSearch võtavad vastu <strong>OTel traceid</strong> — sinu rakendus ei pea kasutama propriotaarset agendi. Kui instrumenteerid rakenduse OTel SDK-ga, saad eksportida OTel Collector'i kaudu kummale. Migration ES → OS ei nõua rakenduse koodi muutmist.</p>
+<h3 id="paev-5-uhendus">Päev 5 ühendus<a class="headerlink" href="#paev-5-uhendus" title="Lingi sektsioonile">&para;</a></h3>
+<p>Päev 5 räägib <strong>Grafana Tempo</strong>'st — standalone trace-storage, Elastic APM-i alternatiiv. Tempo on <strong>odav</strong> (S3) ja <strong>vendor-neutral</strong>. Kui sul on Grafana-ettevõte (Prometheus + Loki + Tempo), jääd sinna. Kui Elastic-ettevõte, jääd sinna. <strong>OTel SDK rakenduses hoiab ülemineku-uksed lahti.</strong></p>
+<h3 id="kokkuvote-l23-st">Kokkuvõte L2.3-st<a class="headerlink" href="#kokkuvote-l23-st" title="Lingi sektsioonile">&para;</a></h3>
+<p>APM = traces. <strong>Elastic APM</strong> on küps, integreeritud, mitme keele agendid. <strong>OpenSearch Trace Analytics</strong> toimib, aga vähem viimistletud. <strong>APM-klaster ≠ logide-klaster</strong> — eraldi sizing, lühem retention. <strong>OTel</strong> on vendor-neutraalne sild.</p>
+<hr />
+<h2 id="l24-kibana-monitooringule-discover-dashboards-alerting-ml">L2.4 — Kibana monitooringule: Discover, Dashboards, Alerting, ML<a class="headerlink" href="#l24-kibana-monitooringule-discover-dashboards-alerting-ml" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Loengu osa 2, hajutuse 4. plokk.</strong> ~15 min, jätkub L2.3 järel — enne L3 vector-osa.</p>
+<p><strong>Miks see sulle oluline:</strong> Elasticsearch on backend, <strong>Kibana on UI</strong>. 90% sinu igapäevasest monitooring-ajast oled Kibanas, mitte ES API-l. Kui sa Kibana feature'isid ei tea, kaotad väärtuse, mille eest maksad.</p>
+</blockquote>
+<h3 id="kibana-on-rohkem-kui-dashboardid">Kibana on rohkem kui dashboardid<a class="headerlink" href="#kibana-on-rohkem-kui-dashboardid" title="Lingi sektsioonile">&para;</a></h3>
+<p>Üldine eksiarvamus: "Kibana = Grafana ekvivalent." Tegelikult on Kibana <strong>kogu Elastic Stack'i UI</strong> — APM, SIEM, Observability, Machine Learning, Stack Monitoring, Alerting on kõik <strong>Kibana sees</strong>, eraldi rakendustena. Üks UI kõige jaoks.</p>
+<p>OpenSearch Dashboards on Kibana fork 2021-st ja teeb sama, aga mõned UI-d on vähem viimistletud.</p>
+<h3 id="discover-sinu-igapaevane-toovahend">Discover — sinu igapäevane töövahend<a class="headerlink" href="#discover-sinu-igapaevane-toovahend" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>KQL-iga logide-otsing.</strong> 90% Kibana-ajast veedad siin. Võimalused mida tihti ei kasutata:</p>
+<ul>
+<li><strong>Saved searches</strong> — kompleksne KQL nimega salvestatud, kõik tiimis kasutavad</li>
+<li><strong>Highlighted fields</strong> — vali tabeli veerud (mitte vaikimisi <code>_source</code> JSON)</li>
+<li><strong>Surrounding documents</strong> — leidsid kahtlase logi-rea? Kliki "View surrounding documents" → näed eelnenud ja järgnenud read kontekstist</li>
+<li><strong>Export to CSV</strong> — tulemused alla edasiseks analüüsiks</li>
+</ul>
+<h3 id="lens-kaasaegne-visualisatsiooni-ehitaja">Lens — kaasaegne visualisatsiooni-ehitaja<a class="headerlink" href="#lens-kaasaegne-visualisatsiooni-ehitaja" title="Lingi sektsioonile">&para;</a></h3>
+<p>Vana <strong>Visualize</strong> asendati <strong>Lens</strong>'iga 2020+. Drag-drop: tirid välja vasakult, valid graafiku-tüübi, Kibana arvab pakkumise. Õpikõver 5 min, mitte 50.</p>
+<p>Näited monitooringus: aja-rida (<code>event.duration</code> per <code>service.name</code>), top-N (top 10 <code>client.ip</code> per 500-veaga), heat map (error rate per host per tund), sankey (kasutaja-teekonna jaotus).</p>
+<h3 id="dashboard-kombineeritud-lens-visualisatsioonid">Dashboard — kombineeritud Lens-visualisatsioonid<a class="headerlink" href="#dashboard-kombineeritud-lens-visualisatsioonid" title="Lingi sektsioonile">&para;</a></h3>
+<p>Mitu Lens-visualisatsiooni ühele lehele. Toetab <strong>drilldown</strong> — kliki bar chart'i tükile, mine teisele dashboardile filtreeritud sellele väärtusele. Production'is on sul tihti 10–20 dashboardi (per-service, per-environment, per-incident-response).</p>
+<h3 id="stack-monitoring-klastri-eneseseire">Stack Monitoring — klastri eneseseire<a class="headerlink" href="#stack-monitoring-klastri-eneseseire" title="Lingi sektsioonile">&para;</a></h3>
+<p><strong>Management → Stack Monitoring</strong>. Näitab:</p>
+<ul>
+<li>Klastri olek (GREEN/YELLOW/RED)</li>
+<li>Iga node CPU/mälu/disk</li>
+<li>Iga indeksi shard count, dokumendi-maht, päringu-load</li>
+<li>Kibana enda performance</li>
+<li>Logstash pipeline'ide throughput</li>
+</ul>
+<p><strong>See on "kes seerib seirejat?"</strong> vastus. Kui sinu monitooring kukub, Stack Monitoring näitab miks.</p>
+<h3 id="observability-ui-unified-vaade-8x">Observability UI — unified vaade (8.x+)<a class="headerlink" href="#observability-ui-unified-vaade-8x" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kibana 8.x lisas <strong>Observability</strong> menus. Idee: üks vaade, kus näed <strong>korraga</strong> logid + metrikud + traces ühe service'i kohta. Discover on logide jaoks, Metrics on metrikute jaoks, APM on tracedide jaoks — <strong>Observability liidab</strong> kõik kolm.</p>
+<p>Kui sa uurid incidenti "miks oli api-checkout aeglane":</p>
+<ol>
+<li>Observability → Services → api-checkout</li>
+<li>Näed transaction latency graafiku</li>
+<li>Klikkid spike'le → näed selle hetke logid, metrics, traces ühes vaates</li>
+</ol>
+<p>OpenSearch parallel: <strong>OpenSearch Observability Plugin</strong> (uuem, vähem viimistletud).</p>
+<h3 id="alerting-rules-modern-vs-watcher-legacy">Alerting — Rules (modern) vs Watcher (legacy)<a class="headerlink" href="#alerting-rules-modern-vs-watcher-legacy" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kibana 7.13+ tutvustas <strong>Rules</strong> — modern alerting framework. Asendab vana <strong>Watcher</strong>-i, mis oli JSON-DSL põhine ja väga keeruline.</p>
+<p><strong>Rules tüübid:</strong></p>
+<ul>
+<li><strong>Index threshold</strong> — "kui count &gt; X 5 minuti jooksul"</li>
+<li><strong>Anomaly detection</strong> — "kui ML anomaly score &gt; 75"</li>
+<li><strong>Custom KQL</strong> — "kui KQL päring annab &gt; 0 tulemust"</li>
+<li><strong>APM</strong> — "kui service latency p99 &gt; 1s"</li>
+<li><strong>Logs threshold</strong> — "kui ERROR logi-ridade arv &gt; 100 per minute"</li>
+</ul>
+<p><strong>Action types</strong> (kuhu alert läheb):</p>
+<ul>
+<li>Slack, Microsoft Teams, PagerDuty, ServiceNow, Jira, Opsgenie</li>
+<li>E-mail, Webhook</li>
+<li>Kibana enda Connectors</li>
+</ul>
+<p><strong>Soovitus:</strong> kasuta Rules, mitte Watcher'it. Watcher on legacy ja süöötud Rules'i suunas. Olemasolev Watcher töötab edasi, aga uusi Watcher'eid ära kirjuta.</p>
+<p>OpenSearch parallel: <strong>Alerting plugin</strong> (sarnane Rules-ile, Apache 2.0, vaba).</p>
+<h3 id="ml-anomaly-detection">ML Anomaly Detection<a class="headerlink" href="#ml-anomaly-detection" title="Lingi sektsioonile">&para;</a></h3>
+<p>Elastic ML pakub <strong>unsupervised anomaly detection</strong> time-series andmetel. Sa annad mudelile aja-rida (näiteks päeva CPU per host), ta õpib mustri, märgib anomaaliad.</p>
+<p><strong>Mida ML AD saab tuvastada:</strong></p>
+<ul>
+<li>Single-metric anomaaliad (CPU üksuse hostil ootamatult kõrge)</li>
+<li>Multi-metric (CPU + lätutus + error-rate korraga anomaalsed)</li>
+<li>Population analysis ("see host käitub erinevalt teistest sama-grupi hostidest")</li>
+<li>Rare events ("see error-kood ilmus, mida pole varem näinud")</li>
+</ul>
+<p><strong>Hind:</strong> Elastic ML on <strong>Platinum-feature</strong>. <strong>OpenSearch Anomaly Detection plugin</strong> on <strong>Apache 2.0</strong> — vaba. Algoritm on sama (Random Cut Forest), kasutuskoht erineb.</p>
+<p><strong>Praktiline nõuanne:</strong> ML AD on <strong>võimas, aga ka petlik</strong>. False positives võivad olla väsitavad, kui alerting on läbi ML score'i. Alusta ML-iga <strong>visualisatsioonis</strong> (näed graafikul anomaaliad punase joonega), mitte alerting'us. Hiljem, kui usaldad mudelit, lisa Rule.</p>
+<h3 id="canvas-noc-seinad-ja-exec-dashboardid">Canvas — NOC-seinad ja exec dashboard'id<a class="headerlink" href="#canvas-noc-seinad-ja-exec-dashboardid" title="Lingi sektsioonile">&para;</a></h3>
+<p>Pixel-perfect dashboardid, mis ei sarnane standardse Kibana-paneeliga. Kasutus: NOC-seina-televisioonid, executive briefing'ud, klient-presentatsioonid. Vajab disainerit — ei ole klikkimise-tasemel.</p>
+<p>OpenSearch ei oma Canvas'i ekvivalenti.</p>
+<h3 id="maps-geo-visualisatsioonid">Maps — geo-visualisatsioonid<a class="headerlink" href="#maps-geo-visualisatsioonid" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kui logidel on <code>geo_point</code> väli (client.ip + GeoIP enrichment), saad teha kaarte: "kust tulevad meie kasutajad", "kust tuli DDoS", "mis riikide servereid puudutab incident".</p>
+<h3 id="kokkuvote-l24-st">Kokkuvõte L2.4-st<a class="headerlink" href="#kokkuvote-l24-st" title="Lingi sektsioonile">&para;</a></h3>
+<p>Kibana on <strong>kogu Elastic Stack'i UI</strong>, mitte ainult dashboardid. <strong>Discover</strong> = sinu igapäev. <strong>Lens</strong> = visualisatsioon drag-drop'iga. <strong>Dashboard</strong> = kombineeritud vaade. <strong>Stack Monitoring</strong> = seire enesest. <strong>Observability UI</strong> = unified logs+metrics+traces. <strong>Alerting (Rules)</strong> asendab Watcher'i. <strong>ML Anomaly Detection</strong> on võimas, aga alusta visualisatsiooniga. <strong>OpenSearch Dashboards</strong> teeb sama, aga mõned UI-d vähem viimistletud.</p>
+<hr />
 <h2 id="l3-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad">L3 — Otsing: lexical (BM25) vs vector, ja kuidas need töötavad<a class="headerlink" href="#l3-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Loengu osa 3.</strong> ~15 min, hajutuse 3. plokk — enne Osa 4 (semantic_text + kNN demo).<br />
-<strong>Miks see sulle oluline:</strong> aitab sul otsustada, kas sinu kasutusjuhul (logide otsing, audit, klienditugi, dokumentatsioon) on vector search või RAG vajalik — või piisab klassikalisest BM25-st. Vector pole alati õige lahendus.</p>
+<p><strong>Loengu osa 3.</strong> ~15 min, hajutuse 3. plokk — enne Osa 4 (semantic_text + kNN demo).</p>
+<p><strong>Miks see sulle oluline:</strong> aitab sul otsustada, kas sinu kasutusjuhul (logide otsing, audit, klienditugi, dokumentatsioon) on vector search või RAG vajalik — või piisab klassikalisest BM25-st. Vector pole alati õige lahendus.</p>
 </blockquote>
 <p>Logi-otsing on Elasticsearchi põhi-kasutusjuhtum, mida köik teavad. Aga 2024+ on otsing <strong>kaheks haru ajunenud</strong>: klassikaline <strong>lexical</strong> (sõnapotsing) ja moderne <strong>vector / semantic</strong> (tähendus-otsing). Mõlema all on <strong>algoritmid</strong> mida tasub tunda — mitte sellepärast et sa neid käsitsi implementeeriks, vaid sellepärast et sa pead mõistma, <strong>miks</strong> üks või teine sobib või mitte.</p>
 <h3 id="lexical-otsing-inverted-index-bm25">Lexical otsing: inverted index + BM25<a class="headerlink" href="#lexical-otsing-inverted-index-bm25" title="Lingi sektsioonile">&para;</a></h3>
 <p><strong>Inverted index</strong> on Lucene'i (ja seega ka Elasticsearch / OpenSearch) põhi-andmestruktuur. Idee on lihtne: tagurpidi tavalisest dokument-→-sõnade-suunast on <strong>sõna-→-dokumentide</strong> suund.</p>
 <p>Dokumendid:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>doc1: &quot;the quick brown fox&quot;
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>doc2: &quot;the lazy dog&quot;
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>doc3: &quot;the quick blue ocean&quot;
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>doc1: &quot;the quick brown fox&quot;
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>doc2: &quot;the lazy dog&quot;
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>doc3: &quot;the quick blue ocean&quot;
 </span></code></pre></div></p>
 <p>Inverted index:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>the   → [doc1, doc2, doc3]
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>quick → [doc1, doc3]
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>brown → [doc1]
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>fox   → [doc1]
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>lazy  → [doc2]
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>dog   → [doc2]
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>blue  → [doc3]
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>ocean → [doc3]
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>the   → [doc1, doc2, doc3]
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>quick → [doc1, doc3]
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>brown → [doc1]
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>fox   → [doc1]
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>lazy  → [doc2]
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>dog   → [doc2]
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>blue  → [doc3]
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>ocean → [doc3]
 </span></code></pre></div></p>
 <p>Päring <code>quick brown</code> → vaatame mis dokumentides on <code>quick</code> (doc1, doc3), mis dokumentides on <code>brown</code> (doc1). Eeldades AND-loogikat: doc1. Eeldades OR-loogikat: doc1 ja doc3.</p>
 <p>See on <strong>kiire</strong> (otsiba sõna hash-tabelist, mitte kõigi dokumentide läbivaatamine) ja <strong>täpne</strong> (kui sõna on samas vormis, leitakse).</p>
@@ -3825,7 +5310,7 @@
 <p>Vt eraldi peatükk <strong><a href="../paev3-vector-rag-lisalugemine/">Päev 3 — Lisalugemine: Vector search, RAG ja AI monitooringus</a></strong> — ~25 min lugemist, sobib süvenemiseks AI-suuna huvilisele.</p>
 </div>
 <h3 id="kokkuvote-l3-st">Kokkuvõte L3-st<a class="headerlink" href="#kokkuvote-l3-st" title="Lingi sektsioonile">&para;</a></h3>
-<p>Lexical (BM25) on <strong>logide-otsingu standard</strong> — kiire, täpne, soodne. Sinu igapäevatöö Kibana Discover'is ja OS Dashboards Discover'is on <strong>see</strong>. Vector search ja RAG on <strong>edasine areng</strong>, mis 2024+ ilmub AI Assistant tööriistadesse — detailid lisalugemises.</p>
+<p>Logide-otsingu standard on lexical (BM25). Kiire ja odav, sõnatasemel täpne. Kibana Discover ja OS Dashboards Discover kasutavad seda vaikimisi. Vector search ja RAG on <strong>edasine areng</strong>, mis 2024+ ilmub AI Assistant tööriistadesse — detailid lisalugemises.</p>
 <div class="admonition tip">
 <p class="admonition-title">💭 Mõtle hetk — enne edasilugemist</p>
 <p>Sinu organisatsioonis — mis on <strong>igapäevane otsingu-muster</strong> logides? Kas piisab "otsi <code>ERROR</code>" lihtsast tekstist (BM25), või tahaksid küsida "leia kõik database-probleemid" loomuliku keelega (vector + RAG)?</p>
@@ -3918,17 +5403,17 @@
 <p>Elastic-i strateegia on <strong>lihtne API</strong>.</p>
 <p><strong>ELSER</strong> (Elastic Learned Sparse EncodeR) — Elastic-i enda treenitud mudel, mis annab <strong>sparse</strong> vektoreid (mitte dense). Töötab pre-trained, ei pea fine-tune'ima. Esmane versioon on inglise keele, <strong>multilingual ELSER (e5-multilingual)</strong> lisandus 2024. Kasutamiseks lihtsalt download'id mudeli ja laed klastri.</p>
 <p><strong><code>semantic_text</code> field type</strong> (Elasticsearch 8.13+, 2024) — mapping-level abstraktsioon, mis teeb kaks asja korraga:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;mappings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;semantic_text&quot;</span><span class="p">,</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;inference_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-elser-endpoint&quot;</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">{</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">&quot;mappings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">      </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;semantic_text&quot;</span><span class="p">,</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">        </span><span class="nt">&quot;inference_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-elser-endpoint&quot;</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>Kui sa indekseerid dokumendi <code>content</code> väljaga, <strong>Elastic teeb automaatselt</strong>:</p>
 <ol>
@@ -3936,23 +5421,23 @@
 <li>ELSER-i kaudu sparse vektori (semantic otsing)</li>
 </ol>
 <p>Päring:
-<div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="err">GET</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex/_search</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;semantic&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tossud kontorisse&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="err">GET</span><span class="w"> </span><span class="err">my</span><span class="mi">-</span><span class="err">i</span><span class="kc">n</span><span class="err">dex/_search</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;semantic&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tossud kontorisse&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
 </span></code></pre></div></p>
 <p>Elastic teeb <strong>hybrid otsingu</strong> ja annab kombineeritud skoori. <strong>Üks API, kaks otsingumeetodit.</strong></p>
 <h3 id="opensearchi-kaik-ml-commons-neural-search">OpenSearch'i käik: ML Commons + Neural Search<a class="headerlink" href="#opensearchi-kaik-ml-commons-neural-search" title="Lingi sektsioonile">&para;</a></h3>
 <p>OpenSearch on <strong>paindlikum, aga rohkem konfigureerimist</strong>.</p>
 <p><strong>ML Commons</strong> — plugin, mis lubab klastrisse laadida ja käivitada ML-mudeleid. Toetab nii lokaalseid mudeleid (Hugging Face transformers, ONNX) kui ka väliseid inference-teenuseid üle HTTP API: Amazon SageMaker, Amazon Bedrock ja teised mudeli-API-d.</p>
 <p><strong>Neural Search plugin</strong> — high-level abstraktsioon, mis kasutab ML Commons'i sees. Sa konfigureerid <strong>ingest pipeline'i</strong>, mis lisab dokumentidele vektorid:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_i</span><span class="kc">n</span><span class="err">ges</span><span class="kc">t</span><span class="err">/pipeli</span><span class="kc">ne</span><span class="err">/</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="mf">-e</span><span class="err">mbeddi</span><span class="kc">n</span><span class="err">g</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;processors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&quot;text_embedding&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-embedding-model&quot;</span><span class="p">,</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">      </span><span class="nt">&quot;field_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content_embedding&quot;</span><span class="w"> </span><span class="p">}</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="p">}]</span>
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="err">PUT</span><span class="w"> </span><span class="err">_i</span><span class="kc">n</span><span class="err">ges</span><span class="kc">t</span><span class="err">/pipeli</span><span class="kc">ne</span><span class="err">/</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="mf">-e</span><span class="err">mbeddi</span><span class="kc">n</span><span class="err">g</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">{</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">&quot;processors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nt">&quot;text_embedding&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">      </span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-embedding-model&quot;</span><span class="p">,</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">      </span><span class="nt">&quot;field_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content_embedding&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">  </span><span class="p">}]</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>Seejärel: <code>neural</code> query type päringuks. <strong>Üle nelja sammu, mitte ühe — aga sa kontrollid iga sammu</strong> ja võid panna oma kohandatud mudeli, fine-tune'itud sinu spetsiifilisele andmekorpusele.</p>
 <h3 id="rag-retrieval-augmented-generation">RAG — Retrieval-Augmented Generation<a class="headerlink" href="#rag-retrieval-augmented-generation" title="Lingi sektsioonile">&para;</a></h3>
@@ -4093,12 +5578,12 @@
 </tbody>
 </table>
 <h3 id="2-otsus-klastri-dimensioneerimine">② Otsus: klastri-dimensioneerimine<a class="headerlink" href="#2-otsus-klastri-dimensioneerimine" title="Lingi sektsioonile">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>UPTIME NÕUE         →  KLASTRI-DISAIN
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>─────────────────────────────────────────────────────
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>99.5%  (best-effort) →  1 node, restart OK
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>99.9%  (8.7h/aastas) →  3 master + N data, replicas=1, snapshots S3
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>99.99% (52min/aastas)→  3 master + N data üle 3 AZ-i + standby AZ
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>99.999% (5min/aastas) →  Multi-region + CCR (harva vajalik)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>UPTIME NÕUE         →  KLASTRI-DISAIN
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>─────────────────────────────────────────────────────
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>99.5%  (best-effort) →  1 node, restart OK
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>99.9%  (8.7h/aastas) →  3 master + N data, replicas=1, snapshots S3
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>99.99% (52min/aastas)→  3 master + N data üle 3 AZ-i + standby AZ
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>99.999% (5min/aastas) →  Multi-region + CCR (harva vajalik)
 </span></code></pre></div>
 <p><strong>Checklist enne tootmist:</strong></p>
 <ul class="task-list">
@@ -4304,7 +5789,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="17. mai 2026 20:31:45 UTC">17. mai 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="22. mai 2026 20:37:27 UTC">22. mai 2026</span>
   </span>
 
     
