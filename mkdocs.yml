@@ -95,6 +95,7 @@ markdown_extensions:
 plugins:
 - search:
     lang: en
+- tags
 - git-revision-date-localized:
     fallback_to_build_date: true
     type: date
@@ -117,7 +118,9 @@ nav:
   - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 
 - "Päev 3 — ELK Stack & OpenSearch":
+  - "Kava": materials/paev3-kava.md
   - "Loeng: ELK & OS — kust tuli, kus on, kuhu läheb": materials/lectures/paev3-elk-loeng.md
+  - "Lisalugemine: Vector search, RAG ja AI": materials/lectures/paev3-vector-rag-lisalugemine.md
   - "Labor": labs/03_elk_stack/lab.md
 
 - "Päev 4 — TICK + Kesksed logimissüsteemid":

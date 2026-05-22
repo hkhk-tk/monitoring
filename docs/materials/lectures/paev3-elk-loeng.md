@@ -10,8 +10,11 @@ tags:
 # Päev 3: Elastic Stack & OpenSearch — kust tuli, kus on, kuhu läheb
 
 **Kursus:** Kaasaegne IT-süsteemide monitooring ja jälgitavus
-**Kestus:** ~60 min loengut, hajutatud läbi päeva — L1 (30 min) avamisel, L2 (15 min) enne klastri-laienemist, L3 (15 min) enne vector-osa
+
+**Kestus:** ~120 min loengut, jaotatud läbi 4-tunnise päeva — L1 (~65 min) avamisel, L2 (~50 min) klastri + APM + Kibana ploki kohas, L3 (~15 min) enne vector-osa
+
 **Tase:** Kesktase → kesk-edasijõudnud. Eeldame, et logimine on selge (Päev 2, Loki), Docker mitme-konteineri stack on selge
+
 **Eeldused:** Päev 1 (observability kolm sammast, Prometheus pull-mudel) · Päev 2 (Zabbix host-tsentriline, Loki + Promtail, label vs sisu indekseerimine)
 
 ---
@@ -22,8 +25,12 @@ Pärast seda loengut oskad:
 
 - **Selgitada**, kuidas tööstus liikus klassikalisest host-tsentrilisest seirest (Zabbix) andme-tsentrilisele observability'le ja milline jõud seda muutust ajas
 - **Eristada** Elasticsearchi ja OpenSearchi: kust ühine tüvi, miks lahkuminek 2021, kuidas seis 2026
+- **Selgitada**, miks logide salvestus JSON-dokumentidena teeb võimalikuks structured search ja mille poolest see erineb tekstifaili `grep`-ist
+- **Eristada** Beats, Logstash, Elastic Agent ja OpenSearch ingestion-tööriistu (Data Prepper, Fluent Bit) ning otsustada, milline neist kuhu sobib
 - **Kirjeldada** Elasticsearchi sõlmerolle (master, data, ingest, coordinating) ja kuidas shardid + replica'd päringut teenindavad
 - **Põhjendada**, miks tõsiselt mõeldud klastris on vähemalt 3 dedicated master sõlme ja mis on quorum
+- **Kirjeldada** APM-i rolli Elastic Stack'is (kolmas observability sammas — traces) ja kuidas see erineb logide-klastrist
+- **Loetleda** Kibana monitooringu-funktsioone (Discover, Dashboards, Stack Monitoring, Alerting, ML Anomaly Detection) ja nende OpenSearch-vasted
 - **Eristada** lexical otsingut (BM25 inverted index'iga) ja vector otsingut (HNSW lähimnaaber-graafiga)
 - **Selgitada**, mis on ELSER, `semantic_text`, OpenSearch neural search, FAISS ja RAG muster
 - **Otsustada**, millal valida Elastic Cloud, Elasticsearch on-prem, Amazon OpenSearch Service, OpenSearch Serverless või OpenSearch on-prem
@@ -32,12 +39,13 @@ Pärast seda loengut oskad:
 
 ## L1.0 — Zabbixilt andmehaldusele: paradigm shift
 
-> **Loengu osa 0**, kohe peale õpiväljundeid. ~5 min, enne L1.1 maastiku osa.  
+> **Loengu osa 0**, kohe peale õpiväljundeid. ~5 min, enne L1.1 maastiku osa.
+>
 > **Miks see sulle oluline:** annab sulle argumendi managementile — miks Zabbixist (mis on klassikaline ja stabiilne) üksi enam ei piisa ja milleks teie organisatsioonis ELK / OpenSearch / Loki kihiks vaja läheb.
 
-Eile tutvusid Zabbixiga. Sa nägid neli mõistet ahelas — **Host → Item → Trigger → Action**. See on klassikaline arhitektuur, mis on töötanud 25 aastat: sa tead, **mis hostid** sul on, **mida nendelt mõõdad** ja **mis tingimustel hoiatust saadetakse**. Iga element on eeldefineeritud, schema on jäik.
+Ennem tutvusid Zabbixiga. Sa nägid neli mõistet ahelas — **Host → Item → Trigger → Action**. See on arhitektuur, mis on töötanud 25 aastat: sa tead, **mis hostid** sul on, **mida nendelt mõõdad** ja **mis tingimustel hoiatust saadetakse**. Iga element on eeldefineeritud, schema on jäik.
 
-Pärastlõunal lisasid sinna Loki. Loki tõi logide tsentraliseerimise — sa ei pea enam SSH-ga 50 serverisse logima, et `grep ERROR` teha. See näeb välja lihtsalt mugavusena. Aga see on tegelikult **palju enamat** — see on osa **paradigm shift'ist**, mida tööstus on viimase 10 aasta jooksul teinud.
+Siis lisasid sinna Loki. Sa ei pea enam SSH-ga 50 serverisse logima, et `grep ERROR` teha. Mugavusena tundub vähe, aga selle taga on suurem nihe: tööstus liigub viimase 10 aasta jooksul host-tsentriliselt seirelt andme-tsentrilisele.
 
 ### Kaks paradigmat kõrvuti
 
@@ -49,7 +57,7 @@ Pärastlõunal lisasid sinna Loki. Loki tõi logide tsentraliseerimise — sa ei
 | **Skaala suund** | Rohkem hoste, rohkem agente | Rohkem andmesõlmi, rohkem shardide |
 | **Sa tead** | **ette**, mida sa otsid | **avastad** mustreid andmetest |
 
-See ei ole tehnoloogiline mood, vaid vastus reaalsetele probleemidele. Neli jõudu, mis selle pöörde tekitasid.
+Neli jõudu seda nihet ajavad.
 
 ### 1. Cloud-native — host pole enam stabiilne entity
 
@@ -108,7 +116,7 @@ Tüüpiline modernne monitooringu-stack aastal 2026 koosneb mitmest kihist, mis 
 - **Elasticsearch või OpenSearch** — forensika, audit-logid, full-text otsing, semantic search
 - **Tempo + OpenTelemetry** — traces (Päev 5)
 
-Niisiis täna ei õpi sa Zabbixi asendust — õpid täiendavat tööriistakihti, mis tegeleb teistsuguste probleemidega kui Zabbix.
+Täna sa ei õpi Zabbixi asendust. Õpid täiendavat kihti, mis lahendab probleeme, mida Zabbix lahendada ei suuda.
 
 !!! tip "💭 Mõtle hetk — enne edasilugemist"
     Sinu praeguse töökeskkonna logide ja sündmuste haldamine — kumb paradigma on sees? Klassikaline (host → item → trigger Zabbix-stiilis) või andme-tsentriline (logid kogutakse ühte storage'sse, päringud jooksvalt)? Või mõlemad korraga?
@@ -119,7 +127,8 @@ Niisiis täna ei õpi sa Zabbixi asendust — õpid täiendavat tööriistakihti
 
 ## L1.1 — Maastik 2026
 
-> **Loengu osa 1, hajutuse 1. plokk.** ~10 min, jätkub kohe L1.0 järel.  
+> **Loengu osa 1, hajutuse 1. plokk.** ~10 min, jätkub kohe L1.0 järel.
+>
 > **Miks see sulle oluline:** aitab sul aru saada, millisesse ökosüsteemi tasub praegu panustada — Elastic-i suunda, OpenSearchi suunda, või Grafana LGTM suunda. Iga otsus lukustab sind aastateks.
 
 Eelnev tabel ütleb mis paradigma muutus on. Aga miks just **praegu** on selle paradigma esindajad — Elastic Stack ja OpenSearch — sellised nagu nad on? Sest 2024–26 on observability-turul olnud rohkesti mängumuutuseid.
@@ -153,7 +162,7 @@ OpenSearch on 2026-l küpsuses: OpenSearch Foundationi raportite põhjal **sajad
 
 Üks asi, mis 2024–25 on selgelt välja kujunenud: **OpenTelemetry on muutunud de facto standardiks** rakenduste instrumenteerimisel. Datadog, Splunk, Elastic, Grafana, New Relic ja Dynatrace pakuvad kõigil OTel-põhist sisendit. See tähendab, et **rakenduse instrumenteerimine ei lukusta sind enam vendorile** — kui kirjutad oma rakenduse OTel SDK-ga, saad ükskõik kuhu eksportida.
 
-See on tähtsam kui tundub. Tähendab, et tänapäeva mõistlik arhitektuur on: OTel rakenduses → OTel Collector → ükskõik mis backend (Datadog, Tempo, Jaeger, Elastic APM, OpenSearch). Sa saad vendori vahetada ilma rakenduse koodi puutumata.
+Praktikas: OTel rakenduses → OTel Collector → ükskõik mis backend (Datadog, Tempo, Jaeger, Elastic APM, OpenSearch). Vendori vahetad ilma rakenduse koodi puutumata.
 
 ### Andmesalvestuse standard tulemas
 
@@ -174,7 +183,8 @@ Klientidele ei piisa enam "leia logist sõna error" — nad tahavad semantic sim
 
 ## L1.2 — Ajalugu, kust me siia jõudsime
 
-> **Loengu osa 1, hajutuse 2. plokk.** ~8 min, jätkub samas blokis.  
+> **Loengu osa 1, hajutuse 2. plokk.** ~8 min, jätkub samas blokis.
+>
 > **Miks see sulle oluline:** aitab sul mõista, miks täna ELK ja OpenSearch ON kaks paralleelset projekti, kumb nendest on sinu olukorraga lähemal, ja miks järgmine sarnane litsentsi-drama tuleb tagasi (kui seda ei oska näha).
 
 ```mermaid
@@ -205,7 +215,7 @@ Asi võttis hoogu kiiresti — 2012 asutati Elastic NV (firma) Hollandis. Esimen
 
 ### 2013 — ELK Stack sünd
 
-Logstash (alates 2009) ja Kibana (alates 2011) liideti samasse ökosüsteemi. Sünnib **ELK Stack** — Elasticsearch + Logstash + Kibana. Mängumuutja logide jaoks. Enne ELK-i oli logide tsentraliseerimine kallis (Splunk) või kohutavalt valus (syslog + grep). ELK demokrastiseeris logide kogumise.
+Logstash (2009) ja Kibana (2011) liideti samasse ökosüsteemi. Sünnib ELK Stack: Elasticsearch + Logstash + Kibana. Enne seda olid kaks valikut — Splunk (kallis) või syslog + grep (valus). ELK pakkus kolmandat: tasuta, tsentraalne, otsitav.
 
 ### 2015 — Beats lisandub, AWS astub sisse
 
@@ -227,7 +237,7 @@ Praktikas: AWS ei saa enam Apache 2.0 tingimustel Elasticsearchi managed teenuse
 
 Vastus tuli kiiresti. AWS fork-is **viimase Apache 2.0 versiooni — Elasticsearch 7.10.2** — aprillis 2021. Koos Logz.io, Aiveni jt-ga moodustub **OpenSearch projekt** — Apache 2.0 all, AWS-i taga. Mai 2021 — esimene OpenSearch 1.0 release.
 
-See oli **valuline lõik**. Kahe aasta jooksul oli ökosüsteem segaduses — millisel litsentsil mis versioon, kas Logstash on ELK või OpenSearchi osa (mõlema, Logstash jäi Apache 2.0-le), kas Kibana saab kasutada OpenSearchiga (algselt jah, hiljem ei).
+Kaks järgnevat aastat oli ökosüsteem segane. Millisel litsentsil mis versioon. Kas Logstash on ELK või OpenSearchi osa (mõlema — Logstash jäi Apache 2.0-le). Kas Kibana saab kasutada OpenSearchiga (algselt jah, hiljem ei).
 
 ### 2023 — vector search
 
@@ -245,9 +255,319 @@ Mõlemad on open source. Mõlemad lisavad AI-võimekust agressiivselt. Mõlemad 
 
 ---
 
-## L1.3 — Elasticsearch vs OpenSearch täna
+## L1.3 — Dokumendi-mudel: JSON, indeksid, mappings, data streams
 
-> **Loengu osa 1, hajutuse 3. plokk.** ~12 min, jätkub samas blokis kuni L1 lõpuni.  
+> **Loengu osa 1, hajutuse 4. plokk.** ~15 min, jätkub L1.2 järel.
+>
+> **Miks see sulle oluline:** see on **alus**, millele kogu Elastic Stacki monitooring on ehitatud. Kui sa ei mõista, mis on dokument ja kuidas indeks töötab, lähevad kõik järgnevad otsused (shard'id, mappings, ILM) sinust mööda.
+
+### Logist saab dokument
+
+Klassikaline Linux logi: tekstirida failis.
+
+```
+May 22 19:03:14 web-prod-01 nginx: 10.0.42.7 - - [22/May/2026:19:03:14 +0000] "GET /api/orders HTTP/1.1" 500 142 "-" "Mozilla/5.0"
+```
+
+Mida saab sellelt küsida? **Ainult `grep`-iga otsida**: "leia kõik read kus on `500`". Aga sa ei saa küsida: "leia kõik 5xx vastused, kus latentsus oli > 200ms, kasutaja oli sisselõginud ja see toimus tunni jooksul". Tekstirida ei tea, **mis on mis**.
+
+Elasticsearch teisendab sama logi **JSON-dokumendiks**:
+
+```json
+{
+  "@timestamp": "2026-05-22T19:03:14.000Z",
+  "host.name": "web-prod-01",
+  "service.name": "nginx",
+  "client.ip": "10.0.42.7",
+  "http.request.method": "GET",
+  "url.path": "/api/orders",
+  "http.response.status_code": 500,
+  "http.response.body.bytes": 142,
+  "user_agent.original": "Mozilla/5.0",
+  "event.duration": 234000000,
+  "user.id": "alice@example.com"
+}
+```
+
+Noud sa saad küsida täiesti teistsuguseid päringuid:
+
+- `http.response.status_code: [500 TO 599] AND event.duration > 200000000`
+- `host.name: web-prod-* AND user.id: *@example.com`
+- Aggregeerida: "top 10 client.ip, kes said 5xx vastuseid viimase tunni jooksul"
+
+See on **structured logging**. Iga väli on **eraldi otsitav**, **filterdataav**, **agregeeritav**. See on põhjus, miks tootmissysteemid lasevad logid **JSON-ina** välja, mitte vabas tekstis.
+
+!!! tip "💡 ECS — Elastic Common Schema"
+    Logidel on **standardiseeritud väljanimed** — `host.name`, `service.name`, `http.response.status_code` jne. See on **Elastic Common Schema**, mille Elastic avaldas 2019 ja mis on muutunud de facto standardiks. OpenSearch töötab samade väljanimedega. Kui sa kasutad ECS-i, on sinu dashboardid ülekantavad teise süsteemi.
+
+### Indeks ≠ SQL-i indeks
+
+Kui sul on SQL-taust, **unusta** see sõna hetkeks. SQL-is on "index" optimiseerimis-struktuur (B-tree või sarnane). Elasticsearchis on **indeks** loogiline **dokumentide kollektsioon** — nagu SQL-i **tabel** või MongoDB **collection**.
+
+Nimetus tuli sellest, et iga sellise kollektsiooni all istub **Lucene'i inverted index** (mis on optimiseerimis-struktuur). Aga **ES-i indeks** on andmete-kollektsioon, mitte struktuur.
+
+Monitooringus on indeksid **enamasti time-based**:
+
+```
+logs-nginx-2026.05.20
+logs-nginx-2026.05.21
+logs-nginx-2026.05.22  ← täna siia kirjutatakse
+
+metrics-host-2026.05.20
+metrics-host-2026.05.21
+metrics-host-2026.05.22
+```
+
+**Miks päeva-kaupa?** Sest:
+
+- Vana päev (eile) on **immutable** — sinna ei lisandu enam. Saab teha optimisat (force merge, snapshot).
+- Vana päev saab **kolida odavamale storage'le** ilma täna-indeksit puudutamata (Hot → Warm → Cold).
+- Vana päeva saab **kustutada** (delete index) ilma keerulise SQL `DELETE WHERE timestamp < ...` päringuta.
+
+### Mapping — väljade sõnastik
+
+**Mapping** on indeksi schema — mis väljad indeksis on ja mis tüüpi. ES saab mappingu **automaatselt** ära arvata (dynamic mapping), aga production'is mõistlikult **määrad ise**.
+
+**Olulisemad välja-tüübid monitooringus:**
+
+| Tüüp | Kasutus | Miks oluline |
+|---|---|---|
+| `text` | Full-text otsing ("error message" → tokeniseeritakse) | KQL `message: error` leiab; aga ei saa täpset matchi |
+| `keyword` | Exact match ("host.name": "web-prod-01") | Filter, aggregation, sort |
+| `date` | Ajaline väli | `@timestamp` päringuteks, range filter |
+| `long`, `double` | Numbrid | Latentsus, baidid, count'id |
+| `boolean` | true/false | Filter |
+| `ip` | IP-aadress | CIDR päringud: `client.ip: 10.0.0.0/8` |
+| `geo_point` | Latitude/longitude | Kaardi-visualisatsioonid |
+| `keyword` (multi) | Tagid, kategooriad | terms aggregation |
+
+**Lugu, mille pärast see oluline on:** sa indekseerid logi `"host.name": "web-prod-01"`. Dynamic mapping otsustab et see on `text` (mitte `keyword`). Nüüd:
+
+- KQL `host.name: "web-prod-01"` — **ei tööta** korralikult (text väli tokeniseeritakse, `web-prod-01` jaguneb)
+- Aggregation **terms** `host.name` peale — ei luba seda (text väljade peal terms agg vaikimisi keelatud)
+- Kibana Visualize ütleb "this field is not aggregatable"
+
+Lahendus: määra `host.name: { "type": "keyword" }` enne esimest dokumenti. Selleks on **index template**.
+
+### Index template — schema, mis töötab tulevikku
+
+Kui sa kirjutad iga päeva uue indeksi (`logs-nginx-2026.05.22`, `logs-nginx-2026.05.23`...), sa ei taha määrata mapping'ut iga indeksi jaoks eraldi. **Index template** ütleb: "kui keegi loob indeksi, mis vastab mustrile `logs-nginx-*`, rakenda neid seadeid ja mapping'ut".
+
+```json
+PUT _index_template/logs-nginx-template
+{
+  "index_patterns": ["logs-nginx-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp":              { "type": "date" },
+        "host.name":               { "type": "keyword" },
+        "client.ip":               { "type": "ip" },
+        "http.response.status_code": { "type": "short" },
+        "event.duration":          { "type": "long" }
+      }
+    }
+  }
+}
+```
+
+No igapäevane uus indeks saab automaatselt õiged seaded ja schema.
+
+### Index alias — üks nimi, mitu indeksit
+
+Kui rakendus tahab öelda "kirjuta uus logi siia", see ei taha teada, mis on tänane kuupäev. **Alias** on loogiline pseudõnim:
+
+```
+logs-nginx-current  →  logs-nginx-2026.05.22
+```
+
+Homme öösel toimub alias-rotation — `logs-nginx-current` osutab nuud `logs-nginx-2026.05.23` peale, atomic-operatsioon, rakendus ei märka muutust.
+
+### Data stream — modernne abstraktsioon
+
+Elasticsearch 7.9+ (ja OpenSearch) toetab **data stream'i** — see varjab alias'eid ja templates'eid ühe nime taha. Sa kirjutad `logs-nginx`, ES haldab rotatsiooni, hot/warm üleminekut, ILM-i — kõik on data stream'i sees.
+
+```
+logs-nginx  (data stream)
+└─ .ds-logs-nginx-2026.05.20-000001  (Hot, kirjutamiseks)
+└─ .ds-logs-nginx-2026.05.20-000002  (Warm)
+└─ .ds-logs-nginx-2026.05.20-000003  (Cold)
+```
+
+Kaasaegne soovitus: **kasuta data streams logide jaoks**, klassikaline alias + template-lähenemine on backward-compatible.
+
+!!! info "OpenSearch-i vasted"
+    OpenSearch toetab samu kontseptsioone teiste nimedega ja üksikute erinevustega:
+
+    - **Index** = sama
+    - **Mapping** = sama
+    - **Index template** = sama
+    - **Index alias** = sama
+    - **Data stream** = OpenSearch 1.2+ toetab data streams analoogiliselt
+    - **ECS** = OpenSearch kasutab oma **OpenSearch Observability Schema (OOS)** või samu ECS välju (sageli kasutatakse ECS-i)
+
+### Kokkuvõte L1.3-st
+
+Elasticsearch ja OpenSearch on **dokumendi-baasidatel** — logi on JSON-dokument, mille iga väli on otsitav. Mapping määrab välja-tüübi (`text` vs `keyword` on monitooringu jaoks kriitilise tähtsusega). Indeks on dokumentide kollektsioon, mitte SQL-i indeks. Time-based indeksid (`logs-nginx-2026.05.22`) võimaldavad rotatsiooni, ILM-i ja kustutamist ilma SQL-stiilis DELETE-deta. Template + alias + data stream on operatiivsed tööriistad, mida sa **igapäevases monitooring-stackis kasutad**.
+
+---
+
+## L1.4 — Stack ingestion: kuidas logid jõuavad klasterisse
+
+> **Loengu osa 1, hajutuse 5. plokk.** ~15 min, jätkub L1.3 järel.
+>
+> **Miks see sulle oluline:** Elasticsearch ise ei lae logisid — ta hoiab neid ja teeb päringuid. Vahel rakenduse ja klastri vahel istub **ingestion-kiht**, mis loeb logifaile, parsib neid, lisab kontekstit ja saadab klastrisse. See valik (Beats vs Logstash vs Elastic Agent vs OTel) **mõjutab sinu igapäevast tööd** rohkem kui klastri-konfiguratsioon ise.
+
+### Beats — kerged shippers
+
+**Beats** on **Go-s kirjutatud kerged data shippers**, igaks andmetüübiks oma. Installeeritakse igale hostile (server, konteiner, VM), nad loevad oma andmeid ja saadavad otse ES-i või Logstash'i / Kafka kaudu.
+
+| Beat | Mida shippib | Näide kasutuses |
+|---|---|---|
+| **Filebeat** | Logifailid (`/var/log/*`, app logid) | Iga nginx, sshd, app server |
+| **Metricbeat** | Süsteemi + app meetrikud | CPU, mälu, ketas, MySQL päringud, Redis-i memory |
+| **Auditbeat** | Linux audit logid | Failimuutuste jälgimine, kasutaja-tegevused |
+| **Heartbeat** | Uptime checks (HTTP/TCP/ICMP) | Kas API on üleval? Kas SSL-sert kehtib? |
+| **Packetbeat** | Võrgu-pakettide analyys | DNS, HTTP, Cassandra protokolli-tasemel |
+| **Winlogbeat** | Windows Events | AD logimine, security events |
+| **Functionbeat** | Cloud function logid | AWS Lambda, GCP Functions |
+
+**Plus:** kerge (10–20 MB RAM per beat), kiire, lihtne konfigureerida.
+
+**Miinus:** iga andmetüübi jaoks eraldi beat = **mitu serviceit**. Suuremas keskkonnas (1000+ hosti) on **konfiguratsiooni-haldus** valus.
+
+### Logstash — raskekõige transform-mootor
+
+**Logstash** on **JRuby-l põhinev pipeline** (`input → filter → output`), mis suudab teha keerulisi transformatsioone. Klassikaline kasutus: **unstructured logi parsing**.
+
+```
+input {
+  beats { port => 5044 }
+}
+filter {
+  grok {
+    match => { "message" => "%{IPORHOST:client.ip} %{HTTPDATE:[@timestamp]} \"%{WORD:http.request.method} %{URIPATH:url.path}" }
+  }
+  geoip { source => "client.ip" }
+  date { match => [ "[@timestamp]", "dd/MMM/yyyy:HH:mm:ss Z" ] }
+}
+output {
+  elasticsearch {
+    hosts => ["https://es01:9200"]
+    index => "logs-nginx-%{+YYYY.MM.dd}"
+  }
+}
+```
+
+**Tugev kus:**
+
+- **Grok** — regex-põhine parsing unstructured logidele (kus rakendus ei suuda JSON-i väljastada)
+- **Enrichment**: GeoIP (IP → riik/linn), DNS lookup, user_agent parse
+- **Mitu sisendit / väljundit korraga**: ES + Kafka + S3
+- **Conditional logic**: "kui status_code >= 500, saada ka Slack'i"
+
+**Nõrk kus:**
+
+- **Raske** — JVM, 1–2 GB RAM, installüss + haldus
+- **Sundjada toimkonda** — vahel pole tegelik vajadus
+
+**Tavaline disain**: Beats hostidel → Logstash (kesksena, 1–3 instantsi) → ES. Logstash teeb "raskem" töö (parsing, enrichment), Beats teevad "kõva" töö (lugemine + saatmine).
+
+### Elastic Agent + Fleet — moderne tee (2022+)
+
+Elastic võttis 2022 vastu valikuotsuse: **mitme erineva Beat'i asemel üks Agent**.
+
+**Elastic Agent** on **üks binary**, mis suudab teha kõike, mida Beats teevad eraldi:
+
+- Loeb logifaile (nagu Filebeat)
+- Kogub metrikuid (nagu Metricbeat)
+- Audit logid (nagu Auditbeat)
+- Uptime checks (nagu Heartbeat)
+
+Konfiguratsioon ei toimu hostis (YAML failina), vaid **Fleet'is** — Kibana sisene UI, kust haldad kõiki agente keskselt.
+
+**Integration'id** — valmis-konfiguratsioonid spetsiifilistele teenustele: nginx, Apache, MySQL, PostgreSQL, Redis, Kafka, Kubernetes, AWS, Azure, GCP, Docker, Fortinet, Cisco jne. Kõik koos dashboardide, alertide, ECS-mappingutega.
+
+**Soovitus:** **uutele deployment'idele kasuta Elastic Agent + Fleet'i**. Olemasolev Beats setup töötab edasi, aga migreerumine on mõtlik.
+
+### Andmevoog (üldine pilt)
+
+```mermaid
+flowchart LR
+  subgraph Hosts["🖥️ Hostid / kõik kohad, kus logid tekivad"]
+    H1["Filebeat /<br/>Elastic Agent"]
+    H2["Metricbeat /<br/>Elastic Agent"]
+    H3["App OTel SDK"]
+  end
+
+  H1 --> KAFKA[("Kafka või Redis<br/>buffer<br/>vali oluliselt")]
+  H2 --> KAFKA
+  H3 --> OTEL["OTel<br/>Collector"]
+  OTEL --> KAFKA
+
+  KAFKA --> LS["Logstash<br/>parsing / enrichment"]
+  LS --> ES[("Elasticsearch /<br/>OpenSearch<br/>klaster")]
+
+  FLEET["Fleet UI<br/>(Kibanas)"] -.haldab.-> H1
+  FLEET -.haldab.-> H2
+
+  ES --> K["Kibana /<br/>OS Dashboards"]
+
+  style KAFKA fill:#ffe0b2
+  style ES fill:#bbdefb
+  style K fill:#c5e1a5
+  style FLEET fill:#f8bbd0
+```
+
+**Kafka või Redis vahel** on tihti vajalik, kui logide-maht on > ~100 GB/päev või klaster maintenance'i ajal ei tohi logisid kaotada.
+
+### OpenSearch ingestion
+
+OpenSearchil ei ole Elastic-i Beats'idega ühilduvat ökosüsteemi (alates 2021 fork'i ajast Beats jäi Elastic'iga). OpenSearch'i tavaline ingestion-stack:
+
+| Komponent | Kirjeldus | Vaste Elastic'is |
+|---|---|---|
+| **Data Prepper** | OpenSearchi natiivne pipeline (Java, sarnane Logstashile) | Logstash |
+| **Fluent Bit** | Kerge log shipper, vendor-neutral, kõige populaarsem OS-iga | Filebeat |
+| **Fluentd** | Raskem variant Fluent Bit'ist, Ruby-põhine | Logstash (osaliselt) |
+| **Vector** | Datadog'i avatud-kood log shipper, Rust, kiire | Filebeat / Logstash kombineeritud |
+| **OpenSearch Ingestion** (AWS) | AWS-i hallatud Data Prepper teenus | Elastic Cloud ingestion |
+
+### OpenTelemetry Collector — tulevik
+
+**OpenTelemetry Collector** (OTel Collector) on **vendor-neutraalne** ingestion-lüli. Aktsepteerib **metrikuid, traceid ja logisid** (logid newer-feature), väljastab kuhu tahad: ES, OS, Tempo, Prometheus, Loki, Splunk, Datadog — kõik korraga või valikuliselt.
+
+**Miks oluline:** kui sa instrumenteerid oma rakenduse OTel SDK-ga, sinu vendor-valik jääb **avatuks**. Saad migreeruda ES → OS, või välja-lülitada Splunk'i ühes regioonis, ilma rakenduse-koodi muutmata.
+
+### Otsustamise raam: mis ingestion-tööriist?
+
+| Olukord | Vali |
+|---|---|
+| Uus Elastic Stack deployment | **Elastic Agent + Fleet** |
+| Olemasolev Beats setup, ei taha migreerida | Beats edasi, lisa Logstash kui vaja parsing'ut |
+| Vajab kompleks-parsing'ut unstructured logide jaoks | Filebeat → **Logstash** → ES |
+| OpenSearch deployment | **Fluent Bit + Data Prepper** või **OTel Collector** |
+| Vendor-neutral, multi-backend (ES + Splunk + Tempo) | **OTel Collector** |
+| Logide-maht > 100 GB/päev, klaster on "värske" | Lisa **Kafka** vahele puhvriks (sama L2 "Kafka" osa) |
+| Cloud-native (Kubernetes-natiivne) | **Fluent Bit** (sidecar / DaemonSet) või **OTel Collector** |
+
+!!! tip "💡 Mõtle hetk"
+    Mis sinu organisatsioonis on praegu ingestion-kihiks? Kui see on "app kirjutab faili, syslog-ng saadab kuhugi", siis migreerumine **Filebeat'ile või Elastic Agent'ile** võtab järjepideva nadalavahetuse, aga vahetab teie monitooring-võimekuse täiesti ümber.
+
+### Kokkuvõte L1.4-st
+
+Ingestion-kiht otsustab, mis kvaliteediga logid klastrisse jõuavad ja kui palju vaeva võtab nende haldamine. **Beats** on klassikaline (üks-andmetüüp-üks-beat), **Logstash** on raskem transform-mootor, **Elastic Agent + Fleet** on modern unified lähenemine. **OpenTelemetry Collector** on vendor-neutraalne tulevik. OpenSearchi vasted: Data Prepper, Fluent Bit, Vector. **Sinu valik mõjutab igapäevast tööd rohkem kui klastri-konfiguratsioon.**
+
+---
+
+## L1.5 — Elasticsearch vs OpenSearch täna
+
+> **Loengu osa 1, hajutuse 3. plokk.** ~12 min, jätkub samas blokis kuni L1 lõpuni.
+>
 > **Miks see sulle oluline:** otsustamise raam, mille järgi valida Elastic Cloud, Elasticsearch on-prem, Amazon OpenSearch Service, OpenSearch Serverless või OpenSearch on-prem — koos hinnamudelite ja TCO komponentidega, mida CFO sinult küsib.
 
 ### Komponendid — peaaegu identsed
@@ -318,7 +638,7 @@ Kibana ja OpenSearch Dashboards näevad **80% identsed** välja — sama tüvi 2
 - **Elasticsearch klaster** on südamik — sealsamas elavad nii **logid**, **mol metrics**, **APM traçeid** kui **vector embeddings**
 - **Kibana** ei ole "ainult dashboardid" — ta on **kogu Elastic Stack'i UI**, sh APM, SIEM (security), Observability, Machine Learning kasutajaliidesed
 
-### Security — siin algab erinevus
+### Security
 
 **Elastic xpack** (osa Elastic License) on Elastici enda security stack. RBAC, doc-level security, field masking, audit-log, SSO, krüpteerimine. Põhilised asjad on tasuta (Basic license), edasijõudnud (SAML SSO, audit) kommerts (Platinum+).
 
@@ -342,7 +662,7 @@ Kui sul on AWS-i keskkond, OpenSearch on pärisilmas tihti **lihtsam ja odavam**
 **Elastic** pakub kahte asja, mis on praktikas väga lihtsalt kasutatavad:
 
 - **ELSER** (Elastic Learned Sparse EncodeR) — Elastic-i enda treenitud sparse retrieval mudel. Pre-trained, töötab inglise keeles. Lisaks toetab Elastic teisi embedding-mudeleid (nt e5-põhised multilingual mudelid), mida saab `semantic_text` väljaga siduda.
-- **`semantic_text` field** (alates 8.13, 2024) — sa lisad oma indeksisse semantic_text-tüüpi välja, Elastic indekseerib selle automaatselt nii BM25-ga (sõnaline) kui ELSER-iga (semantiline). Päring annab hübriid-skoori. **Üks API, kaks otsingumeetodit korraga.**
+- `semantic_text` field (8.13+, 2024): lisad indeksisse semantic_text-tüüpi välja, Elastic indekseerib selle automaatselt nii BM25-ga (sõnaline) kui ELSER-iga (semantiline). Päring annab hübriid-skoori.
 
 **OpenSearch** pakub kahte komplementaarset võimalust:
 
@@ -449,7 +769,8 @@ Sellega oleme valmis labi alustama. **Osa 1**: paneme Elasticsearchi ja Kibana s
 
 ## L2 — Arhitektuur: sõlmed, shardid, quorum, 99.9%
 
-> **Loengu osa 2.** ~15 min, hajutuse 2. plokk — enne Osa 2 (3-node klastri laienemine).  
+> **Loengu osa 2.** ~15 min, hajutuse 2. plokk — enne Osa 2 (3-node klastri laienemine).
+>
 > **Miks see sulle oluline:** aitab sul dimensioneerida klastrit, mis ei kuku ootamatult — mitu master node'i, kui palju RAM-i, kus on backup'id, kuidas Kafka puhverdab koormust, ja millal mis indeks tier'isse läheb.
 
 Osa 1 lõpus nägid sa midagi, mis võib esimese pilguga tunduda imelik: lõid indeksi, läksid Kibanasse, ja **klastri olek näitas kollasena**. Andmed olid sees, otsing töötas, aga oleku-tuli oli kollane. Miks?
@@ -714,9 +1035,177 @@ Osa 2 lab'is laiendad single-node klastri 3-node klastriks ja vaatad, kuidas ole
 
 ---
 
+## L2.3 — APM ja traces: kolmas observability sammas
+
+> **Loengu osa 2, hajutuse 3. plokk.** ~10 min, jätkub L2 järel.
+>
+> **Miks see sulle oluline:** APM on **Elastic Stacki kõige sügavam diferentseerija** OpenSearchi kõrval ja peamine põhjus, miks paljud monitooring-tiimid valivad Elastic'u. APM-klastri sizing **ei võrdu** logide-klastri sizing'uga — kui sa segad need kokku, kukub klaster tasapisi alla.
+
+### Kolmas sammas — traces
+
+Päev 1 rääkis observability kolmest sambast: **logs**, **metrics**, **traces**. Päev 2 + Päev 3 esimene pool keskendub logidele. **APM = traces.**
+
+Trace on **ühe päringu täielik teekond** läbi süsteemi: kasutaja klikib "osta" → frontend pärib API-d → API pärib auth-teenuse → auth pärib andmebaasi → API pärib makse-teenuse → makse-teenus pärib krediitkaardi-API-d. Kõik need on **spans** ühes trace'is. Sa näed waterfall vaates kus aeg kulus, kus error tekkis, milline service oli pudelikael.
+
+Iga span = **mis teenus, mis operatsioon, kui kaua võttis, mis tulemus**. Kogu pilt (trace) annab response-time'i jaotuse mikroteenuste vahel.
+
+### Elastic APM — küps
+
+Elastic ostis Opbeat'i 2017 ja töötas selle Elastic APM'iks. Tänu sellele on Elastic-i APM-pakk **küps**:
+
+- **Auto-instrumentation agendid**: Java, .NET, Node.js, Python, Go, Ruby, PHP — paned agendi rakendusse, ta instrumenteerib automaatselt veebi-raamistiku, andmebaasi-driver'id, HTTP klientid, message queues
+- **APM Server** — võtab agentidelt vastu, valideerib, kirjutab ES-i. **2022+ konsolideeritud Elastic Agent'i sisse**
+- **Kibana APM UI** — Service map (kus mis teenus teisega räägib), Transactions (latentsus, p95/p99), Errors (mis exception'id), Traces (waterfall)
+
+### APM-klaster vs logide-klaster
+
+**APM tekitab väga palju andmeid**, palju rohkem kui logid:
+
+| Aspekt | Logide-klaster | APM-klaster |
+|---|---|---|
+| Dokumendi-maht | 1 logi-rida = 1 dokument | 1 päring = **10–50 span'i** = 10–50 dokumenti |
+| Tüüpiline maht | 100 GB/päev | 1–10 TB/päev |
+| Retention | 30–90 päeva (audit) | 7–14 päeva (debugging) |
+| Otsingu-muster | Tagasivaade incidentidele | Reaalajas dashboardid + alerting |
+
+Logide-klaster = 3 master + 4–6 data node. APM-klaster võib olla **eraldi**, optimeeritud lühema retention'i ja kõrgema ingest rate'i jaoks.
+
+### OpenSearchi vaste — vähem küps
+
+**OpenSearch Observability** + **Trace Analytics** + **Data Prepper**. Toimib, AGA:
+
+- UI vähem viimistletud kui Kibana APM
+- **Agentide perekond on väiksem** — OS soovitab OpenTelemetry SDK-d, oma natiivseid agente ei toodeta
+- Data Prepper asendab APM Server'i — toimib, konfiguratsioon on rohkem käsitööd
+
+See on suuremate observability tiimide jaoks Elastic'u poole arvestatav argument.
+
+### OpenTelemetry kui sild
+
+Nii Elastic kui OpenSearch võtavad vastu **OTel traceid** — sinu rakendus ei pea kasutama propriotaarset agendi. Kui instrumenteerid rakenduse OTel SDK-ga, saad eksportida OTel Collector'i kaudu kummale. Migration ES → OS ei nõua rakenduse koodi muutmist.
+
+### Päev 5 ühendus
+
+Päev 5 räägib **Grafana Tempo**'st — standalone trace-storage, Elastic APM-i alternatiiv. Tempo on **odav** (S3) ja **vendor-neutral**. Kui sul on Grafana-ettevõte (Prometheus + Loki + Tempo), jääd sinna. Kui Elastic-ettevõte, jääd sinna. **OTel SDK rakenduses hoiab ülemineku-uksed lahti.**
+
+### Kokkuvõte L2.3-st
+
+APM = traces. **Elastic APM** on küps, integreeritud, mitme keele agendid. **OpenSearch Trace Analytics** toimib, aga vähem viimistletud. **APM-klaster ≠ logide-klaster** — eraldi sizing, lühem retention. **OTel** on vendor-neutraalne sild.
+
+---
+
+## L2.4 — Kibana monitooringule: Discover, Dashboards, Alerting, ML
+
+> **Loengu osa 2, hajutuse 4. plokk.** ~15 min, jätkub L2.3 järel — enne L3 vector-osa.
+>
+> **Miks see sulle oluline:** Elasticsearch on backend, **Kibana on UI**. 90% sinu igapäevasest monitooring-ajast oled Kibanas, mitte ES API-l. Kui sa Kibana feature'isid ei tea, kaotad väärtuse, mille eest maksad.
+
+### Kibana on rohkem kui dashboardid
+
+Üldine eksiarvamus: "Kibana = Grafana ekvivalent." Tegelikult on Kibana **kogu Elastic Stack'i UI** — APM, SIEM, Observability, Machine Learning, Stack Monitoring, Alerting on kõik **Kibana sees**, eraldi rakendustena. Üks UI kõige jaoks.
+
+OpenSearch Dashboards on Kibana fork 2021-st ja teeb sama, aga mõned UI-d on vähem viimistletud.
+
+### Discover — sinu igapäevane töövahend
+
+**KQL-iga logide-otsing.** 90% Kibana-ajast veedad siin. Võimalused mida tihti ei kasutata:
+
+- **Saved searches** — kompleksne KQL nimega salvestatud, kõik tiimis kasutavad
+- **Highlighted fields** — vali tabeli veerud (mitte vaikimisi `_source` JSON)
+- **Surrounding documents** — leidsid kahtlase logi-rea? Kliki "View surrounding documents" → näed eelnenud ja järgnenud read kontekstist
+- **Export to CSV** — tulemused alla edasiseks analüüsiks
+
+### Lens — kaasaegne visualisatsiooni-ehitaja
+
+Vana **Visualize** asendati **Lens**'iga 2020+. Drag-drop: tirid välja vasakult, valid graafiku-tüübi, Kibana arvab pakkumise. Õpikõver 5 min, mitte 50.
+
+Näited monitooringus: aja-rida (`event.duration` per `service.name`), top-N (top 10 `client.ip` per 500-veaga), heat map (error rate per host per tund), sankey (kasutaja-teekonna jaotus).
+
+### Dashboard — kombineeritud Lens-visualisatsioonid
+
+Mitu Lens-visualisatsiooni ühele lehele. Toetab **drilldown** — kliki bar chart'i tükile, mine teisele dashboardile filtreeritud sellele väärtusele. Production'is on sul tihti 10–20 dashboardi (per-service, per-environment, per-incident-response).
+
+### Stack Monitoring — klastri eneseseire
+
+**Management → Stack Monitoring**. Näitab:
+
+- Klastri olek (GREEN/YELLOW/RED)
+- Iga node CPU/mälu/disk
+- Iga indeksi shard count, dokumendi-maht, päringu-load
+- Kibana enda performance
+- Logstash pipeline'ide throughput
+
+**See on "kes seerib seirejat?"** vastus. Kui sinu monitooring kukub, Stack Monitoring näitab miks.
+
+### Observability UI — unified vaade (8.x+)
+
+Kibana 8.x lisas **Observability** menus. Idee: üks vaade, kus näed **korraga** logid + metrikud + traces ühe service'i kohta. Discover on logide jaoks, Metrics on metrikute jaoks, APM on tracedide jaoks — **Observability liidab** kõik kolm.
+
+Kui sa uurid incidenti "miks oli api-checkout aeglane":
+
+1. Observability → Services → api-checkout
+2. Näed transaction latency graafiku
+3. Klikkid spike'le → näed selle hetke logid, metrics, traces ühes vaates
+
+OpenSearch parallel: **OpenSearch Observability Plugin** (uuem, vähem viimistletud).
+
+### Alerting — Rules (modern) vs Watcher (legacy)
+
+Kibana 7.13+ tutvustas **Rules** — modern alerting framework. Asendab vana **Watcher**-i, mis oli JSON-DSL põhine ja väga keeruline.
+
+**Rules tüübid:**
+
+- **Index threshold** — "kui count > X 5 minuti jooksul"
+- **Anomaly detection** — "kui ML anomaly score > 75"
+- **Custom KQL** — "kui KQL päring annab > 0 tulemust"
+- **APM** — "kui service latency p99 > 1s"
+- **Logs threshold** — "kui ERROR logi-ridade arv > 100 per minute"
+
+**Action types** (kuhu alert läheb):
+
+- Slack, Microsoft Teams, PagerDuty, ServiceNow, Jira, Opsgenie
+- E-mail, Webhook
+- Kibana enda Connectors
+
+**Soovitus:** kasuta Rules, mitte Watcher'it. Watcher on legacy ja süöötud Rules'i suunas. Olemasolev Watcher töötab edasi, aga uusi Watcher'eid ära kirjuta.
+
+OpenSearch parallel: **Alerting plugin** (sarnane Rules-ile, Apache 2.0, vaba).
+
+### ML Anomaly Detection
+
+Elastic ML pakub **unsupervised anomaly detection** time-series andmetel. Sa annad mudelile aja-rida (näiteks päeva CPU per host), ta õpib mustri, märgib anomaaliad.
+
+**Mida ML AD saab tuvastada:**
+
+- Single-metric anomaaliad (CPU üksuse hostil ootamatult kõrge)
+- Multi-metric (CPU + lätutus + error-rate korraga anomaalsed)
+- Population analysis ("see host käitub erinevalt teistest sama-grupi hostidest")
+- Rare events ("see error-kood ilmus, mida pole varem näinud")
+
+**Hind:** Elastic ML on **Platinum-feature**. **OpenSearch Anomaly Detection plugin** on **Apache 2.0** — vaba. Algoritm on sama (Random Cut Forest), kasutuskoht erineb.
+
+**Praktiline nõuanne:** ML AD on **võimas, aga ka petlik**. False positives võivad olla väsitavad, kui alerting on läbi ML score'i. Alusta ML-iga **visualisatsioonis** (näed graafikul anomaaliad punase joonega), mitte alerting'us. Hiljem, kui usaldad mudelit, lisa Rule.
+
+### Canvas — NOC-seinad ja exec dashboard'id
+
+Pixel-perfect dashboardid, mis ei sarnane standardse Kibana-paneeliga. Kasutus: NOC-seina-televisioonid, executive briefing'ud, klient-presentatsioonid. Vajab disainerit — ei ole klikkimise-tasemel.
+
+OpenSearch ei oma Canvas'i ekvivalenti.
+
+### Maps — geo-visualisatsioonid
+
+Kui logidel on `geo_point` väli (client.ip + GeoIP enrichment), saad teha kaarte: "kust tulevad meie kasutajad", "kust tuli DDoS", "mis riikide servereid puudutab incident".
+
+### Kokkuvõte L2.4-st
+
+Kibana on **kogu Elastic Stack'i UI**, mitte ainult dashboardid. **Discover** = sinu igapäev. **Lens** = visualisatsioon drag-drop'iga. **Dashboard** = kombineeritud vaade. **Stack Monitoring** = seire enesest. **Observability UI** = unified logs+metrics+traces. **Alerting (Rules)** asendab Watcher'i. **ML Anomaly Detection** on võimas, aga alusta visualisatsiooniga. **OpenSearch Dashboards** teeb sama, aga mõned UI-d vähem viimistletud.
+
+---
+
 ## L3 — Otsing: lexical (BM25) vs vector, ja kuidas need töötavad
 
-> **Loengu osa 3.** ~15 min, hajutuse 3. plokk — enne Osa 4 (semantic_text + kNN demo).  
+> **Loengu osa 3.** ~15 min, hajutuse 3. plokk — enne Osa 4 (semantic_text + kNN demo).
+>
 > **Miks see sulle oluline:** aitab sul otsustada, kas sinu kasutusjuhul (logide otsing, audit, klienditugi, dokumentatsioon) on vector search või RAG vajalik — või piisab klassikalisest BM25-st. Vector pole alati õige lahendus.
 
 Logi-otsing on Elasticsearchi põhi-kasutusjuhtum, mida köik teavad. Aga 2024+ on otsing **kaheks haru ajunenud**: klassikaline **lexical** (sõnapotsing) ja moderne **vector / semantic** (tähendus-otsing). Mõlema all on **algoritmid** mida tasub tunda — mitte sellepärast et sa neid käsitsi implementeeriks, vaid sellepärast et sa pead mõistma, **miks** üks või teine sobib või mitte.
@@ -797,7 +1286,7 @@ Tänase loengu põhi-fookus on **logide-otsing klassikaliselt** (BM25), sest see
 
 ### Kokkuvõte L3-st
 
-Lexical (BM25) on **logide-otsingu standard** — kiire, täpne, soodne. Sinu igapäevatöö Kibana Discover'is ja OS Dashboards Discover'is on **see**. Vector search ja RAG on **edasine areng**, mis 2024+ ilmub AI Assistant tööriistadesse — detailid lisalugemises.
+Logide-otsingu standard on lexical (BM25). Kiire ja odav, sõnatasemel täpne. Kibana Discover ja OS Dashboards Discover kasutavad seda vaikimisi. Vector search ja RAG on **edasine areng**, mis 2024+ ilmub AI Assistant tööriistadesse — detailid lisalugemises.
 
 !!! tip "💭 Mõtle hetk — enne edasilugemist"
     Sinu organisatsioonis — mis on **igapäevane otsingu-muster** logides? Kas piisab "otsi `ERROR`" lihtsast tekstist (BM25), või tahaksid küsida "leia kõik database-probleemid" loomuliku keelega (vector + RAG)?
