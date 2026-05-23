@@ -121,6 +121,7 @@ nav:
   - "Kava": materials/paev3-kava.md
   - "Loeng: ELK & OS — kust tuli, kus on, kuhu läheb": materials/lectures/paev3-elk-loeng.md
   - "Lisalugemine: Vector search, RAG ja AI": materials/lectures/paev3-vector-rag-lisalugemine.md
+  - "Lisalugemine: RAG retrieval — BM25, vector, hübriid": materials/lectures/paev3-rag-hybrid-monitooring.md
   - "Labor": labs/03_elk_stack/lab.md
 
 - "Päev 4 — TICK + Kesksed logimissüsteemid":
