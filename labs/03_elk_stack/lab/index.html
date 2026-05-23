@@ -1275,10 +1275,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35-vordle-rest-api-on-identne" class="md-nav__link">
+  <a href="#35-vordle-rest-api-on-sisuliselt-identne" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5 Võrdle: REST API on identne
+        3.5 Võrdle: REST API on sisuliselt identne
       
     </span>
   </a>
@@ -2089,10 +2089,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35-vordle-rest-api-on-identne" class="md-nav__link">
+  <a href="#35-vordle-rest-api-on-sisuliselt-identne" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5 Võrdle: REST API on identne
+        3.5 Võrdle: REST API on sisuliselt identne
       
     </span>
   </a>
@@ -2285,7 +2285,7 @@
 <hr />
 <h2 id="osa-1-elasticsearch-ja-kibana-uksinda">Osa 1 · Elasticsearch ja Kibana üksinda<a class="headerlink" href="#osa-1-elasticsearch-ja-kibana-uksinda" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Probleem:</strong> Päev 2 nägid Lokit — kerge, kiire, Grafana sõbralik. Aga Loki indekseerib <strong>labelid</strong>, mitte logi sisu. Kui sinu auditi nõuab et kõik logi-sõnad oleks otsitavad (näiteks "leia kõik logirea kus mainitakse kasutaja ID-d X mistahes kohas viimase 90 päeva jooksul") — Loki ei suuda. Vaja on <strong>täisteksti-indeksi</strong> — sõnaraamatu kus iga sõna teab millises dokumendis ta on. See on Elasticsearch.</p>
+<p><strong>Probleem:</strong> Päev 2 nägid Lokit — kerge, kiire, Grafana-sõbralik. Aga Loki indekseerib <strong>labelid</strong>, mitte logi sisu. Kui sinu audit nõuab, et kõik logi-sõnad oleks otsitavad (näiteks "leia kõik logiread, kus mainitakse kasutaja ID-d X mistahes kohas viimase 90 päeva jooksul") — Loki ei suuda seda. Vaja on <strong>täistekstiindeksit</strong> — sõnaraamatut, kus iga sõna teab, millises dokumendis ta asub. See on Elasticsearch.</p>
 </blockquote>
 <p>Esmalt paneme <strong>ühe</strong> Elasticsearch node'i ja Kibana püsti. Seda ei tehta production'is kunagi — me kasutame seda lihtsalt selleks, et <strong>näha mida Kibana näitab esimese indeksi loomisega</strong>. Vastus on ootamatu.</p>
 <h3 id="11-ainult-elasticsearch">1.1 Ainult Elasticsearch<a class="headerlink" href="#11-ainult-elasticsearch" title="Lingi sektsioonile">&para;</a></h3>
@@ -2313,7 +2313,7 @@
 </span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="nt">es01-data</span><span class="p">:</span>
 </span></code></pre></div>
 <p><strong>Miks <code>ES_JAVA_OPTS=-Xms512m -Xmx512m</code></strong> — vähendame heap'i 512 MB peale per node, sest peagi tuleb klastris 3 node'i ja sinu 6 GB VM ei taluks vaikimisi 1 GB per node.</p>
-<p><strong>Miks <code>xpack.security.enabled=false</code></strong> — lab on isoleeritud, hoiame asju lihtsamana. Production-keskkonnas on see <strong>alati <code>true</code></strong>.</p>
+<p><strong>Miks <code>xpack.security.enabled=false</code></strong> — lab on isoleeritud, hoiame asju lihtsamana. Production-keskkonnas see praktiliselt alati <code>true</code> — security't tavaliselt välja ei lülitata.</p>
 <p>Käivita ainult ES:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-w<span class="w"> </span>vm.max_map_count<span class="o">=</span><span class="m">262144</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>es01
@@ -2321,7 +2321,7 @@
 <p>Oota ~30 s, kuni ES tõuseb. Kontrolli:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>http://localhost:9200
 </span></code></pre></div>
-<p>Vastus peaks olema JSON, mis ütleb klastri nime <code>lab-cluster</code> ja versiooni <code>8.15.x</code>. Kui ei tule midagi, oota veel 10 s — ES tõuseb aeglaselt.</p>
+<p>Vastus peaks olema JSON, mis ütleb klastri nime <code>lab-cluster</code> ja versiooni <code>8.15.x</code>. Kui ei tule midagi, oota veel 10 s — ES käivitub aeglaselt.</p>
 <p>💡 <strong>Kui <code>curl</code> ütleb <code>Connection refused</code>:</strong> kontrolli <code>docker compose logs es01</code>. Otsi rida <code>"started"</code>. Kui näed <code>bootstrap check failed</code>, siis <code>vm.max_map_count</code> on liiga madal.</p>
 <h3 id="12-loo-esimene-indeks-vaata-olekut">1.2 Loo esimene indeks, vaata olekut<a class="headerlink" href="#12-loo-esimene-indeks-vaata-olekut" title="Lingi sektsioonile">&para;</a></h3>
 <p>Loo indeks ja saada üks dokument:</p>
@@ -2339,10 +2339,10 @@
 <div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">&quot;status&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">&quot;unassigned_shards&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 </span></code></pre></div>
-<p><strong><code>unassigned_shards: 1</code></strong> — replica shard'il ei ole kohta. Default <code>number_of_replicas: 1</code> tähendab, et primary shard'ist tehakse 1 koopia. Koopia peab paiknema <strong>eri node'is</strong> kui primary. Sul on <strong>1 node</strong>, niisiis koopia jääb õhku rippuma.</p>
-<p>💭 <strong>Mõtle (vastust ära kerige enne):</strong> Mis juhtub kui sa kustutad kogemata praeguse ainsa node'i? Kas indeks on taastatav <code>replicas: 1</code> seadistusega?</p>
+<p><strong><code>unassigned_shards: 1</code></strong> — replica shard'il pole kohta. Default <code>number_of_replicas: 1</code> tähendab, et primary shard'ist tehakse 1 koopia. Koopia peab paiknema <strong>eri node'is</strong> kui primary. Sul on <strong>1 node</strong>, niisiis koopia jääb õhku rippuma.</p>
+<p>💭 <strong>Mõtle (vastust ära kerige enne):</strong> Mis juhtub, kui sa kustutad kogemata praeguse ainsa node'i? Kas indeks on taastatav <code>replicas: 1</code> seadistusega?</p>
 <blockquote>
-<p>🔍 <strong>Mõttearendus</strong> (loe alles pärast oma vastust): Indeks kaob. <code>replicas: 1</code> ei aita kui koopia pole <strong>eri node'il</strong>. See on miks production-klastrites on <strong>vähemalt 2 node'i</strong> ja replicas ≥ 1.</p>
+<p>🔍 <strong>Mõttearendus</strong> (loe alles pärast oma vastust): Indeks kaob. <code>replicas: 1</code> ei aita, kui koopia pole <strong>eri node'il</strong>. See on, miks production-klastrites on <strong>vähemalt 2 node'i</strong> ja replicas ≥ 1.</p>
 </blockquote>
 <h3 id="13-lisa-kibana">1.3 Lisa Kibana<a class="headerlink" href="#13-lisa-kibana" title="Lingi sektsioonile">&para;</a></h3>
 <p><code>docker-compose.yml</code>-i, <strong>enne</strong> <code>volumes:</code> rida, lisa:</p>
@@ -2362,7 +2362,7 @@
 <p>Oota ~45 s. Ava brauser: <code>http://&lt;sinu-VM-IP&gt;:5601</code>. Klassist <code>192.168.35.12X</code>, VPN-ist <code>192.168.100.12X</code>.</p>
 <p>Kibanas vasakul üleval <code>☰</code> → <strong>Management</strong> → <strong>Stack Monitoring</strong> → <strong>Or, set up with self monitoring</strong> → enable.</p>
 <p>Seejärel <strong>Stack Monitoring</strong> näitab: klaster <code>lab-cluster</code>, <strong>olek YELLOW</strong>, 1 node, indeks <code>test-logs</code> <code>YELLOW</code> (1 replica unassigned).</p>
-<p>💡 <strong>Kui Kibana ütleb <code>Kibana server is not ready yet</code>:</strong> oota veel 30 s. Kibana vajab ES-i täielikult valmis enne kui tõuseb.</p>
+<p>💡 <strong>Kui Kibana ütleb <code>Kibana server is not ready yet</code>:</strong> oota veel 30 s. Kibana vajab ES-i täielikult valmis, enne kui käivitub.</p>
 <h3 id="14-kql-otsing-discoveris">1.4 KQL otsing Discover'is<a class="headerlink" href="#14-kql-otsing-discoveris" title="Lingi sektsioonile">&para;</a></h3>
 <p>Vasakul <strong>Discover</strong> → loo data view (<code>test-logs*</code>) → ajaperioodiks "Last 24 hours".</p>
 <p>Saada veel paar dokumenti terminalist:</p>
@@ -2383,16 +2383,16 @@
 </span></code></pre></div>
 <div class="language-kql highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">level</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">*</span><span class="n">info</span><span class="p">*</span>
 </span></code></pre></div>
-<p>Viimane peaks tagastama 0 tulemust — õpiku näide kuidas KQL <strong>and</strong> töötab dokumentide tasandil, mitte sõna tasandil.</p>
+<p>Viimane peaks tagastama 0 tulemust — õpiku näide, kuidas KQL <strong>and</strong> töötab dokumentide tasandil, mitte sõna tasandil.</p>
 <p>💭 <strong>Mõtle:</strong> Sa just kirjutasid 4 päringut KQL-iga. <strong>Vasta peast:</strong> mis on suur erinevus KQL-i ja LogQL-i (Päev 2 Loki) süntaksite vahel? Kumb tundub esmapilgul intuitiivsem?</p>
 <hr />
 <h2 id="osa-2-laienda-3-node-klastriks">Osa 2 · Laienda 3-node klastriks<a class="headerlink" href="#osa-2-laienda-3-node-klastriks" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Probleem:</strong> Osa 1 lõpus oli sinu klaster YELLOW. Sa tead miks (replica unassigned). Aga oletame, et sa oled e-poe SRE — sinu klaster töötab production'is ja YELLOW olek tähendab: <strong>kaotad ühe DB krahhi puhul logi-andmed lõplikult</strong>. See pole vastuvõetav. Lahendus ei ole "lülitan replicas: 0-ks" (siis ei ole <strong>mingit</strong> kaitset). Lahendus on lisada node'e. Aga <strong>mitu</strong>? Ja <strong>kuidas</strong> nad omavahel räägivad? Selle vastuse leiad järgmise tunni jooksul.</p>
+<p><strong>Probleem:</strong> Osa 1 lõpus oli sinu klaster YELLOW. Sa tead, miks (replica unassigned). Aga oletame, et sa oled e-poe SRE — sinu klaster töötab production'is ja YELLOW olek tähendab: <strong>kaotad ühe DB krahhi puhul logi-andmed lõplikult</strong>. See pole vastuvõetav. Lahendus pole "lülitan replicas: 0-ks" (siis ei ole <strong>mingit</strong> kaitset). Lahendus on lisada node'e. Aga <strong>mitu</strong>? Ja <strong>kuidas</strong> nad omavahel räägivad? Vastuse leiad järgmise tunni jooksul.</p>
 </blockquote>
-<p><strong>Production-mudel</strong> on <strong>3 dedicated master + N data</strong>, aga 6 GB RAM-iga teeme lihtsama versiooni: <strong>3 node'i, igaileks kõik rollid</strong>. Quorum-matemaatika töötab sama — vaatame kuidas.</p>
+<p><strong>Production-mudel</strong> on <strong>3 dedicated master + N data</strong>, aga 6 GB RAM-iga teeme lihtsama versiooni: <strong>3 node'i, igaühel kõik rollid</strong>. Quorum-matemaatika töötab sama — vaatame kuidas.</p>
 <blockquote>
-<p>📖 <strong>Enne kui edasi lähed:</strong> Loengu plokk <strong>L2.2 "Cluster state ja quorum"</strong> seletab miks just kolm, mitte kaks. Loe see üle (max 3 minutit). Selles osas eeldame seda teadmist.</p>
+<p>📖 <strong>Enne kui edasi lähed:</strong> Loengu plokk <strong>L2.2 "Cluster state ja quorum"</strong> seletab, miks just kolm, mitte kaks. Loe see üle (max 3 minutit). Selles osas eeldame seda teadmist.</p>
 </blockquote>
 <h3 id="21-peata-ja-restruktureeri">2.1 Peata ja restruktureeri<a class="headerlink" href="#21-peata-ja-restruktureeri" title="Lingi sektsioonile">&para;</a></h3>
 <p>Peata praegune setup:</p>
@@ -2514,30 +2514,30 @@
 <h3 id="24-too-node-tagasi">2.4 Too node tagasi<a class="headerlink" href="#24-too-node-tagasi" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>start<span class="w"> </span>es02
 </span></code></pre></div>
-<p>Oota ~60 s (ES Java tõuseb aeglaselt), vaata uuesti:</p>
+<p>Oota ~60 s (ES Java käivitub aeglaselt), vaata uuesti:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cat/shards?v&quot;</span>
 </span></code></pre></div>
-<p>Näed, et mõned shard'id liiguvad tagasi es02-le. Klaster <strong>balansseerib uuesti</strong> — see on automaatne shard recovery. Kibanas Stack Monitoring näitab samuti.</p>
-<p>💭 <strong>Mõtle (enne edasilugemist):</strong> Sinu organisatsiooni keskkonnas — kui sa pead haldama klastrit mis on jagatud kahe andmekeskuse vahel — kus on master-kandidaadid? Kuidas tagad, et üks DC kadu ei tee klastrit <strong>read-only</strong>?</p>
+<p>Näed, et mõned shard'id liiguvad tagasi es02-le. Klaster <strong>balansseerib uuesti</strong> — see on automaatne shard recovery. Kibanas Stack Monitoring näitab sama.</p>
+<p>💭 <strong>Mõtle (enne edasilugemist):</strong> Sinu organisatsiooni keskkonnas — kui sa pead haldama klastrit, mis on jagatud kahe andmekeskuse vahel — kus on master-kandidaadid? Kuidas tagad, et üks DC kadu ei tee klastrit <strong>read-only</strong>?</p>
 <blockquote>
-<p>🔍 <strong>Mõttearendus:</strong> Vastus on <strong>kolmes asukohas</strong> — kaks DC-d ja üks <strong>arbiter/witness</strong> kolmandas asukohas (näiteks pilves AZ-i kõrval). Quorum nõuab &gt; 50% master-kandidaate. 2 DC × 1 master = 2 kandidaati, üks DC kadu → 1 master = quorum kadunud. Vaja on <strong>3. asukohta</strong> ainult selleks et säilitada quorum DC-katkestuse ajal. See on miks <strong>ainult kaks andmekeskust pole klastri jaoks lahendus</strong> — vaja minimaalselt 3 erinevat võrgu-failure-domeeni.</p>
+<p>🔍 <strong>Mõttearendus:</strong> Vastus on <strong>kolmes asukohas</strong> — kaks DC-d ja üks <strong>arbiter/witness</strong> kolmandas asukohas (näiteks pilves AZ-i kõrval). Quorum nõuab &gt; 50% master-kandidaate. 2 DC × 1 master = 2 kandidaati, üks DC kadu → 1 master = quorum kadunud. Vaja on <strong>3. asukohta</strong> ainult selleks, et säilitada quorum DC-katkestuse ajal. See on, miks <strong>ainult kaks andmekeskust pole klastri jaoks lahendus</strong> — vaja minimaalselt 3 erinevat võrgu-failure-domeeni.</p>
 </blockquote>
 <h3 id="25-testi-katkesta-2-nodei">2.5 Testi: katkesta 2 node'i<a class="headerlink" href="#25-testi-katkesta-2-nodei" title="Lingi sektsioonile">&para;</a></h3>
-<p>Kui sul on aega ja oled valmis nägema klastri sigatud:</p>
+<p>Kui sul on aega ja oled valmis nägema, mis juhtub, kui klaster quorum'i kaotab:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>stop<span class="w"> </span>es02<span class="w"> </span>es03
 </span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>sleep<span class="w"> </span><span class="m">10</span>
 </span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cluster/health?pretty&quot;</span>
 </span></code></pre></div>
 <p>Vastus näitab error või <code>master_not_discovered_exception</code>. Klaster ei suuda valida masterit, sest quorum (2) puudub.</p>
-<p>Töösta tagasi:</p>
+<p>Too tagasi:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>start<span class="w"> </span>es02<span class="w"> </span>es03
 </span></code></pre></div>
 <p>Oota ~45 s, kontrolli uuesti — klaster taastub GREEN olekusse.</p>
-<p>💭 <strong>Mõtle:</strong> Kirjuta paberile (või tekstifaili) <strong>2 lauset</strong> kelle jaoks sinu töökohas selle stsenaariumi tagajärjed oleksid kõige raskemad. Kas auditi-spetsialistile (logid kadunud)? Tugitiimile (otsing maas)? Dev-tiimile (rakenduse trace kadunud)? Vasta enda peast — koolitajal hea hiljem küsida.</p>
+<p>💭 <strong>Mõtle:</strong> Kirjuta paberile (või tekstifaili) <strong>2 lauset</strong>, kelle jaoks sinu töökohas selle stsenaariumi tagajärjed oleksid kõige raskemad. Kas auditi-spetsialistile (logid kadunud)? Tugitiimile (otsing maas)? Dev-tiimile (rakenduse trace kadunud)? Vasta enda peast — koolitajal hea hiljem küsida.</p>
 <hr />
 <h2 id="osa-3-opensearch-korval-vordlus-es-iga">Osa 3 · OpenSearch kõrval — võrdlus ES-iga<a class="headerlink" href="#osa-3-opensearch-korval-vordlus-es-iga" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Probleem:</strong> Sinu juht küsib "miks me ELK-i ostame, kui OpenSearch on tasuta?" Sul on 30 sekundit vastata. Praeguse osa eesmärk: sa saad <strong>konkreetse</strong> vastuse, mitte vendor-turunduse. Mõlemast platvormist on sinu töökohal kaal — sa pead suutma valida.</p>
+<p><strong>Probleem:</strong> Sinu juht küsib: "miks me ELK-i ostame, kui OpenSearch on tasuta?" Sul on 30 sekundit vastata. Praeguse osa eesmärk: sa saad <strong>konkreetse</strong> vastuse, mitte vendor-turunduse. Mõlemast platvormist on sinu töökohal kaal — sa pead suutma valida.</p>
 </blockquote>
 <p><strong>Sama tehniline alus 2021-st</strong> — OpenSearch hargnes Elasticsearch 7.10.2-st (litsentsi vahetuse tõttu) ja läks oma teed. Täna (2026) on mõlemad küpsed. Kõrvuti tegemine annab sulle kätte konkreetse võrdluse.</p>
 <div class="admonition warning">
@@ -2624,7 +2624,7 @@
 </span></code></pre></div>
 <p><strong>Märkad erinevusi ES-iga:</strong></p>
 <ul>
-<li><code>cluster.initial_cluster_manager_nodes</code> (mitte <code>master_nodes</code>) — OpenSearch sai 2.0-st lahti sõnast "master", kasutab <code>cluster_manager</code>. <strong>Sama mõiste, eri nimi.</strong></li>
+<li><code>cluster.initial_cluster_manager_nodes</code> (mitte <code>master_nodes</code>) — OpenSearch sai 2.0-st lahti sõnast "master", kasutab <code>cluster_manager</code>. <strong>Sama mõiste, lihtsalt erinev nimi.</strong></li>
 <li>Pildi nimi <code>opensearchproject/opensearch:2.18.0</code> — versioon vastab AWS-i toetatud versioonile</li>
 <li><code>DISABLE_SECURITY_PLUGIN=true</code> — OpenSearch Security plugin on <strong>vaikimisi sees</strong> (erinevalt ES-ist), keelame labi jaoks</li>
 </ul>
@@ -2639,12 +2639,12 @@
 </span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="nt">&quot;status&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
 </span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="nt">&quot;number_of_nodes&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
 </span></code></pre></div>
-<p>💡 <strong>Kui näed <code>OpenSearch is not running</code> või <code>cluster manager not discovered</code>:</strong> oota veel 30–60 s. OS tuleb üles aeglasemalt kui ES.</p>
+<p>💡 <strong>Kui näed <code>OpenSearch is not running</code> või <code>cluster manager not discovered</code>:</strong> oota veel 30–60 s. OS käivitub aeglasemalt kui ES.</p>
 <h3 id="34-os-dashboards-sarnasus-kibanaga">3.4 OS Dashboards — sarnasus Kibanaga<a class="headerlink" href="#34-os-dashboards-sarnasus-kibanaga" title="Lingi sektsioonile">&para;</a></h3>
 <p>Ava brauser: <code>http://&lt;sinu-VM-IP&gt;:5601</code>. OS Dashboards UI.</p>
 <p>Vasakul üleval <code>☰</code> → <strong>Discover</strong>. UI on <strong>80% identne</strong> Kibanaga. Sama navigatsioon, sama Discover-vaade, sama Index Patterns mõiste.</p>
-<h3 id="35-vordle-rest-api-on-identne">3.5 Võrdle: REST API on identne<a class="headerlink" href="#35-vordle-rest-api-on-identne" title="Lingi sektsioonile">&para;</a></h3>
-<p>Saada sama dokument OS-i kui sa ES-i panid:</p>
+<h3 id="35-vordle-rest-api-on-sisuliselt-identne">3.5 Võrdle: REST API on sisuliselt identne<a class="headerlink" href="#35-vordle-rest-api-on-sisuliselt-identne" title="Lingi sektsioonile">&para;</a></h3>
+<p>Saada sama dokument OS-i, kui sa ES-i panid:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/test-logs/_doc&quot;</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;esimene logi OS-is&quot;, &quot;level&quot;: &quot;info&quot;}&#39;</span>
@@ -2653,7 +2653,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:9200/_cat/indices?v&quot;</span>
 </span></code></pre></div>
 <p>Täpselt sama vorming, sama veerud, sama <code>health: green</code> (sest 3 node'i).</p>
-<p>KQL päringud Discover'is töötavad <strong>täpselt sama syntaxiga</strong>:</p>
+<p>KQL-päringud Discoveris töötavad <strong>täpselt sama süntaksiga</strong>:</p>
 <div class="language-kql highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="n">level</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;info&quot;</span>
 </span></code></pre></div>
 <h3 id="36-mis-on-tegelikud-erinevused">3.6 Mis on tegelikud erinevused?<a class="headerlink" href="#36-mis-on-tegelikud-erinevused" title="Lingi sektsioonile">&para;</a></h3>
@@ -2679,7 +2679,7 @@
 </tr>
 <tr>
 <td>Litsents</td>
-<td>AGPL-3 / SSPL / Elastic License</td>
+<td>Mitmekordne litsentsimudel (Elastic License 2.0 / SSPL / AGPLv3 osa komponentidest)</td>
 <td>Apache 2.0</td>
 </tr>
 <tr>
@@ -2701,13 +2701,13 @@
 <li><strong>Hybrid-cloud või on-prem ilma AWS-ita</strong> → ES kipub olema tavalisem valik</li>
 <li><strong>Tugev litsentsi-vastane joon</strong> (avalik sektor, kus AGPL/SSPL on probleem) → OpenSearch</li>
 </ul>
-<p>💭 <strong>Mõtle:</strong> Sinu organisatsiooni puhul — milline neist neljast joonist puudutab kõige rohkem? Kas vastus on selge või on rohkem kui üks faktor olulised?</p>
+<p>💭 <strong>Mõtle:</strong> Sinu organisatsiooni puhul — milline neist neljast joonist puudutab kõige rohkem? Kas vastus on selge, või on rohkem kui üks faktor oluline?</p>
 <hr />
 <h2 id="osa-4-vector-search-maitseproov">Osa 4 · Vector search — maitseproov<a class="headerlink" href="#osa-4-vector-search-maitseproov" title="Lingi sektsioonile">&para;</a></h2>
 <blockquote>
-<p><strong>Probleem:</strong> Sinu tugitiim saab päevas 50 tiketit. Pooled on samad probleemid eri sõnadega: "DB ei vasta", "andmebaas timeout", "PostgreSQL connection refused", "psycopg2 OperationalError". BM25 otsing (tavaline täisteksti-otsing) <strong>ei seo</strong> neid omavahel — need pole sõnastikus sarnased. Vector search teeb seda. Vaatame <strong>arvuliselt</strong> kuidas.</p>
+<p><strong>Probleem:</strong> Sinu tugitiim saab päevas 50 tiketit. Pooled on samad probleemid eri sõnadega: "DB ei vasta", "andmebaas timeout", "PostgreSQL connection refused", "psycopg2 OperationalError". BM25 otsing (tavaline täistekstiotsing) <strong>ei seo</strong> neid omavahel — need pole sõnastikus sarnased. Vector search teeb seda. Vaatame <strong>arvuliselt</strong>, kuidas.</p>
 </blockquote>
-<p>L3 loengu osa rääkis BM25-st (lexical) ja vector otsingust. Praegune osa on <strong>lühike maitseproov</strong>, mitte täielik ELSER setup. Eesmärk: näed kuidas <code>knn_vector</code> field töötab praktikas, ilma et peaksid embedding-mudelit laadima.</p>
+<p>L3 loengu osa rääkis BM25-st (lexical) ja vector otsingust. Praegune osa on <strong>lühike maitseproov</strong>, mitte täielik ELSER setup. Eesmärk: näed, kuidas <code>knn_vector</code> field töötab praktikas, ilma et peaksid embedding-mudelit laadima.</p>
 <p>OS klaster on praegu üleval Osa 3 järel. Kasutame seda.</p>
 <h3 id="41-loo-indeks-vector-fieldiga">4.1 Loo indeks vector field'iga<a class="headerlink" href="#41-loo-indeks-vector-fieldiga" title="Lingi sektsioonile">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors&quot;</span><span class="w"> </span><span class="se">\</span>
@@ -2722,9 +2722,9 @@
 </span><span id="__span-40-10"><a id="__codelineno-40-10" name="__codelineno-40-10" href="#__codelineno-40-10"></a><span class="s1">    }</span>
 </span><span id="__span-40-11"><a id="__codelineno-40-11" name="__codelineno-40-11" href="#__codelineno-40-11"></a><span class="s1">  }&#39;</span>
 </span></code></pre></div>
-<p>Märkad <strong><code>knn_vector</code></strong> — OpenSearchi vector tüüp. Reaalsuses on dimensioon 384, 768 või 1536. <strong>4 dimensiooni</strong> on selleks, et saaksime käsitsi vektoreid kirjutada ja vaadata mis juhtub.</p>
+<p>Märkad <strong><code>knn_vector</code></strong> — OpenSearchi vector-tüüp. Reaalsuses on dimensioon 384, 768 või 1536. <strong>4 dimensiooni</strong> on selleks, et saaksime käsitsi vektoreid kirjutada ja vaadata, mis juhtub.</p>
 <h3 id="42-saada-dokumente">4.2 Saada dokumente<a class="headerlink" href="#42-saada-dokumente" title="Lingi sektsioonile">&para;</a></h3>
-<p>Kujutame, et need on logi-read, mille embedding-mudel on juba arvutanud vektorid (4-dim ruum). Kaks tähendus-paari:</p>
+<p>Kujutame, et need on logiread, mille embedding-mudel on juba vektoriteks arvutanud (4-dim ruum). Kaks tähenduspaari:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="c1"># Database connection issues (sarnased vektorid)</span>
 </span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_doc&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;DB connection timeout&quot;, &quot;embedding&quot;: [0.9, 0.1, 0.0, 0.0]}&#39;</span>
@@ -2739,7 +2739,7 @@
 </span><span id="__span-41-12"><a id="__codelineno-41-12" name="__codelineno-41-12" href="#__codelineno-41-12"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_doc&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-41-13"><a id="__codelineno-41-13" name="__codelineno-41-13" href="#__codelineno-41-13"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;route to host failed&quot;, &quot;embedding&quot;: [0.0, 0.0, 0.85, 0.15]}&#39;</span>
 </span></code></pre></div>
-<p><strong>Vaata vektoreid</strong> — kolm esimest on <code>[0.85-0.9, 0.1-0.15, 0, 0]</code> lähedal. Viimased kaks on <code>[0, 0, 0.85-0.9, 0.1-0.15]</code>. <strong>Need on kaks erinevat klastrit ruumis.</strong> Embedding-mudel paneb sarnased asjad ruumis lähedale.</p>
+<p><strong>Vaata vektoreid</strong> — kolm esimest on <code>[0.85-0.9, 0.1-0.15, 0, 0]</code> lähedal. Viimased kaks on <code>[0, 0, 0.85-0.9, 0.1-0.15]</code>. <strong>Need moodustavad kaks eri klastrit vektorruumis</strong> — embedding-mudel paneb sarnased asjad lähestikku.</p>
 <h3 id="43-vector-paring">4.3 Vector päring<a class="headerlink" href="#43-vector-paring" title="Lingi sektsioonile">&para;</a></h3>
 <p>Otsi midagi, mille vektor on <code>[0.9, 0.1, 0.0, 0.0]</code> (sarnane database-klastri'ga):</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:9200/log-vectors/_search?pretty&quot;</span><span class="w"> </span><span class="se">\</span>
@@ -2756,14 +2756,14 @@
 </span><span id="__span-42-12"><a id="__codelineno-42-12" name="__codelineno-42-12" href="#__codelineno-42-12"></a><span class="s1">    }</span>
 </span><span id="__span-42-13"><a id="__codelineno-42-13" name="__codelineno-42-13" href="#__codelineno-42-13"></a><span class="s1">  }&#39;</span>
 </span></code></pre></div>
-<p><strong>Sa peaksid uurima vastust ise</strong>, mitte lugema mu järelduse. Vaata:</p>
+<p><strong>Uuri vastust ise</strong>, mitte loe minu järeldust. Vaata:</p>
 <ol>
 <li>Mis järjekorras tulemused on?</li>
 <li>Millised <code>_score</code> väärtused?</li>
 <li>Kas database-grupi 3 sõnumit on <strong>kõik enne</strong> network-grupi sõnumeid?</li>
 </ol>
-<p>Kui vastus on "jah" — siis nägid praktikas miks <code>knn</code> otsing on <strong>semantiline</strong>, mitte sõna-põhine. BM25 ei oleks seda teinud, sest "psycopg2" pole sõnaraamatuna "DB connection timeout" lähedal.</p>
-<p>💭 <strong>Mõtle:</strong> Sinu töökohas — kas on <strong>konkreetne otsingu-stsenaarium</strong>, kus tugitiim või dev-tiim <strong>otsib praegu täiesti vale märksõnaga</strong>? Kas vector search aitaks?</p>
+<p>Kui vastus on "jah" — siis nägid praktikas, miks <code>knn</code> otsing on <strong>semantiline</strong>, mitte sõnapõhine. BM25 ei oleks seda teinud, sest "psycopg2" pole sõnaraamatuna "DB connection timeout" lähedal.</p>
+<p>💭 <strong>Mõtle:</strong> Sinu töökohas — kas on <strong>konkreetne otsingustsenaarium</strong>, kus tugitiim või dev-tiim <strong>otsib praegu täiesti vale märksõnaga</strong>? Kas vector search aitaks?</p>
 <h3 id="44-mis-tulekul-ei-tehta-klassis">4.4 Mis tulekul (ei tehta klassis)<a class="headerlink" href="#44-mis-tulekul-ei-tehta-klassis" title="Lingi sektsioonile">&para;</a></h3>
 <p>Täielik setup vajaks:</p>
 <ol>
@@ -2788,14 +2788,14 @@
 </ul>
 <p><strong>Arusaamine (vasta peast, kirjuta paberile või tekstifaili):</strong></p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad <strong>ühe lausega</strong> seletada miks production tahab 3, mitte 2 master-kandidaati</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad nimetada <strong>2 olukorda</strong> kus eelistaksid Lokit Elasticsearchile, ja <strong>2</strong> kus vastupidi</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad <strong>ühe lausega</strong> seletada, miks production tahab 3, mitte 2 master-kandidaati</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad nimetada <strong>2 olukorda</strong>, kus eelistaksid Lokit Elasticsearchile, ja <strong>2</strong>, kus vastupidi</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Mõistad <strong>miks dimensioon 4</strong> vector-näites oli pedagoogiline lihtsustus, mitte päris kasutus</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad <strong>ühe lausega</strong> öelda mis on <code>master</code> vs <code>cluster_manager</code> erinevus ES-i ja OS-i vahel</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad <strong>ühe lausega</strong> öelda, mis on <code>master</code> vs <code>cluster_manager</code> erinevus ES-i ja OS-i vahel</li>
 </ul>
 <hr />
 <h2 id="lisaulesanded-kes-jouab-ette">🚀 Lisaülesanded (kes jõuab ette)<a class="headerlink" href="#lisaulesanded-kes-jouab-ette" title="Lingi sektsioonile">&para;</a></h2>
-<p><strong>A. ELSER mudel ja <code>semantic_text</code></strong> — Elastic ES klastris (peata OS, käivita ES):</p>
+<p><strong>A. ELSER-mudel ja <code>semantic_text</code></strong> — Elastic ES klastris (peata OS, käivita ES):</p>
 <ol>
 <li>Laadi ELSER mudel: Kibana → Machine Learning → Trained Models → Download <code>.elser_model_2</code></li>
 <li>Deploy mudel</li>
@@ -2921,7 +2921,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="20. mai 2026 05:15:24 UTC">20. mai 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. mai 2026 03:30:53 UTC">23. mai 2026</span>
   </span>
 
     
