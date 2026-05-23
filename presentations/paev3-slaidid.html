@@ -16,10 +16,12 @@
 
 :root {
   --r-background-color: #fafbfc;
-  --r-main-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --r-main-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
   --r-main-font-size: 40px;
   --r-main-color: #334155;
-  --r-heading-font: 'Inter', sans-serif;
+  --r-heading-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
   --r-heading-color: #0f172a;
   --r-heading-text-transform: none;
   --r-heading-font-weight: 700;
@@ -41,9 +43,9 @@
   --surface-muted: #f1f5f9;
 }
 
-.reveal { font-family: 'Inter', sans-serif; }
+.reveal { font-family: var(--r-main-font); }
 .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--r-heading-font);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -52,10 +54,41 @@
 .reveal h3 { font-size: 1.35em; color: #334155; margin-bottom: 0.3em; font-weight: 600; }
 .reveal h4 { font-size: 1.1em; color: #0f172a; font-weight: 600; }
 
-.reveal code, .reveal pre { font-family: 'JetBrains Mono', monospace; }
+.reveal code, .reveal pre {
+  font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Segoe UI Symbol', monospace;
+}
+.stat-box .num {
+  font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Segoe UI Symbol', monospace;
+}
 .reveal code { background: var(--code-bg); padding: 3px 10px; border-radius: 6px; color: #b45309; font-size: 0.9em; border: 1px solid #e2e8f0; }
-.reveal pre { background: #1e293b; border-radius: 10px; padding: 18px 24px; font-size: 0.62em; line-height: 1.45; box-shadow: var(--card-shadow); }
-.reveal pre code { background: transparent; padding: 0; color: #e2e8f0; border: none; }
+.reveal pre:not(.mermaid) {
+  background: var(--code-bg);
+  color: #334155;
+  border: 1px solid var(--table-border);
+  border-radius: 10px;
+  padding: 18px 24px;
+  font-size: 0.62em;
+  line-height: 1.45;
+  box-shadow: var(--card-shadow);
+}
+.reveal pre:not(.mermaid) code {
+  background: transparent;
+  padding: 0;
+  color: #334155;
+  border: none;
+}
+.reveal pre.mermaid {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  color: var(--r-main-color);
+}
+.reveal .hljs {
+  background: var(--code-bg) !important;
+  color: #334155 !important;
+}
 
 .reveal table { font-size: 0.78em; border-collapse: collapse; margin: 14px 0; width: 100%; }
 .reveal table th, .reveal table td { padding: 12px 16px; border-bottom: 1px solid var(--table-border); text-align: left; }
@@ -369,12 +402,38 @@
   white-space: nowrap;
 }
 
+.trace-waterfall {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.78em;
+  background: var(--code-bg);
+  color: #334155;
+  border: 1px solid var(--table-border);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+.trace-waterfall .trace-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+}
+.trace-waterfall .trace-bar {
+  height: 16px;
+  border-radius: 3px;
+}
+
 .reveal .mermaid-wrap {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0.4em 0 0.2em;
   min-height: 200px;
+  background: var(--surface-muted);
+  border: 1px solid var(--table-border);
+  border-radius: 12px;
+  padding: 16px;
 }
 .reveal .mermaid {
   width: 100%;
@@ -699,7 +758,7 @@ flowchart LR
     <tr><td><strong>Winlogbeat</strong></td><td>Windows Events (AD, security)</td></tr>
   </table>
   <p style="font-size: 0.8em; margin-top: 0.6em;">
-    <span class="good">+ Kerge (10–20 MB RAM)</span> · <span class="bad">− 1000+ hosti halduses valus</span>
+    <span class="good">+ Kerge (10–20 MB RAM)</span> · <span class="bad">- 1000+ hosti halduses valus</span>
   </p>
 </section>
 
@@ -1020,7 +1079,7 @@ flowchart TB
 <section>
   <h2>Quorum — miks 3 master node'i</h2>
   <div class="stat-row" style="margin-top: 0;">
-    <div class="stat-box warn-stat"><div class="num">⌊N/2⌋+1</div><div class="lbl">quorum valem</div></div>
+    <div class="stat-box warn-stat"><div class="num">floor(N/2)+1</div><div class="lbl">quorum valem</div></div>
     <div class="stat-box"><div class="num">3</div><div class="lbl">master → talub 1 kadumist</div></div>
   </div>
   <p style="font-size: 0.92em;"><strong class="bad">Split-brain</strong>: võrk lahkneb → 2 master'it korraga → andmed lahknevad.</p>
@@ -1189,30 +1248,30 @@ flowchart LR
 <section>
   <h2>Trace = päringu teekond</h2>
   <p style="font-size: 0.85em; margin-bottom: 1em;">POST /api/checkout · kogu 354ms</p>
-  <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.78em; background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+  <div class="trace-waterfall">
+    <div class="trace-row">
       <div>Frontend</div>
-      <div><div style="background: var(--accent-elastic); height: 16px; width: 25%; border-radius: 3px;"></div></div>
+      <div><div class="trace-bar" style="background: var(--accent-elastic); width: 25%;"></div></div>
     </div>
-    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+    <div class="trace-row">
       <div>API</div>
-      <div><div style="background: var(--accent-kibana); height: 16px; width: 90%; margin-left: 8%; border-radius: 3px;"></div></div>
+      <div><div class="trace-bar" style="background: var(--accent-kibana); width: 90%; margin-left: 8%;"></div></div>
     </div>
-    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+    <div class="trace-row">
       <div>Auth</div>
-      <div><div style="background: var(--accent-good); height: 16px; width: 6%; margin-left: 11%; border-radius: 3px;"></div></div>
+      <div><div class="trace-bar" style="background: var(--accent-good); width: 6%; margin-left: 11%;"></div></div>
     </div>
-    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+    <div class="trace-row">
       <div>DB SELECT</div>
-      <div><div style="background: var(--accent-warn); height: 16px; width: 18%; margin-left: 17%; border-radius: 3px;"></div></div>
+      <div><div class="trace-bar" style="background: var(--accent-warn); width: 18%; margin-left: 17%;"></div></div>
     </div>
-    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+    <div class="trace-row">
       <div>Payment</div>
-      <div><div style="background: var(--accent-aws); height: 16px; width: 45%; margin-left: 40%; border-radius: 3px;"></div></div>
+      <div><div class="trace-bar" style="background: var(--accent-aws); width: 45%; margin-left: 40%;"></div></div>
     </div>
-    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+    <div class="trace-row">
       <div><span class="bad">→ Stripe API</span></div>
-      <div><div style="background: var(--accent-bad); height: 16px; width: 32%; margin-left: 50%; border-radius: 3px;"></div></div>
+      <div><div class="trace-bar" style="background: var(--accent-bad); width: 32%; margin-left: 50%;"></div></div>
     </div>
   </div>
   <p style="margin-top: 1em; font-size: 0.85em; text-align: center;">
@@ -1554,8 +1613,8 @@ flowchart TD
   <h3>Checklist enne tootmist:</h3>
   <ul class="checklist" style="font-size: 0.85em;">
     <li>3 dedicated master node'i</li>
-    <li><code>heap = ½ RAM-ist</code>, max 31 GB</li>
-    <li><code>number_of_replicas ≥ 1</code></li>
+    <li><code>heap = 1/2 RAM-ist</code>, max 31 GB</li>
+    <li><code>number_of_replicas &gt;= 1</code></li>
     <li>Snapshot S3-le + <strong>restore testitud</strong></li>
     <li>ILM policy hot → warm → cold → frozen → delete</li>
     <li>Kafka buffer kui &gt; 100 GB/päev</li>
@@ -1647,16 +1706,25 @@ flowchart TD
 mermaid.initialize({
   startOnLoad: false,
   securityLevel: 'loose',
-  theme: 'base',
+  theme: 'neutral',
   themeVariables: {
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif",
     fontSize: '14px',
+    background: '#f1f5f9',
+    mainBkg: '#ffffff',
+    secondBkg: '#f1f5f9',
+    tertiaryBkg: '#fafbfc',
     primaryColor: '#e0f2f1',
     primaryTextColor: '#0f172a',
     primaryBorderColor: '#00695c',
     lineColor: '#64748b',
     secondaryColor: '#f1f5f9',
-    tertiaryColor: '#ffffff'
+    tertiaryColor: '#ffffff',
+    textColor: '#334155',
+    nodeTextColor: '#0f172a',
+    clusterBkg: '#f1f5f9',
+    titleColor: '#0f172a',
+    edgeLabelBackground: '#ffffff'
   },
   flowchart: { htmlLabels: true, curve: 'basis' }
 });
