@@ -35,7 +35,7 @@ tags:
 
 ## Miks vector search?
 
-Põhi-loengu L3-s kirjeldasin näidet, kus sa otsid logist `database connection problems` ja BM25 ei leia kirjeid, mis on sõnastatud teisiti — `pool exhausted`, `OperationalError`, `lost connection`. See on **vocabulary mismatch** — sinu mentaalne sõnastik ja logi-rea sõnastik on erinevad.
+Põhi-loengu [§10](paev3-elk-loeng.md#10-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad) kirjeldasin näidet, kus sa otsid logist `database connection problems` ja BM25 ei leia kirjeid, mis on sõnastatud teisiti — `pool exhausted`, `OperationalError`, `lost connection`. See on **vocabulary mismatch** — sinu mentaalne sõnastik ja logi-rea sõnastik on erinevad.
 
 **Vector otsing lahendab selle**, sest ei võrdle sõnu, vaid **tähendusi**. Vaatame, kuidas see töötab.
 

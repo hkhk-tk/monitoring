@@ -11,7 +11,7 @@ tags:
 
 # Päev 3 — Lisalugemine: RAG-i retrieval — BM25, vector või hübriid?
 
-> **Tase:** Edasijõudnud. Eeldab, et oled lugenud Päev 3 põhi-loengu L3 osa (BM25 vs vector) JA eelmise lisalugemise (HNSW, ELSER, RAG põhi-mehaanika).
+> **Tase:** Edasijõudnud. Eeldab, et oled lugenud [Päev 3 põhi-loengu §10](paev3-elk-loeng.md#10-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad) (BM25 vs vector) JA eelmise lisalugemise [Vector search ja RAG](paev3-vector-rag-lisalugemine.md) (HNSW, ELSER, RAG põhi-mehaanika).
 > 
 > **Kestus:** ~20 min lugemist.
 > 
