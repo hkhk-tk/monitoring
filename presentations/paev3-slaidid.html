@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280">
+<title>Päev 3 — Elasticsearch & OpenSearch</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --r-background-color: #0f1419;
+  --r-main-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --r-main-font-size: 30px;
+  --r-main-color: #e6e6e6;
+  --r-heading-font: 'Inter', sans-serif;
+  --r-heading-color: #ffffff;
+  --r-heading-text-transform: none;
+  --r-heading-font-weight: 600;
+  --r-link-color: #5dadec;
+  --r-selection-color: #fff;
+  --r-selection-background-color: #2e5cb8;
+  --accent-elastic: #00bfb3;
+  --accent-opensearch: #005eb8;
+  --accent-kibana: #f04e98;
+  --accent-aws: #ff9900;
+  --accent-good: #4caf50;
+  --accent-warn: #ff9800;
+  --accent-bad: #e53935;
+  --accent-purple: #b388ff;
+  --code-bg: #1e2530;
+  --table-border: #2a3441;
+}
+
+.reveal { font-family: 'Inter', sans-serif; }
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.reveal h1 { font-size: 2.6em; }
+.reveal h2 { font-size: 1.8em; margin-bottom: 0.4em; }
+.reveal h3 { font-size: 1.3em; color: var(--accent-elastic); margin-bottom: 0.3em; }
+.reveal h4 { font-size: 1.0em; color: var(--accent-kibana); }
+
+.reveal code, .reveal pre { font-family: 'JetBrains Mono', monospace; }
+.reveal code { background: var(--code-bg); padding: 2px 8px; border-radius: 4px; color: #ffc66d; font-size: 0.85em; }
+.reveal pre { background: var(--code-bg); border-radius: 6px; padding: 14px 20px; font-size: 0.55em; line-height: 1.4; box-shadow: none; }
+.reveal pre code { background: transparent; padding: 0; color: #e6e6e6; }
+
+.reveal table { font-size: 0.65em; border-collapse: collapse; margin: 12px 0; width: 100%; }
+.reveal table th, .reveal table td { padding: 8px 14px; border-bottom: 1px solid var(--table-border); text-align: left; }
+.reveal table th { background: #1a2230; color: #fff; font-weight: 600; }
+
+.reveal ul { margin: 0.4em 0; }
+.reveal li { margin: 0.25em 0; line-height: 1.4; }
+
+.reveal .lead { text-align: center; }
+.reveal .lead h1 { font-size: 3.2em; font-weight: 700; }
+
+.elastic { color: var(--accent-elastic); font-weight: 600; }
+.os { color: var(--accent-opensearch); font-weight: 600; }
+.aws { color: var(--accent-aws); font-weight: 600; }
+.good { color: var(--accent-good); }
+.warn { color: var(--accent-warn); }
+.bad { color: var(--accent-bad); }
+.purple { color: var(--accent-purple); }
+.muted { color: #888; font-size: 0.85em; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+.split-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+.split-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+
+.box {
+  background: #1a2230;
+  border-left: 4px solid var(--accent-elastic);
+  padding: 14px 20px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+.box.os-box { border-left-color: var(--accent-opensearch); }
+.box.warn-box { border-left-color: var(--accent-warn); }
+.box.good-box { border-left-color: var(--accent-good); }
+.box.bad-box { border-left-color: var(--accent-bad); }
+.box.purple-box { border-left-color: var(--accent-purple); }
+
+.arutelu-slide { background: linear-gradient(135deg, #2a1a4a 0%, #4a1a3a 100%); }
+.arutelu-slide h2 { color: #ffeb3b; }
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 20px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--table-border);
+  font-size: 0.85em;
+}
+.timeline-year { color: var(--accent-elastic); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+.flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+.flow-step {
+  background: #1a2230;
+  border: 2px solid var(--accent-elastic);
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 0.75em;
+  text-align: center;
+  min-width: 100px;
+}
+.flow-arrow { color: var(--accent-elastic); font-size: 1.4em; }
+
+.pillar {
+  background: #1a2230;
+  border-top: 4px solid var(--accent-elastic);
+  padding: 16px;
+  border-radius: 6px;
+  text-align: center;
+}
+.pillar:nth-child(2) { border-top-color: var(--accent-kibana); }
+.pillar:nth-child(3) { border-top-color: var(--accent-purple); }
+.pillar h4 { margin: 0 0 8px 0; }
+
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- TITLE -->
+<section class="lead">
+  <h1>Päev 3</h1>
+  <h2 style="color: var(--accent-elastic); margin-top: 0.2em;">Elasticsearch &amp; OpenSearch</h2>
+  <p style="font-size: 1.1em; color: #aaa; margin-top: 1.2em;">Andmehaldus · Klaster · Otsing</p>
+  <p style="margin-top: 2em; font-size: 0.9em;">
+    <strong>23. mai 2026</strong> · Haapsalu KHK<br>
+    Maria Talvik
+  </p>
+</section>
+
+<!-- ÕPIVÄLJUNDID -->
+<section>
+  <h2>Õpiväljundid</h2>
+  <p class="muted">Pärast täna oskad:</p>
+  <ul style="font-size: 0.85em;">
+    <li>Selgitada miks <span class="elastic">JSON-dokumendid + structured search</span> &gt; <code>grep</code></li>
+    <li>Eristada <strong>Beats, Logstash, Elastic Agent, OTel</strong></li>
+    <li>Põhjendada <strong>3 master node'i</strong> (quorum-matemaatika)</li>
+    <li>Kirjeldada <strong>APM-i</strong> ja miks APM-klaster ≠ logide-klaster</li>
+    <li>Loetleda <strong>Kibana monitooringu-funktsioone</strong> + OS-vasted</li>
+    <li>Eristada <strong>BM25, vector, hybrid</strong> otsingut</li>
+    <li>Otsustada <span class="elastic">ES</span> vs <span class="os">OS</span> — Cloud / on-prem / Serverless</li>
+  </ul>
+</section>
+
+<!-- KAVA -->
+<section>
+  <h2>Päeva kava</h2>
+  <table style="font-size: 0.6em;">
+    <tr><td>10:05–10:35</td><td><strong>Plokk 1</strong> — Paradigm shift, Maastik 2026, Ajalugu</td></tr>
+    <tr><td>10:35–10:55</td><td>🗣️ Arutelu 1</td></tr>
+    <tr><td>11:05–11:35</td><td><strong>Plokk 2</strong> — Dokumendi-mudel + Stack ingestion</td></tr>
+    <tr><td>11:35–11:55</td><td>🗣️ Arutelu 2</td></tr>
+    <tr><td>11:55–12:10</td><td><strong>Plokk 3</strong> — Elasticsearch vs OpenSearch täna</td></tr>
+    <tr><td>12:10–12:40</td><td>🍽️ Lõuna</td></tr>
+    <tr><td>12:40–13:05</td><td><strong>Plokk 4</strong> — Klastri arhitektuur, ILM</td></tr>
+    <tr><td>13:05–13:20</td><td>🗣️ Arutelu 4</td></tr>
+    <tr><td>13:20–13:35</td><td><strong>Plokk 5</strong> — APM + Kibana monitooringule</td></tr>
+    <tr><td>13:35–13:50</td><td>🗣️ Arutelu 5</td></tr>
+    <tr><td>14:00–14:15</td><td><strong>Plokk 6</strong> — BM25 vs Vector vs RAG</td></tr>
+    <tr><td>14:15–14:25</td><td>🗣️ Arutelu 6</td></tr>
+    <tr><td>14:25–14:30</td><td>Refleksioon + kodutöö</td></tr>
+  </table>
+  <p class="muted" style="margin-top: 0.8em;">Lab kodutööna · Slack <code>#paev3-elk</code></p>
+</section>
+
+<!-- PLOKK 1 INTRO -->
+<section class="lead" style="background: linear-gradient(135deg, #1a1a4a 0%, #4a1a3a 100%);">
+  <h1 style="color: #fff;">Plokk 1</h1>
+  <h2 style="color: var(--accent-elastic); margin-top: 0.3em;">Paradigm shift<br>Maastik 2026<br>Ajalugu</h2>
+  <p class="muted" style="margin-top: 1.5em;">10:05–10:35 · 30 min</p>
+</section>
+
+<!-- PARADIGMA -->
+<section>
+  <h2>Kaks paradigmat kõrvuti</h2>
+  <table>
+    <tr><th></th><th>Klassikaline (Zabbix)</th><th>Andme-tsentriline (ELK / OS / Loki)</th></tr>
+    <tr><td><strong>Põhi-küsimus</strong></td><td>"Host X, mida mõõdan?"</td><td>"Andmed, mida küsida saan?"</td></tr>
+    <tr><td><strong>Andmemudel</strong></td><td>Schemaful (Item)</td><td>Schema-less (JSON)</td></tr>
+    <tr><td><strong>Päringud</strong></td><td>Eeldefineeritud (Trigger)</td><td>Ad-hoc (KQL, ESQL, LogQL)</td></tr>
+    <tr><td><strong>Skaala</strong></td><td>Rohkem hoste</td><td>Rohkem data sõlmi</td></tr>
+    <tr><td><strong>Sa tead</strong></td><td><strong>ette</strong> mida otsid</td><td><strong>avastad</strong> mustreid</td></tr>
+  </table>
+</section>
+
+<!-- 4 JÕUDU -->
+<section>
+  <h2>Neli jõudu, mis nihet ajavad</h2>
+  <div class="split-4">
+    <div class="box">
+      <h4>1. Cloud-native</h4>
+      Host pole stabiilne entity. Pod tuleb-kaob 4 min vahel. Andmed on entity.
+    </div>
+    <div class="box os-box">
+      <h4>2. Andmemahud 100×</h4>
+      10 GB → <strong>1–10 TB/päev</strong>. Suuremad 50–500 TB/päev.
+    </div>
+    <div class="box" style="border-left-color: var(--accent-kibana);">
+      <h4>3. Otsing + korrelatsioon</h4>
+      Ad-hoc päringud. Zabbix Trigger ei oska — ainult eeldefineeritu.
+    </div>
+    <div class="box purple-box">
+      <h4>4. AI + ML</h4>
+      Anomaalia-tuvastus, RCA, RAG. Vajab agregeerimist, ML-mudeleid.
+    </div>
+  </div>
+</section>
+
+<!-- KONSOLIDEERIMINE -->
+<section>
+  <h2>Konsolideerimise laine 2024–25</h2>
+  <table>
+    <tr><th>Tehing</th><th>Mõju</th></tr>
+    <tr><td><strong class="bad">Palo Alto ostis Splunki</strong> ($28B, sept 2024)</td><td>Splunk → security platvormi osa</td></tr>
+    <tr><td>Cisco üritas Splunki osta, tagasi lükatud</td><td>Palo Alto astus sisse</td></tr>
+    <tr><td>IBM ostis HashiCorpi (2024)</td><td>Terraform / Vault / Consul → IBM</td></tr>
+    <tr><td>Datadog kasvab (Codiac, Eppo, Voltron)</td><td>Vendor consolidation jätkub</td></tr>
+    <tr><td>Grafana Labs — orgaaniline kasv</td><td>OSS LGTM panus</td></tr>
+  </table>
+  <p class="warn" style="margin-top: 0.8em; font-size: 0.85em;">⚠️ Vendor lock-in tagasi tulekul, ka observability-ruumis</p>
+</section>
+
+<!-- OSS REAKTSIOON -->
+<section>
+  <h2>Open source vastureaktsioon</h2>
+  <table>
+    <tr><th>Algne projekt</th><th>Fork / vaba alternatiiv</th><th>Aasta</th></tr>
+    <tr><td>HashiCorp Terraform</td><td><strong class="good">OpenTofu</strong></td><td>2023</td></tr>
+    <tr><td>HashiCorp Vault</td><td><strong class="good">OpenBao</strong></td><td>2024</td></tr>
+    <tr><td><span class="elastic">Elasticsearch</span></td><td><strong class="good">OpenSearch</strong> (AWS → Linux Foundation)</td><td>2021 → 2024</td></tr>
+    <tr><td>MongoDB</td><td><span class="muted">— pole tugevat forki</span></td><td>—</td></tr>
+  </table>
+  <p style="margin-top: 0.8em; font-size: 0.85em;">2024 sept: <strong>OpenSearch Software Foundation</strong> Linux Foundationi all. AWS, Aiven, Logz.io, Oracle.</p>
+</section>
+
+<!-- OTEL -->
+<section>
+  <h2>OpenTelemetry võitis instrumenteerimise</h2>
+  <p style="font-size: 0.95em;">De facto standard 2024–25:</p>
+  <div class="flow">
+    <div class="flow-step">Rakendus<br><span class="muted">OTel SDK</span></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">OTel<br>Collector</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="border-color: var(--accent-purple);">Mis tahes<br>backend</div>
+  </div>
+  <p class="muted" style="font-size: 0.85em; margin-top: 1em;">
+    Datadog · Splunk · Elastic · Grafana · New Relic · Dynatrace — kõik aktsepteerivad OTel sisendit
+  </p>
+  <p style="margin-top: 1em; font-size: 0.95em;">
+    <span class="good">✓ Vendor-lock puudub instrumenteerimisel.</span> Rakenduse koodi ei pea muutma kui vendor vahetad.
+  </p>
+</section>
+
+<!-- TIMELINE -->
+<section>
+  <h2>Ajalugu — Lucene'st 2026-ni</h2>
+  <div class="timeline-row"><div class="timeline-year">1999</div><div>Apache Lucene (inverted index)</div></div>
+  <div class="timeline-row"><div class="timeline-year">2010</div><div>Elasticsearch sünd (Shay Banon)</div></div>
+  <div class="timeline-row"><div class="timeline-year">2013</div><div>ELK Stack (ES + Logstash + Kibana)</div></div>
+  <div class="timeline-row"><div class="timeline-year">2015</div><div>Beats lisandub · Amazon ES Service</div></div>
+  <div class="timeline-row"><div class="timeline-year">2019</div><div>Elastic vs AWS kohtuvaidlus</div></div>
+  <div class="timeline-row"><div class="timeline-year"><span class="bad">2021</span></div><div><strong>Litsentsi-drama: SSPL + Elastic License</strong> · AWS forkib OpenSearchi</div></div>
+  <div class="timeline-row"><div class="timeline-year">2023</div><div>Vector search · dense_vector · neural search · FAISS</div></div>
+  <div class="timeline-row"><div class="timeline-year"><span class="good">2024</span></div><div><strong>AGPL-3 Elasticile</strong> · OS Software Foundation · <code>semantic_text</code> · Bedrock + OS Serverless</div></div>
+  <div class="timeline-row"><div class="timeline-year">2026</div><div><strong>Mõlemad open source. Mõlemad küpsed. Valik = kontekst + meeskond.</strong></div></div>
+</section>
+
+<!-- ARUTELU 1 -->
+<section class="arutelu-slide">
+  <h2 style="margin-top: 0.5em;">🗣️ Arutelu 1</h2>
+  <p class="muted" style="font-size: 0.85em;">10:35–10:55 · 20 min</p>
+  <ul style="text-align: left; max-width: 900px; margin: 1em auto;">
+    <li>Teie organisatsiooni paradigm-shift seis?</li>
+    <li><strong>Iceberg / OTel / vector search</strong> — kasutuses või plaanis? Mis takistab?</li>
+    <li><strong>Splunki kallinemine / Palo Alto omandamine</strong> — sundinud alternatiivi otsima?</li>
+  </ul>
+</section>
+
+<!-- PLOKK 2 INTRO -->
+<section class="lead" style="background: linear-gradient(135deg, #1a4a4a 0%, #1a3a4a 100%);">
+  <h1 style="color: #fff;">Plokk 2</h1>
+  <h2 style="color: var(--accent-elastic); margin-top: 0.3em;">Dokumendi-mudel<br>Stack ingestion</h2>
+  <p class="muted" style="margin-top: 1.5em;">11:05–11:35 · 30 min</p>
+</section>
+
+<!-- JSON -->
+<section>
+  <h2>Logist saab JSON-dokument</h2>
+  <div class="split">
+    <div>
+      <h4 style="color: var(--accent-warn);">Klassikaline tekstirida</h4>
+<pre>May 22 19:03:14 web-prod-01
+nginx: 10.0.42.7 "GET
+/api/orders" 500 142</pre>
+      <p class="muted" style="font-size: 0.75em;">Ainult <code>grep</code>. Ei tea mis on mis.</p>
+    </div>
+    <div>
+      <h4 style="color: var(--accent-good);">JSON-dokument</h4>
+<pre>{
+  "@timestamp": "2026-05-22T19:03:14Z",
+  "host.name": "web-prod-01",
+  "service.name": "nginx",
+  "http.response.status_code": 500,
+  "event.duration": 234000000
+}</pre>
+      <p class="muted" style="font-size: 0.75em;">Iga väli <strong>otsitav, filterdataav, agregeeritav</strong></p>
+    </div>
+  </div>
+  <p style="margin-top: 1em; font-size: 0.85em;"><span class="good">→</span> Structured logging. ECS = <strong>Elastic Common Schema</strong> (de facto standard).</p>
+</section>
+
+<!-- INDEKS -->
+<section>
+  <h2>Indeks ≠ SQL "index"</h2>
+  <p style="font-size: 0.9em;">ES-i indeks = dokumentide <strong>kollektsioon</strong> (nagu SQL tabel).</p>
+  <h3>Monitooringus time-based:</h3>
+<pre>logs-nginx-2026.05.21
+logs-nginx-2026.05.22  ← täna kirjutatakse
+logs-nginx-2026.05.23</pre>
+  <div class="split">
+    <div class="box good-box">
+      <strong>Miks päeva-kaupa?</strong>
+      <ul style="font-size: 0.85em; margin-top: 6px;">
+        <li>Vana = immutable, optimeerib</li>
+        <li>Kolida odavamale storage'le</li>
+        <li>Kustutada ilma <code>DELETE WHERE</code></li>
+      </ul>
+    </div>
+    <div class="box">
+      <strong>Operatiivsed tööriistad:</strong>
+      <ul style="font-size: 0.85em; margin-top: 6px;">
+        <li><strong>Index template</strong> — schema uutele</li>
+        <li><strong>Alias</strong> — atomic rotation</li>
+        <li><strong>Data stream</strong> (7.9+) — modern</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MAPPING -->
+<section>
+  <h2>Mapping — väljade sõnastik</h2>
+  <table>
+    <tr><th>Tüüp</th><th>Kasutus</th><th>Miks oluline</th></tr>
+    <tr><td><code>text</code></td><td>Full-text otsing</td><td>Tokeniseeritakse</td></tr>
+    <tr><td><code>keyword</code></td><td>Exact match</td><td>Filter, aggregation, sort</td></tr>
+    <tr><td><code>date</code></td><td><code>@timestamp</code></td><td>Range, time-series</td></tr>
+    <tr><td><code>long</code> / <code>double</code></td><td>Latentsus, baidid</td><td>Aritmeetika, percentiles</td></tr>
+    <tr><td><code>ip</code></td><td>IP CIDR</td><td><code>client.ip: 10.0.0.0/8</code></td></tr>
+    <tr><td><code>geo_point</code></td><td>Lat/long</td><td>Kibana Maps</td></tr>
+  </table>
+  <div class="box warn-box" style="margin-top: 1em;">
+    <strong>⚠️ Lõks:</strong> dynamic mapping arvab <code>host.name</code> text'iks → KQL ja terms agg <strong>ei tööta</strong>. Lahendus: index template enne esimest dokumenti.
+  </div>
+</section>
+
+<!-- BEATS -->
+<section>
+  <h2>Beats — kerged Go-shippers</h2>
+  <table>
+    <tr><th>Beat</th><th>Mida shippib</th></tr>
+    <tr><td><strong>Filebeat</strong></td><td>Logifailid (<code>/var/log/*</code>, app logid)</td></tr>
+    <tr><td><strong>Metricbeat</strong></td><td>Süsteem + app meetrikud (CPU, MySQL, Redis)</td></tr>
+    <tr><td><strong>Auditbeat</strong></td><td>Linux audit logid, failimuutused</td></tr>
+    <tr><td><strong>Heartbeat</strong></td><td>Uptime checks (HTTP/TCP/ICMP, SSL-sert)</td></tr>
+    <tr><td><strong>Packetbeat</strong></td><td>Võrgu-pakettide analüüs</td></tr>
+    <tr><td><strong>Winlogbeat</strong></td><td>Windows Events (AD, security)</td></tr>
+  </table>
+  <p style="font-size: 0.8em; margin-top: 0.6em;">
+    <span class="good">+ Kerge (10–20 MB RAM)</span> · <span class="bad">− 1000+ hosti halduses valus</span>
+  </p>
+</section>
+
+<!-- LOGSTASH + AGENT -->
+<section>
+  <h2>Logstash + Elastic Agent + Fleet</h2>
+  <div class="split">
+    <div class="box">
+      <h4>Logstash (raske pipeline)</h4>
+      <p style="font-size: 0.8em;"><code>input → filter → output</code></p>
+      <ul style="font-size: 0.75em;">
+        <li><strong>Grok</strong> — unstructured parsing</li>
+        <li>Enrichment: GeoIP, DNS, user_agent</li>
+        <li>Mitu sisendit/väljundit korraga</li>
+        <li>JRuby, 1–2 GB RAM</li>
+      </ul>
+    </div>
+    <div class="box" style="border-left-color: var(--accent-kibana);">
+      <h4>Elastic Agent + Fleet (2022+)</h4>
+      <p style="font-size: 0.8em;">Üks binary asendab kõiki Beats</p>
+      <ul style="font-size: 0.75em;">
+        <li>Keskne haldus Fleet UI-s (Kibanas)</li>
+        <li>Valmis-integration'id: nginx, k8s, AWS</li>
+        <li><strong>Soovitus uutele deployment'idele</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ANDMEVOOG -->
+<section>
+  <h2>Andmevoog — üldine pilt</h2>
+  <div class="flow" style="flex-direction: column; align-items: stretch;">
+    <div style="display: flex; gap: 10px; justify-content: center;">
+      <div class="flow-step">Filebeat /<br>Elastic Agent</div>
+      <div class="flow-step">Metricbeat /<br>Elastic Agent</div>
+      <div class="flow-step">App OTel<br>SDK</div>
+    </div>
+    <div style="text-align: center; color: var(--accent-elastic); font-size: 1.4em;">↓</div>
+    <div style="text-align: center;">
+      <div class="flow-step" style="display: inline-block; border-color: var(--accent-warn); background: rgba(255,152,0,0.1);">
+        Kafka / Redis buffer<br><span class="muted" style="font-size: 0.8em;">kui &gt; 100 GB/päev</span>
+      </div>
+    </div>
+    <div style="text-align: center; color: var(--accent-elastic); font-size: 1.4em;">↓</div>
+    <div style="text-align: center;">
+      <div class="flow-step" style="display: inline-block;">Logstash (parse / enrich)</div>
+    </div>
+    <div style="text-align: center; color: var(--accent-elastic); font-size: 1.4em;">↓</div>
+    <div style="text-align: center;">
+      <div class="flow-step" style="display: inline-block; border-color: var(--accent-kibana); background: rgba(240,78,152,0.1);">
+        <strong>Elasticsearch / OpenSearch klaster</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OS INGESTION + OTEL -->
+<section>
+  <h2>OpenSearch ingestion + OTel</h2>
+  <table>
+    <tr><th>Komponent</th><th>Kirjeldus</th><th>Elastic vaste</th></tr>
+    <tr><td><strong class="os">Data Prepper</strong></td><td>OS natiivne pipeline (Java)</td><td>Logstash</td></tr>
+    <tr><td><strong>Fluent Bit</strong></td><td>Kerge, vendor-neutral</td><td>Filebeat</td></tr>
+    <tr><td><strong>Vector</strong></td><td>Datadog OSS, Rust, kiire</td><td>Filebeat + Logstash</td></tr>
+    <tr><td><strong class="aws">OS Ingestion</strong></td><td>AWS managed Data Prepper</td><td>Elastic Cloud ingestion</td></tr>
+  </table>
+  <div class="box purple-box" style="margin-top: 1em;">
+    <h4 style="color: var(--accent-purple);">OpenTelemetry Collector — vendor-neutraalne tulevik</h4>
+    <p style="font-size: 0.85em;">Aktsepteerib metrics + traces + logs. Eksport: ES, OS, Tempo, Splunk, Datadog korraga.</p>
+  </div>
+</section>
+
+<!-- ARUTELU 2 -->
+<section class="arutelu-slide">
+  <h2 style="margin-top: 0.5em;">🗣️ Arutelu 2</h2>
+  <p class="muted" style="font-size: 0.85em;">11:35–11:55 · 20 min</p>
+  <ul style="text-align: left; max-width: 900px; margin: 1em auto;">
+    <li>Logide struktuur — <strong>JSON</strong> või vabakujuline tekst?</li>
+    <li>Ingestion-stack: <strong>Beats / Logstash / Agent / Fluent Bit / OTel</strong>?</li>
+    <li>Logide-maht päevas — <strong>Kafka vahepuhver</strong>?</li>
+    <li><strong>ECS</strong> (Elastic Common Schema) kasutate?</li>
+  </ul>
+</section>
+
+<!-- PLOKK 3 INTRO -->
+<section class="lead" style="background: linear-gradient(135deg, #4a3a1a 0%, #4a1a1a 100%);">
+  <h1 style="color: #fff;">Plokk 3</h1>
+  <h2 style="color: var(--accent-elastic); margin-top: 0.3em;">Elasticsearch vs OpenSearch<br>täna</h2>
+  <p class="muted" style="margin-top: 1.5em;">11:55–12:10 · 15 min</p>
+</section>
+
+<!-- KOMPONENDID -->
+<section>
+  <h2>Komponendid — peaaegu identsed</h2>
+  <table>
+    <tr><th>Roll</th><th><span class="elastic">Elastic Stack</span></th><th><span class="os">OpenSearch</span></th></tr>
+    <tr><td>Otsingumootor</td><td>Elasticsearch</td><td>OpenSearch</td></tr>
+    <tr><td>UI</td><td>Kibana</td><td>OpenSearch Dashboards</td></tr>
+    <tr><td>Pipeline</td><td>Logstash</td><td>Logstash + Data Prepper</td></tr>
+    <tr><td>Agendid</td><td>Beats</td><td>Fluent Bit / Data Prepper</td></tr>
+    <tr><td>APM / tracing</td><td>Elastic APM</td><td>OS Trace Analytics</td></tr>
+  </table>
+  <p class="muted" style="margin-top: 1em; font-size: 0.85em;">
+    Kibana ja OS Dashboards = <strong>80% identsed UI-l</strong>. Erinevused 2021+ arenenud osades.
+  </p>
+</section>
+
+<!-- DIFERENTSEERIJAD -->
+<section>
+  <h2>Diferentseerijad 2026</h2>
+  <table>
+    <tr><th>Aspekt</th><th><span class="elastic">Elasticsearch 8.x</span></th><th><span class="os">OpenSearch 2.x</span></th></tr>
+    <tr><td>Security</td><td>xpack (Elastic License)</td><td>OS Security <span class="good">(Apache 2.0)</span></td></tr>
+    <tr><td>Vector search</td><td><code>semantic_text</code> + ELSER</td><td><code>knn_vector</code> + ML Commons + FAISS</td></tr>
+    <tr><td>Litsents</td><td>AGPL-3 / SSPL / Elastic Lic.</td><td><strong class="good">Apache 2.0</strong></td></tr>
+    <tr><td>AWS integratsioon</td><td>Marketplace'i kaudu</td><td><strong class="aws">Natiivne</strong> (Bedrock, IAM, KMS)</td></tr>
+    <tr><td><strong>APM küpsus</strong></td><td><strong class="good">Tugev</strong> (10+ aastat)</td><td>Hea, aga vähem viimistletud</td></tr>
+  </table>
+</section>
+
+<!-- KUS KUMB -->
+<section>
+  <h2>Kus kumb sobib?</h2>
+  <div class="split-4">
+    <div class="box">
+      <h4>🔷 Elastic Cloud / on-prem</h4>
+      <ul style="font-size: 0.75em;">
+        <li>Pole AWS-is</li>
+        <li>AI + semantic search prio</li>
+        <li>Elastic APM kasutuses</li>
+        <li>24/7 commercial support</li>
+      </ul>
+    </div>
+    <div class="box os-box">
+      <h4>🔷 AWS OpenSearch Service</h4>
+      <ul style="font-size: 0.75em;">
+        <li>AWS keskkond</li>
+        <li>Vendor lock vältimine</li>
+        <li>Multi-AZ + standby OOTB</li>
+      </ul>
+    </div>
+    <div class="box" style="border-left-color: var(--accent-aws);">
+      <h4>🔷 OpenSearch Serverless</h4>
+      <ul style="font-size: 0.75em;">
+        <li>RAG + Bedrock KB</li>
+        <li>Auto-scale, null ops</li>
+      </ul>
+    </div>
+    <div class="box good-box">
+      <h4>🔷 OpenSearch on-prem</h4>
+      <ul style="font-size: 0.75em;">
+        <li>GDPR / compliance</li>
+        <li>Andmed ei lähe AWS-i</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HINNAD -->
+<section>
+  <h2>Hinnamudelid — 3 fundamentaalselt erinevat</h2>
+  <table>
+    <tr><th>Mudel</th><th>Toode</th><th>Lõks</th></tr>
+    <tr><td><strong>Per-GB-ingested</strong></td><td>Splunk, Datadog Logs</td><td>Sundib <strong>vähem logima</strong></td></tr>
+    <tr><td><strong>Instance-based</strong></td><td>AWS OS, on-prem</td><td><strong>Cross-AZ transfer</strong> unustatakse</td></tr>
+    <tr><td><strong>Tier-põhine</strong></td><td>Elastic Cloud</td><td>Add-on'id kasvavad</td></tr>
+    <tr><td><strong>Hybrid</strong></td><td>Grafana Cloud + Loki</td><td>Vähem otsingu-paindlikkust</td></tr>
+  </table>
+  <div class="box warn-box" style="margin-top: 1em;">
+    <strong>TCO mis unustatakse:</strong> personali-aeg · cross-AZ transfer ($0.01–0.02/GB) · RAM (vector 2× heap) · ML node'id
+  </div>
+</section>
+
+<!-- LÕUNA -->
+<section class="lead" style="background: #1a1a1a;">
+  <h1 style="color: #ffeb3b;">🍽️ Lõuna</h1>
+  <p class="muted" style="font-size: 1.1em; margin-top: 1em;">12:10–12:40 · 30 min</p>
+</section>
+
+<!-- PLOKK 4 INTRO -->
+<section class="lead" style="background: linear-gradient(135deg, #1a4a2a 0%, #1a3a4a 100%);">
+  <h1 style="color: #fff;">Plokk 4</h1>
+  <h2 style="color: var(--accent-elastic); margin-top: 0.3em;">Klastri arhitektuur<br>ILM</h2>
+  <p class="muted" style="margin-top: 1.5em;">12:40–13:05 · 25 min</p>
+</section>
+
+<!-- SÕLMEROLLID -->
+<section>
+  <h2>Sõlmerollid — neli rolli</h2>
+  <table>
+    <tr><th>Roll</th><th>Mida teeb</th><th>Resurssi-profiil</th></tr>
+    <tr><td><strong class="elastic">master</strong></td><td>Klastri olek, indeksid, shard liigutamine</td><td>Vähe CPU, vaikne</td></tr>
+    <tr><td><strong>data</strong></td><td>Hoiab shardide andmeid, indeks + päring</td><td>Palju mälu, kiired diskid</td></tr>
+    <tr><td><strong>ingest</strong></td><td>Pipeline'id (grok, geoIP)</td><td>Palju CPU</td></tr>
+    <tr><td><strong>coordinating</strong></td><td>Päringute routing, koondamine</td><td>Vähe diski</td></tr>
+  </table>
+  <p style="margin-top: 1em; font-size: 0.95em;">
+    <strong>Production:</strong> 3 dedicated master + N data + 2+ coordinating-only
+  </p>
+</section>
+
+<!-- SHARDID -->
+<section>
+  <h2>Shardid — primary + replica</h2>
+  <p style="font-size: 0.85em;">Indeksi loomisel määrad:</p>
+  <ul style="font-size: 0.85em;">
+    <li><code>number_of_shards</code> (primary) — hilisem muutmine raske</li>
+    <li><code>number_of_replicas</code> — jooksvalt muudetav</li>
+  </ul>
+  <p style="font-size: 0.85em;">3 primary + 1 replica = <strong>6 shardi kokku</strong></p>
+  <div class="box warn-box" style="margin-top: 1em;">
+    <strong>Miks YELLOW single-node klastris?</strong><br>
+    <code>replicas: 1</code> → replica peab paiknema <strong>erinevas</strong> node'is → pole olemas → unassigned → <span class="warn">YELLOW</span>
+  </div>
+  <p style="margin-top: 0.6em; font-size: 0.85em;">Lisa teine node → replica paigutub → <span class="good">GREEN</span></p>
+</section>
+
+<!-- QUORUM -->
+<section>
+  <h2>Quorum — miks 3 master node'i</h2>
+  <p style="font-size: 0.85em;"><strong class="bad">Split-brain</strong>: võrk lahkneb → 2 master'it korraga → andmed lahknevad.</p>
+  <p style="font-size: 0.85em;"><strong>Lahendus:</strong> master valitakse ainult <strong>enamuse</strong> nõusolekul.</p>
+  <p style="font-size: 0.95em; margin-top: 0.8em;">
+    Matemaatika: quorum = <strong>⌊N/2⌋ + 1</strong>
+  </p>
+  <table style="margin-top: 0.6em;">
+    <tr><th>N</th><th>Quorum</th><th>Talub kadu?</th></tr>
+    <tr><td>1</td><td>1</td><td><span class="bad">❌ klaster maas</span></td></tr>
+    <tr><td>2</td><td>2</td><td><span class="bad">❌ quorum kadunud</span></td></tr>
+    <tr><td><strong>3</strong></td><td><strong>2</strong></td><td><span class="good">✅ üks võib kaduda</span></td></tr>
+    <tr><td>5</td><td>3</td><td><span class="good">✅ kaks võivad kaduda</span></td></tr>
+  </table>
+  <p class="muted" style="margin-top: 0.6em; font-size: 0.85em;">Tõsiselt mõeldud klaster = <strong>3 master</strong>. Quorum-matemaatika nõuab.</p>
+</section>
+
+<!-- SLA -->
+<section>
+  <h2>SLA praktikas</h2>
+  <table>
+    <tr><th>SLA</th><th>Downtime/aastas</th><th>Mida nõuab</th></tr>
+    <tr><td>99.5%</td><td>43 h</td><td>1 node, restart OK</td></tr>
+    <tr><td><strong>99.9%</strong></td><td><strong>8.7 h</strong></td><td>3-node, replicas, snapshots S3</td></tr>
+    <tr><td>99.99%</td><td>52 min</td><td><strong>Multi-AZ + standby</strong></td></tr>
+    <tr><td>99.999%</td><td>5 min</td><td>Multi-region + CCR (harva)</td></tr>
+  </table>
+  <div class="box bad-box" style="margin-top: 1em;">
+    <strong>Snapshots S3-le = ainus tegelik backup.</strong><br>
+    Replica ≠ backup. Kustutamine paljundub replicasse. <strong>Restore testitud!</strong>
+  </div>
+</section>
+
+<!-- KAFKA -->
+<section>
+  <h2>Kafka kui ingest buffer</h2>
+  <p style="font-size: 0.85em;">Lahendab kolm probleemi:</p>
+  <ul style="font-size: 0.85em;">
+    <li><strong>Peak hours</strong> — Black Friday = 10× tavakoormus</li>
+    <li><strong>ES downtime</strong> — plaaniline uuendus, agendid ei kaota</li>
+    <li><strong>Multi-consumer</strong> — sama voog ES + S3 + Splunk + Loki</li>
+  </ul>
+  <div class="flow" style="margin-top: 1.5em;">
+    <div class="flow-step" style="border-color: var(--accent-good);">Beats /<br>Vector /<br>Fluent Bit</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="border-color: var(--accent-warn); background: rgba(255,152,0,0.15);">Kafka<br><span class="muted" style="font-size: 0.8em;">logs-raw</span></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">Logstash<br><span class="muted" style="font-size: 0.8em;">parse, enrich</span></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="border-color: var(--accent-kibana);">ES / OS</div>
+  </div>
+  <p class="muted" style="font-size: 0.75em; margin-top: 1em;">Netflix, Uber, Booking.com — kümned miljardid sõnumeid päevas</p>
+</section>
+
+<!-- ILM -->
+<section>
+  <h2>ILM — Hot / Warm / Cold / Frozen</h2>
+  <table>
+    <tr><th>Tier</th><th>Vanus</th><th>Hardware</th><th>Replicas</th></tr>
+    <tr><td>🔥 <strong>Hot</strong></td><td>0–7 p</td><td>Kiire SSD, palju RAM</td><td>1–2</td></tr>
+    <tr><td>🌡️ <strong>Warm</strong></td><td>7–30 p</td><td>Aeglasem SSD / HDD</td><td>1</td></tr>
+    <tr><td>❄️ <strong>Cold</strong></td><td>30–90 p</td><td>HDD, vähem RAM</td><td>0–1</td></tr>
+    <tr><td>🧊 <strong>Frozen</strong></td><td>90+ p</td><td><strong class="aws">S3 / object store</strong></td><td>0 (searchable_snapshot)</td></tr>
+    <tr><td>🚮 <strong>Delete</strong></td><td>365+ p</td><td>—</td><td>—</td></tr>
+  </table>
+  <div class="box good-box" style="margin-top: 1em;">
+    <strong>Searchable snapshots</strong> — indeks elab ainult S3-s. Kulu <strong>10–20× odavam</strong>, latentsus kasvab. Frozen tier'i võti.
+  </div>
+</section>
+
+<!-- ARUTELU 4 -->
+<section class="arutelu-slide">
+  <h2 style="margin-top: 0.5em;">🗣️ Arutelu 4</h2>
+  <p class="muted" style="font-size: 0.85em;">13:05–13:20 · 15 min</p>
+  <ul style="text-align: left; max-width: 900px; margin: 1em auto;">
+    <li>Teie klaster — <strong>mitu master, mitu data</strong>, multi-AZ?</li>
+    <li><strong>Hot / Warm / Cold / Frozen</strong> — millised reaalselt kasutuses?</li>
+    <li>Logide <strong>retention</strong> — kus on kulu peamine kasvataja?</li>
+    <li>Snapshot S3-le tehtud? <strong>Restore testitud?</strong></li>
+  </ul>
+</section>
+
+<!-- PLOKK 5 INTRO -->
+<section class="lead" style="background: linear-gradient(135deg, #4a1a3a 0%, #2a1a4a 100%);">
+  <h1 style="color: #fff;">Plokk 5</h1>
+  <h2 style="color: var(--accent-kibana); margin-top: 0.3em;">APM<br>Kibana monitooringule</h2>
+  <p class="muted" style="margin-top: 1.5em;">13:20–13:35 · 15 min</p>
+</section>
+
+<!-- 3 PILLAR -->
+<section>
+  <h2>Kolm observability sammast</h2>
+  <div class="split-3">
+    <div class="pillar">
+      <h4>📜 Logs</h4>
+      <p style="font-size: 0.8em;">Mis juhtus, kus, millal</p>
+      <p class="muted" style="font-size: 0.75em;">ELK / OS / Loki / Splunk</p>
+    </div>
+    <div class="pillar">
+      <h4>📊 Metrics</h4>
+      <p style="font-size: 0.8em;">Numbrid ajas — CPU, latency, throughput</p>
+      <p class="muted" style="font-size: 0.75em;">Prometheus / InfluxDB</p>
+    </div>
+    <div class="pillar">
+      <h4>🔗 Traces</h4>
+      <p style="font-size: 0.8em;"><strong>Päringu teekond</strong> läbi süsteemi</p>
+      <p class="muted" style="font-size: 0.75em;">Elastic APM / Tempo / Jaeger</p>
+    </div>
+  </div>
+  <p style="text-align: center; margin-top: 2em; font-size: 1.1em;">
+    <strong class="purple">APM = traces</strong>
+  </p>
+</section>
+
+<!-- TRACE WATERFALL -->
+<section>
+  <h2>Trace = päringu teekond</h2>
+  <p style="font-size: 0.85em; margin-bottom: 1em;">POST /api/checkout · kogu 354ms</p>
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7em; background: #1a2230; padding: 16px; border-radius: 8px;">
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+      <div>Frontend</div>
+      <div><div style="background: var(--accent-elastic); height: 16px; width: 25%; border-radius: 3px;"></div></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+      <div>API</div>
+      <div><div style="background: var(--accent-kibana); height: 16px; width: 90%; margin-left: 8%; border-radius: 3px;"></div></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+      <div>Auth</div>
+      <div><div style="background: var(--accent-good); height: 16px; width: 6%; margin-left: 11%; border-radius: 3px;"></div></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+      <div>DB SELECT</div>
+      <div><div style="background: var(--accent-warn); height: 16px; width: 18%; margin-left: 17%; border-radius: 3px;"></div></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+      <div>Payment</div>
+      <div><div style="background: var(--accent-aws); height: 16px; width: 45%; margin-left: 40%; border-radius: 3px;"></div></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; padding: 4px 0;">
+      <div><span class="bad">→ Stripe API</span></div>
+      <div><div style="background: var(--accent-bad); height: 16px; width: 32%; margin-left: 50%; border-radius: 3px;"></div></div>
+    </div>
+  </div>
+  <p style="margin-top: 1em; font-size: 0.85em; text-align: center;">
+    <strong>Sa näed kus aeg kulus → Stripe API on pudelikael (100ms)</strong>
+  </p>
+</section>
+
+<!-- ELASTIC APM -->
+<section>
+  <h2>Elastic APM — küps</h2>
+  <ul style="font-size: 0.85em;">
+    <li><strong>Auto-instrumentation agendid:</strong> Java, .NET, Node.js, Python, Go, Ruby, PHP
+      <br><span class="muted" style="font-size: 0.85em;">Paned agendi rakendusse → instrumenteerib veebi-raamistiku, DB-driver'id, HTTP klientid</span>
+    </li>
+    <li><strong>APM Server</strong> — võtab agentidelt, valideerib, kirjutab ES-i
+      <br><span class="muted" style="font-size: 0.85em;">2022+ konsolideeritud Elastic Agent'i sisse</span>
+    </li>
+    <li><strong>Kibana APM UI:</strong>
+      <ul style="font-size: 0.9em;">
+        <li>Service map (kes kellega räägib)</li>
+        <li>Transactions (latentsus p95/p99)</li>
+        <li>Errors (exception'id, sagedus)</li>
+        <li>Traces (waterfall view)</li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<!-- APM CLUSTER -->
+<section>
+  <h2>APM-klaster ≠ logide-klaster</h2>
+  <table>
+    <tr><th>Aspekt</th><th>Logide-klaster</th><th>APM-klaster</th></tr>
+    <tr><td>Dok per päring</td><td>1 logi-rida</td><td><strong>10–50 span'i</strong></td></tr>
+    <tr><td>Tüüpiline maht</td><td>100 GB/päev</td><td><strong>1–10 TB/päev</strong></td></tr>
+    <tr><td>Retention</td><td>30–90 p (audit)</td><td>7–14 p (debug)</td></tr>
+    <tr><td>Otsingu-muster</td><td>Tagasivaade</td><td>Reaalajas dashboard</td></tr>
+  </table>
+  <div class="box warn-box" style="margin-top: 1em;">
+    <strong>Eraldi sizing.</strong> APM andmed Cold/Frozen kiiremini. Logid audit-nõuetega kauem.<br>
+    <span class="muted" style="font-size: 0.85em;">OS parallel: Trace Analytics + Data Prepper — toimib, vähem viimistletud.</span>
+  </div>
+</section>
+
+<!-- KIBANA APPS -->
+<section>
+  <h2>Kibana = kogu Stack'i UI</h2>
+  <p style="font-size: 0.85em;">Mitte ainult dashboardid!</p>
+  <div class="split">
+    <ul style="font-size: 0.85em;">
+      <li><strong class="elastic">Discover</strong> — KQL logide-otsing (90% sinu ajast)</li>
+      <li><strong>Lens</strong> — drag-drop visualisatsioon</li>
+      <li><strong>Dashboard</strong> — kombineeritud, drilldown</li>
+      <li><strong>Stack Monitoring</strong> — seire enesest</li>
+    </ul>
+    <ul style="font-size: 0.85em;">
+      <li><strong class="purple">Observability</strong> — unified logs+metrics+traces</li>
+      <li><strong>APM UI</strong> — service map, traces</li>
+      <li><strong>Maps</strong> — geo-visualisatsioonid</li>
+      <li><strong>Canvas</strong> — NOC-seinad</li>
+    </ul>
+  </div>
+  <p class="muted" style="font-size: 0.8em; margin-top: 1.5em;">OpenSearch Dashboards = sama, mõned UI-d vähem viimistletud</p>
+</section>
+
+<!-- ALERTING -->
+<section>
+  <h2>Alerting — Rules vs Watcher</h2>
+  <div class="box bad-box">
+    <strong>Watcher</strong> = legacy, JSON-DSL, väga keeruline. <strong>Uusi ära kirjuta.</strong>
+  </div>
+  <div class="box good-box" style="margin-top: 0.6em;">
+    <strong>Rules</strong> (Kibana 7.13+) — modern alerting framework
+  </div>
+  <table style="margin-top: 1em;">
+    <tr><th>Rule tüüp</th><th>Näide</th></tr>
+    <tr><td>Index threshold</td><td>"kui count &gt; X 5 min jooksul"</td></tr>
+    <tr><td>Anomaly detection</td><td>"kui ML score &gt; 75"</td></tr>
+    <tr><td>Custom KQL</td><td>"kui KQL annab &gt; 0 tulemust"</td></tr>
+    <tr><td>APM</td><td>"kui service latency p99 &gt; 1s"</td></tr>
+    <tr><td>Logs threshold</td><td>"kui ERROR count &gt; 100/min"</td></tr>
+  </table>
+  <p style="font-size: 0.8em; margin-top: 0.8em;">
+    <strong>Action types:</strong> Slack · Teams · PagerDuty · ServiceNow · Jira · e-mail · Webhook
+  </p>
+</section>
+
+<!-- ML AD -->
+<section>
+  <h2>ML Anomaly Detection</h2>
+  <p style="font-size: 0.85em;"><strong>Unsupervised</strong> anomaalia-tuvastus time-series'el.</p>
+  <h3>Mida tuvastab:</h3>
+  <ul style="font-size: 0.85em;">
+    <li><strong>Single-metric</strong> — host CPU ootamatult kõrge</li>
+    <li><strong>Multi-metric</strong> — CPU + latency + error rate korraga</li>
+    <li><strong>Population</strong> — see host käitub erinevalt teistest</li>
+    <li><strong>Rare events</strong> — uus error-kood, mida pole varem nähtud</li>
+  </ul>
+  <div class="split" style="margin-top: 1em;">
+    <div class="box" style="border-left-color: var(--accent-elastic);">
+      <strong>Elastic ML</strong> = Platinum feature
+    </div>
+    <div class="box os-box">
+      <strong>OS Anomaly Detection</strong> = <span class="good">Apache 2.0 (vaba)</span>
+    </div>
+  </div>
+  <p class="muted" style="font-size: 0.8em; margin-top: 0.8em;">
+    💡 Alusta visualisatsioonis (näed punase joonega), mitte alerting'us. False positives väsitavad.
+  </p>
+</section>
+
+<!-- ARUTELU 5 -->
+<section class="arutelu-slide">
+  <h2 style="margin-top: 0.5em;">🗣️ Arutelu 5</h2>
+  <p class="muted" style="font-size: 0.85em;">13:35–13:50 · 15 min</p>
+  <ul style="text-align: left; max-width: 900px; margin: 1em auto;">
+    <li><strong>APM</strong> kasutate? Elastic / Jaeger / Tempo / Datadog APM?</li>
+    <li>Kibana Alerting — <strong>Rules</strong> või veel <strong>Watcher</strong>?</li>
+    <li><strong>Stack Monitoring</strong> kasutate self-monitoring jaoks?</li>
+    <li><strong>ML Anomaly Detection</strong> — worth-it või over-engineered?</li>
+  </ul>
+</section>
+
+<!-- PLOKK 6 INTRO -->
+<section class="lead" style="background: linear-gradient(135deg, #4a3a1a 0%, #2a4a1a 100%);">
+  <h1 style="color: #fff;">Plokk 6</h1>
+  <h2 style="color: var(--accent-purple); margin-top: 0.3em;">Otsing<br>BM25 · Vector · RAG</h2>
+  <p class="muted" style="margin-top: 1.5em;">14:00–14:15 · 15 min</p>
+</section>
+
+<!-- INVERTED INDEX -->
+<section>
+  <h2>BM25 = lexical otsing</h2>
+  <p style="font-size: 0.85em;"><strong>Inverted index</strong> (Lucene) — sõna → dokumendid:</p>
+<pre>"error"   → [doc1, doc5, doc8]
+"timeout" → [doc1, doc12]
+"host"    → [doc2, doc5, doc8, doc12]</pre>
+  <h3>BM25 skoor sõltub:</h3>
+  <ol style="font-size: 0.85em;">
+    <li><strong>Term frequency</strong> — palju kordi sõna esineb</li>
+    <li><strong>Inverse document frequency</strong> — kui haruldane sõna</li>
+    <li><strong>Field length</strong> — lühike dokument &gt; pikk</li>
+  </ol>
+  <p style="margin-top: 0.6em; font-size: 0.95em;">
+    <span class="good">✓ Kiire, täpne, soodne</span> — Kibana Discover vaikimisi
+  </p>
+</section>
+
+<!-- BM25 KUKUB -->
+<section>
+  <h2>Kus BM25 kukub läbi</h2>
+  <p style="font-size: 0.85em;">Sa otsid: <code>database connection problems</code></p>
+  <p style="font-size: 0.85em;">Logides on:</p>
+<pre>ERROR: DB timeout after 30s
+Connection pool exhausted
+psycopg2.OperationalError
+Lost connection to database server
+SQLException: Cannot acquire connection</pre>
+  <div class="box bad-box" style="margin-top: 1em;">
+    <strong>Ükski ei sisalda sõna "problems".</strong> Tihti ei sisalda isegi "database".<br>
+    <strong>Vocabulary mismatch</strong> — sinu sõnastik ≠ logi-rea sõnastik.
+  </div>
+  <p style="margin-top: 0.6em; font-size: 0.9em;">
+    <strong class="purple">Lahendus:</strong> vector search — võrdleb tähendusi, mitte sõnu
+  </p>
+</section>
+
+<!-- VECTOR + HNSW -->
+<section>
+  <h2>Vector search + HNSW</h2>
+  <p style="font-size: 0.85em;"><strong>Embedding mudel</strong> (ELSER, e5, OpenAI, Cohere):</p>
+<pre>"DB timeout"       → [0.91, 0.12, 0.04, ...]
+"connection pool"  → [0.89, 0.15, 0.06, ...]
+"OperationalError" → [0.87, 0.14, 0.08, ...]</pre>
+  <p style="font-size: 0.85em;">Sarnased <strong>tähendused</strong> → vektorid lähedal cosine-ruumis.</p>
+  <div class="box purple-box" style="margin-top: 1em;">
+    <strong>HNSW</strong> (Hierarchical Navigable Small World) — graaf, ~5ms päring 1M vektoris (mitte 500ms brute-force).
+  </div>
+  <p class="muted" style="font-size: 0.8em; margin-top: 0.8em;">⚠️ Kompromiss: RAM-kallis. Heap 2× logide-klastri kohta.</p>
+</section>
+
+<!-- RAG -->
+<section>
+  <h2>RAG monitooringus</h2>
+  <p style="font-size: 0.85em;"><strong>Retrieval-Augmented Generation</strong> = LLM + vector storage</p>
+  <h3>Kasutusjuhud SREna:</h3>
+  <ul style="font-size: 0.85em;">
+    <li>🤖 <strong>Incident response AI</strong> — "mis juhtus eile 19:00?"</li>
+    <li>📚 <strong>Runbook-otsing</strong> — "kuidas Redis cluster taaskäivitada?"</li>
+    <li>🔗 <strong>Alert-korrelatsioon</strong> — 1000 alerti, mis juhtus?</li>
+    <li>🔍 <strong>Semantic log pattern</strong> — <code>database connectivity issues</code></li>
+    <li>📝 <strong>Postmortem auto-draft</strong></li>
+  </ul>
+  <p class="muted" style="font-size: 0.8em; margin-top: 1em;">
+    Elastic AI Assistant ja Splunk AI Assistant positsioneerivad end just selle peale 2024+
+  </p>
+</section>
+
+<!-- OTSUSTAMINE -->
+<section>
+  <h2>Otsustamise raam (monitooring)</h2>
+  <table>
+    <tr><th>Kasutusjuhus</th><th>Vali</th></tr>
+    <tr><td>Operatiivlogid (<code>error</code>, <code>timeout</code>)</td><td><strong>BM25</strong></td></tr>
+    <tr><td>Audit / compliance</td><td>BM25 + filtrid</td></tr>
+    <tr><td>Runbook / wiki / dokumentatsioon</td><td><strong>Hybrid</strong></td></tr>
+    <tr><td>Incident response, RCA</td><td><strong class="purple">Hybrid + RAG</strong></td></tr>
+    <tr><td>Pattern matching (<code>db connection issues</code>)</td><td><strong class="purple">Vector</strong></td></tr>
+    <tr><td>Anomaalia-tuvastus aegridades</td><td>ML-mudelid</td></tr>
+    <tr><td>Postmortem auto-draft</td><td><strong class="purple">Vector + RAG</strong></td></tr>
+  </table>
+</section>
+
+<!-- ARUTELU 6 -->
+<section class="arutelu-slide">
+  <h2 style="margin-top: 0.5em;">🗣️ Arutelu 6</h2>
+  <p class="muted" style="font-size: 0.85em;">14:15–14:25 · 10 min</p>
+  <ul style="text-align: left; max-width: 900px; margin: 1em auto;">
+    <li><strong>Vector search</strong> teil — kus annaks reaalset väärtust?</li>
+    <li>LLM-eksperimendid: <strong>Bedrock / OpenAI / Anthropic / on-prem</strong>?</li>
+    <li><strong>Hybrid search</strong> — plaanite migreerida või BM25 piisab?</li>
+  </ul>
+</section>
+
+<!-- CHEAT SHEET 1 -->
+<section>
+  <h2>🎯 Cheat sheet ① — ES või OS?</h2>
+  <table>
+    <tr><th>Olukord</th><th>Vali</th></tr>
+    <tr><td>AWS + vendor lock vältimine</td><td><strong class="os">AWS OpenSearch Service</strong></td></tr>
+    <tr><td>AWS + RAG / Bedrock</td><td><strong class="aws">OpenSearch Serverless</strong></td></tr>
+    <tr><td>Self-hosted, GDPR</td><td><strong>OpenSearch on-prem</strong></td></tr>
+    <tr><td>AI / semantic search + lihtne API</td><td><strong class="elastic">Elastic Cloud</strong></td></tr>
+    <tr><td>Kommertsiaalne tugi + APM</td><td><strong class="elastic">ES on-prem (Platinum)</strong></td></tr>
+    <tr><td>Väike sisekasutus</td><td><strong>OpenSearch on-prem</strong></td></tr>
+  </table>
+</section>
+
+<!-- CHEAT SHEET 2 -->
+<section>
+  <h2>🎯 Cheat sheet ② — Klastri sizing</h2>
+<pre>99.5%   → 1 node, restart OK
+99.9%   → 3 master + N data, replicas=1, snapshots S3
+99.99%  → 3 master + N data ÜLE 3 AZ-i + standby
+99.999% → Multi-region + CCR (harva)</pre>
+  <h3>Checklist enne tootmist:</h3>
+  <ul style="font-size: 0.8em;">
+    <li>☐ 3 dedicated master node'i</li>
+    <li>☐ <code>heap = ½ RAM-ist</code>, max 31 GB</li>
+    <li>☐ <code>number_of_replicas ≥ 1</code></li>
+    <li>☐ Snapshot S3-le + <strong>restore testitud</strong></li>
+    <li>☐ ILM policy hot → warm → cold → frozen → delete</li>
+    <li>☐ Kafka buffer kui &gt; 100 GB/päev</li>
+  </ul>
+</section>
+
+<!-- CHEAT SHEET 3 -->
+<section>
+  <h2>🎯 Cheat sheet ③ — Otsing</h2>
+  <table>
+    <tr><th>Kasutusjuhus</th><th>Vali</th></tr>
+    <tr><td>Operatiivlogid</td><td>BM25</td></tr>
+    <tr><td>Audit / compliance</td><td>BM25 + filtrid</td></tr>
+    <tr><td>Runbook / wiki</td><td>Hybrid</td></tr>
+    <tr><td>Incident response</td><td>Hybrid + RAG</td></tr>
+    <tr><td>Pattern matching</td><td>Vector</td></tr>
+    <tr><td>Anomaalia-tuvastus</td><td>ML-mudelid</td></tr>
+    <tr><td>Postmortem-draft</td><td>Vector + RAG</td></tr>
+  </table>
+</section>
+
+<!-- CHEAT SHEET 4 -->
+<section>
+  <h2>🎯 Cheat sheet ④ — Hinnamudelid</h2>
+  <table>
+    <tr><th>Mudel</th><th>Lõks</th></tr>
+    <tr><td>Per-GB-ingested (Splunk, Datadog)</td><td>Sundib <strong>vähem logima</strong></td></tr>
+    <tr><td>Instance-based (AWS OS, on-prem)</td><td><strong>Cross-AZ transfer</strong> unustatakse</td></tr>
+    <tr><td>Tier-põhine (Elastic Cloud)</td><td>Add-on'id kasvavad</td></tr>
+    <tr><td>Hybrid (Loki)</td><td>Vähem otsingu-paindlikkust</td></tr>
+  </table>
+  <div class="box warn-box" style="margin-top: 1em;">
+    <strong>TCO unustatud komponendid:</strong> personali-aeg · cross-AZ transfer · RAM (vector 2×) · ML node'id
+  </div>
+</section>
+
+<!-- REFLEKSIOON -->
+<section>
+  <h2>Refleksioon</h2>
+  <p class="muted">Enne klassist välja:</p>
+  <ol style="font-size: 0.85em;">
+    <li>Schema-on-write (Zabbix) vs schema-on-read (ELK)? Miks vahe muudab arhitektuuri?</li>
+    <li>3 master + 5 data klaster, 1 AZ kaob — mis juhtub?</li>
+    <li>3 olukorda, kus eelistaksid BM25-d vector'ile</li>
+    <li>Audit-keskkond: <span class="elastic">ES on-prem</span> või <span class="os">OS on-prem</span>?</li>
+    <li><strong>Mis küsimus jäi õhku?</strong> — Slack <code>#paev3-elk</code></li>
+  </ol>
+</section>
+
+<!-- KODUTÖÖ -->
+<section>
+  <h2>Kodutöö</h2>
+  <p style="font-size: 0.95em;"><strong>Lab Päev 3</strong> — <code>docs/labs/03_elk_stack/lab.md</code></p>
+  <ul style="font-size: 0.85em;">
+    <li><strong>Osa 1</strong> — ES + Kibana single-node, YELLOW state, KQL</li>
+    <li><strong>Osa 2</strong> — 3-node klaster, node-kill, recovery</li>
+    <li><strong>Osa 3</strong> — OpenSearch + OS Dashboards võrdlus</li>
+    <li><strong>Osa 4</strong> — kNN vector demo</li>
+  </ul>
+  <p style="margin-top: 1em; font-size: 0.85em;">⏱️ Hinnanguline aeg: ~3 tundi · 💬 Slack <code>#paev3-elk</code></p>
+  <div class="box purple-box" style="margin-top: 1em;">
+    <strong>Järgmine kord 30.05:</strong> TICK Stack + kesksed logimissüsteemid (InfluxDB 3 Core, Telegraf, rsyslog, syslog-ng)
+  </div>
+</section>
+
+<!-- AITÄH -->
+<section class="lead" style="background: linear-gradient(135deg, #0f1419 0%, #1a2a4a 100%);">
+  <h1 style="font-size: 4em; background: linear-gradient(135deg, var(--accent-elastic), var(--accent-kibana)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Aitäh!</h1>
+  <p style="margin-top: 1.5em; font-size: 1.1em;">
+    <strong>Maria Talvik</strong><br>
+    Haapsalu Kutsehariduskeskus
+  </p>
+  <p class="muted" style="font-size: 0.85em; margin-top: 1em;">
+    Monitooring ja Jälgitavus · 2026<br>
+    Küsimused → Slack <code>#paev3-elk</code>
+  </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+
+<script>
+Reveal.initialize({
+  hash: true,
+  controls: true,
+  progress: true,
+  slideNumber: 'c/t',
+  transition: 'slide',
+  transitionSpeed: 'fast',
+  width: 1280,
+  height: 800,
+  margin: 0.06,
+  minScale: 0.3,
+  maxScale: 1.6,
+  plugins: [ RevealNotes, RevealHighlight ]
+});
+</script>
+</body>
+</html>
