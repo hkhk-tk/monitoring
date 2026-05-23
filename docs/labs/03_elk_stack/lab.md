@@ -4,8 +4,22 @@
 
 **Tase:** kesktase–edasijõudnud
 
-**Eeldused:** Päev 1 logimise põhialused, mitme konteineriga Docker Compose, Loki ja Alloy (Päev 2)
+**Eeldused:** Päev 1 logimise põhialused, mitme konteineriga Docker Compose, Loki ja Alloy (Päev 2). Enne labi loe läbi [Päev 3: ELK ja OpenSearch loeng](../../materials/lectures/paev3-elk-loeng.md) (eriti L2 arhitektuur ja quorum).
 **VM:** sinu VM (`ssh <eesnimi>@192.168.35.12X` klassivõrgust või `192.168.100.12X` VPN-ist)
+
+---
+
+## Miks see labor
+
+Päev 2 [Loki labori](../../labs/02_zabbix_loki/loki_lab.md) abil said sa logidest aru **siltide** (`level`, `service`) järgi — see on kiire ja kerge. Täna vaatame, mis juhtub, kui vaja on **iga sõna** otsitavaks (audit, tugitiim, „leia kõik read, kus mainitakse kasutaja X“) ja kui logimahtu tuleb nii palju, et üks server ei piisa.
+
+Sellest labist tuled välja nelja oskusega:
+
+1. **Elasticsearch + Kibana** — üks sõlm, `YELLOW`, siis kolm sõlme ja `GREEN` (shard’id ja taastumine kätega läbi tehtud).
+2. **OpenSearch kõrvuti** — sama API/UI loogika, erinev litsents ja ökosüsteem.
+3. **Vector-otsingu maitse** — miks BM25 ei seo „DB timeout“ ja „psycopg2 error“.
+
+Kõik toimub sinu VM-il Docker Compose’iga; kaks eraldi kausta (`~/paev3/elk` ja `~/paev3/os`), sest 6 GB RAM ei võimalda mõlemat korraga jooksma hoida.
 
 ---
 
@@ -28,9 +42,24 @@
 
 ---
 
+## Labi struktuur
+
+Labor on neljas osas. Klassis jõuad tavaliselt osadeni 1–3; osa 4 ja lisaülesanded võivad jääda koju.
+
+| Osa | Teema | ~aeg | Mida sa mõistad lõpus |
+|-----|-------|------|------------------------|
+| 1 | Üks ES + Kibana + KQL | 50 min | Miks üks sõlm on `YELLOW`; täistekstiotsing vs Loki |
+| 2 | 3-sõlmeline klaster + simulatsioon | 70 min | Miks 3 sõlme; sõlme kadu, shard’ide taastumine, quorum |
+| 3 | OpenSearch võrdlus | 50 min | ES vs OS API/UI; millal kumb valida |
+| 4 | Vector `knn` demo | 30 min | Semantiline otsing vs BM25 (lühike praktiline näide) |
+
+Töökaustad: `~/paev3/elk` (Elasticsearch) ja `~/paev3/os` (OpenSearch). **Ära aja neid korraga** — enne OS käivitamist peata ES, et mälu jätkuks.
+
+---
+
 ## Eeltöö
 
-Päeva 2 stack kasutab päris palju mälu. Enne alustamist pane see maha: [file:1]
+Päeva 2 stack kasutab päris palju mälu. Enne alustamist pane see maha:
 
 ```bash
 # Päev 1 stack alla (kui veel jookseb)
@@ -44,9 +73,9 @@ cd ~/paev2/loki 2>/dev/null && docker compose down 2>/dev/null
 free -h
 ```
 
-**Vaba mälu võiks olla vähemalt 5 GB.** Kui ei ole, vaata, mis veel jookseb: `docker ps`. [file:1]
+**Vaba mälu võiks olla vähemalt 5 GB.** Kui ei ole, vaata, mis veel jookseb: `docker ps`.
 
-Loo päev 3 jaoks eraldi töökaust: [file:1]
+Loo päev 3 jaoks eraldi töökaust:
 
 ```bash
 mkdir -p ~/paev3/elk && cd ~/paev3/elk
@@ -59,13 +88,13 @@ mkdir -p ~/paev3/elk && cd ~/paev3/elk
 
 ## Osa 1 · Elasticsearch ja Kibana eraldi
 
-> **Taust:** Päev 2 kasutasid Lokit – kerge, kiire ja Grafanaga hästi sobiv lahendus. Loki indekseerib aga peamiselt **silte** (labels), mitte logiridade sisu. Kui audit nõuab, et iga logisõna oleks otsitav (näiteks: „leia kõik read, kus mainitakse kasutaja ID-d X mistahes kohas viimase 90 päeva jooksul“), jääb Loki hätta. Sellisel juhul on vaja **täistekstiindeksit** – sõnaraamatut, kus iga sõna „teab“, millises dokumendis ta esineb. Selleks kasutame Elasticsearchi. [file:1]
+> **Taust:** Päev 2 kasutasid Lokit – kerge, kiire ja Grafanaga hästi sobiv lahendus. Loki indekseerib aga peamiselt **silte** (labels), mitte logiridade sisu. Kui audit nõuab, et iga logisõna oleks otsitav (näiteks: „leia kõik read, kus mainitakse kasutaja ID-d X mistahes kohas viimase 90 päeva jooksul“), jääb Loki hätta. Sellisel juhul on vaja **täistekstiindeksit** – sõnaraamatut, kus iga sõna „teab“, millises dokumendis ta esineb. Selleks kasutame Elasticsearchi.
 
-Alustuseks käivitame **ainult ühe** Elasticsearchi sõlme ja Kibana. Tootmiskeskkonnas nii ei tehta – siin on eesmärk **näha, mida Kibana näitab kohe pärast esimese indeksi loomist**. [file:1]
+Alustuseks käivitame **ainult ühe** Elasticsearchi sõlme ja Kibana. Tootmiskeskkonnas nii ei tehta – siin on eesmärk **näha, mida Kibana näitab kohe pärast esimese indeksi loomist**.
 
 ### 1.1 Ainult Elasticsearch
 
-Loo fail `docker-compose.yml`: [file:1]
+Loo fail `docker-compose.yml`:
 
 ```yaml
 services:
@@ -91,30 +120,31 @@ volumes:
   es01-data:
 ```
 
-**Miks `ES_JAVA_OPTS=-Xms512m -Xmx512m`?** Vähendame heap’i 512 MB peale ühe sõlme kohta, sest varsti lisame kaks sõlme juurde ja 6 GB VM ei taluks vaikimisi 1 GB heap’i iga sõlme kohta. [file:1]
+**Miks `ES_JAVA_OPTS=-Xms512m -Xmx512m`?** Vähendame heap’i 512 MB peale ühe sõlme kohta, sest varsti lisame kaks sõlme juurde ja 6 GB VM ei taluks vaikimisi 1 GB heap’i iga sõlme kohta.
 
-**Miks `xpack.security.enabled=false`?** Laborikeskkond on isoleeritud ja hoiame seadistuse võimalikult lihtsa. Tootmiskeskkonnas on see peaaegu alati `true` – turvalisust üldjuhul välja ei lülitata. [file:1]
+**Miks `xpack.security.enabled=false`?** Laborikeskkond on isoleeritud ja hoiame seadistuse võimalikult lihtsa. Tootmiskeskkonnas on see peaaegu alati `true` – turvalisust üldjuhul välja ei lülitata.
 
-Käivita ainult Elasticsearch: [file:1]
+Käivita ainult Elasticsearch:
 
 ```bash
 sudo sysctl -w vm.max_map_count=262144
 docker compose up -d es01
 ```
 
-Oota umbes 30 sekundit, kuni Elasticsearch käivitub, ja kontrolli seejärel: [file:1]
+Oota umbes 30 sekundit, kuni Elasticsearch käivitub, ja kontrolli seejärel:
 
 ```bash
 curl http://localhost:9200
 ```
 
-Vastuseks peaks tulema JSON, kus on näha klastri nimi `lab-cluster` ja versioon `8.15.x`. Kui vastust ei tule, oota veel umbes 10 sekundit – Elasticsearch tuleb suhteliselt aeglaselt üles. [file:1]
+Vastuseks peaks tulema JSON, kus on näha klastri nimi `lab-cluster` ja versioon `8.15.x`. Kui vastust ei tule, oota veel umbes 10 sekundit – Elasticsearch tuleb suhteliselt aeglaselt üles.
 
-💡 **Kui `curl` vastab `Connection refused`:** vaata logisid käsuga `docker compose logs es01`. Otsi rida, kus on kirjas `started`. Kui näed veateadet `bootstrap check failed`, on `vm.max_map_count` endiselt liiga madal. [file:1]
+!!! tip "Kui curl vastab Connection refused"
+    Vaata logisid käsuga `docker compose logs es01`. Otsi rida, kus on kirjas `started`. Kui näed veateadet `bootstrap check failed`, on `vm.max_map_count` endiselt liiga madal. Pärast VM taaskäivitust võib `sysctl` vaja uuesti käivitada.
 
 ### 1.2 Esimene indeks ja klastri olek
 
-Loo indeks ja saada üks dokument: [file:1]
+Loo indeks ja saada üks dokument:
 
 ```bash
 curl -X POST "http://localhost:9200/test-logs/_doc" \
@@ -122,34 +152,36 @@ curl -X POST "http://localhost:9200/test-logs/_doc" \
   -d '{"message": "esimene logi", "level": "info"}'
 ```
 
-Vaata indeksite olekut: [file:1]
+Vaata indeksite olekut:
 
 ```bash
 curl "http://localhost:9200/_cat/indices?v"
 ```
 
-Seal on veerg **`health`**, mille väärtus on praegu **`yellow`**. Miks? [file:1]
+Seal on veerg **`health`**, mille väärtus on praegu **`yellow`**. Miks?
 
 ```bash
 curl "http://localhost:9200/_cluster/health?pretty"
 ```
 
-Olulisemad read: [file:1]
+Olulisemad read:
 
 ```json
 "status" : "yellow",
 "unassigned_shards" : 1,
 ```
 
-**`unassigned_shards: 1`** tähendab, et ühel replica-shard’il ei ole kohta. Vaikimisi on `number_of_replicas: 1`, ehk primary-shard’ist tehakse üks koopia. See koopia peab asuma **teises sõlmes** kui primary. Praegu on klastris ainult **üks sõlm**, seega jääb replica „õhku“. [file:1]
+**`unassigned_shards: 1`** tähendab, et ühel replica-shard’il ei ole kohta. Vaikimisi on `number_of_replicas: 1`, ehk primary-shard’ist tehakse üks koopia. See koopia peab asuma **teises sõlmes** kui primary. Praegu on klastris ainult **üks sõlm**, seega jääb replica „õhku“.
 
-💭 **Mõtle (enne kui edasi kerid):** mis juhtub, kui kustutad praeguse ainsa sõlme? Kas indeks jääb alles, kui seadistus on `replicas: 1`? [file:1]
+??? question "Mõtle (enne kui edasi kerid)"
+    Mis juhtub, kui kustutad praeguse ainsa sõlme? Kas indeks jääb alles, kui seadistus on `replicas: 1`?
 
-> 🔍 **Selgitus (loe alles pärast oma vastust):** indeks kaob. `replicas: 1` ei aita, kui koopia ei asu **teises sõlmes**. See on põhjus, miks tootmisklastris on **vähemalt kaks sõlme** ja replica-de arv on vähemalt 1. [file:1]
+??? note "Selgitus (loe alles pärast oma vastust)"
+    Indeks kaob. `replicas: 1` ei aita, kui koopia ei asu **teises sõlmes**. See on põhjus, miks tootmisklastris on **vähemalt kaks sõlme** ja replica-de arv on vähemalt 1.
 
 ### 1.3 Kibana lisamine
 
-Lisa Kibana `docker-compose.yml` faili, **enne** plokki `volumes:`: [file:1]
+Lisa Kibana `docker-compose.yml` faili, **enne** plokki `volumes:`:
 
 ```yaml
   kibana:
@@ -163,25 +195,26 @@ Lisa Kibana `docker-compose.yml` faili, **enne** plokki `volumes:`: [file:1]
       - "5601:5601"
 ```
 
-Käivita Kibana: [file:1]
+Käivita Kibana:
 
 ```bash
 docker compose up -d kibana
 ```
 
-Oota umbes 45 sekundit ja ava seejärel brauserist `http://<sinu-VM-IP>:5601`. Klassivõrgus kasuta `192.168.35.12X`, VPN-ist `192.168.100.12X`. [file:1]
+Oota umbes 45 sekundit ja ava seejärel brauserist `http://<sinu-VM-IP>:5601`. Klassivõrgus kasuta `192.168.35.12X`, VPN-ist `192.168.100.12X`.
 
-Kibanas vali vasakult menüüst `☰` → **Management** → **Stack Monitoring** → **Or, set up with self monitoring** → Enable. [file:1]
+Kibanas vali vasakult menüüst `☰` → **Management** → **Stack Monitoring** → **Or, set up with self monitoring** → Enable.
 
-Stack Monitoring vaade näitab nüüd klastri `lab-cluster` olekuks `YELLOW`, 1 sõlme ning indeksi `test-logs` olekuks samuti `YELLOW` (1 replica on endiselt määramata). [file:1]
+Stack Monitoring vaade näitab nüüd klastri `lab-cluster` olekuks `YELLOW`, 1 sõlme ning indeksi `test-logs` olekuks samuti `YELLOW` (1 replica on endiselt määramata).
 
-💡 **Kui Kibana näitab `Kibana server is not ready yet`:** oota veel umbes 30 sekundit. Kibana käivitub alles siis, kui Elasticsearch on täielikult valmis. [file:1]
+!!! tip "Kui Kibana näitab not ready yet"
+    Oota veel umbes 30 sekundit. Kibana käivitub alles siis, kui Elasticsearch on täielikult valmis.
 
 ### 1.4 KQL-päring Discover vaates
 
-Vasakul vali **Discover**, loo uus data view (`test-logs*`) ja sea ajaperioodiks „Last 24 hours“. [file:1]
+Vasakul vali **Discover**, loo uus data view (`test-logs*`) ja sea ajaperioodiks „Last 24 hours“.
 
-Saada terminalist veel mõned dokumendid: [file:1]
+Saada terminalist veel mõned dokumendid:
 
 ```bash
 for level in info warn error; do
@@ -192,9 +225,9 @@ for level in info warn error; do
 done
 ```
 
-Vajuta Discover’is **Refresh**. Näed nelja dokumenti. [file:1]
+Vajuta Discover’is **Refresh**. Näed nelja dokumenti.
 
-Proovi KQL filtreid: [file:1]
+Proovi KQL filtreid:
 
 ```kql
 level : "error"
@@ -212,31 +245,34 @@ message : *logi*
 level : "error" and message : *info*
 ```
 
-Viimane päring peaks andma 0 tulemust – klassikaline näide sellest, et KQL-i `and` töötab dokumendi tasandil, mitte sõna tasandil. [file:1]
+Viimane päring peaks andma 0 tulemust – klassikaline näide sellest, et KQL-i `and` töötab dokumendi tasandil, mitte sõna tasandil.
 
-💭 **Mõtle:** sa just kirjutasid neli KQL-päringut. Mis on suurim erinevus KQL-i ja LogQL-i (Päev 2 Loki) süntaksite vahel? Kumb tundub esmapilgul loomulikum? [file:1]
+??? question "Mõtle"
+    Sa just kirjutasid neli KQL-päringut. Mis on suurim erinevus KQL-i ja LogQL-i (Päev 2 Loki) süntaksite vahel? Kumb tundub esmapilgul loomulikum?
 
 ---
 
 ## Osa 2 · Laienda 3-sõlmeline klaster
 
-> **Probleem:** Osa 1 lõpus oli sinu klaster YELLOW. Sa tead, miks (replica on määramata). Oletame, et oled e-poe SRE ja see klaster töötab tootmises. YELLOW olek tähendab: **kaotad ühe DB krahhi korral logiandmed lõplikult**. See ei ole vastuvõetav. Lahendus ei ole „panen replicas: 0“ (siis ei ole üldse kaitset). Lahendus on lisada sõlmi. Küsimus on: **mitu** ja **kuidas** nad omavahel suhtlevad? Järgmise tunni jooksul saad vastuse. [file:1]
+> **Probleem:** Osa 1 lõpus oli sinu klaster YELLOW. Sa tead, miks (replica on määramata). Oletame, et oled e-poe SRE ja see klaster töötab tootmises. YELLOW olek tähendab: **kaotad ühe DB krahhi korral logiandmed lõplikult**. See ei ole vastuvõetav. Lahendus ei ole „panen replicas: 0“ (siis ei ole üldse kaitset). Lahendus on lisada sõlmi. Küsimus on: **mitu** ja **kuidas** nad omavahel suhtlevad? Järgmise tunni jooksul saad vastuse.
 
-Tüüpiline tootmismudel on **3 dedicated master + N data**, aga 6 GB RAM-i puhul kasutame lihtsustatud varianti: **3 sõlme, igal kõik rollid**. Quorumi loogika toimib samamoodi – vaatame seda lähemalt. [file:1]
+Tüüpiline tootmismudel on **3 dedicated master + N data**, aga 6 GB RAM-i puhul kasutame lihtsustatud varianti: **3 sõlme, igal kõik rollid**. Quorumi loogika toimib samamoodi – vaatame seda lähemalt.
 
-> 📖 **Enne kui edasi liigud:** loengu plokk **L2.2 „Cluster state ja quorum“** selgitab, miks just kolm, mitte kaks. Loe see üle (võtab kuni 3 minutit). Selles osas eeldame seda teadmist. [file:1]
+!!! tip "Enne Osa 2"
+    Loe loengust plokk [Cluster state ja quorum — miks kolm master node'i](../../materials/lectures/paev3-elk-loeng.md#cluster-state-ja-quorum-miks-kolm-master-nodei) (võtab kuni 3 minutit). Selles osas eeldame, et saad selgitada, miks tootmises on vähemalt 3 master-kandidaati, mitte 2.
 
 ### 2.1 Peata ja muuda struktuuri
 
-Peata praegune setup: [file:1]
+Oled kaustas `~/paev3/elk` (kui mitte: `cd ~/paev3/elk`). Peata setup:
 
 ```bash
+cd ~/paev3/elk
 docker compose down
 ```
 
-Andmed (volume `es01-data`) jäävad alles, me ei kustuta neid. [file:1]
+Andmed (volume `es01-data`) jäävad alles, me ei kustuta neid.
 
-Asenda kogu `docker-compose.yml` sisu uuega: [file:1]
+Asenda kogu `docker-compose.yml` sisu uuega:
 
 ```yaml
 services:
@@ -302,13 +338,13 @@ volumes:
   es03-data:
 ```
 
-Võrreldes ühe sõlmega seadistusega on lisandunud kolm olulist muutujat: [file:1]
+Võrreldes ühe sõlmega seadistusega on lisandunud kolm olulist muutujat:
 
 - `discovery.seed_hosts` – loend teistest sõlmedest, kellega ühendust võtta klastri leidmiseks.  
 - `cluster.initial_master_nodes` – esmakordsel käivitamisel kasutatav master-kandidaatide loend (kasutatakse ainult esimesel käivitusel).  
 - `discovery.type=single-node` on eemaldatud – me ei ole enam ühe sõlmega klaster.  
 
-Iga sõlm on nüüd korraga `master`, `data` ja `ingest` rollis (vaikimisi, kui `node.roles` ei ole eraldi määratud). See on **labori konfiguratsioon**, mitte tootmiskeskkonna soovitus. Tootmises eraldatakse master- ja data-sõlmed (vt loengu L2 osa). [file:1]
+Iga sõlm on nüüd korraga `master`, `data` ja `ingest` rollis (vaikimisi, kui `node.roles` ei ole eraldi määratud). See on **labori konfiguratsioon**, mitte tootmiskeskkonna soovitus. Tootmises eraldatakse master- ja data-sõlmed (vt loengu L2 osa).
 
 ### 2.2 Käivita 3-sõlmeline klaster
 
@@ -316,19 +352,19 @@ Iga sõlm on nüüd korraga `master`, `data` ja `ingest` rollis (vaikimisi, kui 
 docker compose up -d
 ```
 
-Jälgi RAM-i: [file:1]
+Jälgi RAM-i:
 
 ```bash
 free -h
 ```
 
-Oota umbes 60 sekundit ja kontrolli klastri olekut: [file:1]
+Oota umbes 60 sekundit ja kontrolli klastri olekut:
 
 ```bash
 curl "http://localhost:9200/_cluster/health?pretty"
 ```
 
-Oodatav vastus: [file:1]
+Oodatav vastus:
 
 ```json
 "status" : "green",
@@ -338,33 +374,34 @@ Oodatav vastus: [file:1]
 "unassigned_shards" : 0,
 ```
 
-**GREEN!** Replica `test-logs` indeksist sai nüüd koha (teises sõlmes kui primary). Vaata sõlmi: [file:1]
+**GREEN!** Replica `test-logs` indeksist sai nüüd koha (teises sõlmes kui primary). Vaata sõlmi:
 
 ```bash
 curl "http://localhost:9200/_cat/nodes?v"
 ```
 
-Näed kolme sõlme. Ühe `master` veerus on täht `*` – see on valitud master. Teised on master-kandidaadid. [file:1]
+Näed kolme sõlme. Ühe `master` veerus on täht `*` – see on valitud master. Teised on master-kandidaadid.
 
-Ava Kibanas **Stack Monitoring** – klaster on GREEN ja näitab kolme sõlme. [file:1]
+Ava Kibanas **Stack Monitoring** – klaster on GREEN ja näitab kolme sõlme.
 
-💡 **Kui klaster ei tule 60 sekundiga üles:** vaata `docker compose logs es01 | grep -i "master"`. Otsi rida `master node changed`. Kui näed `master not discovered yet`, oota veel veidi. [file:1]
+!!! tip "Kui klaster ei tule 60 sekundiga üles"
+    Vaata `docker compose logs es01 | grep -i "master"`. Otsi rida `master node changed`. Kui näed `master not discovered yet`, oota veel veidi.
 
 ### 2.3 Simuleeri sõlme kadumist
 
-Praegu on klaster terve. Simuleeri probleemi – kujuta ette, et see on AWS-i saadavuspiirkonna (AZ) vea algus: [file:1]
+Praegu on klaster terve. Simuleeri probleemi – kujuta ette, et see on AWS-i saadavuspiirkonna (AZ) vea algus:
 
 ```bash
 docker compose stop es02
 ```
 
-Kohe pärast seda kontrolli: [file:1]
+Kohe pärast seda kontrolli:
 
 ```bash
 curl "http://localhost:9200/_cluster/health?pretty"
 ```
 
-Näed vastuses midagi sellist: [file:1]
+Näed vastuses midagi sellist:
 
 ```json
 "status" : "yellow",
@@ -372,21 +409,22 @@ Näed vastuses midagi sellist: [file:1]
 "unassigned_shards" : 1,
 ```
 
-**YELLOW** tähendab, et ühe shard’i koopia kaotas oma sõlme ja klaster otsib sellele uut kohta. Oota umbes 60 sekundit ja kontrolli uuesti: [file:1]
+**YELLOW** tähendab, et ühe shard’i koopia kaotas oma sõlme ja klaster otsib sellele uut kohta. Oota umbes 60 sekundit ja kontrolli uuesti:
 
 ```bash
 sleep 60 && curl "http://localhost:9200/_cluster/health?pretty"
 ```
 
-Nüüd peaks klaster olema jälle **GREEN** – shard kopeeriti kahele allesjäänud sõlmele. Vaata shard’e: [file:1]
+Nüüd peaks klaster olema jälle **GREEN** – shard kopeeriti kahele allesjäänud sõlmele. Vaata shard’e:
 
 ```bash
 curl "http://localhost:9200/_cat/shards?v"
 ```
 
-Iga shard (primary + replica) paikneb nüüd ühel kahest allesjäänud sõlmest. [file:1]
+Iga shard (primary + replica) paikneb nüüd ühel kahest allesjäänud sõlmest.
 
-💡 **Kui klaster jääb YELLOW:** vaata, kas `unassigned_shards > 0` – see võib tähendada, et shard ei mahu (diskiruumi piirang). `curl localhost:9200/_cluster/allocation/explain?pretty` aitab põhjuse välja selgitada. [file:1]
+!!! tip "Kui klaster jääb YELLOW"
+    Vaata, kas `unassigned_shards > 0` – see võib tähendada, et shard ei mahu (diskiruumi piirang). `curl localhost:9200/_cluster/allocation/explain?pretty` aitab põhjuse välja selgitada.
 
 ### 2.4 Too sõlm tagasi
 
@@ -394,21 +432,23 @@ Iga shard (primary + replica) paikneb nüüd ühel kahest allesjäänud sõlmest
 docker compose start es02
 ```
 
-Oota umbes 60 sekundit (ES Java käivitub aeglaselt) ja vaata uuesti: [file:1]
+Oota umbes 60 sekundit (ES Java käivitub aeglaselt) ja vaata uuesti:
 
 ```bash
 curl "http://localhost:9200/_cat/shards?v"
 ```
 
-Näed, et osa shard’e liigub tagasi sõlmele `es02`. Klaster **tasakaalustab** end uuesti – see on automaatne shard’ide taastamine. Kibana Stack Monitoring näitab sama. [file:1]
+Näed, et osa shard’e liigub tagasi sõlmele `es02`. Klaster **tasakaalustab** end uuesti – see on automaatne shard’ide taastamine. Kibana Stack Monitoring näitab sama.
 
-💭 **Mõtle (enne edasilugemist):** sinu organisatsioonis – kui klaster on jagatud kahe andmekeskuse vahel, kuhu paigutad master-kandidaadid? Kuidas tagad, et ühe andmekeskuse kadu ei muuda klastrit **read-only** olekusse? [file:1]
+??? question "Mõtle (enne edasilugemist)"
+    Sinu organisatsioonis – kui klaster on jagatud kahe andmekeskuse vahel, kuhu paigutad master-kandidaadid? Kuidas tagad, et ühe andmekeskuse kadu ei muuda klastrit **read-only** olekusse?
 
-> 🔍 **Mõttearendus:** tüüpiline lahendus on **kolm eraldi asukohta** – kaks andmekeskust ja üks arbiter/witness kolmandas asukohas (näiteks pilves, eraldi AZ-is). Quorum nõuab üle 50% master-kandidaatidest. Kui sul on ainult kaks andmekeskust (2 × 1 master = 2 kandidaati), siis ühe DC kadumisel jääb alles 1 master ja quorum kaob. Kolmas asukoht hoiab quorum’i alles. Seetõttu **ainult kaks andmekeskust ei ole klastrile piisav**, vaja on vähemalt kolme erinevat „failure domain’i“. [file:1]
+??? note "Mõttearendus"
+    Tüüpiline lahendus on **kolm eraldi asukohta** – kaks andmekeskust ja üks arbiter/witness kolmandas asukohas (näiteks pilves, eraldi AZ-is). Quorum nõuab üle 50% master-kandidaatidest. Kui sul on ainult kaks andmekeskust (2 × 1 master = 2 kandidaati), siis ühe DC kadumisel jääb alles 1 master ja quorum kaob. Kolmas asukoht hoiab quorum’i alles. Seetõttu **ainult kaks andmekeskust ei ole klastrile piisav**, vaja on vähemalt kolme erinevat „failure domain’i“.
 
 ### 2.5 Test: katkesta kaks sõlme
 
-Kui sul on aega ja tahad näha, mis juhtub quorum’i kadumisel: [file:1]
+Kui sul on aega ja tahad näha, mis juhtub quorum’i kadumisel:
 
 ```bash
 docker compose stop es02 es03
@@ -416,41 +456,47 @@ sleep 10
 curl "http://localhost:9200/_cluster/health?pretty"
 ```
 
-Vastuseks on kas viga või `master_not_discovered_exception`. Klaster ei suuda valida masterit, sest quorum (2) puudub. [file:1]
+Vastuseks on kas viga või `master_not_discovered_exception`. Klaster ei suuda valida masterit, sest quorum (2) puudub.
 
-Too sõlmed tagasi: [file:1]
+Too sõlmed tagasi:
 
 ```bash
 docker compose start es02 es03
 ```
 
-Oota umbes 45 sekundit ja kontrolli uuesti – klaster taastub GREEN olekusse. [file:1]
+Oota umbes 45 sekundit ja kontrolli uuesti – klaster taastub GREEN olekusse.
 
-💭 **Mõtle:** kirjuta paberile või tekstifaili **kaks lauset** selle kohta, kelle jaoks sinu töökohas oleks selle stsenaariumi mõju kõige valusam. Kas auditispetsialist (logid kadunud)? Tugitiim (otsing maas)? Arendustiim (trace’id kadunud)? [file:1]
+??? question "Mõtle"
+    Kirjuta paberile või tekstifaili **kaks lauset** selle kohta, kelle jaoks sinu töökohas oleks selle stsenaariumi mõju kõige valusam. Kas auditispetsialist (logid kadunud)? Tugitiim (otsing maas)? Arendustiim (trace’id kadunud)?
 
 ---
 
 ## Osa 3 · OpenSearch kõrvale – võrdlus Elasticsearchiga
 
-> **Probleem:** Sinu juht küsib: „Miks me ostame ELK-i, kui OpenSearch on tasuta?“ Sul on umbes 30 sekundit, et vastata. Selle osa eesmärk on, et sul oleks **konkreetne** vastus, mitte ainult vendorite turundus. Mõlemad platvormid on sinu töökohas potentsiaalselt olulised ja sa pead suutma põhjendatult valida. [file:1]
+> **Probleem:** Sinu juht küsib: „Miks me ostame ELK-i, kui OpenSearch on tasuta?“ Sul on umbes 30 sekundit, et vastata. Selle osa eesmärk on, et sul oleks **konkreetne** vastus, mitte ainult vendorite turundus. Mõlemad platvormid on sinu töökohas potentsiaalselt olulised ja sa pead suutma põhjendatult valida.
 
-OpenSearch hargnes 2021. aastal Elasticsearch 7.10.2 versioonist (litsentsimuudatuse tõttu) ja arenes sealt edasi oma suunas. Täna (2026) on mõlemad lahendused küpsed. Neid kõrvuti proovides saad praktilise võrdluse. [file:1]
+OpenSearch hargnes 2021. aastal Elasticsearch 7.10.2 versioonist (litsentsimuudatuse tõttu) ja arenes sealt edasi oma suunas. Täna (2026) on mõlemad lahendused küpsed. Neid kõrvuti proovides saad praktilise võrdluse.
+
+**Kontekstivahetus:** Osa 1–2 töötasid kaustas `~/paev3/elk`. Nüüd **peatame ES-i**, et vabastada RAM — indeks `test-logs` ja volume’id (`es01-data` jne) **ei kao**, need jäävad kettale. OpenSearch käivitame **teises kaustas** `~/paev3/os` (sama port 9200, aga teine klaster). Hiljem saad ES tagasi tõsta: `cd ~/paev3/elk && docker compose up -d`.
 
 !!! warning "Mälu risk OpenSearchiga"
     3 ES-sõlme + 3 OS-sõlme + Kibana + OS Dashboards = umbes 9–10 GB RAM-i. **Sinu 6 GB VM ei pea seda vastu.** Peata enne OpenSearchi käivitamist kindlasti Elasticsearchi klaster.
 
 ### 3.1 Peata ES, vabasta RAM
 
+Oled kaustas `~/paev3/elk`:
+
 ```bash
+cd ~/paev3/elk
 docker compose down
 free -h
 ```
 
-Veendu, et vaba mälu oleks 4–5 GB. Andmed (volumes `es01-data` jne) jäävad alles, saad hiljem ES-i juurde tagasi tulla. [file:1]
+Veendu, et vaba mälu oleks 4–5 GB. Andmed (volumes `es01-data` jne) jäävad alles — `docker compose down` ei kustuta volume’e.
 
 ### 3.2 OpenSearchi klastri Compose
 
-Loo uus kaust ja `docker-compose.yml`: [file:1]
+Loo uus kaust ja `docker-compose.yml`:
 
 ```bash
 mkdir -p ~/paev3/os && cd ~/paev3/os
@@ -527,7 +573,7 @@ volumes:
   os03-data:
 ```
 
-Olulisemad erinevused ES-seadistusest: [file:1]
+Olulisemad erinevused ES-seadistusest:
 
 - `cluster.initial_cluster_manager_nodes` (mitte `master_nodes`) – OpenSearch loobus alates 2.0 versioonist sõnast „master“ ja kasutab `cluster_manager`. Mõiste on sama, nimi erineb.  
 - Pildi nimi `opensearchproject/opensearch:2.18.0` – versioon vastab AWS-i poolt toetatule.  
@@ -542,7 +588,7 @@ free -h
 curl "http://localhost:9200/_cluster/health?pretty"
 ```
 
-Oodatav vastus on sisult sama, mis ES-i puhul: [file:1]
+Oodatav vastus on sisult sama, mis ES-i puhul:
 
 ```json
 "cluster_name" : "lab-os-cluster",
@@ -550,17 +596,18 @@ Oodatav vastus on sisult sama, mis ES-i puhul: [file:1]
 "number_of_nodes" : 3,
 ```
 
-💡 **Kui näed `OpenSearch is not running` või `cluster manager not discovered`:** oota veel 30–60 sekundit – OpenSearch käivitub tavaliselt veidi aeglasemalt kui Elasticsearch. [file:1]
+!!! tip "Kui OpenSearch ei ole valmis"
+    Oota veel 30–60 sekundit – OpenSearch käivitub tavaliselt veidi aeglasemalt kui Elasticsearch.
 
 ### 3.4 OS Dashboards – sarnane Kibana UI
 
-Ava brauserist `http://<sinu-VM-IP>:5601` – avaneb OS Dashboards. [file:1]
+Ava brauserist `http://<sinu-VM-IP>:5601` – avaneb OS Dashboards.
 
-Vasakul üleval vali `☰` → **Discover**. Kasutajaliides on ligikaudu 80% ulatuses Kibanaga samasuguse loogikaga: sama navigatsioon, sama Discover-vaade, sama Index Patterns kontseptsioon. [file:1]
+Vasakul üleval vali `☰` → **Discover**. Kasutajaliides on ligikaudu 80% ulatuses Kibanaga samasuguse loogikaga: sama navigatsioon, sama Discover-vaade, sama Index Patterns kontseptsioon.
 
 ### 3.5 REST API sarnasus
 
-Saada OpenSearchi sama dokument, mida panid varem Elasticsearchi: [file:1]
+Saada OpenSearchi sama dokument, mida panid varem Elasticsearchi:
 
 ```bash
 curl -X POST "http://localhost:9200/test-logs/_doc" \
@@ -568,15 +615,15 @@ curl -X POST "http://localhost:9200/test-logs/_doc" \
   -d '{"message": "esimene logi OS-is", "level": "info"}'
 ```
 
-Vaata indekseid: [file:1]
+Vaata indekseid:
 
 ```bash
 curl "http://localhost:9200/_cat/indices?v"
 ```
 
-Väljund on sama struktuuriga (samad veerud, sama `health: green`, sest 3 sõlme). [file:1]
+Väljund on sama struktuuriga (samad veerud, sama `health: green`, sest 3 sõlme).
 
-KQL-päringud Discoveris töötavad sama süntaksiga: [file:1]
+KQL-päringud Discoveris töötavad sama süntaksiga:
 
 ```kql
 level : "info"
@@ -584,7 +631,7 @@ level : "info"
 
 ### 3.6 Olulised erinevused
 
-API ja UI tasandil on erinevusi vähe. Olulisemad erisused on seal, kus tooted on pärast 2021. aastat eraldi arenenud: [file:1]
+API ja UI tasandil on erinevusi vähe. Olulisemad erisused on seal, kus tooted on pärast 2021. aastat eraldi arenenud:
 
 | Aspekt | Elasticsearch 8.x | OpenSearch 2.x |
 |---|---|---|
@@ -594,26 +641,31 @@ API ja UI tasandil on erinevusi vähe. Olulisemad erisused on seal, kus tooted o
 | AWS integratsioon | Marketplace’i kaudu | Natiivne (Bedrock, SageMaker, IAM, KMS) |
 | Cluster manager / master | `master` tähisega | `cluster_manager` tähisega (sama roll) |
 
-Praktilised valikud: [file:1]
+Praktilised valikud:
 
 - **AWS-keskne organisatsioon** (Bedrock, SageMaker, IAM) – tihti OpenSearch, sest integratsioon on natiivne.  
 - **Olemasolev Elasticu investeering** (Logstash, ECS, ELSER) – sageli eelistatakse Elasticsearchi.  
 - **On-prem / hybrid-cloud ilma AWS-ita** – Elasticsearch on tavaline valik.  
 - **Litsentsipoliitika väga tundlik** (nt avalik sektor) – OpenSearchi Apache 2.0 litsents võib olla eelistatud.  
 
-💭 **Mõtle:** sinu organisatsiooni puhul – milline neist neljast punktist on kõige olulisem? Kas üks faktor kaalub teisi üle või on mitu sama tugevat? [file:1]
+??? question "Mõtle"
+    Sinu organisatsiooni puhul – milline neist neljast punktist on kõige olulisem? Kas üks faktor kaalub teisi üle või on mitu sama tugevat?
 
 ---
 
 ## Osa 4 · Vector-otsing – lühike maitseproov
 
-> **Probleem:** tugitiim saab päevas kümneid tiketeid. Paljud kirjeldavad sama probleemi erinevaid sõnu kasutades: „DB ei vasta“, „andmebaas timeout“, „PostgreSQL connection refused“, „psycopg2 OperationalError“. BM25 (tavaline täistekstiotsing) **ei seo** neid omavahel – sõnastikus pole need lähedased. Vector-otsing aga seob. Vaatame seda numbriliselt. [file:1]
+> **Probleem:** tugitiim saab päevas kümneid tiketeid. Paljud kirjeldavad sama probleemi erinevaid sõnu kasutades: „DB ei vasta“, „andmebaas timeout“, „PostgreSQL connection refused“, „psycopg2 OperationalError“. BM25 (tavaline täistekstiotsing) **ei seo** neid omavahel – sõnastikus pole need lähedased. Vector-otsing aga seob. Vaatame seda numbriliselt.
 
-Loengu L3 osa rääkis BM25-st (lexical) ja vector-otsingust. Siin teeme **lühiülevaate**, mitte täismahus ELSER-seadistuse. Eesmärk on näha, kuidas `knn_vector` väli praktikas käitub ilma embedding-mudelit üles panemata. Kasutame Osa 3 OpenSearchi klastrit. [file:1]
+!!! note "Eeldus enne Osa 4"
+    OpenSearchi klaster peab jooksma kaustas `~/paev3/os`. Kontrolli: `cd ~/paev3/os && docker compose ps` — kolm `os0X` konteinerit peavad olema `Up`. Kui ES on veel üleval või mälu on otsas, lõpeta Osa 3 enne siia tulekut.
+
+Loengu [vector/RAG lisalugemine](../../materials/lectures/paev3-vector-rag-lisalugemine.md) räägib BM25-st (lexical) ja vector-otsingust. Siin teeme **lühiülevaate**, mitte täismahus ELSER-seadistuse. Eesmärk on näha, kuidas `knn_vector` väli praktikas käitub ilma embedding-mudelit üles panemata — kasutame sama OpenSearchi klastrit, mis Osa 3 lõpus üleval oli.
 
 ### 4.1 Indeks vector-väljaga
 
 ```bash
+cd ~/paev3/os
 curl -X PUT "http://localhost:9200/log-vectors" \
   -H "Content-Type: application/json" \
   -d '{
@@ -627,11 +679,11 @@ curl -X PUT "http://localhost:9200/log-vectors" \
   }'
 ```
 
-`knn_vector` on OpenSearchi vector-tüüp. Päriselus on dimensioon tavaliselt 384, 768 või 1536, kuid **4 dimensiooni** valime selleks, et saaks vektoreid käsitsi kirjutada ja käitumist lihtsalt jälgida. [file:1]
+`knn_vector` on OpenSearchi vector-tüüp. Päriselus on dimensioon tavaliselt 384, 768 või 1536, kuid **4 dimensiooni** valime selleks, et saaks vektoreid käsitsi kirjutada ja käitumist lihtsalt jälgida.
 
 ### 4.2 Dokumentide lisamine
 
-Kujutame ette, et allpool on logiread, mille embedding-mudel on juba vektoriteks arvutanud 4-mõõtmelises ruumis. Esimene grupp on andmebaasiprobleemid, teine võrguprobleemid: [file:1]
+Kujutame ette, et allpool on logiread, mille embedding-mudel on juba vektoriteks arvutanud 4-mõõtmelises ruumis. Esimene grupp on andmebaasiprobleemid, teine võrguprobleemid:
 
 ```bash
 # Database connection probleemid (sarnased vektorid)
@@ -649,11 +701,11 @@ curl -X POST "http://localhost:9200/log-vectors/_doc" -H "Content-Type: applicat
   -d '{"message": "route to host failed", "embedding": [0.0, 0.0, 0.85, 0.15]}'
 ```
 
-Kolm esimest vektorit on ligikaudu `[0.85–0.9, 0.1–0.15, 0, 0]`, kaks viimast `[0, 0, 0.85–0.9, 0.1–0.15]`. Need moodustavad vektorruumis kaks eraldi klastrit – embedding-mudel paigutab sarnased asjad lähestikku. [file:1]
+Kolm esimest vektorit on ligikaudu `[0.85–0.9, 0.1–0.15, 0, 0]`, kaks viimast `[0, 0, 0.85–0.9, 0.1–0.15]`. Need moodustavad vektorruumis kaks eraldi klastrit – embedding-mudel paigutab sarnased asjad lähestikku.
 
 ### 4.3 Vector-päring
 
-Otsi midagi, mille vektor on `[0.9, 0.1, 0.0, 0.0]` (database-klastri lähedal): [file:1]
+Otsi midagi, mille vektor on `[0.9, 0.1, 0.0, 0.0]` (database-klastri lähedal):
 
 ```bash
 curl -X POST "http://localhost:9200/log-vectors/_search?pretty" \
@@ -671,32 +723,33 @@ curl -X POST "http://localhost:9200/log-vectors/_search?pretty" \
   }'
 ```
 
-Vaata vastust ise: [file:1]
+Vaata vastust ise:
 
 1. Mis järjekorras tulemused on?  
 2. Millised on `_score` väärtused?  
 3. Kas kolm database-klastri sõnumit tulevad enne kahte network-klastri sõnumit?  
 
-Kui vastus on „jah“, nägid praktikas, miks `knn`-otsing on **semantiline** ja mitte ainult sõnapõhine. BM25 ei annaks „psycopg2“ ja „DB connection timeout“ vahel sellist seost. [file:1]
+Kui vastus on „jah“, nägid praktikas, miks `knn`-otsing on **semantiline** ja mitte ainult sõnapõhine. BM25 ei annaks „psycopg2“ ja „DB connection timeout“ vahel sellist seost.
 
-💭 **Mõtle:** kas sinu tööl on konkreetne otsingustsenaarium, kus tugitiim või arendajad otsivad praegu „vale sõnaga“? Kas vector-otsing võiks seda aidata? [file:1]
+??? question "Mõtle"
+    Kas sinu tööl on konkreetne otsingustsenaarium, kus tugitiim või arendajad otsivad praegu „vale sõnaga“? Kas vector-otsing võiks seda aidata?
 
 ### 4.4 Mis oleks järgmine samm (seda klassis ei tee)
 
-Täielik vector-otsingu lahendus vajaks: [file:1]
+Täielik vector-otsingu lahendus vajaks:
 
 1. **Embedding-mudelit** klastris (nt `sentence-transformers/all-MiniLM-L6-v2`).  
 2. **Ingest-pipelinet**, mis arvutab `message → embedding` automaatselt.  
 3. **Hybrid-päringut**, mis kombineerib BM25 ja vector-otsingu.  
 4. **ML-sõlme**, et mitte koormata põhiklastrit ML-arvutustega.  
 
-Elasticsearchi `semantic_text` väli teeb sammud 1 ja 2 automaatselt – see on kirjas lisaülesandes A. [file:1]
+Elasticsearchi `semantic_text` väli teeb sammud 1 ja 2 automaatselt – see on kirjas lisaülesandes A.
 
 ---
 
 ## ✅ Lõpukontroll (tehnika + arusaamine)
 
-**Tehniline (kontrollitav):** [file:1]
+**Tehniline (kontrollitav):**
 
 - [ ] `docker compose ps` kaustas `~/paev3/elk` näitab 3 ES-sõlme + Kibana – kõik on `healthy` või `Up`.  
 - [ ] `curl http://localhost:9200/_cluster/health?pretty` näitab `status: green` ja `number_of_nodes: 3`.  
@@ -707,7 +760,7 @@ Elasticsearchi `semantic_text` väli teeb sammud 1 ja 2 automaatselt – see on 
 - [ ] OS Dashboards kasutajaliides on selgelt Kibana-laadne.  
 - [ ] `knn_vector` väljaga päring annab database-klastri sõnumid esimesteks tulemusteks.  
 
-**Arusaamine (vasta peast, kirjuta paberile või tekstifaili):** [file:1]
+**Arusaamine (vasta peast, kirjuta paberile või tekstifaili):**
 
 - [ ] Suudad ühe lausega selgitada, miks tootmiskeskkond vajab 3, mitte 2 master-kandidaati.  
 - [ ] Suudad nimetada kaks olukorda, kus eelistad Lokit Elasticsearchile, ja kaks olukorda, kus vastupidi eelistad Elastic Stacki.  
@@ -718,14 +771,14 @@ Elasticsearchi `semantic_text` väli teeb sammud 1 ja 2 automaatselt – see on 
 
 ## 🚀 Lisaülesanded (kellel veel aega jääb)
 
-**A. ELSER-mudel ja `semantic_text`** – Elasticu ES-klastri peal (peata OS, käivita ES): [file:1]
+**A. ELSER-mudel ja `semantic_text`** – Elasticu ES-klastri peal (peata OS, käivita ES):
 
 1. Laadi ELSER-mudel: Kibana → Machine Learning → Trained Models → Download `.elser_model_2`.  
 2. Deploy’ ülemudeli.  
 3. Loo indeks `semantic_text` väljaga (vt loengu L3 koodi).  
 4. Saada paar dokumenti ja vaata, kuidas Elastic teeb automaatselt BM25 + ELSER hübriidotsingu.  
 
-**B. Snapshot lokaalsesse „S3“** – snapshot’i simulatsioon: [file:1]
+**B. Snapshot lokaalsesse „S3“** – snapshot’i simulatsioon:
 
 1. Loo lokaalne kaust `mkdir -p ~/paev3/snapshots`.  
 2. Lisa Compose’i kõikidele ES-sõlmedele volume `- ~/paev3/snapshots:/snapshots`.  
@@ -733,7 +786,7 @@ Elasticsearchi `semantic_text` väli teeb sammud 1 ja 2 automaatselt – see on 
    `curl -X PUT localhost:9200/_snapshot/local -d '{"type":"fs","settings":{"location":"/snapshots"}}'`.  
 4. Tee snapshot, kustuta indeks ja taasta see snapshot’ist.  
 
-**C. Kafka kui ingest-buffer** – ehita pipeline Filebeat → Kafka → Logstash → ES (lähtudes L2 „Andmevoo“ Mermaid-diagrammist). [file:1]
+**C. Kafka kui ingest-buffer** – ehita pipeline Filebeat → Kafka → Logstash → ES (lähtudes L2 „Andmevoo“ Mermaid-diagrammist).
 
 ---
 
@@ -747,7 +800,7 @@ Elasticsearchi `semantic_text` väli teeb sammud 1 ja 2 automaatselt – see on 
 | Kibana `not ready yet` ka 2 minuti pärast | `docker logs kibana \| tail -50` | ES ei ole üleval. Tee enne Kibana ootamist `curl localhost:9200`. |
 | Klaster jäi YELLOW pärast sõlme tagasitoomist | `curl localhost:9200/_cluster/allocation/explain?pretty` | Diskiruumi piirang või shard’ide paigutusreeglid. |
 | OS Dashboards näitab `OpenSearch is not running` | `curl http://localhost:9200/_cluster/health` | OS klaster ei ole valmis, oota umbes 60 sekundit. |
-| `master_not_discovered_exception` | `docker logs es01 \| grep -i master` | Kaks või enam sõlme on maas, quorum kadus. Too sõlmed tagasi. | [file:1]
+| `master_not_discovered_exception` | `docker logs es01 \| grep -i master` | Kaks või enam sõlme on maas, quorum kadus. Too sõlmed tagasi. |
 
 ---
 
@@ -760,6 +813,6 @@ Elasticsearchi `semantic_text` väli teeb sammud 1 ja 2 automaatselt – see on 
 | Elastic `semantic_text` ja ELSER | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-text.html> | Taust lisaülesande A jaoks. |
 | OpenSearch k-NN ja neural search | <https://opensearch.org/docs/latest/search-plugins/neural-search/> | Vector-otsing OpenSearchis. |
 | Elasticsearch Docker Compose näide | <https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html> | Production’ile sarnane multi-node seadistus. |
-| OpenSearch Docker Compose | <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/> | OpenSearchi multi-node seadistus. | [file:1]
+| OpenSearch Docker Compose | <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/> | OpenSearchi multi-node seadistus. |
 
 --8<-- "_snippets/abbr.md"

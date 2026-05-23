@@ -1,15 +1,17 @@
 ---
+
 tags:
-  - Elasticsearch
-  - OpenSearch
-  - VectorSearch
-  - AI
-  - Day3
+
+- Elasticsearch
+- OpenSearch
+- VectorSearch
+- AI
+- Day3
 
 # Päev 3: Elastic Stack & OpenSearch — kust tuli, kus on, kuhu läheb
 
 **Kursus:** Kaasaegne IT-süsteemide monitooring ja jälgitavus  
-**Kestus:** ~130 min klassiloengut (6 plokki) + kodutöö lab (~3 h) — vt [Päev 3 kava](../paev3-kava.md)  
+**Kestus:** ~~130 min klassiloengut (6 plokki) + kodutöö lab (~~3 h) — vt [Päev 3 kava](../paev3-kava.md)  
 **Tase:** Kesktase → kesk-edasijõudnud  
 **Eeldused:** Päev 1 (observability kolm sammast, Prometheus pull-mudel) · Päev 2 (Zabbix host-tsentriline, Loki + Alloy, label vs sisu indekseerimine)
 
@@ -20,15 +22,16 @@ tags:
 
 ## Sisu (klassi plokid)
 
-| Plokk | Kell (kava) | Peatükk siin | Teema |
-|-------|-------------|--------------|-------|
-| **1** | 10:05–10:35 | [§1](#1-zabbixilt-andmehaldusele-paradigm-shift) · [§2](#2-maastik-2026) · [§3](#3-ajalugu-kust-me-siia-joudsime) | Paradigm shift · maastik 2026 · ajalugu |
-| **2** | 11:05–11:35 | [§4](#4-dokumendi-mudel-json-indeksid-mappings-data-streams) · [§5](#5-stack-ingestion-kuidas-logid-jouavad-klasterisse) | JSON, indeksid, ingestion |
-| **3** | 11:55–12:10 | [§6](#6-elasticsearch-vs-opensearch-tana) | ES vs OS, hinnad, valik |
-| **4** | 12:40–13:05 | [§7](#7-arhitektuur-solmed-shardid-quorum-999) | Klaster, shardid, ILM, Kafka |
-| **5** | 13:20–13:35 | [§8](#8-apm-ja-traces-kolmas-observability-sammas) · [§9](#9-kibana-monitooringule-discover-dashboards-alerting-ml) | APM · Kibana |
-| **6** | 14:00–14:15 | [§10](#10-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad) | BM25 vs vector (ülevaade) |
-| — | Kodutöö | [§11](#11-cheat-sheet--vota-too-juurde-kaasa) · [Lab](../../labs/03_elk_stack/lab.md) | Otsustustabelid · praktika |
+
+| Plokk | Kell (kava) | Peatükk siin                                                                                                             | Teema                                   |
+| ----- | ----------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- |
+| **1** | 10:05–10:35 | [§1](#1-zabbixilt-andmehaldusele-paradigm-shift) · [§2](#2-maastik-2026) · [§3](#3-ajalugu-kust-me-siia-joudsime)        | Paradigm shift · maastik 2026 · ajalugu |
+| **2** | 11:05–11:35 | [§4](#4-dokumendi-mudel-json-indeksid-mappings-data-streams) · [§5](#5-stack-ingestion-kuidas-logid-jouavad-klasterisse) | JSON, indeksid, ingestion               |
+| **3** | 11:55–12:10 | [§6](#6-elasticsearch-vs-opensearch-tana)                                                                                | ES vs OS, hinnad, valik                 |
+| **4** | 12:40–13:05 | [§7](#7-arhitektuur-solmed-shardid-quorum-999)                                                                           | Klaster, shardid, ILM, Kafka            |
+| **5** | 13:20–13:35 | [§8](#8-apm-ja-traces-kolmas-observability-sammas) · [§9](#9-kibana-monitooringule-discover-dashboards-alerting-ml)      | APM · Kibana                            |
+| **6** | 14:00–14:15 | [§10](#10-otsing-lexical-bm25-vs-vector-ja-kuidas-need-tootavad)                                                         | BM25 vs vector (ülevaade)               |
+| —     | Kodutöö     | [§11](#11-cheat-sheet--vota-too-juurde-kaasa) · [Lab](../../labs/03_elk_stack/lab.md)                                    | Otsustustabelid · praktika              |
 
 
 **Lisalugemine** (mitte klassis kohustuslik): [Vector search ja RAG](paev3-vector-rag-lisalugemine.md) · [RAG retrieval — BM25, vector, hübriid](paev3-rag-hybrid-monitooring.md)
@@ -230,6 +233,8 @@ flowchart LR
     style COL fill:#fff9c4
     style APP fill:#e3f2fd
 ```
+
+
 
 ### Andmesalvestuse standard tulemas
 
@@ -717,7 +722,7 @@ OpenSearchil ei ole Elastic-i Beats'idega ühilduvat ökosüsteemi (alates 2021 
 | Vajab kompleks-parsing'ut unstructured logide jaoks | Filebeat → **Logstash** → ES                                |
 | OpenSearch deployment                               | **Fluent Bit + Data Prepper** või **OTel Collector**        |
 | Vendor-neutral, multi-backend (ES + Splunk + Tempo) | **OTel Collector**                                          |
-| Logide-maht > 100 GB/päev, klaster on "värske"      | Lisa **Kafka** vahele puhvriks (sama §7 Kafka osa)        |
+| Logide-maht > 100 GB/päev, klaster on "värske"      | Lisa **Kafka** vahele puhvriks (sama §7 Kafka osa)          |
 | Cloud-native (Kubernetes-natiivne)                  | **Fluent Bit** (sidecar / DaemonSet) või **OTel Collector** |
 
 
@@ -1054,7 +1059,7 @@ Indeks Elasticsearchis on **loogiline konteiner**. Füüsiliselt jaotub ta **sha
 Indeksi loomisel määrad kaks numbrit:
 
 - `**number_of_shards`** (primary) — mitmeks tükiks indeks jaotub. Vaikimisi 1. Hilisem muutmine on raske (reindex), niisiis vali ette.
-- `**number_of_replicas**` — mitu koopiat igast primary shardist tehakse. Vaikimisi 1. Saab jooksvalt muuta.
+- `**number_of_replicas`** — mitu koopiat igast primary shardist tehakse. Vaikimisi 1. Saab jooksvalt muuta.
 
 Näide: indeks `logs-2026.05` `number_of_shards: 3` ja `number_of_replicas: 1` = **3 primary + 3 replica = 6 shardi kokku**. Kui sul on 3 data node'i, paigutab Elasticsearch shardid nii, et iga primary ja tema replica on **eri node'idel** — muidu node'i kadu kaotaks andmed.
 
@@ -1075,6 +1080,8 @@ flowchart TB
     style SN fill:#fff9c4
     style TN fill:#c8e6c9
 ```
+
+
 
 **Roll päringus:**
 
@@ -1241,6 +1248,9 @@ flowchart LR
     style D fill:#eeeeee
 ```
 
+
+
+
 | Tier          | Tüüpiline vanus | Hardware                    | Replicas                | Operatsioon                                                   |
 | ------------- | --------------- | --------------------------- | ----------------------- | ------------------------------------------------------------- |
 | **🔥 Hot**    | 0–7 p           | Kiire SSD, palju RAM        | 1–2                     | Kirjutamine + päringud, hoitakse RAM-is                       |
@@ -1314,6 +1324,8 @@ flowchart LR
     style DB fill:#ffcdd2
     style API fill:#fff9c4
 ```
+
+
 
 ### Elastic APM — küps
 
@@ -1392,6 +1404,8 @@ flowchart TB
     style SM fill:#e1f5fe
     style ES fill:#fff3e0
 ```
+
+
 
 ### Discover — sinu igapäevane töövahend
 
@@ -1550,6 +1564,8 @@ flowchart LR
     style R fill:#c8e6c9
 ```
 
+
+
 See on **kiire** (otsib sõna hash-tabelist, mitte kõigi dokumentide läbivaatamine) ja **täpne** (kui sõna on samas vormis, leitakse).
 
 Aga "kiire ja täpne" pole **piisav**. Vaja on **järjestada** — milline dokument on **kõige relevantsem** päringule?
@@ -1604,6 +1620,8 @@ flowchart TB
     style LR fill:#ffcdd2
     style VR fill:#c8e6c9
 ```
+
+
 
 ### Edasine areng — vector search ja RAG monitooringus
 
@@ -1724,8 +1742,6 @@ Päeva lõpus, enne kui klassist välja lähed, mõtle läbi:
 4. **Otsus**: ettevõtte audit-keskkonna jaoks vali Elasticsearch on-prem või OpenSearch on-prem. Miks?
 5. **Mis küsimus jäi õhku?** — kirjuta see üles. Hommepool tule tagasi.
 
-
-
 ---
 
 ## Allikad
@@ -1785,7 +1801,5 @@ Päeva lõpus, enne kui klassist välja lähed, mõtle läbi:
 [^os-foundation]: Linux Foundation, "AWS and the Linux Foundation Establish the OpenSearch Software Foundation" — [https://www.linuxfoundation.org/press/aws-and-the-linux-foundation-establish-the-opensearch-software-foundation](https://www.linuxfoundation.org/press/aws-and-the-linux-foundation-establish-the-opensearch-software-foundation). Numbrid (200M+ downloads jms) on OpenSearch projekti enda 2024 aastaraportist — [https://opensearch.org](https://opensearch.org).
 
 [^aws-os-quotas]: AWS OpenSearch Service service quotas ja arhitektuuri-piirid — [https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html). Multi-AZ + standby mudel: [https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html).
-
-
 
 --8<-- "_snippets/abbr.md"

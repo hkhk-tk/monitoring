@@ -637,14 +637,19 @@ nginx: 10.0.42.7 "GET
 </section>
 
 <!-- INDEKS -->
-<section>
+<section class="diagram-slide">
   <h2>Indeks ≠ SQL "index"</h2>
-  <p style="font-size: 0.9em;">ES-i indeks = dokumentide <strong>kollektsioon</strong> (nagu SQL tabel).</p>
-  <h3>Monitooringus time-based:</h3>
-<pre>logs-nginx-2026.05.21
-logs-nginx-2026.05.22  ← täna kirjutatakse
-logs-nginx-2026.05.23</pre>
-  <div class="split">
+  <p class="muted" style="margin-bottom: 0.3em;">Kollektsioon dokumente · monitooringus time-based</p>
+  <div class="mermaid-wrap" style="min-height: 100px;">
+    <pre class="mermaid">
+flowchart LR
+  I1["logs-nginx<br/>2026.05.21<br/>suletud"] --> I2["logs-nginx<br/>2026.05.22<br/>kirjutatakse"] --> I3["logs-nginx<br/>2026.05.23"]
+  ILM["ILM policy"] -.-> I1
+  ILM -.-> I2
+  style I2 fill:#e0f2f1,stroke:#00695c
+    </pre>
+  </div>
+  <div class="split" style="margin-top: 0.5em;">
     <div class="box good-box">
       <strong>Miks päeva-kaupa?</strong>
       <ul style="font-size: 0.85em; margin-top: 6px;">
@@ -724,6 +729,41 @@ logs-nginx-2026.05.23</pre>
   </div>
 </section>
 
+<!-- ELK STACK -->
+<section class="diagram-slide">
+  <h2>Elastic Stack — tervikpilt</h2>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  subgraph Sources["Allikad"]
+    H["Host"]
+    L["Logid"]
+    A["Apps"]
+  end
+  subgraph Beats["Beats"]
+    FB["Filebeat"]
+    MB["Metricbeat"]
+    AB["Auditbeat"]
+  end
+  LS["Logstash"]
+  ES[("Elasticsearch")]
+  KB["Kibana"]
+  H --> MB
+  L --> FB
+  A --> FB
+  FB --> LS
+  MB --> LS
+  AB --> LS
+  LS --> ES
+  FB -. otse .-> ES
+  ES <--> KB
+  style ES fill:#e0f2f1,stroke:#00695c
+  style KB fill:#fce4ec,stroke:#ad1457
+  style LS fill:#f3e5f5,stroke:#4527a0
+    </pre>
+  </div>
+</section>
+
 <!-- ANDMEVOOG -->
 <section class="diagram-slide">
   <h2>Andmevoog — üldine pilt</h2>
@@ -789,9 +829,25 @@ flowchart LR
 </section>
 
 <!-- KOMPONENDID -->
-<section>
+<section class="diagram-slide">
   <h2>Komponendid — peaaegu identsed</h2>
-  <table>
+  <div class="mermaid-wrap" style="min-height: 200px;">
+    <pre class="mermaid">
+flowchart TB
+  subgraph Elastic["Elastic Stack"]
+    B1["Beats / Agent"] --> L1["Logstash"]
+    L1 --> E1[("Elasticsearch")]
+    E1 <--> K1["Kibana"]
+  end
+  subgraph OpenSearch["OpenSearch"]
+    F1["Fluent Bit / Prepper"] --> O1[("OpenSearch")]
+    O1 <--> K2["Dashboards"]
+  end
+  style E1 fill:#e0f2f1,stroke:#00695c
+  style O1 fill:#e3f2fd,stroke:#0d47a1
+    </pre>
+  </div>
+  <table style="font-size: 0.7em; margin-top: 0.4em;">
     <tr><th>Roll</th><th><span class="elastic">Elastic Stack</span></th><th><span class="os">OpenSearch</span></th></tr>
     <tr><td>Otsingumootor</td><td>Elasticsearch</td><td>OpenSearch</td></tr>
     <tr><td>UI</td><td>Kibana</td><td>OpenSearch Dashboards</td></tr>
@@ -927,15 +983,33 @@ flowchart TB
 </section>
 
 <!-- SHARDID -->
-<section>
+<section class="diagram-slide">
   <h2>Shardid — primary + replica</h2>
-  <p style="font-size: 0.85em;">Indeksi loomisel määrad:</p>
-  <ul style="font-size: 0.85em;">
-    <li><code>number_of_shards</code> (primary) — hilisem muutmine raske</li>
-    <li><code>number_of_replicas</code> — jooksvalt muudetav</li>
-  </ul>
-  <p style="font-size: 0.85em;">3 primary + 1 replica = <strong>6 shardi kokku</strong></p>
-  <div class="box warn-box" style="margin-top: 1em;">
+  <div class="mermaid-wrap" style="min-height: 200px;">
+    <pre class="mermaid">
+flowchart TB
+  subgraph N1["node-1"]
+    P0["primary 0"]
+    R2["replica 2"]
+  end
+  subgraph N2["node-2"]
+    P1["primary 1"]
+    R0["replica 0"]
+  end
+  subgraph N3["node-3"]
+    P2["primary 2"]
+    R1["replica 1"]
+  end
+  style P0 fill:#e0f2f1,stroke:#00695c
+  style P1 fill:#e0f2f1,stroke:#00695c
+  style P2 fill:#e0f2f1,stroke:#00695c
+  style R0 fill:#f1f5f9,stroke:#94a3b8
+  style R1 fill:#f1f5f9,stroke:#94a3b8
+  style R2 fill:#f1f5f9,stroke:#94a3b8
+    </pre>
+  </div>
+  <p class="muted" style="font-size: 0.82em; margin-top: 0.3em;">3 primary + 1 replica = <strong>6 shardi</strong> · <code>number_of_shards</code> hiljem raske muuta</p>
+  <div class="box warn-box" style="margin-top: 0.6em;">
     <strong>Miks YELLOW single-node klastris?</strong><br>
     <code>replicas: 1</code> → replica peab paiknema <strong>erinevas</strong> node'is → pole olemas → unassigned → <span class="warn">YELLOW</span>
   </div>
@@ -1073,9 +1147,20 @@ flowchart LR
 </section>
 
 <!-- 3 PILLAR -->
-<section>
+<section class="diagram-slide">
   <h2>Kolm observability sammast</h2>
-  <div class="split-3">
+  <div class="mermaid-wrap" style="min-height: 90px;">
+    <pre class="mermaid">
+flowchart LR
+  LOGS["Logs<br/>mis juhtus"] --> CORR["Korrelatsioon<br/>Discover / APM"]
+  MET["Metrics<br/>numbrid ajas"] --> CORR
+  TRA["Traces<br/>päringu teekond"] --> CORR
+  CORR --> RCA["Root cause"]
+  style TRA fill:#f3e5f5,stroke:#4527a0
+  style CORR fill:#e0f2f1,stroke:#00695c
+    </pre>
+  </div>
+  <div class="split-3" style="margin-top: 0.5em;">
     <div class="pillar">
       <span class="pillar-label">Logs</span>
       <h4>Logid</h4>
@@ -1199,9 +1284,19 @@ flowchart LR
 </section>
 
 <!-- ALERTING -->
-<section>
+<section class="diagram-slide">
   <h2>Alerting — Rules vs Watcher</h2>
-  <div class="box bad-box">
+  <div class="mermaid-wrap" style="min-height: 100px;">
+    <pre class="mermaid">
+flowchart LR
+  RULE["Rule<br/>KQL / threshold / APM"] --> CHK{"Tingimus<br/>5 min?"}
+  CHK -->|jah| ACT["Action<br/>Slack · PagerDuty · e-mail"]
+  CHK -->|ei| WAIT["Järgmine tsükkel"]
+  style RULE fill:#e3f2fd,stroke:#0d47a1
+  style ACT fill:#e8f5e9,stroke:#2e7d32
+    </pre>
+  </div>
+  <div class="box bad-box" style="margin-top: 0.5em;">
     <strong>Watcher</strong> = legacy, JSON-DSL, väga keeruline. <strong>Uusi ära kirjuta.</strong>
   </div>
   <div class="box good-box" style="margin-top: 0.6em;">
@@ -1266,21 +1361,31 @@ flowchart LR
 </section>
 
 <!-- INVERTED INDEX -->
-<section>
+<section class="diagram-slide">
   <h2>BM25 = lexical otsing</h2>
-  <p style="font-size: 0.85em;"><strong>Inverted index</strong> (Lucene) — sõna → dokumendid:</p>
-<pre>"error"   → [doc1, doc5, doc8]
-"timeout" → [doc1, doc12]
-"host"    → [doc2, doc5, doc8, doc12]</pre>
-  <h3>BM25 skoor sõltub:</h3>
+  <div class="split" style="margin-top: 0;">
+    <div class="mermaid-wrap" style="min-height: 180px;">
+      <pre class="mermaid">
+flowchart TB
+  Q["KQL: error AND timeout"] --> W1["sõna: error"]
+  Q --> W2["sõna: timeout"]
+  W1 --> D1["doc1, doc5, doc8"]
+  W2 --> D2["doc1, doc12"]
+  style Q fill:#e3f2fd,stroke:#0d47a1
+      </pre>
+    </div>
+    <div>
+  <h3 style="font-size: 1em;">BM25 skoor sõltub</h3>
   <ol style="font-size: 0.85em;">
     <li><strong>Term frequency</strong> — palju kordi sõna esineb</li>
     <li><strong>Inverse document frequency</strong> — kui haruldane sõna</li>
     <li><strong>Field length</strong> — lühike dokument &gt; pikk</li>
   </ol>
-  <p style="margin-top: 0.6em; font-size: 0.95em;">
-    <span class="good">Kiire, täpne, soodne</span> — Kibana Discover vaikimisi
+  <p style="margin-top: 0.6em; font-size: 0.9em;">
+    <span class="good">Kiire, täpne, soodne</span> — Discover vaikimisi
   </p>
+    </div>
+  </div>
 </section>
 
 <!-- BM25 KUKUB -->
@@ -1302,18 +1407,54 @@ SQLException: Cannot acquire connection</pre>
   </p>
 </section>
 
-<!-- VECTOR + HNSW -->
-<section>
-  <h2>Vector search + HNSW</h2>
-  <p style="font-size: 0.85em;"><strong>Embedding mudel</strong> (ELSER, e5, OpenAI, Cohere):</p>
-<pre>"DB timeout"       → [0.91, 0.12, 0.04, ...]
-"connection pool"  → [0.89, 0.15, 0.06, ...]
-"OperationalError" → [0.87, 0.14, 0.08, ...]</pre>
-  <p style="font-size: 0.85em;">Sarnased <strong>tähendused</strong> → vektorid lähedal cosine-ruumis.</p>
-  <div class="box purple-box" style="margin-top: 1em;">
-    <strong>HNSW</strong> (Hierarchical Navigable Small World) — graaf, ~5ms päring 1M vektoris (mitte 500ms brute-force).
+<!-- VECTOR EMBEDDING -->
+<section class="diagram-slide">
+  <h2>Vector search — embedding</h2>
+  <div class="mermaid-wrap" style="min-height: 120px;">
+    <pre class="mermaid">
+flowchart LR
+  T1["DB timeout"] --> E1["[0.91, 0.12, ...]"]
+  T2["connection pool"] --> E2["[0.89, 0.15, ...]"]
+  T3["OperationalError"] --> E3["[0.87, 0.14, ...]"]
+  E1 -. cosine .- E2
+  E2 -. cosine .- E3
+  style E1 fill:#e8f5e9,stroke:#2e7d32
+  style E2 fill:#e8f5e9,stroke:#2e7d32
+  style E3 fill:#e8f5e9,stroke:#2e7d32
+    </pre>
   </div>
-  <p class="callout" style="margin-top: 0.8em;"><strong>Kompromiss:</strong> RAM-kallis. Heap 2× logide-klastri kohta.</p>
+  <p class="muted" style="font-size: 0.85em;">Sarnased tähendused → vektorid lähedal · mudelid: ELSER, e5, OpenAI, Cohere</p>
+</section>
+
+<!-- HNSW -->
+<section class="diagram-slide">
+  <h2>HNSW — kiire ANN otsing</h2>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart TD
+  subgraph L2["Kiht 2 — vähe sõlmi"]
+    L2A(("A")) --- L2B(("B")) --- L2C(("C"))
+  end
+  subgraph L1["Kiht 1"]
+    L1A(("A")) --- L1D(("D"))
+    L1B(("B")) --- L1E(("E"))
+    L1B --- L1A
+  end
+  subgraph L0["Kiht 0 — kõik dokumendid"]
+    N1(("1")) --- N2(("2"))
+    N2 --- N3(("3"))
+    N3 --- N4(("4"))
+    N4 --- N5(("5"))
+  end
+  Q["Päring q"] -.-> L2A
+  L2A -.-> L1A
+  L1A -.-> N4
+  N4 -.-> N5
+  style Q fill:#fff8e1,stroke:#e65100
+  style N5 fill:#e8f5e9,stroke:#2e7d32
+    </pre>
+  </div>
+  <p class="callout" style="margin-top: 0.4em; font-size: 0.85em;"><strong>~5 ms</strong> 1M vektoris vs brute-force ~500 ms · <strong>Kompromiss:</strong> RAM-kallis</p>
 </section>
 
 <!-- RAG -->
@@ -1348,9 +1489,24 @@ flowchart TD
 </section>
 
 <!-- OTSUSTAMINE -->
-<section>
+<section class="diagram-slide">
   <h2>Otsustamise raam (monitooring)</h2>
-  <table>
+  <div class="mermaid-wrap" style="min-height: 140px;">
+    <pre class="mermaid">
+flowchart TD
+  START["Kasutusjuht"] --> Q1{"Operatiivlogid<br/>konkreetsed sõnad?"}
+  Q1 -->|jah| BM25["BM25 / KQL"]
+  Q1 -->|ei| Q2{"Tähendus /<br/>semantika?"}
+  Q2 -->|jah| VEC["Vector / hybrid"]
+  Q2 -->|ei| Q3{"Incident + LLM?"}
+  Q3 -->|jah| RAG["Hybrid + RAG"]
+  Q3 -->|ei| ML["ML anomaly"]
+  style BM25 fill:#e0f2f1,stroke:#00695c
+  style VEC fill:#f3e5f5,stroke:#4527a0
+  style RAG fill:#e8eaf6,stroke:#4527a0
+    </pre>
+  </div>
+  <table style="font-size: 0.68em; margin-top: 0.3em;">
     <tr><th>Kasutusjuhus</th><th>Vali</th></tr>
     <tr><td>Operatiivlogid (<code>error</code>, <code>timeout</code>)</td><td><strong>BM25</strong></td></tr>
     <tr><td>Audit / compliance</td><td>BM25 + filtrid</td></tr>
@@ -1505,9 +1661,8 @@ mermaid.initialize({
   flowchart: { htmlLabels: true, curve: 'basis' }
 });
 
-async function renderMermaidInSlide(slide) {
-  if (!slide) return;
-  const nodes = slide.querySelectorAll('.mermaid:not([data-processed])');
+async function renderAllMermaid() {
+  const nodes = document.querySelectorAll('.reveal .mermaid:not([data-processed])');
   if (nodes.length) {
     await mermaid.run({ nodes: Array.from(nodes), suppressErrors: true });
   }
@@ -1526,10 +1681,7 @@ Reveal.initialize({
   minScale: 0.4,
   maxScale: 1.8,
   plugins: [ RevealNotes, RevealHighlight ]
-}).then(() => {
-  renderMermaidInSlide(Reveal.getCurrentSlide());
-  Reveal.on('slidechanged', (event) => renderMermaidInSlide(event.currentSlide));
-});
+}).then(() => renderAllMermaid());
 </script>
 </body>
 </html>
