@@ -105,7 +105,7 @@ nav:
 - Avaleht: index.md
 
 - "Päev 1 — Prometheus + Grafana":
-  - "Kava": materials/paev1-kava.md
+  - "Kava": teacher/paev1-kava.md
   - "Loeng 1: Observability": materials/lectures/paev1-observability.md
   - "Loeng 2: Prometheus + Grafana": materials/lectures/paev1-loeng.md
   - "Labor": labs/01_prometheus_grafana/lab.md
@@ -118,14 +118,14 @@ nav:
   - "Labor: Loki": labs/02_zabbix_loki/loki_lab.md
 
 - "Päev 3 — ELK Stack & OpenSearch":
-  - "Kava": materials/paev3-kava.md
+  - "Kava": teacher/paev3-kava.md
   - "Loeng: ELK & OS — kust tuli, kus on, kuhu läheb": materials/lectures/paev3-elk-loeng.md
   - "Lisalugemine: Vector search, RAG ja AI": materials/lectures/paev3-vector-rag-lisalugemine.md
   - "Lisalugemine: RAG retrieval — BM25, vector, hübriid": materials/lectures/paev3-rag-hybrid-monitooring.md
   - "Labor": labs/03_elk_stack/lab.md
 
 - "Päev 4 — TICK + Kesksed logimissüsteemid":
-  - "Kava": materials/paev4-kava.md
+  - "Kava": teacher/paev4-kava.md
   - "Loeng: TICK Stack — aegread": materials/lectures/intro-to-tick-stack.md
   - "TICK labor": labs/04_tick_keskne_logimine/tick_lab.md
   - "Ülevaade": labs/04_tick_keskne_logimine/keskne_logimine.md
