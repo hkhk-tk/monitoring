@@ -10,7 +10,7 @@ tags:
 
 # Päev 4 — Kava ja ettevalmistus
 
-**23. mai 2026 · 10:00–14:30 · Haapsalu KHK**
+**30. mai 2026 · 10:00–14:30 · Haapsalu KHK**
 **Teema:** TICK Stack (InfluxDB 3) + kesksed logimissüsteemid ja SIEM
 
 ---
@@ -32,8 +32,8 @@ Päev on kahes osas. **Hommik:** aegread ja TICK Stack käed-külge omal VM-il. 
 | 12:40–13:00 | 20 | **SIEM kui mõiste** — logimine vs SIEM, EDR/XDR/SOAR/MDR kihid lühidalt, NIS2 kontekst | Klass |
 | 13:00–13:30 | 30 | **Wazuh — konkreetne SIEM** — arhitektuur (agent/manager/indexer/dashboard), Wazuhi indekseerija = OpenSearch (side päev 3-le), Active Response kontsept. **Demo kui testitud**, muidu screenshot-läbikäik | Klass |
 | 13:30–13:40 | 10 | ☕ Paus | — |
-| 13:40–14:00 | 20 | **Apache Kafka logimises** — miks puhver, producers → Kafka → consumers, Eesti Panga / Fujitsu skaala. Kontseptuaalne, installi ei tee | Klass |
-| 14:00–14:25 | 25 | **Kokkuvõte: logimise + SIEM maastik** — tabel tahvlile (Loki vs ELK vs OpenSearch vs Wazuh/SIEM), kriteeriumid. "Mida teie oma organisatsioonis?" | Klass |
+| 13:40–14:00 | 20 | **Apache Kafka logimises** — miks puhver, producers → Kafka → consumers, suure mahuga keskkonna skaala. Kontseptuaalne, installi ei tee | Klass |
+| 14:00–14:25 | 25 | **Kokkuvõte: logimise + SIEM maastik** — tabel tahvlile ([cheat sheet](../materials/lectures/paev4-cheat-sheet.md)). "Mida teie oma organisatsioonis?" | Klass |
 | 14:25–14:30 | 5 | Refleksioon + kodutöö (lab osad 5–7) | Klass |
 
 **Aja jaotus:** TICK hands-on ~65 min · loeng/bridge ~85 min · arutelu + kokkuvõte ~45 min · pausid + lõuna 50 min · algus/lõpp 25 min.
@@ -49,8 +49,8 @@ Päev järgib **Kolbi tsüklit**, aga kahe erineva rütmiga:
 
 **Lugemine:**
 
-1. [TICK Stack — aegreade monitooring](lectures/intro-to-tick-stack.md) — eelduslik, enne hommiku-laborit
-2. SIEM ja kesksed logimissüsteemid — pärastlõuna materjal *(loeng repos eraldi)*
+1. [Päev 4 loeng](../materials/lectures/paev4-loeng.md) — eelduslik enne klassi (~90 min); klassis 10:00–14:30 jutustus + lab
+2. [Otsustustabelid](../materials/lectures/paev4-cheat-sheet.md) — valikuline, klassi kokkuvõtteks
 
 Need on **eelduslikud**. Klassiajal hommikul teeme, ei loe — aeg on praktikaks.
 

@@ -126,9 +126,9 @@ nav:
 
 - "Päev 4 — TICK + Kesksed logimissüsteemid":
   - "Kava": teacher/paev4-kava.md
-  - "Loeng: TICK Stack — aegread": materials/lectures/intro-to-tick-stack.md
+  - "Loeng: aegread, keskne logimine ja SIEM": materials/lectures/paev4-loeng.md
+  - "Otsustustabelid (cheat sheet)": materials/lectures/paev4-cheat-sheet.md
   - "TICK labor": labs/04_tick_keskne_logimine/tick_lab.md
-  - "Ülevaade": labs/04_tick_keskne_logimine/keskne_logimine.md
 
 - "Päev 5 — Tempo + OTel + Kokkuvõte":
   - "Labor": labs/05_tempo_otel/lab.md

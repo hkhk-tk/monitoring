@@ -4,7 +4,7 @@
 
 **Tase:** kesktase
 
-**Eeldused:** Päev 1 (Docker Compose, Prometheus pull-mudel, Grafana). Aegrida-mõiste, line protocol ja andmemudel (tag/field/timestamp) — loe enne labi [Päev 4: TICK Stack loeng](../../materials/lectures/intro-to-tick-stack.md). SQL `SELECT`, `WHERE`, `GROUP BY` põhialused.
+**Eeldused:** Päev 1 (Docker Compose, Prometheus pull-mudel, Grafana). Aegrida-mõiste, line protocol ja andmemudel (tag/field/timestamp) — loe enne labi [Päev 4 loeng](../../materials/lectures/paev4-loeng.md). SQL `SELECT`, `WHERE`, `GROUP BY` põhialused.
 **VM:** sinu VM (`ssh <eesnimi>@192.168.35.12X` klassivõrgust või `192.168.100.12X` VPN-ist)
 
 ---

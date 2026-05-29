@@ -37,8 +37,8 @@ Päev järgib **Kolbi õppimistsüklit**: kogemus → reflektsioon → teooria �
 
 **Lugemine (~75 min kokku):**
 
-1. [Loeng 1 — monitooring, logimine, observability](lectures/paev1-observability.md) — 35 min
-2. [Loeng 2 — Prometheus ja Grafana](lectures/paev1-loeng.md) — 50 min
+1. [Loeng 1 — monitooring, logimine, observability](../materials/lectures/paev1-observability.md) — 35 min
+2. [Loeng 2 — Prometheus ja Grafana](../materials/lectures/paev1-loeng.md) — 50 min
 
 Need on **eelduslikud**. Klassiajal teeme, ei loe — aeg on väärtuslik praktikaks.
 
@@ -75,7 +75,7 @@ Täpsed IP-d, kasutajanimed, paroolid: [VM ligipääs](../resources/vm-access.md
 
 ## Järgmine kord (25.04)
 
-Teisel päeval vaatleme **Zabbix** (agent-põhine monitooring, võrdlus Prometheus pull-mudeliga) ja **Loki** + Promtail (Grafana ökosüsteemi logimislahendus). Õpid:
+Teisel päeval vaatleme **Zabbix** (agent-põhine monitooring, võrdlus Prometheus pull-mudeliga) ja **Loki** + Alloy (Grafana ökosüsteemi logimislahendus). Õpid:
 
 - Zabbix-agendi erinevus Prometheus exporter'ist ja millal kumba eelistada
 - Loki label-indeks vs ELK täisindeks — millal kumba
