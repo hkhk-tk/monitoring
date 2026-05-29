@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#paev-4-kava-ja-ettevalmistus" class="md-skip">
+        <a href="#paev-4-tick-stack-kesksed-logimissusteemid" class="md-skip">
           Keri sisuni
         </a>
       
@@ -1204,17 +1204,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#meetod" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Meetod
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#enne-klassi" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1241,17 +1230,6 @@
     <span class="md-ellipsis">
       
         Laborikeskkond
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#arutelude-lahtekohad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Arutelude lähtekohad
       
     </span>
   </a>
@@ -1713,17 +1691,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#meetod" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Meetod
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#enne-klassi" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1750,17 +1717,6 @@
     <span class="md-ellipsis">
       
         Laborikeskkond
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#arutelude-lahtekohad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Arutelude lähtekohad
       
     </span>
   </a>
@@ -1844,141 +1800,108 @@
   
 
 
-<h1 id="paev-4-kava-ja-ettevalmistus">Päev 4 — Kava ja ettevalmistus<a class="headerlink" href="#paev-4-kava-ja-ettevalmistus" title="Lingi sektsioonile">&para;</a></h1>
-<p><strong>30. mai 2026 · 10:00–14:30 · Haapsalu KHK</strong>
-<strong>Teema:</strong> TICK Stack (InfluxDB 3) + kesksed logimissüsteemid ja SIEM</p>
-<hr />
+<h1 id="paev-4-tick-stack-kesksed-logimissusteemid">Päev 4 — TICK Stack + kesksed logimissüsteemid<a class="headerlink" href="#paev-4-tick-stack-kesksed-logimissusteemid" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>30. mai 2026 · 10:00–14:30 · Haapsalu KHK</strong></p>
+<p>Kaks osa. <strong>Hommik:</strong> aegread ja TICK Stack käed-külge omal VM-il. <strong>Pärastlõuna:</strong> kesksed logimissüsteemid ja SIEM loenguna — hands-on'i siin ei tee (OpenSearchi ehitasid päev 3; Wazuh ja Kafka on liiga rasked ühe päeva laborisse). Lab osad 5–7 jäävad koju.</p>
 <h2 id="paevakava">Päevakava<a class="headerlink" href="#paevakava" title="Lingi sektsioonile">&para;</a></h2>
-<p>Päev on kahes osas. <strong>Hommik:</strong> aegread ja TICK Stack käed-külge omal VM-il. <strong>Pärastlõuna:</strong> kesksed logimissüsteemid ja SIEM — loeng + arutelu, sest seda osa hands-on ei tee (OpenSearchi ehitasid juba päev 3, Wazuh ja Kafka on liiga rasked ühe päeva laborisse). Lab osad 5–7 jäävad koju.</p>
 <table>
 <thead>
 <tr>
 <th>Kell</th>
-<th>Min</th>
 <th>Tegevus</th>
 <th>Kus</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>10:00–10:10</td>
-<td>10</td>
-<td><strong>Kordamine</strong> — "mis vahe on Prometheuse pull-mudelil ja aegrea-andmebaasil?" Lase arvata enne seletamist</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>10:10–10:20</td>
-<td>10</td>
-<td><strong>TICK kontsept</strong> — InfluxDB 3 Core, T-I-C-K → konsolideeritud, miks aegread eraldi DB. Paralleel Prometheus+Grafanaga</td>
+<td>10:00–10:20</td>
+<td>Kordamine + TICK kontsept — pull-mudel vs aegrea-DB, T-I-C-K, miks aegread eraldi DB</td>
 <td>Klass</td>
 </tr>
 <tr>
 <td>10:20–11:05</td>
-<td>45</td>
-<td><strong>TICK hands-on</strong> — InfluxDB 3 Core + Telegraf + Explorer Docker Compose'iga, line protocol, esimene SQL päring (lab osad 1–3)</td>
+<td><strong>TICK hands-on</strong> — InfluxDB 3 Core + Telegraf + Explorer, line protocol, esimene SQL (lab 1–3)</td>
 <td>Oma VM</td>
 </tr>
 <tr>
 <td>11:05–11:15</td>
-<td>10</td>
 <td>☕ Paus</td>
 <td>—</td>
 </tr>
 <tr>
 <td>11:15–11:35</td>
-<td>20</td>
-<td><strong>Telegraf + SQL</strong> — agent kogub süsteemimeetrikad, päring SQL-iga (lab osa 4)</td>
+<td><strong>Telegraf + SQL</strong> — agent kogub süsteemimeetrikad (lab 4)</td>
 <td>Oma VM</td>
 </tr>
 <tr>
 <td>11:35–11:55</td>
-<td>20</td>
-<td><strong>Arutelu: TICK vs Prometheus</strong> — push vs pull, kardinaalsus, millal kumba (IoT/aegread vs cloud-native)</td>
+<td>Arutelu: TICK vs Prometheus — push vs pull, kardinaalsus</td>
 <td>Klass</td>
 </tr>
 <tr>
 <td>11:55–12:25</td>
-<td>30</td>
 <td>🍽️ Lõuna</td>
 <td>—</td>
 </tr>
 <tr>
-<td>12:25–12:40</td>
-<td>15</td>
-<td><strong>Bridge: kesksed logimissüsteemid</strong> — maastiku kaart tahvlile. "Nägite Loki (päev 2), ELK + OpenSearch (päev 3). Mis veel ja miks?"</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>12:40–13:00</td>
-<td>20</td>
-<td><strong>SIEM kui mõiste</strong> — logimine vs SIEM, EDR/XDR/SOAR/MDR kihid lühidalt, NIS2 kontekst</td>
+<td>12:25–13:00</td>
+<td>Kesksed logimissüsteemid + SIEM mõiste — logimine vs SIEM, EDR/XDR/SOAR, NIS2</td>
 <td>Klass</td>
 </tr>
 <tr>
 <td>13:00–13:30</td>
-<td>30</td>
-<td><strong>Wazuh — konkreetne SIEM</strong> — arhitektuur (agent/manager/indexer/dashboard), Wazuhi indekseerija = OpenSearch (side päev 3-le), Active Response kontsept. <strong>Demo kui testitud</strong>, muidu screenshot-läbikäik</td>
+<td><strong>Wazuh</strong> — arhitektuur (agent/manager/indexer/dashboard), indekseerija = OpenSearch, Active Response</td>
 <td>Klass</td>
 </tr>
 <tr>
 <td>13:30–13:40</td>
-<td>10</td>
 <td>☕ Paus</td>
 <td>—</td>
 </tr>
 <tr>
 <td>13:40–14:00</td>
-<td>20</td>
-<td><strong>Apache Kafka logimises</strong> — miks puhver, producers → Kafka → consumers, suure mahuga keskkonna skaala. Kontseptuaalne, installi ei tee</td>
+<td>Apache Kafka logitorudes — miks puhver, producers → Kafka → consumers</td>
 <td>Klass</td>
 </tr>
 <tr>
 <td>14:00–14:25</td>
-<td>25</td>
-<td><strong>Kokkuvõte: logimise + SIEM maastik</strong> — tabel tahvlile (<a href="../../materials/lectures/paev4-cheat-sheet/">cheat sheet</a>). "Mida teie oma organisatsioonis?"</td>
+<td>Kokkuvõte: logimise + SIEM maastik (<a href="../../materials/lectures/paev4-cheat-sheet/">cheat sheet</a>)</td>
 <td>Klass</td>
 </tr>
 <tr>
 <td>14:25–14:30</td>
-<td>5</td>
-<td>Refleksioon + kodutöö (lab osad 5–7)</td>
+<td>Refleksioon + kodutöö (lab 5–7)</td>
 <td>Klass</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Aja jaotus:</strong> TICK hands-on ~65 min · loeng/bridge ~85 min · arutelu + kokkuvõte ~45 min · pausid + lõuna 50 min · algus/lõpp 25 min.</p>
-<h2 id="meetod">Meetod<a class="headerlink" href="#meetod" title="Lingi sektsioonile">&para;</a></h2>
-<p>Päev järgib <strong>Kolbi tsüklit</strong>, aga kahe erineva rütmiga:</p>
-<ul>
-<li><strong>Hommik (TICK)</strong> — kogemus enne teooriat. InfluxDB 3 läheb käima enne, kui seletame line protocoli ja aegrea-mudelit. Sa kirjutad ise iga punkti ja iga SQL päringu, ei vaata ekraanilt.</li>
-<li><strong>Pärastlõuna (SIEM + maastik)</strong> — kontseptuaalne, sest hands-on'i siin ei jõua. Rõhk on <strong>valima oskamisel</strong>, mitte nimede teadmisel: millal TICK, millal SIEM, millal Kafka-puhver. Iga ploki järel arutelu "mis on teil tööl".</li>
-</ul>
 <h2 id="enne-klassi">Enne klassi<a class="headerlink" href="#enne-klassi" title="Lingi sektsioonile">&para;</a></h2>
-<p><strong>Lugemine:</strong></p>
-<ol>
-<li><a href="../../materials/lectures/paev4-loeng/">Päev 4 loeng</a> — eelduslik enne klassi (~90 min); klassis 10:00–14:30 jutustus + lab</li>
-<li><a href="../../materials/lectures/paev4-cheat-sheet/">Otsustustabelid</a> — valikuline, klassi kokkuvõtteks</li>
-</ol>
-<p>Need on <strong>eelduslikud</strong>. Klassiajal hommikul teeme, ei loe — aeg on praktikaks.</p>
-<p><strong>Tehniline kontroll:</strong></p>
+<p><strong>Loe ette</strong> (klassiajal teeme, ei loe): <a href="../../materials/lectures/paev4-loeng/">Päev 4 loeng</a> (~90 min). <a href="../../materials/lectures/paev4-cheat-sheet/">Otsustustabelid</a> on valikuline.</p>
+<p><strong>Kontrolli oma VM:</strong></p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SSH ligipääs VM-ile töötab (<a href="../../resources/vm-access/">vm-access</a>)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> VPN ühendub (kui töötad kodust)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Päev 3 ELK/OpenSearch stack VM-il <strong>maha pandud</strong> (<code>docker compose down</code> — vabasta mälu, TICK vajab ~2 GB)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker</code> ja <code>docker compose</code> VM-il töötavad</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SSH + VPN töötab (<a href="../../resources/vm-access/">VM ligipääs</a>)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Päev 3 ELK/OpenSearch stack maas: <code>docker compose down</code> (TICK vajab ~2 GB vaba mälu)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker</code> ja <code>docker compose</code> töötavad</li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Kui <code>docker pull</code> jääb toppama</p>
+<p>Kui näed <code>Image ... Pulling</code> ja see ei liigu: VM-il pole töötavat IPv6 ühendust, aga Docker proovib seda enne IPv4-le langemist. Lülita IPv6 välja ja proovi uuesti:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-w<span class="w"> </span>net.ipv6.conf.all.disable_ipv6<span class="o">=</span><span class="m">1</span><span class="w"> </span>net.ipv6.conf.default.disable_ipv6<span class="o">=</span><span class="m">1</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
+</span></code></pre></div></p>
+</div>
 <h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
 <p>Päeva lõpuks osaleja:</p>
 <ul>
 <li><strong>Selgitab</strong>, miks aegread vajavad eraldi andmebaasi (mitte PostgreSQL-i), ja toob kaks olukorda kummagi — InfluxDB ja Prometheus — kasuks</li>
 <li><strong>Ehitab</strong> InfluxDB 3 Core + Telegraf + Explorer stacki Docker Compose'iga, loob tokeni ja andmebaasi</li>
 <li><strong>Kirjutab</strong> line protocol rea ja päringustab andmeid SQL-iga</li>
-<li><strong>Eristab</strong> lihtsat logimist ja SIEM-i, ning kirjeldab Wazuhi nelja komponenti ja Active Response'i rolli</li>
+<li><strong>Eristab</strong> lihtsat logimist ja SIEM-i, kirjeldab Wazuhi nelja komponenti ja Active Response'i rolli</li>
 <li><strong>Põhjendab</strong>, miks Kafka logitorudes puhvrina eksisteerib</li>
-<li><strong>Valib</strong> kesksete logimislahenduste vahel (Loki / ELK / OpenSearch / SIEM) kriteeriumide alusel oma organisatsiooni kontekstis</li>
+<li><strong>Valib</strong> kesksete logimislahenduste vahel (Loki / ELK / OpenSearch / SIEM) oma organisatsiooni kontekstis</li>
 </ul>
 <h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Lingi sektsioonile">&para;</a></h2>
-<p>Iga osaleja: oma VM (4 GB RAM, 2 CPU, Docker eelinstallitud). TICK on kerge — InfluxDB 3 Core + Explorer + Telegraf mahuvad mängleva kergusega, kui päev 3 stack on maas.</p>
+<p>Oma VM: 4 GB RAM, 2 CPU, Docker eelinstallitud. TICK on kerge ja mahub mängleva kergusega, kui päev 3 stack on maas.</p>
 <table>
 <thead>
 <tr>
@@ -2006,31 +1929,8 @@
 </tbody>
 </table>
 <p>Täpsed IP-d, kasutajanimed, paroolid: <a href="../../resources/vm-access/">VM ligipääs</a>.</p>
-<h2 id="arutelude-lahtekohad">Arutelude lähtekohad<a class="headerlink" href="#arutelude-lahtekohad" title="Lingi sektsioonile">&para;</a></h2>
-<p>Klassis arutame <strong>konkreetseid asju teie töökeskkonnast</strong> — need pole testiküsimused.</p>
-<p><strong>TICK vs Prometheus (11:35):</strong></p>
-<ul>
-<li>Kus su praeguses süsteemis aegread juba tekivad — ja kas Prometheus piisab, või tuleks pikaajaliseks hoiuks eraldi TSDB?</li>
-<li>Push vs pull — kumb su keskkonda paremini sobib ja miks?</li>
-</ul>
-<p><strong>SIEM (pärastlõuna):</strong></p>
-<ul>
-<li>Kas su organisatsioon on <strong>NIS2</strong> mõjualas? Mis see logimisele ja juhtumikäsitlusele tähendab?</li>
-<li>Kasutate juba SIEM-i (Splunk, Sentinel, Wazuh, midagi muud), või on logid praegu "ainult logid"?</li>
-<li>Kui ehitaksid Wazuhi piloodi — millised hostid esimesena, mis reeglid?</li>
-</ul>
-<p><strong>Maastik (kokkuvõte):</strong></p>
-<ul>
-<li>Loki vs ELK vs OpenSearch vs SIEM — maksumus, keerukus, skaala, otsinguvõimekus. Mida teie oma kontekstis valiksite?</li>
-</ul>
 <h2 id="jargmine-kord-606">Järgmine kord (6.06)<a class="headerlink" href="#jargmine-kord-606" title="Lingi sektsioonile">&para;</a></h2>
-<p>Viiendal päeval <strong>Tempo + OpenTelemetry</strong> — hajutatud jälgimine (distributed tracing), kolmas sammas. Seome kõik viis päeva kokku <strong>LGTM stackiga</strong> (Loki + Grafana + Tempo + Mimir) ja vaatame <strong>2026 trende</strong>. Õpid:</p>
-<ul>
-<li>Trace, span, context propagation — kuidas üks päring läbi mitme teenuse jälgitavaks teha</li>
-<li>OpenTelemetry kui vendor-neutraalne standard instrumenteerimisele</li>
-<li>Kus kogu kursuse jooksul õpitu (metrics, logs, traces) ühte pildi kokku saab</li>
-</ul>
-<p>Eeltöö: päeva 4 labori kodutöö (osad 5–7) esitatud.</p>
+<p><strong>Päev 5 — Tempo + OpenTelemetry</strong>: hajutatud jälgimine (distributed tracing), kolmas sammas. Seome kõik viis päeva kokku <strong>LGTM stackiga</strong> (Loki + Grafana + Tempo + Mimir) ja vaatame 2026 trende. Eeltöö: päev 4 kodutöö (lab osad 5–7) esitatud.</p>
 
 
 
@@ -2051,7 +1951,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="29. mai 2026 18:42:59 UTC">29. mai 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="29. mai 2026 21:16:40 UTC">29. mai 2026</span>
   </span>
 
     
