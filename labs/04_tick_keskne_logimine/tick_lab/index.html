@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/labs/04_tick_keskne_logimine/tick_lab/">
       
       
-        <link rel="prev" href="../../03_elk_stack/lab/">
+        <link rel="prev" href="../../../materials/lectures/intro-to-tick-stack/">
       
       
         <link rel="next" href="../keskne_logimine/">
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#paev-4-tick-stack-labor" class="md-skip">
+        <a href="#paev-4-tick-stack-influxdb-3-core-telegraf-ja-aegread-labor" class="md-skip">
           Keri sisuni
         </a>
       
@@ -246,7 +246,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../materials/paev1-kava/" class="md-tabs__link">
+        <a href="../../../materials/paev1-kava.md" class="md-tabs__link">
           
   
   
@@ -290,7 +290,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../materials/paev3-kava/" class="md-tabs__link">
+        <a href="../../../materials/paev3-kava.md" class="md-tabs__link">
           
   
   
@@ -314,7 +314,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../../../materials/paev4-kava.md" class="md-tabs__link">
           
   
   
@@ -523,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/paev1-kava/" class="md-nav__link">
+      <a href="../../../materials/paev1-kava.md" class="md-nav__link">
         
   
   
@@ -919,7 +919,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../materials/paev3-kava/" class="md-nav__link">
+      <a href="../../../materials/paev3-kava.md" class="md-nav__link">
         
   
   
@@ -1074,6 +1074,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1121,6 +1125,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/paev4-kava.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/intro-to-tick-stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: TICK Stack — aegread
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1189,10 +1249,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#eesmark" class="md-nav__link">
+  <a href="#miks-see-labor" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Eesmärk
+        Miks see labor
       
     </span>
   </a>
@@ -1200,10 +1260,337 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#labistruktuur-skelett" class="md-nav__link">
+  <a href="#opivaljundid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Labistruktuur (skelett)
+        🎯 Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#labi-struktuur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Labi struktuur
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eeltoo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eeltöö
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-1-influxdb-3-core-ules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 1 · InfluxDB 3 Core üles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 1 · InfluxDB 3 Core üles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-baas-ainult-influxdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Baas — ainult InfluxDB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-operator-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Operator token
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-andmebaas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Andmebaas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-2-line-protocol-kasitsi-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 2 · Line protocol käsitsi + SQL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 2 · Line protocol käsitsi + SQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-uks-punkt-kasitsi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Üks punkt käsitsi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-sql-paring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 SQL päring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-3-explorer-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 3 · Explorer UI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 3 · Explorer UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-lisa-explorer-composei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Lisa Explorer compose'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-uhenda-ja-pari-visuaalselt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Ühenda ja päri visuaalselt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-4-telegraf-agent-kogub-automaatselt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 4 · Telegraf — agent kogub automaatselt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 4 · Telegraf — agent kogub automaatselt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-telegrafi-config-baas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Telegrafi config — baas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-lisa-telegraf-composei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Lisa Telegraf compose'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-pari-telegrafi-andmeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Päri Telegrafi andmeid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-lisa-veel-inpute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Lisa veel inpute
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-5-sql-sugavamalt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 5 · SQL sügavamalt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-6-dual-output-tootmismuster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 6 · Dual-output — tootmismuster
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-7-mqtt-sensor-maitseproov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 7 · MQTT sensor — maitseproov
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 7 · MQTT sensor — maitseproov">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-lisa-mosquitto-broker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Lisa Mosquitto broker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-telegraf-mqtt-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Telegraf MQTT input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-simuleeri-sensorit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Simuleeri sensorit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lopukontroll-tehnika-arusaamine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Lõpukontroll (tehnika + arusaamine)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lisaulesanded-kellel-veel-aega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Lisaülesanded (kellel veel aega)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#veaotsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Veaotsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Allikad
       
     </span>
   </a>
@@ -1587,10 +1974,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#eesmark" class="md-nav__link">
+  <a href="#miks-see-labor" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Eesmärk
+        Miks see labor
       
     </span>
   </a>
@@ -1598,10 +1985,337 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#labistruktuur-skelett" class="md-nav__link">
+  <a href="#opivaljundid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Labistruktuur (skelett)
+        🎯 Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#labi-struktuur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Labi struktuur
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eeltoo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eeltöö
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-1-influxdb-3-core-ules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 1 · InfluxDB 3 Core üles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 1 · InfluxDB 3 Core üles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-baas-ainult-influxdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Baas — ainult InfluxDB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-operator-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Operator token
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-andmebaas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Andmebaas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-2-line-protocol-kasitsi-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 2 · Line protocol käsitsi + SQL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 2 · Line protocol käsitsi + SQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-uks-punkt-kasitsi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Üks punkt käsitsi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-sql-paring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 SQL päring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-3-explorer-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 3 · Explorer UI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 3 · Explorer UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-lisa-explorer-composei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Lisa Explorer compose'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-uhenda-ja-pari-visuaalselt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Ühenda ja päri visuaalselt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-4-telegraf-agent-kogub-automaatselt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 4 · Telegraf — agent kogub automaatselt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 4 · Telegraf — agent kogub automaatselt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-telegrafi-config-baas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Telegrafi config — baas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-lisa-telegraf-composei" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Lisa Telegraf compose'i
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-pari-telegrafi-andmeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Päri Telegrafi andmeid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-lisa-veel-inpute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Lisa veel inpute
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-5-sql-sugavamalt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 5 · SQL sügavamalt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-6-dual-output-tootmismuster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 6 · Dual-output — tootmismuster
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-7-mqtt-sensor-maitseproov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 7 · MQTT sensor — maitseproov
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 7 · MQTT sensor — maitseproov">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-lisa-mosquitto-broker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Lisa Mosquitto broker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-telegraf-mqtt-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Telegraf MQTT input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-simuleeri-sensorit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Simuleeri sensorit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lopukontroll-tehnika-arusaamine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Lõpukontroll (tehnika + arusaamine)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lisaulesanded-kellel-veel-aega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Lisaülesanded (kellel veel aega)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#veaotsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Veaotsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Allikad
       
     </span>
   </a>
@@ -1628,46 +2342,552 @@
   
 
 
-<h1 id="paev-4-tick-stack-labor">Päev 4: TICK Stack — Labor<a class="headerlink" href="#paev-4-tick-stack-labor" title="Lingi sektsioonile">&para;</a></h1>
-<p><em>Tuleb 23. mail</em></p>
+<h1 id="paev-4-tick-stack-influxdb-3-core-telegraf-ja-aegread-labor">Päev 4: TICK Stack — InfluxDB 3 Core, Telegraf ja aegread (labor)<a class="headerlink" href="#paev-4-tick-stack-influxdb-3-core-telegraf-ja-aegread-labor" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>Kestus:</strong> ~4 tundi (klassitöö umbes 2.5 h, ülejäänu kodused lisaülesanded)</p>
+<p><strong>Tase:</strong> kesktase</p>
+<p><strong>Eeldused:</strong> Päev 1 (Docker Compose, Prometheus pull-mudel, Grafana). Aegrida-mõiste, line protocol ja andmemudel (tag/field/timestamp) — loe enne labi <a href="../../../materials/lectures/intro-to-tick-stack/">Päev 4: TICK Stack loeng</a>. SQL <code>SELECT</code>, <code>WHERE</code>, <code>GROUP BY</code> põhialused.
+<strong>VM:</strong> sinu VM (<code>ssh &lt;eesnimi&gt;@192.168.35.12X</code> klassivõrgust või <code>192.168.100.12X</code> VPN-ist)</p>
 <hr />
-<div class="admonition info">
-<p class="admonition-title">Ettevalmistus</p>
-<p>Puhasta eelmine stack: <code>cd ~/paev3 &amp;&amp; docker compose down -v</code></p>
-</div>
-<div class="admonition abstract">
-<p class="admonition-title">TL;DR</p>
-<p>Päev 4 eesmärk on näha alternatiivset metrics‑mõtlemist (InfluxDB/Telegraf) ja siduda see “kesksed logimissüsteemid” suurema pildiga: millal mis tööriist on mõistlik.</p>
-</div>
-<hr />
-<h2 id="eesmark">Eesmärk<a class="headerlink" href="#eesmark" title="Lingi sektsioonile">&para;</a></h2>
-<p>Selle labori lõpuks osaleja:
-- seab TICK stacki üles ja näeb andmeid dashboardil
-- mõistab, mis on Telegrafi roll (agent/collector)
-- oskab sõnastada, kus TICK sobitub vs Prometheus</p>
-<hr />
-<h2 id="labistruktuur-skelett">Labistruktuur (skelett)<a class="headerlink" href="#labistruktuur-skelett" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="miks-see-labor">Miks see labor<a class="headerlink" href="#miks-see-labor" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päev 1 kasutasid Prometheust — pull-mudel, mõõdikud, PromQL. See töötab suurepäraselt serverite ja konteinerite jaoks. Aga kui andmeid tuleb teistmoodi — tuhanded sensorid, igaüks saadab väärtuse iga sekund, miljoneid punkte päevas — siis on vaja <strong>spetsialiseeritud aegreade andmebaasi</strong>. Loengus nägid, miks ja kuidas TICK arenes. Täna paned selle ise püsti.</p>
+<p>Sellest labist tuled välja viie oskusega:</p>
 <ol>
-<li>Stack üles (compose)</li>
-<li>Andmete kogumine (Telegraf)</li>
-<li>Influx query / dashboard</li>
-<li>Võrdlus Prometheusega (andmemudel, query, retention)</li>
+<li><strong>InfluxDB 3 Core</strong> püsti, token-autentimisega, üks andmebaas loodud.</li>
+<li><strong>Line protocol</strong> — kirjutad esimese punkti käsitsi ja näed toorvormingut.</li>
+<li><strong>SQL aegridade peal</strong> — päring nii käsurealt kui Exploreri UI-st.</li>
+<li><strong>Telegraf</strong> kogub su VM-i süsteemimeetrikaid automaatselt InfluxDB-sse.</li>
+<li><strong>Dual-output</strong> — sama agent saadab andmed kahte sihtkohta korraga (tootmismuster).</li>
+</ol>
+<p>Erinevalt päev 3 ELK-klastrist on TICK kerge — InfluxDB 3 Core + Explorer + Telegraf mahuvad 4 GB VM-i mängleva kergusega.</p>
+<hr />
+<h2 id="opivaljundid">🎯 Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Teadmised:</strong></p>
+<ol>
+<li>Selgitab, miks aegread vajavad eraldi andmebaasi (mitte PostgreSQL-i) — meenuta loengut.</li>
+<li>Loeb ja kirjutab line protocol rea: tabel, tag-set, field-set, ajatempel.</li>
+<li>Põhjendab, mis on Telegrafi roll agendina ja millal eelistada teda <code>node_exporter</code>-ile.</li>
+<li>Toob vähemalt kaks olukorda, kus eelistada InfluxDB-d, ja kaks, kus Prometheust.</li>
+</ol>
+<p><strong>Oskused:</strong></p>
+<ol>
+<li>Käivitab InfluxDB 3 Core Docker Compose'iga ja loob operator-tokeni + andmebaasi.</li>
+<li>Kirjutab andmeid line protocol vormingus käsitsi ja päringustab SQL-iga.</li>
+<li>Seadistab Telegrafi koguma süsteemimeetrikaid ja saatma neid InfluxDB-sse.</li>
+<li>Konfigureerib Telegrafi saatma sama voogu kahte sihtkohta (dual-output).</li>
 </ol>
 <hr />
-<details>
-<summary><strong>Veaotsing + allikad (peida/ava)</strong></summary>
-
-## Veaotsing
-
-- `docker compose ps` / `docker compose logs <teenus>` on esimene samm
-- Kui andmeid ei tule, kontrolli Telegrafi konfiguratsiooni ja ühendusi
-
-## Allikad
-
-- InfluxDB docs: <https://docs.influxdata.com/>
-- Telegraf: <https://docs.influxdata.com/telegraf/>
-
+<h2 id="labi-struktuur">Labi struktuur<a class="headerlink" href="#labi-struktuur" title="Lingi sektsioonile">&para;</a></h2>
+<p>Labor on seitsmes osas. Klassis jõuad tavaliselt osadeni 1–4 (põhi-stack püsti ja andmed voolavad); osa 5–7 ja lisaülesanded võivad jääda koju.</p>
+<table>
+<thead>
+<tr>
+<th>Osa</th>
+<th>Teema</th>
+<th>~aeg</th>
+<th>Mida sa mõistad lõpus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>InfluxDB 3 Core üles + token + andmebaas</td>
+<td>15 min</td>
+<td>Server elab, miks token, mis on database</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Line protocol käsitsi + SQL päring</td>
+<td>15 min</td>
+<td>Toorvorming, kuidas SQL aegridade peal töötab</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Explorer UI</td>
+<td>10 min</td>
+<td>Visuaalne haldus ja päring</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Telegraf → süsteemimeetrikad</td>
+<td>20 min</td>
+<td>Agent kogub, andmed voolavad automaatselt</td>
+</tr>
+<tr>
+<td>5</td>
+<td>SQL sügavamalt</td>
+<td>20 min</td>
+<td><code>DATE_BIN</code>, agregeerimine, tag-filter</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Dual-output</td>
+<td>15 min</td>
+<td>Sama agent, kaks sihtkohta — tootmismuster</td>
+</tr>
+<tr>
+<td>7</td>
+<td>MQTT sensor maitseproov</td>
+<td>25 min</td>
+<td>Miks TSDB tööstuses ja IoT-s domineerib</td>
+</tr>
+</tbody>
+</table>
+<p>Töökaust: <code>~/paev4</code>. TICK on eraldi ökosüsteem (mitte Grafana LGTM), seega uus kaust on õige.</p>
+<hr />
+<h2 id="eeltoo">Eeltöö<a class="headerlink" href="#eeltoo" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päev 3 ELK/OpenSearch stack võtab palju mälu. Pane see maha:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>~/paev3/elk<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>~/paev3/os<span class="w">  </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>free<span class="w"> </span>-h
+</span></code></pre></div>
+<p>Vaba mälu võiks olla vähemalt 2 GB — TICK ei vaja rohkem. Loo töökaust:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/paev4<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/paev4
+</span></code></pre></div>
+<hr />
+<h2 id="osa-1-influxdb-3-core-ules">Osa 1 · InfluxDB 3 Core üles<a class="headerlink" href="#osa-1-influxdb-3-core-ules" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> loengust tead, et aegread vajavad eraldi andmebaasi. InfluxDB 3 Core on selle uus avatud lähtekoodiga versioon — andmed kettal Parquet-failidena, päring SQL-iga. Autentimine on <strong>vaikimisi sees</strong> — server ei tee midagi ilma tokenita. See on uus võrreldes vanade InfluxDB versioonidega ja sunnib sind kohe token-loogikaga tegelema.</p>
+</blockquote>
+<h3 id="11-baas-ainult-influxdb">1.1 Baas — ainult InfluxDB<a class="headerlink" href="#11-baas-ainult-influxdb" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loo <code>~/paev4/docker-compose.yml</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">influxdb3-core</span><span class="p">:</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:3-core</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb3-core</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8181:8181&quot;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb3</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serve</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--node-id=node0</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--object-store=file</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--data-dir=/var/lib/influxdb3/data</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb3-data:/var/lib/influxdb3/data</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="nt">influxdb3-data</span><span class="p">:</span>
+</span></code></pre></div>
+<p>Pane tähele <code>command:</code> plokki — <code>influxdb3 serve</code> vajab <code>--node-id</code> (selle server identifitseerib end nii) ja <code>--object-store=file</code> (andmed lokaalsele kettale, mitte S3-le). Käivita:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>~/paev4
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>influxdb3-core
+</span></code></pre></div>
+<p>Oota ~15 sekundit ja testi:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>http://localhost:8181/health
+</span></code></pre></div>
+<p>Vastuseks tuleb <code>OK</code> (server elab). Päringuid veel teha ei saa — pole tokenit.</p>
+<div class="admonition tip">
+<p class="admonition-title">Kui curl annab Connection refused</p>
+<p>Server alles käivitub, oota veel umbes 10 sekundit. Kui jääb püsima, vaata <code>docker compose logs influxdb3-core</code>.</p>
+</div>
+<h3 id="12-operator-token">1.2 Operator token<a class="headerlink" href="#12-operator-token" title="Lingi sektsioonile">&para;</a></h3>
+<p>Server ei tee midagi ilma autentimiseta. Esimene token, mille lood, on <strong>operator token</strong> — täisõigustega võti. Loo see konteineri seest:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>create<span class="w"> </span>token<span class="w"> </span>--admin
+</span></code></pre></div>
+<p>Väljund sisaldab pikka token-stringi (algab <code>apiv3_...</code>). <strong>Kopeeri see kohe</strong> — InfluxDB näitab tokenit ainult üks kord, hiljem ei saa seda kätte.</p>
+<p>Salvesta token shell-muutujasse, et järgmised käsud oleksid lihtsamad:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">TOKEN</span><span class="o">=</span><span class="s2">&quot;apiv3_...kleebi_oma_token_siia...&quot;</span>
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Kui kaotad tokeni</p>
+<p>Lihtsaim on <code>docker compose down -v</code> (kustutab andmed) ja alustad uuesti. Tootmises seda ei juhtu — token läheb saladuste-haldurisse.</p>
+</div>
+<h3 id="13-andmebaas">1.3 Andmebaas<a class="headerlink" href="#13-andmebaas" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loo andmebaas nimega <code>mon</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>create<span class="w"> </span>database<span class="w"> </span>mon<span class="w"> </span>--token<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<p>Kontrolli:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>show<span class="w"> </span>databases<span class="w"> </span>--token<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<p>Nimekirjas on <code>mon</code>. InfluxDB 3-s on <strong>database</strong> ülemine tase (vanas 1.x oli see "database + retention policy", 2.x "bucket" — meenuta loengu andmemudeli tabelit).</p>
+<details class="question">
+<summary>Mõtle</summary>
+<p>Miks on token-autentimine vaikimisi sees mõistlik vaikeväärtus aegreade-andmebaasile, mis tihti kogub tundlikke sensori- või äriandmeid? Mis oleks risk, kui see oleks vaikimisi väljas?</p>
 </details>
+<hr />
+<h2 id="osa-2-line-protocol-kasitsi-sql">Osa 2 · Line protocol käsitsi + SQL<a class="headerlink" href="#osa-2-line-protocol-kasitsi-sql" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> enne kui agent andmeid automaatselt saadab, kirjuta üks punkt <strong>käsitsi</strong>, et näha toorvormingut. Line protocol on tekstivorming, milles kõik InfluxDB-sse jõuab — Telegraf, curl, klient, kõik toodavad lõpuks sama. Kui näed seda korra käsitsi, mõistad ülejäänut.</p>
+</blockquote>
+<h3 id="21-uks-punkt-kasitsi">2.1 Üks punkt käsitsi<a class="headerlink" href="#21-uks-punkt-kasitsi" title="Lingi sektsioonile">&para;</a></h3>
+<p>Line protocol struktuur (meenuta loengut): <code>tabel,tag-set field-set ajatempel</code>. Saada üks punkt HTTP API kaudu:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:8181/api/v3/write_lp?db=mon&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>--data-raw<span class="w"> </span><span class="s1">&#39;cpu_manual,host=minu-vm,region=klass usage=42.0&#39;</span>
+</span></code></pre></div>
+<p>Lahti võetuna:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cpu_manual,host=minu-vm,region=klass usage=42.0
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>│          └── tag-set (indekseeritud)        └── field (väärtus)
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>└── tabel (measurement)
+</span></code></pre></div>
+<p>Ajatempli jätsime välja — InfluxDB paneb selle ise (praegune hetk). Saada veel paar punkti erinevate väärtustega:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:8181/api/v3/write_lp?db=mon&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span>--data-raw<span class="w"> </span><span class="s1">&#39;cpu_manual,host=minu-vm,region=klass usage=55.5</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s1">cpu_manual,host=minu-vm,region=klass usage=78.1</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s1">cpu_manual,host=teine-vm,region=klass usage=12.0&#39;</span>
+</span></code></pre></div>
+<p>Iga rida on üks punkt. Pane tähele: teine <code>host</code> (<code>teine-vm</code>) loob automaatselt uue seeria — tag'i muutus eraldab andmed.</p>
+<div class="admonition tip">
+<p class="admonition-title">Kui saad 400 Bad Request</p>
+<p>Vaata, et tag-set ja field-set vahel oleks <strong>tühik</strong>, ja et <code>field</code> oleks <code>võti=väärtus</code> kujul. Line protocol on tühiku-tundlik.</p>
+</div>
+<h3 id="22-sql-paring">2.2 SQL päring<a class="headerlink" href="#22-sql-paring" title="Lingi sektsioonile">&para;</a></h3>
+<p>InfluxDB 3 päringukeel on <strong>SQL</strong> (sama loogika, mis PostgreSQL-is). Päri kõik:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>query<span class="w"> </span>--database<span class="w"> </span>mon<span class="w"> </span>--token<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="s2">&quot;SELECT * FROM cpu_manual&quot;</span>
+</span></code></pre></div>
+<p>Näed nelja rida, igal <code>host</code>, <code>region</code>, <code>usage</code>, <code>time</code>. Proovi filtrit ja agregaati:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>query<span class="w"> </span>--database<span class="w"> </span>mon<span class="w"> </span>--token<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="s2">&quot;SELECT host, AVG(usage) FROM cpu_manual GROUP BY host&quot;</span>
+</span></code></pre></div>
+<p><code>minu-vm</code> keskmine on kolme punkti keskmine, <code>teine-vm</code> üks punkt. See on tavaline SQL — <code>time</code> veerg lihtsalt tuleb iga tabeliga automaatselt kaasa.</p>
+<details class="question">
+<summary>Mõtle</summary>
+<p>Sa just kirjutasid SQL-i aegridade peal. Mille poolest erineb see Prometheuse PromQL-ist (päev 1)? Kumb tundub loomulikum andmebaasi-taustaga inimesele, kumb monitooringu-taustaga inimesele?</p>
+</details>
+<hr />
+<h2 id="osa-3-explorer-ui">Osa 3 · Explorer UI<a class="headerlink" href="#osa-3-explorer-ui" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> käsurida on hea, aga aegridade juures tahad sa graafikut näha. InfluxDB 3 Explorer on eraldi veebiliides — sama, mida InfluxData ametlikult 3.x ajastul kasutab (vana Chronograf on asendatud). Lisame ta samasse stacki.</p>
+</blockquote>
+<h3 id="31-lisa-explorer-composei">3.1 Lisa Explorer compose'i<a class="headerlink" href="#31-lisa-explorer-composei" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lisa <code>docker-compose.yml</code>-i, <code>services:</code> alla (enne <code>volumes:</code> plokki):</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="w">  </span><span class="nt">explorer</span><span class="p">:</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdata/influxdb3-ui:1.8.0</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb3-explorer</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8888:8080&quot;</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--mode=admin&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">explorer-db:/db</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb3-core</span>
+</span></code></pre></div>
+<p>Ja lisa <code>volumes:</code> plokki rida:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="w">  </span><span class="nt">explorer-db</span><span class="p">:</span>
+</span></code></pre></div>
+<p>Käivita ainult Explorer:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>explorer
+</span></code></pre></div>
+<p><code>--mode=admin</code> annab täisõigused (kirjutamine + haldus); ilma selleta oleks Explorer read-only. Konteiner kuulab sees pordil 8080, me avaldame selle hostil pordina 8888.</p>
+<h3 id="32-uhenda-ja-pari-visuaalselt">3.2 Ühenda ja päri visuaalselt<a class="headerlink" href="#32-uhenda-ja-pari-visuaalselt" title="Lingi sektsioonile">&para;</a></h3>
+<p>Ava brauserist <code>http://&lt;sinu-VM-IP&gt;:8888</code> (klassivõrgus <code>192.168.35.12X</code>, VPN-ist <code>192.168.100.12X</code>).</p>
+<p>Esimesel avamisel küsib Explorer ühenduse andmeid:</p>
+<ul>
+<li><strong>Server URL:</strong> <code>http://influxdb3-core:8181</code> — kasuta konteineri nime, mitte <code>localhost</code>, sest Explorer ja InfluxDB on samas Docker-võrgus.</li>
+<li><strong>Token:</strong> sinu operator token (<code>$TOKEN</code> väärtus).</li>
+<li><strong>Database:</strong> <code>mon</code>.</li>
+</ul>
+<p>Pärast ühendamist vali <code>mon</code> andmebaas ja kirjuta sama SQL:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cpu_manual</span>
+</span></code></pre></div>
+<p>Näed tabelit ja saad lülitada graafiku-vaatesse. Sama päring, mille tegid käsurealt, aga nüüd visuaalselt.</p>
+<div class="admonition tip">
+<p class="admonition-title">Kui Explorer ütleb connection failed</p>
+<p>Kontrolli, et Server URL on <code>http://influxdb3-core:8181</code> (konteineri nimi), mitte <code>localhost:8181</code>. <code>localhost</code> viitaks Exploreri enda konteinerile, mitte InfluxDB-le.</p>
+</div>
+<details class="question">
+<summary>Mõtle</summary>
+<p>Explorer on InfluxDB-spetsiifiline. Päev 1 kasutasid Grafanat, mis töötab paljude andmeallikate peal. Millal eelistaksid tööriista-spetsiifilist UI-d (Explorer) ja millal universaalset (Grafana)?</p>
+</details>
+<hr />
+<h2 id="osa-4-telegraf-agent-kogub-automaatselt">Osa 4 · Telegraf — agent kogub automaatselt<a class="headerlink" href="#osa-4-telegraf-agent-kogub-automaatselt" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> seni kirjutasid andmeid käsitsi. Päriselus teeb seda <strong>agent</strong>, mis jookseb taustal ja kogub pidevalt. Telegraf on TICK-ist kõige elavam tükk: ~300 input-pluginat, töötab ükskõik millise sihtkohaga. Kõige tähtsam — sama Telegraf, mida sa siin seadistad, töötab homme tööl ükskõik millise TSDB-ga.</p>
+</blockquote>
+<h3 id="41-telegrafi-config-baas">4.1 Telegrafi config — baas<a class="headerlink" href="#41-telegrafi-config-baas" title="Lingi sektsioonile">&para;</a></h3>
+<p>Loo <code>~/paev4/telegraf.conf</code>. Alusta minimaalsest: agent + üks input + output.</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">[agent]</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;10s&quot;</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;minu-vm&quot;</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># INPUT: kogub CPU mõõdikud</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="k">[[inputs.cpu]]</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">  </span><span class="n">percpu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">  </span><span class="n">totalcpu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="c1"># OUTPUT: saadab InfluxDB 3 Core&#39;i (v2-ühilduva API kaudu)</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="k">[[outputs.influxdb_v2]]</span>
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">  </span><span class="n">urls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;http://influxdb3-core:8181&quot;</span><span class="p">]</span>
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">  </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;${INFLUX_TOKEN}&quot;</span>
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">  </span><span class="n">organization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="w">  </span><span class="n">bucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mon&quot;</span>
+</span></code></pre></div>
+<p>Kaks asja, mida tasub mõista:</p>
+<ul>
+<li><strong><code>outputs.influxdb_v2</code></strong> — InfluxDB 3 Core võtab vastu vana v2 write-API kaudu, seega kasutame <code>influxdb_v2</code> output-pluginat. <code>bucket</code> = andmebaasi nimi (<code>mon</code>), <code>organization</code> jääb tühjaks (Core ei kasuta seda).</li>
+<li><strong><code>${INFLUX_TOKEN}</code></strong> — Telegraf loeb tokeni keskkonnamuutujast, et seda ei peaks faili kirjutama.</li>
+</ul>
+<h3 id="42-lisa-telegraf-composei">4.2 Lisa Telegraf compose'i<a class="headerlink" href="#42-lisa-telegraf-composei" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lisa <code>services:</code> alla:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="w">  </span><span class="nt">telegraf</span><span class="p">:</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telegraf:1.34</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telegraf</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INFLUX_TOKEN=${INFLUX_TOKEN}</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./telegraf.conf:/etc/telegraf/telegraf.conf:ro</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb3-core</span>
+</span></code></pre></div>
+<p>Telegraf loeb tokeni keskkonnast, mille me anname <code>docker compose</code>-le edasi. Ekspordi token muutuja, mida compose ootab:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">INFLUX_TOKEN</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>telegraf
+</span></code></pre></div>
+<p>Vaata Telegrafi logi:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>telegraf
+</span></code></pre></div>
+<p>Otsi rida nagu <code>Wrote batch of N metrics</code>. Kui see ilmub iga 10 sekundi tagant, voolavad andmed. Välju <code>Ctrl+C</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Kui logis on unauthorized või 401</p>
+<p><code>INFLUX_TOKEN</code> ei jõudnud Telegrafini. Kontrolli, et eksportisid muutuja <strong>enne</strong> <code>docker compose up</code>, ja et see on sama token, millega lõid andmebaasi.</p>
+</div>
+<h3 id="43-pari-telegrafi-andmeid">4.3 Päri Telegrafi andmeid<a class="headerlink" href="#43-pari-telegrafi-andmeid" title="Lingi sektsioonile">&para;</a></h3>
+<p>Telegraf lõi tabeli <code>cpu</code>. Päri seda:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>query<span class="w"> </span>--database<span class="w"> </span>mon<span class="w"> </span>--token<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="s2">&quot;SELECT time, usage_idle, usage_user FROM cpu ORDER BY time DESC LIMIT 5&quot;</span>
+</span></code></pre></div>
+<p>Näed viit viimast mõõtmist. <code>usage_idle</code> näitab jõudeoleku protsenti. Ava sama Exploreris graafikuna — näed CPU joont reaalajas kasvamas.</p>
+<h3 id="44-lisa-veel-inpute">4.4 Lisa veel inpute<a class="headerlink" href="#44-lisa-veel-inpute" title="Lingi sektsioonile">&para;</a></h3>
+<p>Nüüd, kui üks input töötab, lisa veel. Lisa <code>telegraf.conf</code>-i <code>inputs.cpu</code> järele:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">[[inputs.mem]]</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">[[inputs.disk]]</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span><span class="n">ignore_fs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tmpfs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;devtmpfs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;overlay&quot;</span><span class="p">]</span>
+</span></code></pre></div>
+<p>Rakenda muudatus (Telegraf loeb confi käivitusel):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>telegraf
+</span></code></pre></div>
+<p>Päri uut tabelit:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>query<span class="w"> </span>--database<span class="w"> </span>mon<span class="w"> </span>--token<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="s2">&quot;SELECT time, used_percent FROM mem ORDER BY time DESC LIMIT 3&quot;</span>
+</span></code></pre></div>
+<p>Iga input loob oma tabeli (<code>cpu</code>, <code>mem</code>, <code>disk</code>). Sama agent, üks config, mitu mõõdiku-allikat.</p>
+<details class="question">
+<summary>Mõtle</summary>
+<p>Telegrafil on push-mudel (agent saadab ise andmed), Prometheusel pull-mudel (server tõmbab). Päev 1 nägid pull-i. Mis olukorras on push parem — näiteks kui sensorid on tulemüüri taga ega ole väljast kättesaadavad?</p>
+</details>
+<hr />
+<h2 id="osa-5-sql-sugavamalt">Osa 5 · SQL sügavamalt<a class="headerlink" href="#osa-5-sql-sugavamalt" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> aegridade juures on tavaline küsimus mitte "mis on väärtus", vaid "mis on keskmine 1-minutilistes akendes viimase tunni jooksul". Selleks on aja-aknad.</p>
+</blockquote>
+<p>Telegraf on nüüd kogunud andmeid mõnda aega. Proovi neid päringuid (Explorer või käsurida).</p>
+<p><strong>Aja-filter</strong> — viimase 10 minuti andmed:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">time</span><span class="p">,</span><span class="w"> </span><span class="n">usage_user</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cpu</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="k">WHERE</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;10 minutes&#39;</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="k">DESC</span>
+</span></code></pre></div>
+<p><strong>Aja-aknad <code>DATE_BIN</code>-iga</strong> — keskmine CPU 1-minutilistes akendes:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">SELECT</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span><span class="n">DATE_BIN</span><span class="p">(</span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 minute&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">time</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">minut</span><span class="p">,</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">  </span><span class="k">AVG</span><span class="p">(</span><span class="n">usage_user</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">keskmine_user</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="k">FROM</span><span class="w"> </span><span class="n">cpu</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="k">WHERE</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;30 minutes&#39;</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">minut</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">minut</span><span class="w"> </span><span class="k">DESC</span>
+</span></code></pre></div>
+<p><code>DATE_BIN</code> on InfluxDB 3 SQL-i viis aega "ämbritesse" jagada — see asendab vana InfluxQL-i <code>GROUP BY time(1m)</code>. Tulemus on downsampelitud rida iga minuti kohta.</p>
+<p><strong>Maksimum ja miinimum</strong>:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">used_percent</span><span class="p">),</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="n">used_percent</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mem</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="k">WHERE</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 hour&#39;</span>
+</span></code></pre></div>
+<details class="question">
+<summary>Mõtle</summary>
+<p>Miks on <code>DATE_BIN</code>-iga agregeerimine odavam ja kasulikum kui kõigi toorpunktide tagastamine, kui sul on graafik 24 tunni jagu andmeid?</p>
+</details>
+<hr />
+<h2 id="osa-6-dual-output-tootmismuster">Osa 6 · Dual-output — tootmismuster<a class="headerlink" href="#osa-6-dual-output-tootmismuster" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> see on Telegrafi kõige väärtuslikum oskus tööturul. Sama agent saadab samad andmed <strong>kahte sihtkohta korraga</strong>. Tootmises tähendab see, et saad TSDB-d vahetada ilma agente uuesti seadistamata, või saata sama voo nii reaalaja-andmebaasi kui pikaajalisse arhiivi.</p>
+</blockquote>
+<p>Lisa <code>telegraf.conf</code>-i teine output <code>outputs.influxdb_v2</code> järele. Lihtsaim teine sihtkoht testimiseks on fail:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># Teine output: kirjuta samad andmed faili (tootmises oleks see nt teine TSDB)</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="k">[[outputs.file]]</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">  </span><span class="n">files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/tmp/telegraf-out.txt&quot;</span><span class="p">]</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">  </span><span class="n">data_format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;influx&quot;</span>
+</span></code></pre></div>
+<p>Rakenda ja vaata:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>telegraf
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>telegraf<span class="w"> </span>tail<span class="w"> </span>-5<span class="w"> </span>/tmp/telegraf-out.txt
+</span></code></pre></div>
+<p>Näed samu mõõdikuid line protocol vormingus failis — <strong>ja</strong> samal ajal InfluxDB-s. Üks kogumine, kaks sihtkohta.</p>
+<p><strong>Edasijõudnutele:</strong> asenda <code>outputs.file</code> teise päris-sihtkohaga. Kui sul on päev 1 Prometheuse stack veel olemas, proovi <code>outputs.prometheus_client</code> — siis sama Telegraf serveerib mõõdikuid ka Prometheusele scrape'imiseks. See on täpselt see muster, mida loeng kirjeldas: üks agent, InfluxDB + Prometheus korraga.</p>
+<details class="question">
+<summary>Mõtle</summary>
+<p>Sinu praeguses tööl — kui peaksid TSDB-d vahetama (nt InfluxDB → VictoriaMetrics), kui palju tööd oleks, kui kõik agendid kirjutavad otse ühte sihtkohta? Kuidas dual-output või marsruteerija (Vector, loeng) seda muudaks?</p>
+</details>
+<hr />
+<h2 id="osa-7-mqtt-sensor-maitseproov">Osa 7 · MQTT sensor — maitseproov<a class="headerlink" href="#osa-7-mqtt-sensor-maitseproov" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> siin on koht, kus TSDB-d päriselt domineerivad — tööstus, energia, nutimajad. Sensorid ei kõnele HTTP-d, nad kõnelevad <strong>MQTT</strong>-d (kerge sõnumiprotokoll). Telegrafil on MQTT input. Teeme väikese maitseproovi: üks MQTT broker, üks simuleeritud sensor, Telegraf kuulab.</p>
+</blockquote>
+<h3 id="71-lisa-mosquitto-broker">7.1 Lisa Mosquitto broker<a class="headerlink" href="#71-lisa-mosquitto-broker" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lisa <code>docker-compose.yml</code>-i <code>services:</code> alla:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="w">  </span><span class="nt">mosquitto</span><span class="p">:</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eclipse-mosquitto:2</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mosquitto</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;1883:1883&quot;</span>
+</span><span id="__span-31-6"><a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;mosquitto&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;/mosquitto-no-auth.conf&quot;</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>mosquitto
+</span></code></pre></div>
+<h3 id="72-telegraf-mqtt-input">7.2 Telegraf MQTT input<a class="headerlink" href="#72-telegraf-mqtt-input" title="Lingi sektsioonile">&para;</a></h3>
+<p>Lisa <code>telegraf.conf</code>-i:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">[[inputs.mqtt_consumer]]</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">  </span><span class="n">servers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tcp://mosquitto:1883&quot;</span><span class="p">]</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span><span class="n">topics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sensorid/+/temperatuur&quot;</span><span class="p">]</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">  </span><span class="n">data_format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;value&quot;</span>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">  </span><span class="n">data_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;float&quot;</span>
+</span><span id="__span-33-6"><a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">  </span><span class="n">name_override</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;temperatuur&quot;</span>
+</span></code></pre></div>
+<p><code>topics</code> kasutab metamärki <code>+</code> — kuulab kõiki sensoreid (<code>sensorid/saal1/temperatuur</code>, <code>sensorid/saal2/temperatuur</code> jne). Rakenda:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>telegraf
+</span></code></pre></div>
+<h3 id="73-simuleeri-sensorit">7.3 Simuleeri sensorit<a class="headerlink" href="#73-simuleeri-sensorit" title="Lingi sektsioonile">&para;</a></h3>
+<p>Saada paar mõõtmist (kasutame Mosquitto enda klienti konteinerist):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>mosquitto<span class="w"> </span>mosquitto_pub<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;sensorid/saal1/temperatuur&quot;</span><span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;21.5&quot;</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>mosquitto<span class="w"> </span>mosquitto_pub<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;sensorid/saal1/temperatuur&quot;</span><span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;22.1&quot;</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>mosquitto<span class="w"> </span>mosquitto_pub<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;sensorid/saal2/temperatuur&quot;</span><span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;19.8&quot;</span>
+</span></code></pre></div>
+<p>Päri:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>influxdb3-core<span class="w"> </span>influxdb3<span class="w"> </span>query<span class="w"> </span>--database<span class="w"> </span>mon<span class="w"> </span>--token<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">  </span><span class="s2">&quot;SELECT * FROM temperatuur ORDER BY time DESC&quot;</span>
+</span></code></pre></div>
+<p>Näed sensori-temperatuure InfluxDB-s. Sama tööriist, mis kogus CPU-d, kogub nüüd sensori-andmeid — ainult input-plugin muutus.</p>
+<details class="question">
+<summary>Mõtle</summary>
+<p>Loengus nägid, et TICK-i sugu andmebaasid domineerivad tööstuses ja IoT-s. Pärast seda harjutust — miks on Telegraf + InfluxDB selle maailma jaoks loomulikum valik kui Prometheus + node_exporter?</p>
+</details>
+<hr />
+<h2 id="lopukontroll-tehnika-arusaamine">✅ Lõpukontroll (tehnika + arusaamine)<a class="headerlink" href="#lopukontroll-tehnika-arusaamine" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Tehniline (kontrollitav):</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker compose ps</code> kaustas <code>~/paev4</code> näitab <code>influxdb3-core</code>, <code>explorer</code> ja <code>telegraf</code> olekus <code>Up</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>curl http://localhost:8181/health</code> vastab <code>OK</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>influxdb3 show databases</code> näitab andmebaasi <code>mon</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Kirjutasid käsitsi line protocol punkti ja nägid seda <code>SELECT * FROM cpu_manual</code> väljundis.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explorer UI ühendub <code>http://influxdb3-core:8181</code> peale ja näitab sinu andmeid graafikuna.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Telegrafi logis on näha <code>Wrote batch of N metrics</code> iga ~10 s tagant.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>SELECT ... FROM cpu</code> tagastab Telegrafi kogutud reaalseid mõõdikuid.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> (Osa 5) <code>DATE_BIN</code>-iga päring tagastab ühe rea minuti kohta, mitte kõiki toorpunkte.</li>
+</ul>
+<p><strong>Arusaamine (vasta peast):</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad ühe lausega selgitada, miks aegread ei sobi tavalisse SQL-andmebaasi suure mahu juures.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Oskad lugeda line protocol rida ja nimetada, kus on tabel, tag, field, ajatempel.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Suudad nimetada kaks olukorda, kus eelistad Telegrafi <code>node_exporter</code>-ile, ja kaks vastupidi.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Selgitad, mis vahe on push- (Telegraf) ja pull-mudelil (Prometheus) ning millal kumb sobib.</li>
+</ul>
+<hr />
+<h2 id="lisaulesanded-kellel-veel-aega">🚀 Lisaülesanded (kellel veel aega)<a class="headerlink" href="#lisaulesanded-kellel-veel-aega" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>A. Grafana InfluxDB peal.</strong> Kui sul on päev 1 Grafana stack veel alles, lisa InfluxDB 3 datasource (SQL/FlightSQL) ja ehita CPU dashboard. Sama Grafana, mis töötas Prometheuse peal, töötab ka TSDB peal — see on LGTM-põhimõte praktikas.</p>
+<p><strong>B. Docker input.</strong> Lisa <code>[[inputs.docker]]</code> Telegrafi confi (mount <code>/var/run/docker.sock</code>). Nüüd jälgib Telegraf su konteinerite ressursikasutust — sama VM, uus mõõdikute allikas.</p>
+<p><strong>C. Retention.</strong> Explorer 1.8 oskab andmebaasile retention-perioodi seada. Sea <code>mon</code> andmebaasile 7-päevane retention ja mõtle, miks aegridade puhul on automaatne vanade andmete kustutamine olulisem kui tavalises andmebaasis.</p>
+<p><strong>D. Cardinality katse.</strong> Kirjuta line protocol punkte, kus iga punkt on uue unikaalse <code>host</code> tag-väärtusega (nt <code>host=vm-1</code>, <code>host=vm-2</code> ... <code>host=vm-1000</code>). See kasvatab cardinality't. Mõtle, miks see on TSDB suurim peavalu (meenuta loengut).</p>
+<hr />
+<h2 id="veaotsing">Veaotsing<a class="headerlink" href="#veaotsing" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Probleem</th>
+<th>Kontroll</th>
+<th>Lahendus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curl localhost:8181/health</code> → Connection refused</td>
+<td><code>docker compose ps</code></td>
+<td>Server alles käivitub või ei tööta. <code>docker compose logs influxdb3-core</code>.</td>
+</tr>
+<tr>
+<td><code>create token</code> ei anna tokenit</td>
+<td><code>docker compose logs influxdb3-core</code></td>
+<td>Server pole valmis. Oota ja proovi uuesti.</td>
+</tr>
+<tr>
+<td>Kõik käsud → <code>401 unauthorized</code></td>
+<td><code>echo $TOKEN</code></td>
+<td><code>$TOKEN</code> on tühi või vale. Loo uus token või kontrolli muutujat.</td>
+</tr>
+<tr>
+<td>Telegraf logis <code>401</code>/<code>unauthorized</code></td>
+<td><code>docker exec telegraf env \| grep INFLUX</code></td>
+<td><code>INFLUX_TOKEN</code> ei jõudnud konteinerisse. Ekspordi muutuja ja <code>docker compose up -d telegraf</code> uuesti.</td>
+</tr>
+<tr>
+<td>Telegraf <code>connection refused</code> InfluxDB-le</td>
+<td><code>urls</code> confis</td>
+<td>Peab olema <code>http://influxdb3-core:8181</code> (konteineri nimi), mitte <code>localhost</code>.</td>
+</tr>
+<tr>
+<td>Explorer "connection failed"</td>
+<td>Server URL UI-s</td>
+<td>Kasuta <code>http://influxdb3-core:8181</code>, mitte <code>localhost:8181</code>.</td>
+</tr>
+<tr>
+<td><code>400 Bad Request</code> line protocol kirjutamisel</td>
+<td>rea süntaks</td>
+<td>Tag-set ja field-set vahel peab olema tühik; field on <code>võti=väärtus</code>.</td>
+</tr>
+<tr>
+<td>SQL päring → tabelit ei leita</td>
+<td><code>influxdb3 query "SELECT table_name FROM information_schema.tables"</code></td>
+<td>Andmeid pole veel kirjutatud või tabeli nimi vale.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="allikad">📚 Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Allikas</th>
+<th>URL</th>
+<th>Miks oluline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>InfluxDB 3 Core docs</td>
+<td><a href="https://docs.influxdata.com/influxdb3/core/">https://docs.influxdata.com/influxdb3/core/</a></td>
+<td>Ametlik seadistus- ja CLI-viide.</td>
+</tr>
+<tr>
+<td>InfluxDB 3 Core — Get started</td>
+<td><a href="https://docs.influxdata.com/influxdb3/core/get-started/">https://docs.influxdata.com/influxdb3/core/get-started/</a></td>
+<td>Setup, write, query samm-sammult.</td>
+</tr>
+<tr>
+<td>Line protocol viide</td>
+<td><a href="https://docs.influxdata.com/influxdb3/core/reference/line-protocol/">https://docs.influxdata.com/influxdb3/core/reference/line-protocol/</a></td>
+<td>Toorvormingu täpne süntaks.</td>
+</tr>
+<tr>
+<td>InfluxDB 3 Explorer docs</td>
+<td><a href="https://docs.influxdata.com/influxdb3/explorer/">https://docs.influxdata.com/influxdb3/explorer/</a></td>
+<td>UI seadistus ja kasutus.</td>
+</tr>
+<tr>
+<td>Telegraf docs + pluginad</td>
+<td><a href="https://docs.influxdata.com/telegraf/v1/">https://docs.influxdata.com/telegraf/v1/</a></td>
+<td>~300 input/output plugina viide.</td>
+</tr>
+<tr>
+<td>Telegraf InfluxDB 3 output</td>
+<td><a href="https://docs.influxdata.com/influxdb3/core/write-data/use-telegraf/">https://docs.influxdata.com/influxdb3/core/write-data/use-telegraf/</a></td>
+<td><code>influxdb_v2</code> output InfluxDB 3-le.</td>
+</tr>
+<tr>
+<td>SQL viide (InfluxDB 3)</td>
+<td><a href="https://docs.influxdata.com/influxdb3/core/reference/sql/">https://docs.influxdata.com/influxdb3/core/reference/sql/</a></td>
+<td><code>DATE_BIN</code>, agregaadid, aja-funktsioonid.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1688,7 +2908,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23. aprill 2026 11:01:58 UTC">23. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="29. mai 2026 16:21:32 UTC">29. mai 2026</span>
   </span>
 
     

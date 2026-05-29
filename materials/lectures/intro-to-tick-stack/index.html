@@ -12,29 +12,31 @@
         <meta name="author" content="Maria Talvik">
       
       
-        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/">
+        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/intro-to-tick-stack/">
       
       
+        <link rel="prev" href="../../../labs/03_elk_stack/lab/">
       
-        <link rel="next" href="materials/lectures/paev1-observability/">
+      
+        <link rel="next" href="../../../labs/04_tick_keskne_logimine/tick_lab/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Loeng: TICK Stack — aegread - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.v2.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.v2.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#kaasaegne-it-susteemide-monitooring-ja-jalgitavus" class="md-skip">
+        <a href="#tick-stack-aegreade-monitooring" class="md-skip">
           Keri sisuni
         </a>
       
@@ -96,7 +98,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Päis">
-    <a href="." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -116,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Avaleht
+              Loeng: TICK Stack — aegread
             
           </span>
         </div>
@@ -221,11 +223,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -246,7 +246,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="materials/paev1-kava.md" class="md-tabs__link">
+        <a href="../../paev1-kava.md" class="md-tabs__link">
           
   
   
@@ -268,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="materials/lectures/paev2-zabbix/" class="md-tabs__link">
+        <a href="../paev2-zabbix/" class="md-tabs__link">
           
   
   
@@ -290,7 +290,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="materials/paev3-kava.md" class="md-tabs__link">
+        <a href="../../paev3-kava.md" class="md-tabs__link">
           
   
   
@@ -308,11 +308,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="materials/paev4-kava.md" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../paev4-kava.md" class="md-tabs__link">
           
   
   
@@ -334,7 +336,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="labs/05_tempo_otel/lab/" class="md-tabs__link">
+        <a href="../../../labs/05_tempo_otel/lab/" class="md-tabs__link">
           
   
   
@@ -356,7 +358,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="resources/vm-access/" class="md-tabs__link">
+        <a href="../../../resources/vm-access/" class="md-tabs__link">
           
   
   
@@ -398,7 +400,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -425,37 +427,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Avaleht
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -471,142 +446,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#ajakava" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ajakava
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#laborikeskkond" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Laborikeskkond
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kuidas-me-tootame" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kuidas me töötame
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mida-monitoorime" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Mida monitoorime
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#paevade-ulevaade" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päevade ülevaade
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Päevade ülevaade">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#paev-1-prometheus-grafana" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 1: Prometheus + Grafana
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-2-zabbix-loki" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 2: Zabbix + Loki
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-3-elastic-stack" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 3: Elastic Stack
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-4-tick-stack-laiem-pilt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 4: TICK Stack + laiem pilt
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-5-lgtm-tervik-tulevik" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 5: LGTM tervik + Tulevik
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -684,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/paev1-kava.md" class="md-nav__link">
+      <a href="../../paev1-kava.md" class="md-nav__link">
         
   
   
@@ -712,7 +551,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/lectures/paev1-observability/" class="md-nav__link">
+      <a href="../paev1-observability/" class="md-nav__link">
         
   
   
@@ -740,7 +579,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/lectures/paev1-loeng/" class="md-nav__link">
+      <a href="../paev1-loeng/" class="md-nav__link">
         
   
   
@@ -768,7 +607,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/01_prometheus_grafana/lab/" class="md-nav__link">
+      <a href="../../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
         
   
   
@@ -796,7 +635,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
+      <a href="../../../labs/01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
         
   
   
@@ -895,7 +734,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/lectures/paev2-zabbix/" class="md-nav__link">
+      <a href="../paev2-zabbix/" class="md-nav__link">
         
   
   
@@ -923,7 +762,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/lectures/paev2-loki/" class="md-nav__link">
+      <a href="../paev2-loki/" class="md-nav__link">
         
   
   
@@ -951,7 +790,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
+      <a href="../../../labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
         
   
   
@@ -979,7 +818,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
+      <a href="../../../labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
         
   
   
@@ -1080,7 +919,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/paev3-kava.md" class="md-nav__link">
+      <a href="../../paev3-kava.md" class="md-nav__link">
         
   
   
@@ -1108,7 +947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/lectures/paev3-elk-loeng/" class="md-nav__link">
+      <a href="../paev3-elk-loeng/" class="md-nav__link">
         
   
   
@@ -1136,7 +975,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/lectures/paev3-vector-rag-lisalugemine/" class="md-nav__link">
+      <a href="../paev3-vector-rag-lisalugemine/" class="md-nav__link">
         
   
   
@@ -1164,7 +1003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/lectures/paev3-rag-hybrid-monitooring/" class="md-nav__link">
+      <a href="../paev3-rag-hybrid-monitooring/" class="md-nav__link">
         
   
   
@@ -1192,7 +1031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/03_elk_stack/lab/" class="md-nav__link">
+      <a href="../../../labs/03_elk_stack/lab/" class="md-nav__link">
         
   
   
@@ -1224,8 +1063,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -1241,21 +1082,22 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -1273,7 +1115,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1291,7 +1133,7 @@
   
   
     <li class="md-nav__item">
-      <a href="materials/paev4-kava.md" class="md-nav__link">
+      <a href="../../paev4-kava.md" class="md-nav__link">
         
   
   
@@ -1316,10 +1158,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="materials/lectures/intro-to-tick-stack/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: TICK Stack — aegread
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1335,6 +1204,114 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#miks-me-seda-opime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Miks me seda õpime?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mis-on-aegreadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mis on aegreadata?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kuidas-tick-stack-sundis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kuidas TICK Stack sündis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kolm-ajastut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kolm ajastut
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#andmemudel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Andmemudel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paringukeeled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Päringukeeled
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kokkuvote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokkuvõte
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💭 Mõtle
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1347,7 +1324,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
+      <a href="../../../labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
         
   
   
@@ -1375,7 +1352,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
+      <a href="../../../labs/04_tick_keskne_logimine/keskne_logimine/" class="md-nav__link">
         
   
   
@@ -1470,7 +1447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/05_tempo_otel/lab/" class="md-nav__link">
+      <a href="../../../labs/05_tempo_otel/lab/" class="md-nav__link">
         
   
   
@@ -1498,7 +1475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="labs/05_tempo_otel/trendid/" class="md-nav__link">
+      <a href="../../../labs/05_tempo_otel/trendid/" class="md-nav__link">
         
   
   
@@ -1597,7 +1574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="resources/vm-access/" class="md-nav__link">
+      <a href="../../../resources/vm-access/" class="md-nav__link">
         
   
   
@@ -1625,7 +1602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="resources/grafana-stack/" class="md-nav__link">
+      <a href="../../../resources/grafana-stack/" class="md-nav__link">
         
   
   
@@ -1653,7 +1630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="resources/docker-cheatsheet/" class="md-nav__link">
+      <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
         
   
   
@@ -1681,7 +1658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="resources/material-style/" class="md-nav__link">
+      <a href="../../../resources/material-style/" class="md-nav__link">
         
   
   
@@ -1736,10 +1713,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ajakava" class="md-nav__link">
+  <a href="#miks-me-seda-opime" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ajakava
+        Miks me seda õpime?
       
     </span>
   </a>
@@ -1747,10 +1724,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#laborikeskkond" class="md-nav__link">
+  <a href="#mis-on-aegreadata" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Laborikeskkond
+        Mis on aegreadata?
       
     </span>
   </a>
@@ -1758,10 +1735,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#kuidas-me-tootame" class="md-nav__link">
+  <a href="#kuidas-tick-stack-sundis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kuidas me töötame
+        Kuidas TICK Stack sündis
       
     </span>
   </a>
@@ -1769,10 +1746,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mida-monitoorime" class="md-nav__link">
+  <a href="#kolm-ajastut" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mida monitoorime
+        Kolm ajastut
       
     </span>
   </a>
@@ -1780,74 +1757,46 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paevade-ulevaade" class="md-nav__link">
+  <a href="#andmemudel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Päevade ülevaade
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Päevade ülevaade">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#paev-1-prometheus-grafana" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 1: Prometheus + Grafana
+        Andmemudel
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-2-zabbix-loki" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#paringukeeled" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Päev 2: Zabbix + Loki
+        Päringukeeled
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-3-elastic-stack" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#kokkuvote" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Päev 3: Elastic Stack
+        Kokkuvõte
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-4-tick-stack-laiem-pilt" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#motle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Päev 4: TICK Stack + laiem pilt
+        💭 Mõtle
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paev-5-lgtm-tervik-tulevik" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päev 5: LGTM tervik + Tulevik
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1871,88 +1820,180 @@
   
 
 
-<h1 id="kaasaegne-it-susteemide-monitooring-ja-jalgitavus">Kaasaegne IT-süsteemide monitooring ja jälgitavus<a class="headerlink" href="#kaasaegne-it-susteemide-monitooring-ja-jalgitavus" title="Lingi sektsioonile">&para;</a></h1>
-<p><strong>Täienduskoolitus</strong> · 26 akadeemilist tundi · 5 laupäeva · Haapsalu KHK · 2026</p>
+<h1 id="tick-stack-aegreade-monitooring">TICK Stack — Aegreade monitooring<a class="headerlink" href="#tick-stack-aegreade-monitooring" title="Lingi sektsioonile">&para;</a></h1>
+<h2 id="miks-me-seda-opime">Miks me seda õpime?<a class="headerlink" href="#miks-me-seda-opime" title="Lingi sektsioonile">&para;</a></h2>
+<p>Tunned ilmselt juba Prometheust ja Grafanat. Need töötavad suurepäraselt Kubernetese ja mikroteenuste jaoks. Aga kujuta ette teistsugust maailma — tehast tuhandete sensoritega, igaüks saadab temperatuuri või vibratsiooni iga sekund. Miljoneid andmepunkte päevas. Või Bolti sõidud: GPS-koordinaadid, kiirus, aku tase pidevas vormis.</p>
+<p>Sellist andmevoogu nimetatakse <strong>aegreadateks</strong> (time series data). Prometheus saab mingi määrani hakkama, aga tööstuses — Tesla tootmisliinidest Siemensi tuulikuteni, NASA rakettidest Starshipi robotkulleriteni — domineerivad <strong>spetsialiseeritud aegreade andmebaasid</strong>. Kõige populaarsem neist on InfluxDB, mille populaarsus DB-Engines edetabelis on kolm korda kõrgem kui lähima konkurendi oma.</p>
+<p>Eesti kontekstis on see relevantne — Skeleton Technologies, Starship, Bolt, kõik töötavad aegreadatega. TICK Stack on tööturul hinnatud oskus.</p>
+<p>Tänane tund: mis see on, kuidas see arenes, ja miks laboris kasutame just <strong>InfluxDB 3 Core</strong>'i.</p>
 <hr />
-<h2 id="ajakava">Ajakava<a class="headerlink" href="#ajakava" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="mis-on-aegreadata">Mis on aegreadata?<a class="headerlink" href="#mis-on-aegreadata" title="Lingi sektsioonile">&para;</a></h2>
+<p>Tavaline andmebaas (MySQL, PostgreSQL) on ehitatud tehingute jaoks. E-poes klient teeb tellimuse, laoseis muutub — sündmust võib hiljem muuta või kustutada.</p>
+<p>Aegreadata on fundamentaalselt erinev. Temperatuurisensor ütleb iga 10 sekundi tagant "praegu 23.5 kraadi". Vanu näite ei muudeta — see <strong>OLI</strong> sel hetkel 23.5. Sa ainult lisad uusi punkte, ja sind huvitab peamiselt "mis juhtus ajas".</p>
 <table>
 <thead>
 <tr>
-<th>Päev</th>
-<th>Kuupäev</th>
-<th>Kell</th>
-<th>Teemad</th>
+<th>Tavaline andmebaas</th>
+<th>Aegreade andmebaas</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>18. aprill</td>
-<td>10:00–14:30</td>
-<td>Monitooringu alused + Prometheus + Grafana</td>
+<td>Üksikud tehingud</td>
+<td>Pidev andmevoog</td>
 </tr>
 <tr>
-<td>2</td>
-<td>25. aprill</td>
-<td>10:00–14:30</td>
-<td>Zabbix + Loki</td>
+<td>Andmeid muudetakse</td>
+<td>Ainult lisatakse</td>
 </tr>
 <tr>
-<td>3</td>
-<td>9. mai</td>
-<td>10:00–14:30</td>
-<td>Elastic Stack (ELK)</td>
+<td>"Mis on praegune seis?"</td>
+<td>"Mis juhtus ajas?"</td>
 </tr>
 <tr>
-<td>4</td>
-<td>23. mai</td>
-<td>10:00–14:30</td>
-<td>TICK Stack + Kesksed logimissüsteemid</td>
-</tr>
-<tr>
-<td>5</td>
-<td>6. juuni</td>
-<td>10:00–14:30</td>
-<td>Tempo + OpenTelemetry + LGTM tervik + Trendid</td>
+<td>Sadu kirjutamisi sekundis</td>
+<td>Miljoneid kirjutamisi sekundis</td>
 </tr>
 </tbody>
 </table>
-<h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Lingi sektsioonile">&para;</a></h2>
-<p>Igal osalejal on isiklik virtuaalmasin (4GB RAM, Docker eelinstallitud):</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mon-&lt;sinu-nimi&gt;       — sinu Docker host (192.168.5.12X)
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mon-target            — jagatud Linux server (192.168.5.140)
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mon-target-web        — jagatud veebiserver (192.168.5.141)
-</span></code></pre></div>
-<p>Ligipääs: <code>ssh student@192.168.5.12X</code> (parool jagatakse kohapeal)</p>
-<h2 id="kuidas-me-tootame">Kuidas me töötame<a class="headerlink" href="#kuidas-me-tootame" title="Lingi sektsioonile">&para;</a></h2>
-<p>Iga teema on ehitatud üles tsüklitena:</p>
-<ol>
-<li><strong>Probleem</strong> — reaalse olukorra kirjeldus (5 min)</li>
-<li><strong>Käed külge</strong> — Docker Compose üles, konfig tehtud (25 min)</li>
-<li><strong>Mini-teooria</strong> — nüüd selgitame miks see nii töötab (10 min)</li>
-<li><strong>Väljakutse</strong> — iseseisvalt lahendatav ülesanne (10 min)</li>
-</ol>
-<p>Teooria tuleb <strong>pärast</strong> praktikat, mitte enne. Iga päev alustame ja lõpetame lühikese aruteluga.</p>
-<h2 id="mida-monitoorime">Mida monitoorime<a class="headerlink" href="#mida-monitoorime" title="Lingi sektsioonile">&para;</a></h2>
-<p>Kaks jagatud target-masinat simuleerivad "tootmiskeskkonda":</p>
-<ul>
-<li><strong>mon-target</strong> — Linux server kus jooksevad teenused ja genereeritakse logisid (sh vigaseid)</li>
-<li><strong>mon-target-web</strong> — Nginx veebiserver kus tekivad HTTP vead ja aeglased päringud</li>
-</ul>
-<p>Koolitaja tekitab jooksvalt probleeme — teie ülesanne on need oma monitooringust leida.</p>
-<h2 id="paevade-ulevaade">Päevade ülevaade<a class="headerlink" href="#paevade-ulevaade" title="Lingi sektsioonile">&para;</a></h2>
-<h3 id="paev-1-prometheus-grafana">Päev 1: Prometheus + Grafana<a class="headerlink" href="#paev-1-prometheus-grafana" title="Lingi sektsioonile">&para;</a></h3>
-<p>Metrics-sammas. Prometheus kogub mõõdikuid, Grafana visualiseerib. Lõpuks on teil töötav dashboard alertidega.</p>
-<h3 id="paev-2-zabbix-loki">Päev 2: Zabbix + Loki<a class="headerlink" href="#paev-2-zabbix-loki" title="Lingi sektsioonile">&para;</a></h3>
-<p>Agent-based monitoring (Zabbix) + logi-sammas (Loki). Grafanas näete nii metrikaid kui logisid koos.</p>
-<h3 id="paev-3-elastic-stack">Päev 3: Elastic Stack<a class="headerlink" href="#paev-3-elastic-stack" title="Lingi sektsioonile">&para;</a></h3>
-<p>Alternatiivne logimislahendus. Elasticsearch indekseerib, Logstash töötleb, Kibana visualiseerib. Võrdlus Lokiga.</p>
-<h3 id="paev-4-tick-stack-laiem-pilt">Päev 4: TICK Stack + laiem pilt<a class="headerlink" href="#paev-4-tick-stack-laiem-pilt" title="Lingi sektsioonile">&para;</a></h3>
-<p>Ajaridade monitooring (InfluxDB) + ülevaade Opensearch, Graylog, Kafka — millal mida kasutada?</p>
-<h3 id="paev-5-lgtm-tervik-tulevik">Päev 5: LGTM tervik + Tulevik<a class="headerlink" href="#paev-5-lgtm-tervik-tulevik" title="Lingi sektsioonile">&para;</a></h3>
-<p>Tempo lisamine traces-sambana. Kogu LGTM stack: metrics↔logs↔traces navigeerimine Grafanas. Observability trendid 2026.</p>
+<p>Kui proovid miljoneid mõõtmisi sekundis MySQL-i panna, see lihtsalt ei tööta. Mitte sellepärast, et MySQL oleks halb — lihtsalt valedele tööle loodud. Sama kui kruvikeerajaga naela lüüa.</p>
 <hr />
-<p><em>Koolitaja: Maria Talvik · maria.talvik@haapsalu.kutsehariduskeskus.ee</em></p>
+<h2 id="kuidas-tick-stack-sundis">Kuidas TICK Stack sündis<a class="headerlink" href="#kuidas-tick-stack-sundis" title="Lingi sektsioonile">&para;</a></h2>
+<ol>
+<li>Paul Dix töötab San Franciscos monitooringufirmas ja lööb pead vastu seina — tavalised andmebaasid ei skaleeru nende kasutusel. Ta otsustab: "Teen selle, mida pole olemas." 2013 sünnib <strong>InfluxDB</strong> (sõnast "influx" — sissevool, andmed voolavad sisse).</li>
+</ol>
+<p>Andmebaasist üksi ei piisa. Kuidas andmed sinna saavad? Kuidas neid näha? Kuidas hoiatusi seada? Järgmistel aastatel ehitavad nad välja ökosüsteemi:</p>
+<ul>
+<li><strong>T</strong>elegraf — agent, mis jookseb serveris ja kogub andmeid (üle 300 plugini: CPU, Docker, MQTT, Modbus, mida iganes sensor)</li>
+<li><strong>I</strong>nfluxDB — andmebaas ise</li>
+<li><strong>C</strong>hronograf — veebiliides graafikuteks</li>
+<li><strong>K</strong>apacitor — hoiatuste mootor ("kui CPU &gt;90% üle 5 minuti, saada email")</li>
+</ul>
+<p>Nii sündis <strong>TICK Stack</strong> — nelja komponendi eesnimede järgi.</p>
+<hr />
+<h2 id="kolm-ajastut">Kolm ajastut<a class="headerlink" href="#kolm-ajastut" title="Lingi sektsioonile">&para;</a></h2>
+<p>Stack on aastatega oluliselt muutunud. <strong>InfluxData ise</strong> ütleb ametlikus Platform-dokumentatsioonis:</p>
+<blockquote>
+<p><em>"The InfluxDB 2 platform </em><em>consolidates</em><em> InfluxDB, Chronograf, and Kapacitor from the InfluxData 1.x platform into a single packaged solution."</em> — <a href="https://docs.influxdata.com/platform/">docs.influxdata.com/platform</a></p>
+</blockquote>
+<p>Ehk "TICK Stack" kui termin on ametlikult <strong>1.x ajastu mõiste</strong>. 2.x-s konsolideeris InfluxData kolm komponenti üheks. Ja 2024-st on juba järgmine põlvkond.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  1.x AJASTU             |   2.x AJASTU             |   3.x AJASTU (meie labi)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ─────────────          |   ─────────────          |   ──────────────────────
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  ┌──────────┐           |   ┌──────────────────┐   |   ┌──────────────┐
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  │ Telegraf │           |   │   Telegraf       │   |   │   Telegraf   │
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  └────┬─────┘           |   └────┬─────────────┘   |   └────┬─────────┘
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>       ▼                 |        ▼                 |        ▼
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  ┌──────────┐           |   ┌──────────────────┐   |   ┌──────────────┐
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  │ InfluxDB │           |   │   InfluxDB 2.x   │   |   │ InfluxDB 3   │
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  │   1.x    │           |   │   + UI           │   |   │   Core       │
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  └────┬─────┘           |   │   + Tasks/Checks │   |   └────┬─────────┘
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>       ▼                 |   └──────────────────┘   |        ▼
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  ┌────┴─────┐           |                          |   ┌──────────────┐
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  ▼          ▼           |   (C ja K pole surnud,   |   │ InfluxDB 3   │
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>┌──────┐ ┌──────┐        |    aga konsolideeritud   |   │  Explorer    │
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│Chron.│ │Kapa. │        |    2.x UI ja Tasks       |   │  (eraldi)    │
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>└──────┘ └──────┘        |    sisse)                |   └──────────────┘
+</span></code></pre></div>
+<p><strong>Aprill 2026</strong> InfluxData jagab oma tooted nii:</p>
+<table>
+<thead>
+<tr>
+<th>Kategooria</th>
+<th>Tooted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Peatooted</strong></td>
+<td>InfluxDB 3 Core/Enterprise, Telegraf, InfluxDB 3 Explorer</td>
+</tr>
+<tr>
+<td><strong>Muud tooted</strong></td>
+<td>InfluxDB 2.x, InfluxDB 1.x, Chronograf, Kapacitor</td>
+</tr>
+</tbody>
+</table>
+<p>Chronograf ja Kapacitor pole surnud — neid hooldatakse ja neil on palju kasutajaid legacy 1.x süsteemides. Aga InfluxData neid enam peatoodetena ei positsioneeri.</p>
+<p>Meie laboris <strong>InfluxDB 3 Core + Telegraf + Explorer</strong>. Põhjused: 27. mail 2026 osutab Docker <code>influxdb:latest</code> just 3 Core'ile — see on uus standard järgmiseks 3-5 aastaks. Tööturul kohtad siiski kõiki kolme — 1.x tööstuses, 2.x enamikus ettevõtetes, 3.x tulekul.</p>
+<hr />
+<h2 id="andmemudel">Andmemudel<a class="headerlink" href="#andmemudel" title="Lingi sektsioonile">&para;</a></h2>
+<p>Terminoloogia on kolmes ajastus erinev, aga <strong>idee on sama</strong>: kategooria, indekseeritud tag'id filtreerimiseks, numbrilised field'id väärtustena, ajatempel iga punkti juures.</p>
+<table>
+<thead>
+<tr>
+<th>Kontseptsioon</th>
+<th>1.x</th>
+<th>2.x</th>
+<th>3.x (meie labi)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ülemine tase</td>
+<td>database + retention policy</td>
+<td>organization + bucket</td>
+<td><strong>database</strong></td>
+</tr>
+<tr>
+<td>Kategooria</td>
+<td>measurement</td>
+<td>measurement</td>
+<td><strong>table</strong></td>
+</tr>
+<tr>
+<td>Indekseeritud sildid</td>
+<td>tags</td>
+<td>tags</td>
+<td>tags</td>
+</tr>
+<tr>
+<td>Väärtused</td>
+<td>fields</td>
+<td>fields</td>
+<td>fields</td>
+</tr>
+</tbody>
+</table>
+<p>Üks andmepunkt line protocol vormingus:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cpu,host=server01,region=tallinn usage_user=23.5 1705312200000000000
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│   └── tag&#39;id                   └── field        └── ajatempel (ns)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└── tabel
+</span></code></pre></div>
+<p><strong>Reegel:</strong> tag'idesse pane asjad, mille järgi filtreerid (server, regioon, teenuse nimi) — tag'id on indekseeritud, filtreerimine kiire. Field'idesse pane numbrilised väärtused (protsent, temperatuur, kiirus) — neid ei indekseerita. Valesti disainitud mudel = aeglased päringud.</p>
+<hr />
+<h2 id="paringukeeled">Päringukeeled<a class="headerlink" href="#paringukeeled" title="Lingi sektsioonile">&para;</a></h2>
+<p>InfluxData on põhjustanud natuke segadust, sest igal versioonil on erinev keel:</p>
+<p><strong>1.x — InfluxQL</strong> (SQL-sarnane, oma süntaksiga):
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">usage_user</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cpu</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="n">h</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">time</span><span class="p">(</span><span class="mi">1</span><span class="n">m</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p><strong>2.x — Flux</strong> (funktsionaalne, "torude" süsteem):
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>from(bucket: &quot;monitoring&quot;)
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  |&gt; range(start: -1h)
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;cpu&quot;)
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  |&gt; aggregateWindow(every: 1m, fn: mean)
+</span></code></pre></div></p>
+<p><strong>3.x — SQL</strong> (peamine) + InfluxQL (tagasi-ühilduvuseks). <strong>Flux on maha jäetud.</strong>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">usage_user</span><span class="p">)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">cpu</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">WHERE</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 hour&#39;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">DATE_BIN</span><span class="p">(</span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 minute&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">time</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p>Meie labi kasutab SQL-i. Miks see on hea muudatus:
+- SQL oskab iga IT-inimene — universaalne oskus
+- Parem ülekantavus teistele töödele (PostgreSQL, MySQL, BigQuery)
+- InfluxData enda suund tulevikuks</p>
+<p>Kui satud tööle 1.x või 2.x süsteemi, õpid vastava keele juurde. Kontseptsioonid (agregeerimine, aja-aknad, tag-filtreerimine) on kõigis kolmes samad — erinev vaid süntaks.</p>
+<hr />
+<h2 id="kokkuvote">Kokkuvõte<a class="headerlink" href="#kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
+<p>Aegreadata on pidev andmevoog ajatempliga, ja tavalised SQL-andmebaasid ei tule sellega toime. InfluxData alustas 2013 klassikalise nelja-komponentse TICK Stack'iga (T+I+C+K), konsolideeris 2020 InfluxDB 2.x-sse, ja on nüüd üle liikumas InfluxDB 3-le. Järgmises tunnis ehitame just selle uusima versiooni üles.</p>
+<hr />
+<h2 id="motle">💭 Mõtle<a class="headerlink" href="#motle" title="Lingi sektsioonile">&para;</a></h2>
+<ol>
+<li>Mille poolest erineb aegreadata sinu igapäevatöös tavalistest andmebaasi andmetest — kus su praeguses süsteemis aegread juba tekivad?</li>
+<li>Su keskkonnas: kui hakkaksid mõõdikuid pikaajaliselt hoidma, kas Prometheus piisab või tuleks eraldi TSDB? Mille järgi otsustaksid?</li>
+<li>Kui kohtaksid tööl 1.x või 2.x süsteemi — mis on esimene asi, mida peaksid päringukeele juures ümber õppima?</li>
+</ol>
 
 
 
@@ -1973,7 +2014,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="22. aprill 2026 19:08:00 UTC">22. aprill 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="29. mai 2026 16:21:32 UTC">29. mai 2026</span>
   </span>
 
     
@@ -2036,10 +2077,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js"></script>
       
