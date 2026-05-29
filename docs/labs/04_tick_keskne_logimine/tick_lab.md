@@ -1,4 +1,4 @@
-# Päev 4: TICK Stack — InfluxDB 3 Core, Telegraf ja aegread (labor)
+# Päev 4: TICK Stack — InfluxDB 3 Core, Telegraf ja aegread
 
 **Kestus:** ~4 tundi (klassitöö umbes 2.5 h, ülejäänu kodused lisaülesanded)
 
