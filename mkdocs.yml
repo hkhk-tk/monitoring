@@ -125,6 +125,8 @@ nav:
   - "Labor": labs/03_elk_stack/lab.md
 
 - "Päev 4 — TICK + Kesksed logimissüsteemid":
+  - "Kava": materials/paev4-kava.md
+  - "Loeng: TICK Stack — aegread": materials/lectures/intro-to-tick-stack.md
   - "TICK labor": labs/04_tick_keskne_logimine/tick_lab.md
   - "Ülevaade": labs/04_tick_keskne_logimine/keskne_logimine.md
 
