@@ -1,0 +1,2380 @@
+
+<!doctype html>
+<html lang="et" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Kaasaegne IT-süsteemide monitooring ja jälgitavus — 26 akadeemilist tundi, Haapsalu KHK, 2026">
+      
+      
+        <meta name="author" content="Maria Talvik">
+      
+      
+        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/materials/lectures/paev4-loeng/">
+      
+      
+        <link rel="prev" href="../../../teacher/paev4-kava/">
+      
+      
+        <link rel="next" href="../paev4-cheat-sheet/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Loeng: aegread, keskne logimine ja SIEM - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.v2.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#paev-4-aegread-keskne-logimine-ja-siem" class="md-skip">
+          Keri sisuni
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Päis">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Monitooring ja Jälgitavus — Täienduskoolitus
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Loeng: aegread, keskne logimine ja SIEM
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Tume teema"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Tume teema" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Hele teema"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Hele teema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Otsi" placeholder="Otsi" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Otsing">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Lähtesta" aria-label="Lähtesta" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Otsingu lähtestamine
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hkhk-tk/monitoring" title="Ava repositooriumis" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hkhk-tk/monitoring
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Vaheleht" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Avaleht
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../teacher/paev1-kava/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 1 — Prometheus + Grafana
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../paev2-zabbix/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 2 — Zabbix + Loki
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../teacher/paev3-kava/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 3 — ELK Stack & OpenSearch
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../teacher/paev4-kava/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 4 — TICK + Kesksed logimissüsteemid
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../labs/05_tempo_otel/lab/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Päev 5 — Tempo + OTel + Kokkuvõte
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../resources/vm-access/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Ressursid
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Monitooring ja Jälgitavus — Täienduskoolitus
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hkhk-tk/monitoring" title="Ava repositooriumis" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hkhk-tk/monitoring
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Avaleht
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 1 — Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 1 — Prometheus + Grafana
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../teacher/paev1-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev1-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 1: Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev1-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng 2: Prometheus + Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Koolitaja juhend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 2 — Zabbix + Loki
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 2 — Zabbix + Loki
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev2-zabbix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Zabbix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev2-loki/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Loki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor: Zabbix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor: Loki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 3 — ELK Stack & OpenSearch
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 3 — ELK Stack & OpenSearch
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../teacher/paev3-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev3-elk-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: ELK & OS — kust tuli, kus on, kuhu läheb
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev3-vector-rag-lisalugemine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lisalugemine: Vector search, RAG ja AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev3-rag-hybrid-monitooring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lisalugemine: RAG retrieval — BM25, vector, hübriid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/03_elk_stack/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 4 — TICK + Kesksed logimissüsteemid
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 4 — TICK + Kesksed logimissüsteemid
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../teacher/paev4-kava/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: aegread, keskne logimine ja SIEM
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: aegread, keskne logimine ja SIEM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paev4-cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Otsustustabelid (cheat sheet)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TICK labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Päev 5 — Tempo + OTel + Kokkuvõte
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Päev 5 — Tempo + OTel + Kokkuvõte
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/05_tempo_otel/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../labs/05_tempo_otel/trendid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trendid 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ressursid
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ressursid
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/vm-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VM ligipääs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/grafana-stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana Stack — LGTM ülevaade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/material-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materjalide stiilijuhend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Sisukord
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opivaljundid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Õpiväljundid
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <span class="md-tag">Day4</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">InfluxDB</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Kafka</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">SIEM</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">TICK</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Wazuh</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">lugemismaterjal</span>
+      
+    
+  </nav>
+
+
+  
+  
+
+
+<h1 id="paev-4-aegread-keskne-logimine-ja-siem">Päev 4: Aegread, keskne logimine ja SIEM<a class="headerlink" href="#paev-4-aegread-keskne-logimine-ja-siem" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>Kursus:</strong> Kaasaegne IT-süsteemide monitooring ja jälgitavus
+<strong>Tase:</strong> Kesktase — eeldame, et tunned Docker Compose'i ja oled näinud eelmiste päevade tööriistu
+<strong>Eeldused:</strong> Päev 1 (Prometheus, Grafana) · Päev 2 (Loki) · Päev 3 (Elasticsearch, OpenSearch)
+<strong>Labor:</strong> <a href="../../../labs/04_tick_keskne_logimine/tick_lab/">tick_lab.md</a> · <strong>Otsustustabelid:</strong> <a href="../paev4-cheat-sheet/">cheat sheet</a></p>
+<p>See on monitooringu, mitte turvaakadeemia päev. Hommikupool on aegread — kuidas mõõdikud spetsiaalsesse andmebaasi voolavad. Pärastlõuna on logitoru ja küsimus, millal logimisele lisandub SIEM. Sysadminina ei pea sa tundma kahtsada Wazuhi reeglit; pead oskama öelda, kuhu su logid lähevad ja millal läheb vaja korrelatsiooni. Turvameeskond kirjutab reeglid — sina ehitad toru, mis sinna voolab.</p>
+<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p>Pärast seda peatükki oskad:</p>
+<ul>
+<li><strong>selgitada</strong>, miks aegread vajavad eraldi andmebaasi — ja millal Prometheus piisab, millal InfluxDB</li>
+<li><strong>lugeda</strong> line protocol rida ja kirjutada SQL-päring aegridade peal</li>
+<li><strong>kirjeldada</strong> keskse logimise nelja kihti ja paigutada sinna Loki, ELK ja OpenSearch</li>
+<li><strong>eristada</strong> operatiivset logimist ja SIEM-i ning nimetada Wazuhi nelja komponenti</li>
+<li><strong>põhjendada</strong>, miks suure mahuga logitorudes on Kafka vahel</li>
+</ul>
+<hr />
+<h1 id="osa-i-aegread-ja-tick-stack">Osa I — Aegread ja TICK Stack<a class="headerlink" href="#osa-i-aegread-ja-tick-stack" title="Lingi sektsioonile">&para;</a></h1>
+<h2 id="prometheus-utleb-cpu-on-korge-aga-mitte-koike">Prometheus ütleb „CPU on kõrge“ — aga mitte kõike<a class="headerlink" href="#prometheus-utleb-cpu-on-korge-aga-mitte-koike" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päev 1 panid Prometheuse püsti. Ta tõmbab iga viieteistkümne sekundi tagant <code>/metrics</code>-ist numbreid, Grafana joonistab graafiku, ja kui midagi läheb valesti, saad sellest enne kasutajat teada — eeldusel, et dashboard on õigesti seatud. Serverite ja konteinerite jaoks töötab see suurepäraselt; Prometheus on Kubernetese ja cloud-native maailma loomulik valik.</p>
+<p>Aga kujuta teistsugust olukorda. Eesti tootmisliinil on kakssada temperatuuriandurit, igaüks saadab väärtuse iga sekund — umbes seitseteist miljonit punkti päevas. Iga mõõtmine on uus rida ajas: keegi ei „uuenda“ vana väärtust, vaid lisab uue. Andur ütleb „23,5 kraadi“, ja see jääb ajalukku. Sama loogika kehtib Skeleton Technologiesi superkondensaatorite testimisel või Bolti sõidukite GPS-, kiiruse- ja akuandmete voos.</p>
+<p>Kui paned sellise voo PostgreSQL-i, hakkab andmebaas aeglaselt lämbuma. PostgreSQL on ehitatud tehingute jaoks — tellimus, muudatus, kustutamine. Aegread on aga peamiselt <strong>append-only</strong>: miljonid kirjed sekundis, ja küsimus pole „mis on praegune seis?“, vaid „mis juhtus ajas?“.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>PostgreSQL / MySQL</th>
+<th>Aegrea-andmebaas (InfluxDB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mida hoiab</td>
+<td>praegune seis</td>
+<td>sündmused ajas</td>
+</tr>
+<tr>
+<td>Kirjutamine</td>
+<td>muudetakse, kustutatakse</td>
+<td>peamiselt ainult lisatakse</td>
+</tr>
+<tr>
+<td>Tüüpiline küsimus</td>
+<td>„Mis on saldo?“</td>
+<td>„Mis oli keskmine eile öösel?“</td>
+</tr>
+<tr>
+<td>Maht</td>
+<td>sajad kirjed/sek</td>
+<td>miljonid/sek</td>
+</tr>
+<tr>
+<td>Vanad andmed</td>
+<td>jäävad</td>
+<td>retention + downsampling</td>
+</tr>
+</tbody>
+</table>
+<p>See pole PostgreSQL-i puudus, vaid tööriista vale valik — umbes nagu lüüa naela kruvikeerajaga. Andureid jälgib aegrea-andmebaas, mis on ehitatud just selleks:</p>
+<pre class="mermaid"><code>graph LR
+    S1[Andur 1] --&gt;|iga 1s| DB[(Aegreade DB)]
+    S2[Andur 2] --&gt;|iga 1s| DB
+    S3[Andur 3] --&gt;|iga 1s| DB
+    DB --&gt; Q1["Keskmine viimase tunni jooksul"]
+    DB --&gt; Q2["Trend nädalas"]</code></pre>
+<h2 id="paul-dix-ja-tick-stacki-sund">Paul Dix ja TICK Stacki sünd<a class="headerlink" href="#paul-dix-ja-tick-stacki-sund" title="Lingi sektsioonile">&para;</a></h2>
+<ol>
+<li>aastal töötab Paul Dix San Franciscos monitooringufirmas. Kliendid tahavad hoida miljoneid mõõtmisi, aga PostgreSQL ja MySQL ei skaleeru. 2013. aastal sünnib <strong>InfluxDB</strong> — nimi tuleb sõnast <em>influx</em>, sissevool.</li>
+</ol>
+<p>Ainult andmebaasist ei piisanud, ja nii kasvas selle ümber ökosüsteem neljast tükist: <strong>Telegraf</strong> kogus andmeid, <strong>InfluxDB</strong> hoidis neid, <strong>Chronograf</strong> joonistas graafikuid ja <strong>Kapacitor</strong> saatis hoiatusi. Nende nelja esitähe järgi: <strong>TICK Stack</strong>. Alguses olid need neli eraldi programmi, igaühel oma config, andmekaust ja taaskäivitus.</p>
+<p>Aastatega muutus see kolm korda:</p>
+<table>
+<thead>
+<tr>
+<th>Põlvkond</th>
+<th>Mis muutus</th>
+<th>Päring</th>
+<th>Mootor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1.x TICK</strong></td>
+<td>4 eraldi programmi</td>
+<td>InfluxQL</td>
+<td>TSM — kardinaalsus piiratud</td>
+</tr>
+<tr>
+<td><strong>2.x</strong></td>
+<td>C ja K <strong>sisse</strong> andmebaasi; üks binaar + UI</td>
+<td>Flux + InfluxQL</td>
+<td>TSM</td>
+</tr>
+<tr>
+<td><strong>3.x</strong></td>
+<td><strong>uus mootor</strong> (nullist)</td>
+<td>SQL + InfluxQL; Flux <strong>ei toeta</strong></td>
+<td>Apache Arrow + Parquet</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>graph LR
+    subgraph "1.x"
+        T1[Telegraf] --&gt; I1[InfluxDB]
+        I1 --&gt; C1[Chronograf]
+        I1 --&gt; K1[Kapacitor]
+    end
+    subgraph "2.x"
+        T2[Telegraf] --&gt; I2["InfluxDB 2&lt;br/&gt;+ UI + Tasks"]
+    end
+    subgraph "3.x lab"
+        T3[Telegraf] --&gt; I3[InfluxDB 3 Core]
+        I3 --&gt; E3[Explorer]
+    end</code></pre>
+<p>Tasub teada, mis igast tähest sai. <strong>Telegraf</strong> jäi alles ja kirjutab tänini sama line protocoli, mis 1.x ajal. <strong>InfluxDB</strong> on endiselt tuum, aga 3.x mootor on hoopis teine (Rust, Parquet, S3-võimekus). <strong>Chronograf</strong> asendus <strong>Exploreriga</strong> — see on 3.x ametlik veebiliides. <strong>Kapacitor</strong> sulandus esmalt 2.x Tasks'i ja siis 3.x Processing Engine'i sisse. Lihtne viis seda meeles pidada: 1.x oli neli tööriista, 2.x üks kast sama mootoriga, 3.x uus mootor sama kütusega (line protocol) ja uue rooliga (SQL).</p>
+<p>1.x ja 2.x on tänaseks hooldusrežiimis — uued projektid lähevad 3.x peale, kuigi tööl võid kohata kõiki kolme, ja 2.x Flux tuleb migreerimisel SQL-iks ümber kirjutada. Kui keegi ütleb „meil on TICK“, on esimene küsimus alati „mis põlvkond?“. Meie laboris kasutame InfluxDB 3 Core'i koos Telegrafi ja Exploreriga; alates 2026. aasta maist osutab Docker <code>influxdb:latest</code> 3 Core'ile, aga laboris kinnitame versiooni tag'iga <code>influxdb:3-core</code>.</p>
+<h2 id="influxdb-3-tsm-ist-parquetini">InfluxDB 3 — TSM-ist Parquetini<a class="headerlink" href="#influxdb-3-tsm-ist-parquetini" title="Lingi sektsioonile">&para;</a></h2>
+<p>Vanem InfluxDB (1.x ja 2.x) kasutas <strong>TSM</strong>-mootorit. Iga unikaalne siltide kombinatsioon — üks <strong>seeria</strong> — võttis mälu, ja just sellepärast oli <strong>kardinaalsus</strong> range piirang. InfluxDB 3 on ehitatud <strong>Apache Arrow</strong> ja <strong>Parquet</strong> peale: andmed seisavad kettal veergude kaupa. Kui päring küsib „anna <code>usage_user</code> viimase tunni jooksul“, loeb mootor ainult ühe veeru, mitte terveid ridu — see on kiirem, pakib paremini kokku, ja seeriate arv ei piira enam samamoodi.</p>
+<pre class="mermaid"><code>graph TB
+    T[Telegraf / curl] --&gt;|line protocol| ING[InfluxDB 3 Core]
+    ING --&gt; PARQ[Parquet kettal]
+    Q[SQL] --&gt; ING
+    EXP[Explorer :8888] --&gt; Q</code></pre>
+<p>Päringukeel on ajas vahetunud kolm korda: 1.x kasutas InfluxQL-i, 2.x tõi Fluxi (funktsionaalne „torude“ keel, mida tööl veel kohtad), ja 3.x läks SQL-i peale, jättes Fluxi maha ning hoides InfluxQL-i ainult tagasiühilduvuseks. Üks päring, mille sa täna laboris kirjutad, näeb välja nii:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">SELECT</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="n">DATE_BIN</span><span class="p">(</span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 minute&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">time</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">minut</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="k">AVG</span><span class="p">(</span><span class="n">usage_user</span><span class="p">)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">FROM</span><span class="w"> </span><span class="n">cpu</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">WHERE</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 hour&#39;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">minut</span>
+</span></code></pre></div>
+<p><code>DATE_BIN</code> jagab aja minutilisteks ämbriteks — sama, mida vana InfluxQL tegi <code>GROUP BY time(1m)</code>-iga. SQL-i kasuks räägib see, et seda oskab iga IT-inimene ja see kandub üle teistele andmebaasidele; kontseptsioonid (agregeerimine, aja-aknad, tag-filter) on kõigis kolmes keeles samad, erinev on vaid süntaks.</p>
+<h2 id="line-protocol-ja-kardinaalsus">Line protocol ja kardinaalsus<a class="headerlink" href="#line-protocol-ja-kardinaalsus" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kõik, mis InfluxDB-sse jõuab, on <strong>line protocol</strong> — üks tekstirida punkti kohta:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cpu,host=server01,region=tallinn usage_user=23.5 1705312200000000000
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│   └── tag&#39;id (indekseeritud)        └── field    └── ajatempel (ns)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└── tabel
+</span></code></pre></div>
+<p>Rea võib lugeda nagu kompaktse CSV-rea. <strong>Tabel</strong> (<code>cpu</code>) on kategooria — mõtle sellele nagu andmebaasi tabelinimele. <strong>Tag'id</strong> (<code>host</code>, <code>region</code>) on indekseeritud sildid, mille järgi hiljem filtreerid — sama roll, mis Loki label'il (Päev 2) või Prometheuse label'il (Päev 1). <strong>Field</strong> (<code>usage_user</code>) on tegelik mõõdetav number, mida ei indekseerita. <strong>Ajatempel</strong> on viimane, nanosekundites; kui selle ära jätad, paneb server hetke <code>now()</code>.</p>
+<p>Siit tuleb aegrea-andmebaasi tähtsaim disainimõiste: <strong>kardinaalsus</strong>, ehk unikaalsete seeriate arv. Iga unikaalne siltide kombinatsioon on üks seeria. <code>temperatuur,ruum=saal1,andur=a1</code> on üks seeria; tuhat ruumi korda viiskümmend andurit teeb viiskümmend tuhat seeriat — see on veel hallatav. Aga kui paned sildiks midagi, millel on miljoneid võimalikke väärtusi — <code>trace_id</code>, <code>user_id</code>, IP-aadress — plahvatab kardinaalsus laele. Reegel on lihtne ja sama, mis Lokis ja Prometheuses: sildiks pane see, mille järgi filtreerid ja millel on piiratud arv väärtusi; kõik muu läheb field'iks.</p>
+<p>Kuna aegandmeid koguneb kiiresti, kustutab <strong>retention</strong> vana toorandme automaatselt, ja <strong>downsampling</strong> hoiab minutikeskmisi kauem kui sekundi-täpsust. Prometheuses teeb sama recording rules koos Thanose või Mimiriga; InfluxDB teeb seda andmebaasi sees. Mõte mõlemal: salvesta detail lühikeseks ajaks, agregaat pikaks.</p>
+<p>Mõned vead korduvad nii sageli, et tasub neid ette teada:</p>
+<table>
+<thead>
+<tr>
+<th>Viga</th>
+<th>Mida näed</th>
+<th>Selgitus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tag ja field segamini</td>
+<td>päring ei leia <code>host</code></td>
+<td>tag on filter (<code>WHERE host=...</code>), field on number (<code>AVG(usage_user)</code>)</td>
+</tr>
+<tr>
+<td>Ajatempel vales formaadis</td>
+<td>rida ei salvestu</td>
+<td>nanosekundid; võib ära jätta, siis server paneb <code>now()</code></td>
+</tr>
+<tr>
+<td>Liiga kõrge kardinaalsus</td>
+<td>DB aeglane, mälu täis</td>
+<td>ära pane <code>user_id</code> sildiks — sama reegel Lokis ja Prometheuses</td>
+</tr>
+<tr>
+<td>Token puudub või vale</td>
+<td><code>401</code> Exploreris</td>
+<td>3.x <strong>nõuab</strong> tokenit — see on turvavaikimisi, mitte viga</td>
+</tr>
+</tbody>
+</table>
+<h2 id="telegraf-ja-explorer">Telegraf ja Explorer<a class="headerlink" href="#telegraf-ja-explorer" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kui Prometheus <strong>tõmbab</strong> mõõdikud ise, siis Telegraf <strong>saadab</strong> need. Telegraf on agent, mis jookseb serveris ja kogub CPU-d, Dockerit, MQTT-andurite voogu, Modbus-i — üle kolmesaja sisend-plugina. Üks tema väärtuslikumaid omadusi on dual-output: sama mõõdikuvoog läheb korraga mitmesse sihtkohta, nii et TSDB või arhiivi saab vahetada ilma agente ümber seadistamata.</p>
+<pre class="mermaid"><code>graph LR
+    I1[CPU] --&gt; TG[Telegraf]
+    I2[MQTT] --&gt; TG
+    I3[Docker] --&gt; TG
+    TG --&gt; DB[(InfluxDB 3)]
+    TG --&gt; F[teine siht]</code></pre>
+<p>Graafikute nägemiseks on InfluxDB 3-l oma veebiliides, <strong>Explorer</strong> (port 8888), mis asendab vana Chronografi. Ta ühendub serveriga (URL, token, andmebaas) ja lubab kirjutada SQL-i ning näha tulemust tabeli või graafikuna. Token on 3.x juures uus ja kohustuslik — server ei tee midagi ilma autentimiseta, mis tootmises on mõistlik vaikimisi.</p>
+<p>Laboris paned InfluxDB 3 Core'i (port 8181), Telegrafi ja Exploreri ise Docker Compose'iga püsti. Kõigepealt kirjutad esimese line protocol rea käsitsi <code>curl</code>-iga ja näed punkti Exploreris — nii saad aru toorvormingust enne, kui Telegraf hakkab sama tegema automaatselt iga kümne sekundi tagant. Enne labi pane Päev 3 stack kinni (<code>docker compose down</code>), sest TICK vajab umbes kaks gigabaiti vaba mälu.</p>
+<h2 id="kaks-maailma-tehas-ja-prometheus">Kaks maailma — tehas ja Prometheus<a class="headerlink" href="#kaks-maailma-tehas-ja-prometheus" title="Lingi sektsioonile">&para;</a></h2>
+<p>Tehasepõrandal on kakssada andurit, mis räägivad MQTT-d (kerge sõnumiprotokoll, mitte HTTP) ja toodavad seitseteist miljonit punkti päevas. Toru selleni on lihtne: andurid saadavad MQTT brokerisse, Telegraf loeb sealt ja kirjutab InfluxDB-sse, ja operaator vaatab Grafana või Exploreri graafikut, mitte ei SSH-i ükshaaval masinatesse.</p>
+<pre class="mermaid"><code>graph LR
+    SENS[200 andurit] --&gt; BROKER[MQTT broker]
+    BROKER --&gt; TG[Telegraf]
+    TG --&gt; DB[(InfluxDB 3)]
+    DB --&gt; UI[Grafana / Explorer]</code></pre>
+<p>See on sama monitooringu loogika, mis Päev 1 — leia probleem enne kasutajat — lihtsalt teise protokolli ja teise andmebaasiga. Prometheus ja InfluxDB pole konkurendid, vaid eri tööde tööriistad:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Prometheus</th>
+<th>InfluxDB + Telegraf</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mudel</td>
+<td>pull</td>
+<td>push</td>
+</tr>
+<tr>
+<td>Tugevus</td>
+<td>K8s, <code>/metrics</code>, PromQL</td>
+<td>IoT, MQTT, pikk retention</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>node_exporter</td>
+<td>Telegraf</td>
+</tr>
+<tr>
+<td>Pikk ajalugu</td>
+<td>Thanos / Mimir</td>
+<td>TSDB ise / Enterprise</td>
+</tr>
+</tbody>
+</table>
+<p>Vale küsimus on „kumb on parem“; õige on „millist probleemi ma lahendan“. Kubernetese klaster <code>/metrics</code>-iga on Prometheuse maailm. Tootmisliin Modbus-anduritega on InfluxDB maailm. CI-runnerid, mille eluiga on viis minutit, on Pushgateway erandjuht, kus pull ei jõua. Ja viie aasta ajaloolised trendid suudavad mõlemad, ainult erineva halduskoormusega. Paljudes majades elavad mõlemad kõrvuti.</p>
+<h2 id="kus-influxdb-d-pariselt-kasutatakse">Kus InfluxDB-d päriselt kasutatakse<a class="headerlink" href="#kus-influxdb-d-pariselt-kasutatakse" title="Lingi sektsioonile">&para;</a></h2>
+<p>Eelmine näide tehasest oli mõtteline. Päris elus katab InfluxDB terve rea valdkondi: võrgu- ja taristumonitooring, IoT-analüütika ja ennetav hooldus, satelliiditelemeetria, energia- ja akusalvestussüsteemid, finantsturg ning klassikaline tööstuse „data historian“. DB-Enginesi edetabelis on InfluxDB aegrea-andmebaaside kategoorias pikalt esikohal — see ei tee teda automaatselt „parimaks“, aga näitab, et selles nišis on ta de facto standard, mille oskust tasub tööturul omada.</p>
+<p>Üks konkreetne lugu seob need mõisted paremini kokku kui ükski tabel. <strong>LeoLabs</strong> ehitab pidevalt uuenevat „elavat kaarti“ madalast Maa-orbiidist ja jälgib üle kahekümne viie tuhande objekti — aktiivsetest satelliitidest kuni kosmoseprügini — et hoiatada kokkupõrgete eest. Andmed tulevad globaalsest radarivõrgust (Austraalia, Alaska, Uus-Meremaa, Maui), mis töötab autonoomselt ilma kohapealse personalita; ainus viis süsteemi tervist jälgida on reaalajatelemeetria.</p>
+<p>Tehniliselt on see täpselt seesama väljakutse, millest hommikul rääkisime. Igal radaril on tuhandeid riistvarakomponente ja kogu võrgus kahe- kuni kolmetuhande operatsioonisüsteemiga seadme telemeetria — <strong>kõrge kardinaalsus</strong> — ning seda hoitakse <strong>kolm aastat täisresolutsioonis</strong>, et uurida riistvararikkeid ja kõrvutada radari käitumist hooajaliste muutustega. Koguja on <strong>Telegraf</strong>, mille konfiguratsioone genereerib ja paigaldab automaatselt <strong>Ansible</strong> (allikatõena NetBox, käivitajana GitHub Actions) — sama Infrastructure-as-Code mõte, mida sa infra-repos ise kasutad. Salvestus eraldab arvutuse ja andmed (S3-tagune), mis teeb kolmeaastase ajaloo majanduslikult mõistlikuks — täpselt see kompromiss, mida Parquet ja objektisalvestus võimaldavad.</p>
+<p>Tulemus pole mitte „vau-efekt“, vaid igavus heas mõttes: insenerid kirjeldavad süsteemi suurima eelisena seda, et see lihtsalt töötab taustal ja skaleerub ise. Üks väike tiim haldab üle tuhande alarmi ilma kohapealse personalita. Kui tahad mustrit ühe pildina meeles hoida: seadmed → Telegraf → InfluxDB (pikk retention, S3) → alarmid ja Python-analüütika. See on sama kuju, mille sa laboris väiksemas mahus kokku paned.</p>
+<hr />
+<h1 id="osa-ii-logid-ja-siem">Osa II — Logid ja SIEM<a class="headerlink" href="#osa-ii-logid-ja-siem" title="Lingi sektsioonile">&para;</a></h1>
+<h2 id="maastiku-kaart-viis-paeva-uhes-pildis">Maastiku kaart — viis päeva ühes pildis<a class="headerlink" href="#maastiku-kaart-viis-paeva-uhes-pildis" title="Lingi sektsioonile">&para;</a></h2>
+<p>Enne kui lähme edasi, tasub kõik seni nähtu ühte pilti panna. Iga päev on katnud ühe tükki samast maastikust:</p>
+<table>
+<thead>
+<tr>
+<th>Päev</th>
+<th>Mis jäi kätte</th>
+<th>Tänane seos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Prometheus pull, Grafana, alarmid</td>
+<td>numbrid — sama sammas mis InfluxDB, teine mudel</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Loki odav logi, LogQL, Alloy</td>
+<td>operatiivne logi — üks neljast maailmast</td>
+</tr>
+<tr>
+<td>3</td>
+<td>OpenSearch täisindeks, ECS</td>
+<td>salvestuskiht — Wazuh kasutab sama mootorit</td>
+</tr>
+<tr>
+<td>4 hommik</td>
+<td>InfluxDB push, line protocol</td>
+<td>kolmas „numbrite“ tee</td>
+</tr>
+<tr>
+<td>4 pärastlõuna</td>
+<td>toru + SIEM</td>
+<td>kuidas logid liiguvad ja millal tekivad juhtumid</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>graph TB
+    subgraph "Mõõdikud"
+        P[Prometheus pull]
+        I[InfluxDB push]
+    end
+    subgraph "Logid operatiivsed"
+        L[Loki — odav sildid]
+        E[ELK / OpenSearch — täisindeks]
+    end
+    subgraph "Turvalogid"
+        S[SIEM — juhtumid]
+    end
+    subgraph "Puhver suurel mahul"
+        K[Kafka]
+    end
+    P --&gt; G[Grafana]
+    I --&gt; G
+    L --&gt; G
+    E --&gt; KIB[Kibana / Dashboards]
+    S --&gt; KIB
+    K --&gt; L
+    K --&gt; E
+    K --&gt; S</code></pre>
+<p>Täna me uut logistacki ei ehita — seome olemasoleva teadmise kokku. Päev 3 OpenSearch on alus, mille peal Wazuh hiljem töötab.</p>
+<h2 id="viiskummend-serverit-keskne-logimine">Viiskümmend serverit — keskne logimine<a class="headerlink" href="#viiskummend-serverit-keskne-logimine" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kujuta ette tavalist ööd. Telefon heliseb — veeb on aeglane. Zabbix näitab CPU-piiki hostil <code>web-03</code>. Sa SSH-id sinna, aga viga oli hoopis <code>api-07</code>-s, mis <code>web-03</code>-le helistas. Ilma keskse logita kulub tund serverite vahel hüppamiseks ja <code>grep ERROR</code> ajamiseks viiekümnes kohas. Keskse logiga teed ühe päringu — <code>service=api AND level=error</code> — ühes kohas, ja vastus tuleb minutitega.</p>
+<p>See ongi keskse logimise mõte: üks koht, kust otsid, et leida probleem enne kasutajat (sama MTTD-loogika, mis Päev 1). Konteinerite ajastul pole see luksus, vaid vajadus — konteineri logid kaovad taaskäivitusel. Toru, mille sa ehitad, peab kandma vähemalt nelja asja: rakenduslogid (JSON, tasemed, stack trace), access-logid (nginx, load balancer), süsteemilogid (syslog, <code>auth.log</code> — nii operatiiv kui turva) ja konteinerilogid (stdout/stderr). Hea harjumus algusest peale: logid JSON-ina ja korrelatsiooni-ID, mis seob logi jäljega (Päev 5).</p>
+<h2 id="neli-kihti-shipper-puhver-tootlus-salvestus">Neli kihti — shipper, puhver, töötlus, salvestus<a class="headerlink" href="#neli-kihti-shipper-puhver-tootlus-salvestus" title="Lingi sektsioonile">&para;</a></h2>
+<p>Iga suurem logitoru, olgu selle salvestuseks Loki, ELK või SIEM, järgib sama nelja-kihilist mustrit. Kui selle korra selgeks teed, oskad lugeda ükskõik millist logi-arhitektuuri.</p>
+<pre class="mermaid"><code>graph LR
+    A[Allikad] --&gt; F[1 Shipper]
+    F --&gt; K[2 Puhver optional]
+    K --&gt; P[3 Töötlus]
+    P --&gt; S[4 Salvestus]
+    S --&gt; UI[Grafana / Kibana]</code></pre>
+<p>Esimene kiht on <strong>shipper</strong> — kerge agent, mis jookseb igal masinal, loeb logifaili või konteineri väljundit ja saadab edasi. Fluent Bit on neist kõige kergem (umbes ühe megabaidi mäluga) ja seda kohtab Kubernetese sidecar'ina; Alloy kuulub Grafana maailma ja kannab korraga logisid, mõõdikuid ja jälgi (Päev 5); Filebeat on Elasticu oma; rsyslog on klassikaline Linuxi syslog-server. Väikeses majas läheb shipper otse Lokisse või OpenSearchi, ja puhvri ning töötluse lisad alles siis, kui maht kasvab.</p>
+<p>Kolmandat kihti, töötlust, teeb sageli <strong>Vector</strong>, mis on ühtaegu shipper ja marsruteerija: ta saadab warn-taseme logid Lokisse, kõik logid odavasse S3-arhiivi ja turvasündmused SIEM-i, ning filtreerib ääres — viskab debug-logid minema enne, kui need salvestusse jõuavad. See on sama mõte, mida nägid Telegrafi dual-output'i juures, ainult terve logitoru tasemel.</p>
+<table>
+<thead>
+<tr>
+<th>Kiht</th>
+<th>Analoogia</th>
+<th>Millal vajalik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 Shipper</td>
+<td>postkast igas majas</td>
+<td>alati — ilma selleta jäävad logid masinale</td>
+</tr>
+<tr>
+<td>2 Puhver (Kafka)</td>
+<td>sorteerimiskesk</td>
+<td>suur maht, mitu tarbijat</td>
+</tr>
+<tr>
+<td>3 Töötlus (Logstash / Vector)</td>
+<td>puhastus ja sortimine</td>
+<td>JSON-parse, PII maskeerimine, sample</td>
+</tr>
+<tr>
+<td>4 Salvestus</td>
+<td>arhiiv</td>
+<td>Loki / OpenSearch / S3</td>
+</tr>
+</tbody>
+</table>
+<p>Viiesaja konteineriga Kubernetese keskkonnas näeb see välja nii: Fluent Bit igas podis, sealt Kafkasse, Logstash parsib, OpenSearch salvestab. Viie kuni kahekümne serveriga tiimis piisab aga Alloy'st või Fluent Bitist otse Lokisse ja Grafanasse — Kafka pole kohustus, vaid asi, mille lisad siis, kui maht või tarbijate arv seda nõuab.</p>
+<h2 id="kafka-puhver-suurel-mahul">Kafka — puhver suurel mahul<a class="headerlink" href="#kafka-puhver-suurel-mahul" title="Lingi sektsioonile">&para;</a></h2>
+<p>Kui logimaht on tuhandeid sõnumeid sekundis — suure finants- või riigiasutuse, suure IT-keskkonna skaalal — ei pruugi shipper otse salvestusse enam piisata. Probleem on selles, et kui ELK, Loki või SIEM hoolduse ajal aeglustub või taaskäivitub, lähevad sõnumid kaotsi. <strong>Kafka</strong> istub vahel puhvrina: producer kirjutab oma tempos, consumer loeb oma tempos, ja kui consumer on maas, ootavad sõnumid Kafkas, kuni ta naaseb.</p>
+<pre class="mermaid"><code>graph LR
+    P1[Rakendused] --&gt; K[Kafka topic]
+    P2[Shipperid] --&gt; K
+    K --&gt; C1[Loki consumer]
+    K --&gt; C2[OpenSearch consumer]
+    K --&gt; C3[SIEM consumer]</code></pre>
+<p>Kolm sõna piisab algatuseks: <strong>topic</strong> on üks voog (nt <code>app-logs</code>), <strong>partition</strong> jagab voo paralleelseteks osadeks, ja <strong>consumer group</strong> lubab mitmel lugejal töö omavahel ära jagada. Hea analoogia: shipper on kuller, Kafka on sorteerimiskesk. Kui OpenSearch on hoolduses — ladu suletud — viskaks kuller pakid muidu maha ja logid kaoksid; Kafkaga ootavad pakid riiulil, ja kui ladu avaneb, võtab consumer need järjekorras ära.</p>
+<p>Tasub teada, et Kafka hoiab sõnumeid teatud arv päevi või gigabaite — see on <strong>puhver, mitte pikaajaline arhiiv</strong>, ega asenda OpenSearchi retentionit. Ja kuna Kafkal endal on mõõdikud — consumer lag, offset — kehtib siin sama alarmiloogika, mis Päev 1: kui lag kasvab, ei jõua SIEM või ELK järele. Reegel, millal Kafka üldse vahele võtta: logimaht üle umbes saja gigabaidi päevas, mitu eri tarbijat, ja nõue, et hooldus ei tohi andmeid kaotada.</p>
+<h2 id="logimine-vs-siem">Logimine vs SIEM<a class="headerlink" href="#logimine-vs-siem" title="Lingi sektsioonile">&para;</a></h2>
+<p>Loki või OpenSearch ütleb sulle fakti: „viis ebaõnnestunud ssh-katset hostis <code>web-01</code>“. SIEM ütleb mustri: „juhtum #4821 — brute force, sellele järgnes edukas login ja siis <code>useradd</code>. Reageeri.“ Andmed on samad; vahe on selles, et SIEM teab reegleid, mille järgi üksikud sündmused juhtumiks kokku panna. Praktikas lisab ta logihaldusele neli asja: logid kõikjalt kokku (server, tulemüür, AD, pilv), normaliseerimise ühtsesse vormi (Linuxi <code>failed password</code> ja Windowsi sündmus <code>4625</code> saavad võrreldavaks — sama ECS-i mõte, mis Päev 3), korrelatsioonireeglid ja alarmid juhtumitena, mitte üksiksündmustena.</p>
+<p>Juhtumi elukaart on lihtne jälgida näite varal. Kell 09:00 tekib <code>auth.log</code>-i viiskümmend ebaõnnestunud ssh-katset — üksik sündmus, veel mitte juhtum. Kell 09:02 logib sama IP edukalt sisse, ja SIEM korreleerib: brute force, millele järgnes õnnestumine. Kell 09:05 tuleb samal hostil <code>useradd</code>, mis mustrit täiendab. Kell 09:06 avab SIEM juhtumi #4821, severity High, seotud MITRE tehnikaga T1110. Edasi tuleb triage — kas tegu on testija või ründajaga — ja siis reageerimine: IP blokeerimine või hosti isoleerimine. Operatiivne logimine peatuks esimese sammu juures: sa näeksid ridu, aga keegi ei ütleks, et see on juhtum.</p>
+<p>Kriitilises taristus nõuab <strong>NIS2</strong> logimist ja juhtumite dokumenteerimist (vt <a href="../paev1-observability/#10-regulatiivne-kontekst">Päev 1 §10</a>), ja SIEM aitab sellega: juhtumi number, ajajoon, kes reageeris. Just sellepärast eraldavad paljud majad turvalogid operatiivlogidest — neil on erinev retention, juurdepääs ja GDPR-i kaalutlused. Sysadminina ei pea sa kirjutama viitsada reeglit; pead tagama, et <code>auth.log</code>, tulemüüri ja AD sündmused jõuavad torusse, mitte ainult rakenduse debug-logi.</p>
+<p>Turvasõnavara on akronüüme täis, aga need on kihid, mitte konkurendid. <strong>EDR</strong> istub endpoint'i peal ja jälgib protsesse seestpoolt; <strong>SIEM</strong> korreleerib logisid; <strong>XDR</strong> ühendab EDR-i ja SIEM-i ühte liidesesse; <strong>SOAR</strong> lisab automaatsed reageerimis-playbook'id; ja <strong>MDR</strong> on teenus, kus keegi teine peab su turvavalvet.</p>
+<pre class="mermaid"><code>graph TB
+    LOG[Logid] --&gt; SIEM[SIEM]
+    HOST[Endpoint] --&gt; EDR[EDR]
+    SIEM --&gt; XDR[XDR ühes UI-s]
+    EDR --&gt; XDR
+    XDR --&gt; SOAR[automatiseerimine]
+    SOAR -.-&gt; MDR[Väline SOC teenus]</code></pre>
+<p>Keskmises majas on tavaliselt EDR ja SIEM, ja sysadmini roll on hoolitseda, et logid SIEM-i voolaksid. Tööl kohtad neid Splunk ES-i, Microsoft Sentineli, Elastic Security või Wazuhi nime all — erinev hind, sama roll.</p>
+<h2 id="wazuh-opensearch-elus">Wazuh — OpenSearch elus<a class="headerlink" href="#wazuh-opensearch-elus" title="Lingi sektsioonile">&para;</a></h2>
+<p>Wazuh on hea näide, sest see on avatud lähtekoodiga ja toetub asjale, mille sa eile ehitasid: <strong>Wazuhi Indexer on OpenSearch</strong>. Eile oli see tühi platvorm; siin näed, mis selle peal reaalselt töötab.</p>
+<pre class="mermaid"><code>graph TB
+    A[Wazuh Agent] --&gt; M[Manager&lt;br/&gt;reeglid + korrelatsioon]
+    M --&gt; I[Indexer OpenSearch]
+    I --&gt; D[Dashboard]
+    M -.Active Response.-&gt; A</code></pre>
+<table>
+<thead>
+<tr>
+<th>Komponent</th>
+<th>Roll</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Agent</strong></td>
+<td>kogub logid, faili-muutused, protsessid, paketid</td>
+</tr>
+<tr>
+<td><strong>Manager</strong></td>
+<td>rakendab reegleid ja korreleerib</td>
+</tr>
+<tr>
+<td><strong>Indexer</strong></td>
+<td>salvestab — sinu Päev 3 OpenSearch</td>
+</tr>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td>OpenSearch Dashboards-põhine liides</td>
+</tr>
+</tbody>
+</table>
+<p>Peale tavalise logikogumise teeb Wazuh veel kolme asja: <strong>FIM</strong> jälgib katalooge nagu <code>/etc</code> ja annab alarmi, kui <code>/etc/passwd</code> muutub (sysadminile küsimus: kas paigaldus või rünnak?); <strong>Vulnerability Detector</strong> võrdleb paigaldatud pakette CVE-andmebaasiga, nii et sama agent, mis logib, oskab öelda ka „see CVE on sinu serveris“; ja <strong>SCA</strong> kontrollib konfiguratsiooni CIS-i benchmark'ide vastu.</p>
+<p>Kõige kõnekam on <strong>Active Response</strong>. Kui ründaja teeb hostile hulga ssh-katseid, matchib Wazuhi reegel mustri, tekitab alarmi (seotud MITRE tehnikaga T1110, Brute Force) ja Active Response käivitub: agent blokeerib ründaja IP automaatselt, ilma inimese sekkumiseta. Sellega muutub logimine reageerimiseks. Wazuhi dashboardil näed viimaseid alarme severity järgi värvituna; ühe juhtumi avades näed ajajoont (ebaõnnestumised → edukas login → käsk) ja selle MITRE-vastendust — see on koht, kus SIEM räägib ründaja keelt, mitte ainult logiridu.</p>
+<p>Kui ehitaksid Wazuhi piloodi, ei alustaks sa viiesajast serverist, vaid viiest kuni kümnest, sest reeglid vajavad tuunimist. Loomulik järjekord lähtub väärtusest ja eksponeeritusest:</p>
+<table>
+<thead>
+<tr>
+<th>Prioriteet</th>
+<th>Host</th>
+<th>Miks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>avalik veeb / DMZ</td>
+<td>ssh- ja veebirünnakud</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AD / LDAP</td>
+<td>identiteet</td>
+</tr>
+<tr>
+<td>3</td>
+<td>andmebaasid</td>
+<td>andmete väärtus</td>
+</tr>
+<tr>
+<td>4</td>
+<td>töölauad</td>
+<td>pigem EDR-i tsoon, vähem SIEM-agente</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kuidas-valida-neli-maailma">Kuidas valida — neli maailma<a class="headerlink" href="#kuidas-valida-neli-maailma" title="Lingi sektsioonile">&para;</a></h2>
+<p>Sa oled nüüd näinud nelja maailma, ja need pole järjestatud halvast paremaks — neil on erinev fookus:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Fookus</th>
+<th>Kus kasutad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Loki</strong></td>
+<td>odav, sildid, Grafana</td>
+<td>operatiivne debug</td>
+</tr>
+<tr>
+<td><strong>ELK / OpenSearch</strong></td>
+<td>täisindeks, analüütika</td>
+<td>forensika, keerukad päringud</td>
+</tr>
+<tr>
+<td><strong>SIEM</strong></td>
+<td>juhtumid, reeglid</td>
+<td>turva, NIS2</td>
+</tr>
+<tr>
+<td><strong>InfluxDB</strong></td>
+<td>aegread, IoT</td>
+<td>mõõdikud push-mudelis</td>
+</tr>
+</tbody>
+</table>
+<p>Enamik maju ei vali ühte, vaid hoiab operatiivlogi ja turvalogi eraldi, vahel Kafka nende vahel. Valik sõltub ka organisatsiooni suurusest: väike maja (1–10 serverit) saab hakkama Loki ja Grafanaga ning SIEM-i piloodi või pilveteenusega; keskmine lisab eraldi turvalogi (Wazuh või Sentinel); suur ehitab Kafka peale mitme consumer'iga toru, mida hooldavad eri meeskonnad SLA-de all.</p>
+<p>Enne otsust tasub vastata viiele küsimusele: kui suur on logimaht päevas (see määrab Loki vs ELK vs Kafka), kes seda hooldab (üks sysadmin vs eraldi platvormitiim), kas vaja on forensikat (täistekst, pikk retention), kas kehtivad turvanõuded (NIS2, eraldi juhtumid), ja kas Grafana on juba maja standard (Loki vs Kibana). Lihtne kokkuvõte kogu päevast mälupildiks:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Mõõdikud:  Prometheus (pull) | InfluxDB (push)
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Logid:     Loki (odav) | OpenSearch (täis) | SIEM (juhtumid)
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Toru:      Shipper → [Kafka] → Töötlus → Salvestus
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Lab:       Telegraf → InfluxDB 3 → Explorer + SQL
+</span></code></pre></div>
+<p>Valmis otsustustabelid on koondatud eraldi: <a href="../paev4-cheat-sheet/">cheat sheet</a>.</p>
+<h2 id="kodutoo-ja-paev-5-sild">Kodutöö ja Päev 5 sild<a class="headerlink" href="#kodutoo-ja-paev-5-sild" title="Lingi sektsioonile">&para;</a></h2>
+<p>Laboris jõuad osadeni üks kuni neli; kodus jäävad osad viis kuni seitse: SQL sügavamalt (<code>DATE_BIN</code>, agregeerimine), dual-output (tootmismuster, kus sama voog läheb kahte kohta) ja MQTT-andur (IoT maitseproov). Päev 5 toob kolmanda samba — jäljed Tempo ja OpenTelemetry'ga — ja seob mõõdikud, logid ja jäljed kokku LGTM-iks.</p>
+<hr />
+<h2 id="kokkuvote">Kokkuvõte<a class="headerlink" href="#kokkuvote" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Aegread ei ole tehingud.</strong> InfluxDB on ehitatud append-only maailmale, PostgreSQL tehingutele.
+<strong>TICK on läbinud kolm põlvkonda:</strong> 1.x neli programmi, 2.x üks kast, 3.x uus mootor. Meie lab kasutab Telegrafi, InfluxDB 3 Core'i, Exploreri ja SQL-i.
+<strong>Prometheus tõmbab, Telegraf saadab</strong> — ja mõlemad võivad korraga elada.
+<strong>Keskne logimine on neli kihti:</strong> shipper → (Kafka) → töötlus → salvestus.
+<strong>SIEM lisab logidele korrelatsiooni ja juhtumid.</strong> Wazuh on OpenSearch + reeglid + Active Response.</p>
+<hr />
+<h2 id="kusimused-enesetestiks">Küsimused enesetestiks<a class="headerlink" href="#kusimused-enesetestiks" title="Lingi sektsioonile">&para;</a></h2>
+<details>
+<summary><strong>Küsimused (vastused all)</strong></summary>
+
+1. Miks kahesaja anduri voog ei sobi PostgreSQL-i?
+2. Mis vahe on 1.x TICK ja 3.x stackil?
+3. Mis on kardinaalsus?
+4. Push vs pull — näide kummastki?
+5. Nimeta keskse logimise neli kihti.
+6. Mis vahe on logimisel ja SIEM-il?
+7. Millal võtta Kafka vahele?
+8. Wazuhi neli komponenti?
+
+??? note "Vastused"
+
+    1) Append-only, miljonid kirjed päevas, küsimus on ajas — mitte saldo.
+    2) 1.x: neli programmi, InfluxQL, TSM. 3.x: Telegraf + Core + Explorer, SQL, Parquet-mootor.
+    3) Unikaalsete seeriate arv. Liiga palju silte (nt `trace_id`) teeb DB aeglaseks.
+    4) Pull: Prometheus `/metrics`. Push: Telegraf, MQTT-andurid.
+    5) Shipper → puhver → töötlus → salvestus.
+    6) Logimine annab fakti; SIEM teeb mustrist juhtumi.
+    7) Suur maht, mitu consumer'it, hooldus ei tohi sõnumeid kaotada.
+    8) Agent, Manager, Indexer, Dashboard.
+
+</details>
+
+<hr />
+<h2 id="allikad">Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Allikas</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>InfluxData platform</td>
+<td><a href="https://docs.influxdata.com/platform/">https://docs.influxdata.com/platform/</a></td>
+</tr>
+<tr>
+<td>InfluxDB 3 Core</td>
+<td><a href="https://docs.influxdata.com/influxdb3/core/">https://docs.influxdata.com/influxdb3/core/</a></td>
+</tr>
+<tr>
+<td>Line protocol</td>
+<td><a href="https://docs.influxdata.com/influxdb3/core/reference/line-protocol/">https://docs.influxdata.com/influxdb3/core/reference/line-protocol/</a></td>
+</tr>
+<tr>
+<td>Telegraf</td>
+<td><a href="https://docs.influxdata.com/telegraf/v1/">https://docs.influxdata.com/telegraf/v1/</a></td>
+</tr>
+<tr>
+<td>LeoLabs kasutuslugu</td>
+<td><a href="https://www.influxdata.com/customer/leolabs/">https://www.influxdata.com/customer/leolabs/</a></td>
+</tr>
+<tr>
+<td>InfluxDB kasutusalad</td>
+<td><a href="https://www.influxdata.com/solutions/">https://www.influxdata.com/solutions/</a></td>
+</tr>
+<tr>
+<td>DB-Engines — TSDB edetabel</td>
+<td><a href="https://db-engines.com/en/ranking/time+series+dbms">https://db-engines.com/en/ranking/time+series+dbms</a></td>
+</tr>
+<tr>
+<td>Wazuh</td>
+<td><a href="https://documentation.wazuh.com/">https://documentation.wazuh.com/</a></td>
+</tr>
+<tr>
+<td>MITRE ATT&amp;CK — T1110</td>
+<td><a href="https://attack.mitre.org/techniques/T1110/">https://attack.mitre.org/techniques/T1110/</a></td>
+</tr>
+<tr>
+<td>Vector</td>
+<td><a href="https://vector.dev/docs/">https://vector.dev/docs/</a></td>
+</tr>
+<tr>
+<td>Apache Kafka</td>
+<td><a href="https://kafka.apache.org/documentation/">https://kafka.apache.org/documentation/</a></td>
+</tr>
+<tr>
+<td>OpenSearch</td>
+<td><a href="https://opensearch.org/docs/latest/">https://opensearch.org/docs/latest/</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Versioonid:</strong> InfluxDB 3 Core · Telegraf 1.34 · Explorer 1.8.0</p>
+<hr />
+<p><em>Labor: <a href="../../../labs/04_tick_keskne_logimine/tick_lab/">tick_lab.md</a> · Järgmine: Päev 5 — Tempo + OpenTelemetry</em></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Viimane uuendus">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="29. mai 2026 18:42:59 UTC">29. mai 2026</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Üles
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 Maria Talvik · Haapsalu Kutsehariduskeskus
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
