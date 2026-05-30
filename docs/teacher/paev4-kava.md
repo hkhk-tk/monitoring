@@ -53,8 +53,8 @@ Kaks osa. **Hommik:** aegread ja TICK Stack käed-külge omal VM-il. **Pärastl�
 Päeva lõpuks osaleja:
 
 - **Selgitab**, miks aegread vajavad eraldi andmebaasi (mitte PostgreSQL-i), ja toob kaks olukorda kummagi — InfluxDB ja Prometheus — kasuks
-- **Ehitab** InfluxDB 3 Core + Telegraf + Explorer stacki Docker Compose'iga, loob tokeni ja andmebaasi
-- **Kirjutab** line protocol rea ja päringustab andmeid SQL-iga
+- **Ehitab** InfluxDB 2.7 + Telegraf stacki Docker Compose'iga, läbib esmase seadistuse (org, bucket, token)
+- **Kirjutab** line protocol rea ja päringustab andmeid Flux'iga (UI Data Explorer)
 - **Eristab** lihtsat logimist ja SIEM-i, kirjeldab Wazuhi nelja komponenti ja Active Response'i rolli
 - **Põhjendab**, miks Kafka logitorudes puhvrina eksisteerib
 - **Valib** kesksete logimislahenduste vahel (Loki / ELK / OpenSearch / SIEM) oma organisatsiooni kontekstis
@@ -63,13 +63,16 @@ Päeva lõpuks osaleja:
 
 Oma VM: 4 GB RAM, 2 CPU, Docker eelinstallitud. TICK on kerge ja mahub mängleva kergusega, kui päev 3 stack on maas.
 
+!!! note "Miks InfluxDB 2.7, mitte 3?"
+    Lab-serverite CPU (Intel Xeon E5-2660, Sandy Bridge) ei toeta **AVX2** käsustikku, mida InfluxDB 3 binäär nõuab — v3 sureb käivitamisel (SIGILL, exit 132). Seetõttu kasutame **InfluxDB 2.7** (Go binäär, töötab igal CPU-l). Kontseptsioonid on samad; erinevus on päringukeel: v2.7 kasutab **Flux**'i (või InfluxQL v1-compat kaudu), mitte SQL-i nagu v3.
+
 | Teenus | Port | Kirjeldus |
 |--------|------|-----------|
-| InfluxDB 3 Core | 8181 | Aegrea-andmebaas, SQL päringud |
-| InfluxDB 3 Explorer | 8888 | Veebiliides — haldus ja päring |
+| InfluxDB 2.7 | 8086 | Aegrea-andmebaas + veebiliides (UI sissehitatud, eraldi Explorerit pole) |
 | Telegraf | — | Agent, kogub süsteemimeetrikad (ei kuula porti) |
+| Mosquitto (MQTT) | 1883 | Sensorite brokker — osa 7 (kodutöö) |
 
-Täpsed IP-d, kasutajanimed, paroolid: [VM ligipääs](../resources/vm-access.md).
+UI sisselogimine: **admin / Monitor2026!** · org `hkhk` · bucket `mon`. Täpsed IP-d: [VM ligipääs](../resources/vm-access.md).
 
 ## Järgmine kord (6.06)
 
