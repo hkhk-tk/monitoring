@@ -12,7 +12,7 @@ tags:
 
 **30. mai 2026 · 10:00–14:30 · Haapsalu KHK**
 
-Kaks osa. **Hommik:** aegread ja TICK Stack käed-külge omal VM-il. **Pärastlõuna:** kesksed logimissüsteemid ja SIEM loenguna — hands-on'i siin ei tee (OpenSearchi ehitasid päev 3; Wazuh ja Kafka on liiga rasked ühe päeva laborisse). Lab osad 5–7 jäävad koju.
+Kaks osa. **Hommik:** aegread ja TICK Stack käed-külge omal VM-il. **Pärastlõuna:** kesksed logimissüsteemid ja SIEM — **Wazuh käed-külge** (kerge agent kesksesse managerisse, tuvastus), Kafka loenguna. TICK lab osad 5–7 jäävad koju.
 
 ## Päevakava
 
@@ -24,12 +24,13 @@ Kaks osa. **Hommik:** aegread ja TICK Stack käed-külge omal VM-il. **Pärastl�
 | 11:15–11:35 | **Telegraf + SQL** — agent kogub süsteemimeetrikad (lab 4) | Oma VM |
 | 11:35–11:55 | Arutelu: TICK vs Prometheus — push vs pull, kardinaalsus | Klass |
 | 11:55–12:25 | 🍽️ Lõuna | — |
-| 12:25–13:00 | Kesksed logimissüsteemid + SIEM mõiste — logimine vs SIEM, EDR/XDR/SOAR, NIS2 | Klass |
-| 13:00–13:30 | **Wazuh** — arhitektuur (agent/manager/indexer/dashboard), indekseerija = OpenSearch, Active Response | Klass |
-| 13:30–13:40 | ☕ Paus | — |
-| 13:40–14:00 | Apache Kafka logitorudes — miks puhver, producers → Kafka → consumers | Klass |
-| 14:00–14:25 | Kokkuvõte: logimise + SIEM maastik ([cheat sheet](../materials/lectures/paev4-cheat-sheet.md)) | Klass |
-| 14:25–14:30 | Refleksioon + kodutöö (lab 5–7) | Klass |
+| 12:25–12:50 | Kesksed logimissüsteemid + SIEM mõiste — logimine vs SIEM, EDR/XDR/SOAR, NIS2 | Klass |
+| 12:50–13:05 | **Wazuh** — arhitektuur (agent/manager/indexer/dashboard), indekseerija = OpenSearch | Klass |
+| 13:05–13:45 | **Wazuh hands-on** — agent paigaldus + enroll kesksesse managerisse, tuvastus (ebaõnn. login), alerti lugemine ([wazuh lab](../labs/04_tick_keskne_logimine/wazuh_lab.md)) | Oma VM |
+| 13:45–13:55 | ☕ Paus | — |
+| 13:55–14:10 | Apache Kafka logitorudes — miks puhver, producers → Kafka → consumers | Klass |
+| 14:10–14:25 | Kokkuvõte: logimise + SIEM maastik ([cheat sheet](../materials/lectures/paev4-cheat-sheet.md)) | Klass |
+| 14:25–14:30 | Refleksioon + kodutöö (TICK lab 5–7) | Klass |
 
 ## Enne klassi
 
@@ -48,6 +49,9 @@ Kaks osa. **Hommik:** aegread ja TICK Stack käed-külge omal VM-il. **Pärastl�
     sudo systemctl restart docker
     ```
 
+!!! warning "Koolitajale — Wazuh manager enne klassi püsti"
+    Pärastlõune Wazuh hands-on eeldab, et **keskne manager juba jookseb** mon-maria peal (`192.168.100.120`). Manager-stacki image'd on suured (multi-GB) — **tee pull tunde varem**, mitte klassiajal. Setup WSL-ist: `~/paev4-wazuh-test.sh manager` (või käsitsi: `git clone wazuh-docker -b v4.14.5` → `single-node` → sertifikaadid → `docker compose up -d`). Õpilased pull'ivad ainult kerge **agendi** (~kümneid MB) — nende osa on kiire ka kodus, kui manager on ligi. Dashboard: `https://192.168.100.120` (admin / SecretPassword).
+
 ## Õpiväljundid
 
 Päeva lõpuks osaleja:
@@ -56,6 +60,7 @@ Päeva lõpuks osaleja:
 - **Ehitab** InfluxDB 2.7 + Telegraf stacki Docker Compose'iga, läbib esmase seadistuse (org, bucket, token)
 - **Kirjutab** line protocol rea ja päringustab andmeid Flux'iga (UI Data Explorer)
 - **Eristab** lihtsat logimist ja SIEM-i, kirjeldab Wazuhi nelja komponenti ja Active Response'i rolli
+- **Paigaldab ja enrollib** Wazuhi agendi kesksesse managerisse ning tekitab tuvastatava turbesündmuse (ebaõnnestunud sisselogimine)
 - **Põhjendab**, miks Kafka logitorudes puhvrina eksisteerib
 - **Valib** kesksete logimislahenduste vahel (Loki / ELK / OpenSearch / SIEM) oma organisatsiooni kontekstis
 
@@ -73,6 +78,9 @@ Oma VM: 4 GB RAM, 2 CPU, Docker eelinstallitud. TICK on kerge ja mahub mängleva
 | Mosquitto (MQTT) | 1883 | Sensorite brokker — osa 7 (kodutöö) |
 
 UI sisselogimine: **admin / Monitor2026!** · org `hkhk` · bucket `mon`. Täpsed IP-d: [VM ligipääs](../resources/vm-access.md).
+
+!!! note "Wazuh (pärastlõuna) — keskne mudel"
+    Manager + indexer + dashboard jooksevad **ühes kohas** (mon-maria, `192.168.100.120`) — koolitaja seab püsti enne klassi (suur pull). Õpilane paigaldab oma VM-ile ainult kerge **wazuh-agent**'i (kiire), enrollib managerisse ja vaatab oma masina sündmusi ühises dashboardis. Indexer = OpenSearch (Java) → töötab Sandy Bridge'il, erinevalt InfluxDB 3-st. Mida õpilane teeb/kontrollib: vt [Wazuh lab](../labs/04_tick_keskne_logimine/wazuh_lab.md).
 
 ## Järgmine kord (6.06)
 

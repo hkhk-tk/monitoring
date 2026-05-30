@@ -233,6 +233,7 @@ Loo `~/paev4/telegraf.conf`. Alusta minimaalsest: agent + üks input + output.
 [agent]
   interval = "10s"
   hostname = "minu-vm"
+  debug = true
 
 # INPUT: CPU mõõdikud
 [[inputs.cpu]]
@@ -247,7 +248,7 @@ Loo `~/paev4/telegraf.conf`. Alusta minimaalsest: agent + üks input + output.
   bucket = "mon"
 ```
 
-Kaks asja: **`outputs.influxdb_v2`** kirjutab v2 API kaudu (`organization` = `hkhk`, `bucket` = `mon`); **`${INFLUX_TOKEN}`** loetakse keskkonnamuutujast, et seda ei peaks faili kirjutama.
+Kolm asja: **`outputs.influxdb_v2`** kirjutab v2 API kaudu (`organization` = `hkhk`, `bucket` = `mon`); **`${INFLUX_TOKEN}`** loetakse keskkonnamuutujast, et seda ei peaks faili kirjutama; **`debug = true`** paneb Telegrafi logima iga eduka kirjutamise (näed kohe, kas andmed voolavad).
 
 ### 4.2 Lisa Telegraf compose'i
 
