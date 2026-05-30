@@ -12,31 +12,27 @@
         <meta name="author" content="Maria Talvik">
       
       
-        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/teacher/paev4-kava/">
+        <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/labs/04_tick_keskne_logimine/wazuh_lab/">
       
       
-        <link rel="prev" href="../../labs/03_elk_stack/lab/">
-      
-      
-        <link rel="next" href="../../materials/lectures/paev4-loeng/">
       
       
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Kava - Monitooring ja Jälgitavus — Täienduskoolitus</title>
+        <title>Päev 4 (pärastlõuna): Wazuh SIEM — agent, tuvastus, Active Response - Monitooring ja Jälgitavus — Täienduskoolitus</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +51,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.v2.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.v2.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -82,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#paev-4-tick-stack-kesksed-logimissusteemid" class="md-skip">
+        <a href="#paev-4-parastlouna-wazuh-siem-agent-tuvastus-active-response" class="md-skip">
           Keri sisuni
         </a>
       
@@ -98,7 +94,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Päis">
-    <a href="../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-header__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -118,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Kava
+              Päev 4 (pärastlõuna): Wazuh SIEM — agent, tuvastus, Active Response
             
           </span>
         </div>
@@ -225,7 +221,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -246,7 +242,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../paev1-kava/" class="md-tabs__link">
+        <a href="../../../teacher/paev1-kava/" class="md-tabs__link">
           
   
   
@@ -268,7 +264,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../materials/lectures/paev2-zabbix/" class="md-tabs__link">
+        <a href="../../../materials/lectures/paev2-zabbix/" class="md-tabs__link">
           
   
   
@@ -290,7 +286,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../paev3-kava/" class="md-tabs__link">
+        <a href="../../../teacher/paev3-kava/" class="md-tabs__link">
           
   
   
@@ -308,13 +304,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../../teacher/paev4-kava/" class="md-tabs__link">
           
   
   
@@ -336,7 +330,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../labs/05_tempo_otel/lab/" class="md-tabs__link">
+        <a href="../../05_tempo_otel/lab/" class="md-tabs__link">
           
   
   
@@ -358,7 +352,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../resources/vm-access/" class="md-tabs__link">
+        <a href="../../../resources/vm-access/" class="md-tabs__link">
           
   
   
@@ -400,7 +394,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigatsioon" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
+    <a href="../../.." title="Monitooring ja Jälgitavus — Täienduskoolitus" class="md-nav__button md-logo" aria-label="Monitooring ja Jälgitavus — Täienduskoolitus" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -430,7 +424,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -523,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../paev1-kava/" class="md-nav__link">
+      <a href="../../../teacher/paev1-kava/" class="md-nav__link">
         
   
   
@@ -551,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev1-observability/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev1-observability/" class="md-nav__link">
         
   
   
@@ -579,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev1-loeng/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev1-loeng/" class="md-nav__link">
         
   
   
@@ -607,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/01_prometheus_grafana/lab/" class="md-nav__link">
+      <a href="../../01_prometheus_grafana/lab/" class="md-nav__link">
         
   
   
@@ -635,7 +629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
+      <a href="../../01_prometheus_grafana/koolitaja-juhend/" class="md-nav__link">
         
   
   
@@ -734,7 +728,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev2-zabbix/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev2-zabbix/" class="md-nav__link">
         
   
   
@@ -762,7 +756,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev2-loki/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev2-loki/" class="md-nav__link">
         
   
   
@@ -790,7 +784,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/02_zabbix_loki/zabbix_lab/" class="md-nav__link">
+      <a href="../../02_zabbix_loki/zabbix_lab/" class="md-nav__link">
         
   
   
@@ -818,7 +812,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/02_zabbix_loki/loki_lab/" class="md-nav__link">
+      <a href="../../02_zabbix_loki/loki_lab/" class="md-nav__link">
         
   
   
@@ -919,7 +913,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../paev3-kava/" class="md-nav__link">
+      <a href="../../../teacher/paev3-kava/" class="md-nav__link">
         
   
   
@@ -947,7 +941,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev3-elk-loeng/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev3-elk-loeng/" class="md-nav__link">
         
   
   
@@ -975,7 +969,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev3-vector-rag-lisalugemine/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev3-vector-rag-lisalugemine/" class="md-nav__link">
         
   
   
@@ -1003,7 +997,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev3-rag-hybrid-monitooring/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev3-rag-hybrid-monitooring/" class="md-nav__link">
         
   
   
@@ -1031,7 +1025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/03_elk_stack/lab/" class="md-nav__link">
+      <a href="../../03_elk_stack/lab/" class="md-nav__link">
         
   
   
@@ -1063,10 +1057,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -1082,22 +1074,21 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -1115,7 +1106,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1130,37 +1121,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Kava
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../teacher/paev4-kava/" class="md-nav__link">
         
   
   
@@ -1176,81 +1140,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Sisukord">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Sisukord
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#paevakava" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Päevakava
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#enne-klassi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Enne klassi
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#opivaljundid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Õpiväljundid
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#laborikeskkond" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Laborikeskkond
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jargmine-kord-606" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Järgmine kord (6.06)
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1263,7 +1152,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev4-loeng/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev4-loeng/" class="md-nav__link">
         
   
   
@@ -1291,7 +1180,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../materials/lectures/paev4-cheat-sheet/" class="md-nav__link">
+      <a href="../../../materials/lectures/paev4-cheat-sheet/" class="md-nav__link">
         
   
   
@@ -1319,7 +1208,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/04_tick_keskne_logimine/tick_lab/" class="md-nav__link">
+      <a href="../tick_lab/" class="md-nav__link">
         
   
   
@@ -1414,7 +1303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/05_tempo_otel/lab/" class="md-nav__link">
+      <a href="../../05_tempo_otel/lab/" class="md-nav__link">
         
   
   
@@ -1442,7 +1331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../labs/05_tempo_otel/trendid/" class="md-nav__link">
+      <a href="../../05_tempo_otel/trendid/" class="md-nav__link">
         
   
   
@@ -1541,7 +1430,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../resources/vm-access/" class="md-nav__link">
+      <a href="../../../resources/vm-access/" class="md-nav__link">
         
   
   
@@ -1569,7 +1458,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../resources/grafana-stack/" class="md-nav__link">
+      <a href="../../../resources/grafana-stack/" class="md-nav__link">
         
   
   
@@ -1597,7 +1486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../resources/docker-cheatsheet/" class="md-nav__link">
+      <a href="../../../resources/docker-cheatsheet/" class="md-nav__link">
         
   
   
@@ -1625,7 +1514,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../resources/material-style/" class="md-nav__link">
+      <a href="../../../resources/material-style/" class="md-nav__link">
         
   
   
@@ -1680,21 +1569,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#paevakava" class="md-nav__link">
+  <a href="#miks-see-labor" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Päevakava
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#enne-klassi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Enne klassi
+        Miks see labor
       
     </span>
   </a>
@@ -1705,7 +1583,7 @@
   <a href="#opivaljundid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Õpiväljundid
+        🎯 Õpiväljundid
       
     </span>
   </a>
@@ -1713,10 +1591,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#laborikeskkond" class="md-nav__link">
+  <a href="#eeltoo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Laborikeskkond
+        Eeltöö
       
     </span>
   </a>
@@ -1724,10 +1602,126 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#jargmine-kord-606" class="md-nav__link">
+  <a href="#osa-1-paigalda-ja-enrolli-agent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Järgmine kord (6.06)
+        Osa 1 · Paigalda ja enrolli agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Osa 1 · Paigalda ja enrolli agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-lisa-wazuhi-pakihoidla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Lisa Wazuhi pakihoidla
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-paigalda-agent-suunatud-kesksele-managerile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Paigalda agent, suunatud kesksele managerile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-kaivita-ja-keela-auto-uuendus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Käivita ja keela auto-uuendus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-kontrolli-uhendust" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Kontrolli ühendust
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-2-leia-end-dashboardist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 2 · Leia end dashboardist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-3-tekita-tuvastus-ebaonnestunud-sisselogimised" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 3 · Tekita tuvastus — ebaõnnestunud sisselogimised
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#osa-4-active-response-valikuline-kodus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Osa 4 · Active Response (valikuline, kodus)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lopukontroll-enesekontroll-verifitseeritav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Lõpukontroll (enesekontroll, verifitseeritav)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#veaotsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Veaotsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allikad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Allikad
       
     </span>
   </a>
@@ -1749,206 +1743,228 @@
                 
                   
 
-  <nav class="md-tags" >
-    
-      
-      
-      
-      
-        <span class="md-tag">Day4</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">InfluxDB</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">SIEM</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">TICK</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">Wazuh</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">kava</span>
-      
-    
-  </nav>
-
 
   
   
 
 
-<h1 id="paev-4-tick-stack-kesksed-logimissusteemid">Päev 4 — TICK Stack + kesksed logimissüsteemid<a class="headerlink" href="#paev-4-tick-stack-kesksed-logimissusteemid" title="Lingi sektsioonile">&para;</a></h1>
-<p><strong>30. mai 2026 · 10:00–14:30 · Haapsalu KHK</strong></p>
-<p>Kaks osa. <strong>Hommik:</strong> aegread ja TICK Stack käed-külge omal VM-il. <strong>Pärastlõuna:</strong> kesksed logimissüsteemid ja SIEM — <strong>Wazuh käed-külge</strong> (kerge agent kesksesse managerisse, tuvastus), Kafka loenguna. TICK lab osad 5–7 jäävad koju.</p>
-<h2 id="paevakava">Päevakava<a class="headerlink" href="#paevakava" title="Lingi sektsioonile">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Kell</th>
-<th>Tegevus</th>
-<th>Kus</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>10:00–10:20</td>
-<td>Kordamine + TICK kontsept — pull-mudel vs aegrea-DB, T-I-C-K, miks aegread eraldi DB</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>10:20–11:05</td>
-<td><strong>TICK hands-on</strong> — InfluxDB 3 Core + Telegraf + Explorer, line protocol, esimene SQL (lab 1–3)</td>
-<td>Oma VM</td>
-</tr>
-<tr>
-<td>11:05–11:15</td>
-<td>☕ Paus</td>
-<td>—</td>
-</tr>
-<tr>
-<td>11:15–11:35</td>
-<td><strong>Telegraf + SQL</strong> — agent kogub süsteemimeetrikad (lab 4)</td>
-<td>Oma VM</td>
-</tr>
-<tr>
-<td>11:35–11:55</td>
-<td>Arutelu: TICK vs Prometheus — push vs pull, kardinaalsus</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>11:55–12:25</td>
-<td>🍽️ Lõuna</td>
-<td>—</td>
-</tr>
-<tr>
-<td>12:25–12:50</td>
-<td>Kesksed logimissüsteemid + SIEM mõiste — logimine vs SIEM, EDR/XDR/SOAR, NIS2</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>12:50–13:05</td>
-<td><strong>Wazuh</strong> — arhitektuur (agent/manager/indexer/dashboard), indekseerija = OpenSearch</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>13:05–13:45</td>
-<td><strong>Wazuh hands-on</strong> — agent paigaldus + enroll kesksesse managerisse, tuvastus (ebaõnn. login), alerti lugemine (<a href="../../labs/04_tick_keskne_logimine/wazuh_lab/">wazuh lab</a>)</td>
-<td>Oma VM</td>
-</tr>
-<tr>
-<td>13:45–13:55</td>
-<td>☕ Paus</td>
-<td>—</td>
-</tr>
-<tr>
-<td>13:55–14:10</td>
-<td>Apache Kafka logitorudes — miks puhver, producers → Kafka → consumers</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>14:10–14:25</td>
-<td>Kokkuvõte: logimise + SIEM maastik (<a href="../../materials/lectures/paev4-cheat-sheet/">cheat sheet</a>)</td>
-<td>Klass</td>
-</tr>
-<tr>
-<td>14:25–14:30</td>
-<td>Refleksioon + kodutöö (TICK lab 5–7)</td>
-<td>Klass</td>
-</tr>
-</tbody>
-</table>
-<h2 id="enne-klassi">Enne klassi<a class="headerlink" href="#enne-klassi" title="Lingi sektsioonile">&para;</a></h2>
-<p><strong>Loe ette</strong> (klassiajal teeme, ei loe): <a href="../../materials/lectures/paev4-loeng/">Päev 4 loeng</a> (~90 min). <a href="../../materials/lectures/paev4-cheat-sheet/">Otsustustabelid</a> on valikuline.</p>
-<p><strong>Kontrolli oma VM:</strong></p>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SSH + VPN töötab (<a href="../../resources/vm-access/">VM ligipääs</a>)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Päev 3 ELK/OpenSearch stack maas: <code>docker compose down</code> (TICK vajab ~2 GB vaba mälu)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker</code> ja <code>docker compose</code> töötavad</li>
-</ul>
+<h1 id="paev-4-parastlouna-wazuh-siem-agent-tuvastus-active-response">Päev 4 (pärastlõuna): Wazuh SIEM — agent, tuvastus, Active Response<a class="headerlink" href="#paev-4-parastlouna-wazuh-siem-agent-tuvastus-active-response" title="Lingi sektsioonile">&para;</a></h1>
+<p><strong>Kestus:</strong> ~1.5 tundi (klassis)
+<strong>Tase:</strong> kesktase
+<strong>Eeldused:</strong> Päev 3 (OpenSearch — Wazuhi indexer <em>on</em> OpenSearch). SSH, Linux CLI, sudo. Loe enne <a href="../../../materials/lectures/paev4-loeng/">Päev 4 loeng</a> SIEM + Wazuh osa.
+<strong>VM:</strong> sinu VM (<code>ssh &lt;eesnimi&gt;@192.168.35.12X</code> / <code>192.168.100.12X</code>)</p>
+<hr />
+<h2 id="miks-see-labor">Miks see labor<a class="headerlink" href="#miks-see-labor" title="Lingi sektsioonile">&para;</a></h2>
+<p>Päev 2 panid Zabbixi agendid saatma andmeid kesksele serverile. Päev 3 ehitasid OpenSearchi klastri. <strong>SIEM ühendab need kaks ideed turbe vaates:</strong> kerged agendid igal masinal saadavad turbesündmused (logid, failimuutused, sisselogimised) kesksele <strong>managerile</strong>, mis rakendab tuvastusreegleid ja hoiab andmeid OpenSearchis. Wazuh on selle avatud lähtekoodiga standard.</p>
+<p>Erinevalt hommikusest TICK-labist <strong>ei ehita sa tervet stacki</strong> — manager + indexer + dashboard jookseb juba keskselt (<code>192.168.100.120</code>). Sina paned oma VM-ile kerge <strong>agendi</strong> (~0.1 GB RAM), enrollid ta managerisse ja vaatad, kuidas su masina sündmused jõuavad ühisesse dashboardi. See on päris SIEM-arhitektuur: hajutatud agendid → keskne analüüs.</p>
+<div class="admonition info">
+<p class="admonition-title">Mida sa teed ja kontrollid</p>
+<p><strong>Teed:</strong> 1) paigaldad wazuh-agendi, 2) enrollid kesksesse managerisse, 3) tekitad turbesündmuse (ebaõnnestunud sisselogimised), 4) leiad alerti dashboardist.<br>
+<strong>Kontrollid:</strong> agent on dashboardis <strong>Active</strong>; sinu ebaõnnestunud login'id ilmuvad alertina (reegel <strong>5710</strong>).<br>
+<strong>Allalaadimine on väike</strong> — agent on üks pakk (~kümneid MB), mitte raske stack nagu hommikune InfluxDB. Sekundid, mitte minutid.</p>
+</div>
+<hr />
+<h2 id="opivaljundid">🎯 Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Teadmised:</strong></p>
+<ol>
+<li>Kirjeldab Wazuhi nelja komponenti (agent, manager, indexer, dashboard) ja kummagi rolli.</li>
+<li>Selgitab, miks SIEM kasutab keskset managerit, mitte iga masina lokaalset analüüsi.</li>
+</ol>
+<p><strong>Oskused:</strong></p>
+<ol>
+<li>Paigaldab ja enrollib Wazuhi agendi kesksesse managerisse.</li>
+<li>Tekitab turbesündmuse (ebaõnnestunud sisselogimised) ja leiab vastava alerti dashboardist.</li>
+<li>Tõlgendab alerti: reegli ID, tase, allikas.</li>
+</ol>
+<hr />
+<h2 id="eeltoo">Eeltöö<a class="headerlink" href="#eeltoo" title="Lingi sektsioonile">&para;</a></h2>
+<p>Agent on kerge — muud stack'id ei sega. Kui hommikune TICK veel jookseb ja tahad mälu vabaks: <code>cd ~/paev4 &amp;&amp; docker compose down</code>.</p>
 <div class="admonition warning">
-<p class="admonition-title">Kui <code>docker pull</code> jääb toppama</p>
-<p>Kui näed <code>Image ... Pulling</code> ja see ei liigu: VM-il pole töötavat IPv6 ühendust, aga Docker proovib seda enne IPv4-le langemist. Lülita IPv6 välja ja proovi uuesti:
+<p class="admonition-title">Kui <code>yum</code>/<code>dnf</code> jääb toppama</p>
+<p>Sama IPv6-probleem mis docker pull. Lülita välja:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-w<span class="w"> </span>net.ipv6.conf.all.disable_ipv6<span class="o">=</span><span class="m">1</span><span class="w"> </span>net.ipv6.conf.default.disable_ipv6<span class="o">=</span><span class="m">1</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
 </span></code></pre></div></p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Koolitajale — Wazuh manager enne klassi püsti</p>
-<p>Pärastlõune Wazuh hands-on eeldab, et <strong>keskne manager juba jookseb</strong> mon-maria peal (<code>192.168.100.120</code>). Manager-stacki image'd on suured (multi-GB) — <strong>tee pull tunde varem</strong>, mitte klassiajal. Setup WSL-ist: <code>~/paev4-wazuh-test.sh manager</code> (või käsitsi: <code>git clone wazuh-docker -b v4.14.5</code> → <code>single-node</code> → sertifikaadid → <code>docker compose up -d</code>). Õpilased pull'ivad ainult kerge <strong>agendi</strong> (~kümneid MB) — nende osa on kiire ka kodus, kui manager on ligi. Dashboard: <code>https://192.168.100.120</code> (admin / SecretPassword).</p>
+<hr />
+<h2 id="osa-1-paigalda-ja-enrolli-agent">Osa 1 · Paigalda ja enrolli agent<a class="headerlink" href="#osa-1-paigalda-ja-enrolli-agent" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> agent on programm, mis su masinal kogub turbesündmusi ja saadab managerile. Alates Wazuh 4.0-st piisab enrollimiseks <strong>ühest asjast</strong> — manageri IP-st installi ajal. Agent küsib ise võtme ja registreerub; käsitsi võtmevahetust pole vaja.</p>
+</blockquote>
+<h3 id="11-lisa-wazuhi-pakihoidla">1.1 Lisa Wazuhi pakihoidla<a class="headerlink" href="#11-lisa-wazuhi-pakihoidla" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>rpm<span class="w"> </span>--import<span class="w"> </span>https://packages.wazuh.com/key/GPG-KEY-WAZUH
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/yum.repos.d/wazuh.repo<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s">[wazuh]</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s">gpgcheck=1</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s">gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s">enabled=1</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s">name=EL-$releasever - Wazuh</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s">baseurl=https://packages.wazuh.com/4.x/yum/</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s">protect=1</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s">EOF</span>
+</span></code></pre></div>
+<h3 id="12-paigalda-agent-suunatud-kesksele-managerile">1.2 Paigalda agent, suunatud kesksele managerile<a class="headerlink" href="#12-paigalda-agent-suunatud-kesksele-managerile" title="Lingi sektsioonile">&para;</a></h3>
+<p><code>WAZUH_MANAGER</code> ütleb agendile, kuhu enrollida. Meie keskne manager on <code>192.168.100.120</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span><span class="nv">WAZUH_MANAGER</span><span class="o">=</span><span class="s2">&quot;192.168.100.120&quot;</span><span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>wazuh-agent
+</span></code></pre></div>
+<p>See kirjutab manageri IP automaatselt <code>/var/ossec/etc/ossec.conf</code>-i <code>&lt;client&gt;&lt;server&gt;</code> alla.</p>
+<h3 id="13-kaivita-ja-keela-auto-uuendus">1.3 Käivita ja keela auto-uuendus<a class="headerlink" href="#13-kaivita-ja-keela-auto-uuendus" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>wazuh-agent
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># väldi tahtmatut uuendust üle manageri versiooni:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/^enabled=1/enabled=0/&quot;</span><span class="w"> </span>/etc/yum.repos.d/wazuh.repo
+</span></code></pre></div>
+<h3 id="14-kontrolli-uhendust">1.4 Kontrolli ühendust<a class="headerlink" href="#14-kontrolli-uhendust" title="Lingi sektsioonile">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>wazuh-agent<span class="w"> </span>--no-pager
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>tail<span class="w"> </span>-15<span class="w"> </span>/var/ossec/logs/ossec.log
+</span></code></pre></div>
+<p>Otsi logist rida nagu <code>Connected to the server</code> ja <code>Agent is now ...</code>. Kui näed seda, oled managerisse enrollitud.</p>
+<div class="admonition tip">
+<p class="admonition-title">Kui logis on <code>Unable to connect</code> / <code>Connection refused</code></p>
+<p>Kontrolli, et manageri IP on õige (<code>grep -A2 '&lt;server&gt;' /var/ossec/etc/ossec.conf</code> peab näitama <code>192.168.100.120</code>) ja et oled VPN/klassivõrgus, kust <code>192.168.100.120</code> on kättesaadav. Pordid 1514 (side) ja 1515 (enroll) peavad olema avatud.</p>
 </div>
-<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
-<p>Päeva lõpuks osaleja:</p>
+<p>💭 <strong>Mõtle:</strong> sa ei vahetanud käsitsi ühtegi võtit. Mis julgeolekurisk on sellega, et agent enrollib end automaatselt ilma paroolita? Millal tootmises paneksid enrollimisele parooli (<code>WAZUH_REGISTRATION_PASSWORD</code>)?</p>
+<hr />
+<h2 id="osa-2-leia-end-dashboardist">Osa 2 · Leia end dashboardist<a class="headerlink" href="#osa-2-leia-end-dashboardist" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> manager näitab kõiki enrollitud agente ühes kohas — see on SIEM-i väärtus: üks vaade kõigile masinatele.</p>
+</blockquote>
+<p>Ava brauserist <strong><code>https://192.168.100.120</code></strong> (iseallkirjastatud sert → nõustu hoiatusega). Logi sisse:</p>
 <ul>
-<li><strong>Selgitab</strong>, miks aegread vajavad eraldi andmebaasi (mitte PostgreSQL-i), ja toob kaks olukorda kummagi — InfluxDB ja Prometheus — kasuks</li>
-<li><strong>Ehitab</strong> InfluxDB 2.7 + Telegraf stacki Docker Compose'iga, läbib esmase seadistuse (org, bucket, token)</li>
-<li><strong>Kirjutab</strong> line protocol rea ja päringustab andmeid Flux'iga (UI Data Explorer)</li>
-<li><strong>Eristab</strong> lihtsat logimist ja SIEM-i, kirjeldab Wazuhi nelja komponenti ja Active Response'i rolli</li>
-<li><strong>Paigaldab ja enrollib</strong> Wazuhi agendi kesksesse managerisse ning tekitab tuvastatava turbesündmuse (ebaõnnestunud sisselogimine)</li>
-<li><strong>Põhjendab</strong>, miks Kafka logitorudes puhvrina eksisteerib</li>
-<li><strong>Valib</strong> kesksete logimislahenduste vahel (Loki / ELK / OpenSearch / SIEM) oma organisatsiooni kontekstis</li>
+<li>Kasutaja: <code>admin</code></li>
+<li>Parool: <code>SecretPassword</code></li>
 </ul>
-<h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Lingi sektsioonile">&para;</a></h2>
-<p>Oma VM: 4 GB RAM, 2 CPU, Docker eelinstallitud. TICK on kerge ja mahub mängleva kergusega, kui päev 3 stack on maas.</p>
-<div class="admonition note">
-<p class="admonition-title">Miks InfluxDB 2.7, mitte 3?</p>
-<p>Lab-serverite CPU (Intel Xeon E5-2660, Sandy Bridge) ei toeta <strong>AVX2</strong> käsustikku, mida InfluxDB 3 binäär nõuab — v3 sureb käivitamisel (SIGILL, exit 132). Seetõttu kasutame <strong>InfluxDB 2.7</strong> (Go binäär, töötab igal CPU-l). Kontseptsioonid on samad; erinevus on päringukeel: v2.7 kasutab <strong>Flux</strong>'i (või InfluxQL v1-compat kaudu), mitte SQL-i nagu v3.</p>
+<p>Mine <strong>Agents</strong> (või Server management → Endpoints summary). Leia oma VM nimi nimekirjast — staatus <strong>Active</strong> (roheline). Kõik klassi agendid on samas nimekirjas.</p>
+<p>💭 <strong>Mõtle:</strong> kõigi õpilaste masinad on ühes nimekirjas. Mis vahe on sellel ja Päev 2 Zabbixil, kus iga host oli samuti keskses serveris? Mille poolest erineb turbe-keskne vaade (Wazuh) jõudlus-kesksest (Zabbix)?</p>
+<hr />
+<h2 id="osa-3-tekita-tuvastus-ebaonnestunud-sisselogimised">Osa 3 · Tekita tuvastus — ebaõnnestunud sisselogimised<a class="headerlink" href="#osa-3-tekita-tuvastus-ebaonnestunud-sisselogimised" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> SIEM-i mõte on <strong>tuvastada</strong>, mitte ainult koguda. Üks levinuim signaal on korduvad ebaõnnestunud sisselogimised (brute-force katse). Wazuhil on selle jaoks vaikereeglid — tekitame sündmuse ja vaatame, kuidas reegel rakendub.</p>
+</blockquote>
+<p>Tekita oma VM-il viis ebaõnnestunud SSH-sisselogimist olematu kasutajaga:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no<span class="w"> </span>-o<span class="w"> </span><span class="nv">ConnectTimeout</span><span class="o">=</span><span class="m">3</span><span class="w"> </span>olematukasutaja@127.0.0.1<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">done</span>
+</span></code></pre></div>
+<p>Iga katse läheb <code>/var/log/secure</code>-i; agent loeb selle ja saadab managerile.</p>
+<p>Dashboardis mine <strong>Threat Hunting / Security Events</strong> (või Discover), vali oma agent ja vaata viimaseid sündmusi. Otsi alerteid nagu:</p>
+<ul>
+<li><strong>5710</strong> — <em>Attempt to login using a non-existent user</em> (tase 5)</li>
+<li><strong>5712</strong> — <em>sshd: brute force trying to get access</em> (tase 10), kui katseid on piisavalt tihedalt</li>
+</ul>
+<p>Klõpsa ühel alertil ja vaata välju: <strong>rule.id</strong>, <strong>rule.level</strong>, <strong>rule.description</strong>, <strong>agent.name</strong>, <strong>data.srcip</strong>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Kui alerteid kohe ei näe</p>
+<p>Andmete jõudmine võtab kuni ~30 s. Kontrolli, et ülal paremal on ajavahemik "Last 15 minutes" ja et valitud on õige agent. Värskenda lehte.</p>
 </div>
+<p>💭 <strong>Mõtle:</strong> reegel 5710 on tase 5, brute-force 5712 on tase 10. Miks on sama tüüpi sündmus (login fail) eri tasemega sõltuvalt kontekstist? Kuidas aitab tasemepõhine eskaleerimine SOC-meeskonnal prioritiseerida?</p>
+<hr />
+<h2 id="osa-4-active-response-valikuline-kodus">Osa 4 · Active Response (valikuline, kodus)<a class="headerlink" href="#osa-4-active-response-valikuline-kodus" title="Lingi sektsioonile">&para;</a></h2>
+<blockquote>
+<p><strong>Miks:</strong> SIEM ei pea ainult teatama — ta saab <strong>reageerida</strong>. Wazuhi Active Response saab käivitada skripti, kui reegel rakendub: nt blokeerida ründav IP tulemüüris. See on automaatne kaitse, mis töötab ka öösel kui keegi ei vaata.</p>
+</blockquote>
+<p>Wazuhi vaikekonfiguratsioonis on Active Response <code>firewall-drop</code>, mis blokeerib IP, mis ületab brute-force läve. Loe konfiguratsiooni (manageris):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># managerile pääseb keskselt; kohalik vaade agendi poolelt:</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>grep<span class="w"> </span>-A5<span class="w"> </span><span class="s1">&#39;active-response&#39;</span><span class="w"> </span>/var/ossec/etc/ossec.conf
+</span></code></pre></div>
+<p>Mõtle läbi: kui agent tuvastab 8 ebaõnnestunud katset 120 s jooksul samalt IP-lt, käivitab manager <code>firewall-drop</code> selle agendi peal. Loengus nägid, miks automaatne reageerimine on kahe teraga mõõk (vale-positiivne → blokeerid iseennast).</p>
+<p>💭 <strong>Mõtle:</strong> mis juhtuks, kui Active Response blokeeriks IP-d liiga agressiivselt? Too näide olukorrast, kus automaatne blokeerimine teeks rohkem kahju kui kasu.</p>
+<hr />
+<h2 id="lopukontroll-enesekontroll-verifitseeritav">✅ Lõpukontroll (enesekontroll, verifitseeritav)<a class="headerlink" href="#lopukontroll-enesekontroll-verifitseeritav" title="Lingi sektsioonile">&para;</a></h2>
+<p><strong>Tehniline:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>sudo systemctl status wazuh-agent</code> → <code>active (running)</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>/var/ossec/logs/ossec.log</code> sisaldab rida <code>Connected to the server</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Dashboardis (<code>https://192.168.100.120</code>) on sinu VM <strong>Active</strong> olekus.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Pärast 5 ebaõnnestunud sisselogimist näed dashboardis reegli <strong>5710</strong> alerteid oma agendilt.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Oskad ühel alertil nimetada <code>rule.id</code>, <code>rule.level</code>, <code>agent.name</code>.</li>
+</ul>
+<p><strong>Arusaamine (vasta peast):</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Nimetad Wazuhi neli komponenti ja kummagi rolli.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Selgitad, miks indexer on OpenSearch (meenuta Päev 3) ja mis seal hoitakse.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Selgitad, miks SIEM analüüsib keskselt, mitte igal masinal eraldi.</li>
+</ul>
+<hr />
+<h2 id="veaotsing">Veaotsing<a class="headerlink" href="#veaotsing" title="Lingi sektsioonile">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Teenus</th>
-<th>Port</th>
-<th>Kirjeldus</th>
+<th>Probleem</th>
+<th>Kontroll</th>
+<th>Lahendus</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>InfluxDB 2.7</td>
-<td>8086</td>
-<td>Aegrea-andmebaas + veebiliides (UI sissehitatud, eraldi Explorerit pole)</td>
-</tr>
-<tr>
-<td>Telegraf</td>
+<td><code>yum install</code> jääb toppama</td>
 <td>—</td>
-<td>Agent, kogub süsteemimeetrikad (ei kuula porti)</td>
+<td>IPv6 välja (vt Eeltöö), proovi uuesti.</td>
 </tr>
 <tr>
-<td>Mosquitto (MQTT)</td>
-<td>1883</td>
-<td>Sensorite brokker — osa 7 (kodutöö)</td>
+<td>Agent <code>Unable to connect</code></td>
+<td><code>grep -A2 '&lt;server&gt;' /var/ossec/etc/ossec.conf</code></td>
+<td>Manageri IP peab olema <code>192.168.100.120</code>; pead olema võrgus, kust see on ligi.</td>
+</tr>
+<tr>
+<td>Agent paigaldatud, aga dashboardis pole</td>
+<td><code>sudo systemctl status wazuh-agent</code></td>
+<td>Käivita: <code>sudo systemctl enable --now wazuh-agent</code>. Oota ~30 s.</td>
+</tr>
+<tr>
+<td>Dashboard ei avane</td>
+<td>brauser</td>
+<td><code>https://</code> (mitte http), nõustu iseallkirjastatud serdiga.</td>
+</tr>
+<tr>
+<td>Sisselogimine ebaõnnestub</td>
+<td>—</td>
+<td><code>admin</code> / <code>SecretPassword</code> (väiketähed loevad).</td>
+</tr>
+<tr>
+<td>Alerteid ei näe</td>
+<td>ajavahemik UI-s</td>
+<td>Sea "Last 15 minutes", vali õige agent, värskenda.</td>
 </tr>
 </tbody>
 </table>
-<p>UI sisselogimine: <strong>admin / Monitor2026!</strong> · org <code>hkhk</code> · bucket <code>mon</code>. Täpsed IP-d: <a href="../../resources/vm-access/">VM ligipääs</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Wazuh (pärastlõuna) — keskne mudel</p>
-<p>Manager + indexer + dashboard jooksevad <strong>ühes kohas</strong> (mon-maria, <code>192.168.100.120</code>) — koolitaja seab püsti enne klassi (suur pull). Õpilane paigaldab oma VM-ile ainult kerge <strong>wazuh-agent</strong>'i (kiire), enrollib managerisse ja vaatab oma masina sündmusi ühises dashboardis. Indexer = OpenSearch (Java) → töötab Sandy Bridge'il, erinevalt InfluxDB 3-st. Mida õpilane teeb/kontrollib: vt <a href="../../labs/04_tick_keskne_logimine/wazuh_lab/">Wazuh lab</a>.</p>
-</div>
-<h2 id="jargmine-kord-606">Järgmine kord (6.06)<a class="headerlink" href="#jargmine-kord-606" title="Lingi sektsioonile">&para;</a></h2>
-<p><strong>Päev 5 — Tempo + OpenTelemetry</strong>: hajutatud jälgimine (distributed tracing), kolmas sammas. Seome kõik viis päeva kokku <strong>LGTM stackiga</strong> (Loki + Grafana + Tempo + Mimir) ja vaatame 2026 trende. Eeltöö: päev 4 kodutöö (lab osad 5–7) esitatud.</p>
+<hr />
+<h2 id="allikad">📚 Allikad<a class="headerlink" href="#allikad" title="Lingi sektsioonile">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Allikas</th>
+<th>URL</th>
+<th>Miks oluline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wazuh agent — Linux</td>
+<td><a href="https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-linux.html">https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-linux.html</a></td>
+<td>Agendi paigaldus ja enroll.</td>
+</tr>
+<tr>
+<td>Wazuh agent enrollment</td>
+<td><a href="https://documentation.wazuh.com/current/user-manual/agent-enrollment/index.html">https://documentation.wazuh.com/current/user-manual/agent-enrollment/index.html</a></td>
+<td>Kuidas auto-enroll töötab.</td>
+</tr>
+<tr>
+<td>Wazuh ruleset</td>
+<td><a href="https://documentation.wazuh.com/current/user-manual/ruleset/index.html">https://documentation.wazuh.com/current/user-manual/ruleset/index.html</a></td>
+<td>Reeglid, tasemed, rule.id.</td>
+</tr>
+<tr>
+<td>Active Response</td>
+<td><a href="https://documentation.wazuh.com/current/user-manual/capabilities/active-response/index.html">https://documentation.wazuh.com/current/user-manual/capabilities/active-response/index.html</a></td>
+<td>Automaatne reageerimine.</td>
+</tr>
+<tr>
+<td>Wazuh Docker (manager)</td>
+<td><a href="https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html">https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html</a></td>
+<td>Keskse stacki taust.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -2032,10 +2048,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.tabs.link", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Kopeeritud", "clipboard.copy": "Kopeeri l\u00f5ikelauale", "search.result.more.one": "1 veel sellel lehel", "search.result.more.other": "# veel sellel lehel", "search.result.none": "Otsingule ei leitud \u00fchtegi vastet", "search.result.one": "Leiti \u00fcks tulemus", "search.result.other": "Leiti # tulemust", "search.result.placeholder": "Otsimiseks kirjuta siia", "search.result.term.missing": "Puudub", "select.version": "Vali versioon"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js"></script>
       
