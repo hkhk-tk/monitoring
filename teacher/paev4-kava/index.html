@@ -1894,14 +1894,18 @@
 <p>Päeva lõpuks osaleja:</p>
 <ul>
 <li><strong>Selgitab</strong>, miks aegread vajavad eraldi andmebaasi (mitte PostgreSQL-i), ja toob kaks olukorda kummagi — InfluxDB ja Prometheus — kasuks</li>
-<li><strong>Ehitab</strong> InfluxDB 3 Core + Telegraf + Explorer stacki Docker Compose'iga, loob tokeni ja andmebaasi</li>
-<li><strong>Kirjutab</strong> line protocol rea ja päringustab andmeid SQL-iga</li>
+<li><strong>Ehitab</strong> InfluxDB 2.7 + Telegraf stacki Docker Compose'iga, läbib esmase seadistuse (org, bucket, token)</li>
+<li><strong>Kirjutab</strong> line protocol rea ja päringustab andmeid Flux'iga (UI Data Explorer)</li>
 <li><strong>Eristab</strong> lihtsat logimist ja SIEM-i, kirjeldab Wazuhi nelja komponenti ja Active Response'i rolli</li>
 <li><strong>Põhjendab</strong>, miks Kafka logitorudes puhvrina eksisteerib</li>
 <li><strong>Valib</strong> kesksete logimislahenduste vahel (Loki / ELK / OpenSearch / SIEM) oma organisatsiooni kontekstis</li>
 </ul>
 <h2 id="laborikeskkond">Laborikeskkond<a class="headerlink" href="#laborikeskkond" title="Lingi sektsioonile">&para;</a></h2>
 <p>Oma VM: 4 GB RAM, 2 CPU, Docker eelinstallitud. TICK on kerge ja mahub mängleva kergusega, kui päev 3 stack on maas.</p>
+<div class="admonition note">
+<p class="admonition-title">Miks InfluxDB 2.7, mitte 3?</p>
+<p>Lab-serverite CPU (Intel Xeon E5-2660, Sandy Bridge) ei toeta <strong>AVX2</strong> käsustikku, mida InfluxDB 3 binäär nõuab — v3 sureb käivitamisel (SIGILL, exit 132). Seetõttu kasutame <strong>InfluxDB 2.7</strong> (Go binäär, töötab igal CPU-l). Kontseptsioonid on samad; erinevus on päringukeel: v2.7 kasutab <strong>Flux</strong>'i (või InfluxQL v1-compat kaudu), mitte SQL-i nagu v3.</p>
+</div>
 <table>
 <thead>
 <tr>
@@ -1912,23 +1916,23 @@
 </thead>
 <tbody>
 <tr>
-<td>InfluxDB 3 Core</td>
-<td>8181</td>
-<td>Aegrea-andmebaas, SQL päringud</td>
-</tr>
-<tr>
-<td>InfluxDB 3 Explorer</td>
-<td>8888</td>
-<td>Veebiliides — haldus ja päring</td>
+<td>InfluxDB 2.7</td>
+<td>8086</td>
+<td>Aegrea-andmebaas + veebiliides (UI sissehitatud, eraldi Explorerit pole)</td>
 </tr>
 <tr>
 <td>Telegraf</td>
 <td>—</td>
 <td>Agent, kogub süsteemimeetrikad (ei kuula porti)</td>
 </tr>
+<tr>
+<td>Mosquitto (MQTT)</td>
+<td>1883</td>
+<td>Sensorite brokker — osa 7 (kodutöö)</td>
+</tr>
 </tbody>
 </table>
-<p>Täpsed IP-d, kasutajanimed, paroolid: <a href="../../resources/vm-access/">VM ligipääs</a>.</p>
+<p>UI sisselogimine: <strong>admin / Monitor2026!</strong> · org <code>hkhk</code> · bucket <code>mon</code>. Täpsed IP-d: <a href="../../resources/vm-access/">VM ligipääs</a>.</p>
 <h2 id="jargmine-kord-606">Järgmine kord (6.06)<a class="headerlink" href="#jargmine-kord-606" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>Päev 5 — Tempo + OpenTelemetry</strong>: hajutatud jälgimine (distributed tracing), kolmas sammas. Seome kõik viis päeva kokku <strong>LGTM stackiga</strong> (Loki + Grafana + Tempo + Mimir) ja vaatame 2026 trende. Eeltöö: päev 4 kodutöö (lab osad 5–7) esitatud.</p>
 
@@ -1951,7 +1955,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="29. mai 2026 21:16:40 UTC">29. mai 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="30. mai 2026 04:03:12 UTC">30. mai 2026</span>
   </span>
 
     
