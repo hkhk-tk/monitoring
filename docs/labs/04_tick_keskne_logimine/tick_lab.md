@@ -18,7 +18,7 @@ TICK on kerge — InfluxDB + Telegraf mahuvad 4 GB VM-i mängleva kergusega, kui
 
 ---
 
-## 🎯 Õpiväljundid
+## Õpiväljundid
 
 **Teadmised:**
 
@@ -429,7 +429,7 @@ Data Explorer'is filter `_measurement` = `temperatuur` — näed sensori-tempera
 
 ---
 
-## ✅ Lõpukontroll (enesekontroll, verifitseeritav)
+## Lõpukontroll (enesekontroll, verifitseeritav)
 
 **Tehniline:**
 
@@ -450,7 +450,7 @@ Data Explorer'is filter `_measurement` = `temperatuur` — näed sensori-tempera
 
 ---
 
-## 🚀 Lisaülesanded (kellel aega)
+## Lisaülesanded (kellel aega)
 
 **A. Grafana InfluxDB peal.** Kui päev 1 Grafana stack on alles, lisa InfluxDB datasource (Flux) ja ehita CPU dashboard. Sama Grafana, mis töötas Prometheuse peal, töötab ka TSDB peal — LGTM-põhimõte praktikas.
 

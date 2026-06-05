@@ -2,7 +2,7 @@
 
 **Kestus:** ~4 tundi (klassis Osad 1–4, ülejäänu kodus)
 **Tase:** kesktase
-**Eeldused:** Päev 1 (Docker Compose, Prometheus, Grafana datasource'id). Päev 2 (Loki, LogQL). Hajutatud jälgimise mõisted (span, trace, OTLP, context propagation) — loe enne labi [Päev 5 loeng](../../materials/lectures/paev5-loeng.md).
+**Eeldused:** Päev 1 (Docker Compose, Prometheus, Grafana datasource'id). Päev 2 (Loki, LogQL). Hajutatud jälgimise mõisted (span, trace, OTLP, context propagation) — loe enne labi [Päev 5 loeng: hajutatud jälgimine](../../materials/lectures/paev5-tracing-loeng.md). SLO/veaeelarve viited (Osad 5–6) tulevad [II mooduli loengust](../../materials/lectures/paev5-tookindlus-loeng.md).
 **VM:** sinu VM (`ssh <eesnimi>@192.168.35.12X` klassivõrgust või `192.168.100.12X` VPN-ist)
 
 ---
@@ -348,7 +348,7 @@ See ütleb Grafanale: kui logireas on `trace_id=abc123`, tee sellest klõpsatav 
 
 Kui sul on logigeneraator (päev 2 `log-generator` tekitas ridu `trace_id=...`), ava *Explore* → Loki → `{job="applog"}`. Klõpsa real, kus on `trace_id`. Näed nüüd klõpsatavat **trace_id** välja → klõps → hüppad Tempo trace'i.
 
-Kui logigeneraatorit pole, ava lihtsalt päev 3 trace Grafanas ja vaata, kuidas trace-vaates on iga span'i juures sildid, mille kaudu saaks tagasi logidesse liikuda.
+Kui logigeneraatorit pole, ava lihtsalt Osa 3 trace Grafanas ja vaata, kuidas trace-vaates on iga span'i juures sildid, mille kaudu saaks tagasi logidesse liikuda.
 
 💭 **Mõtle:** korrelatsioon töötab ainult siis, kui `trace_id` on **nii logis kui jäljes**. Mida see tähendab rakenduse instrumenteerimise jaoks — kes peab tagama, et logirida sisaldab sama `trace_id`-d, mis jälg? Miks on OTel siin abiks (meenuta loengut)?
 
