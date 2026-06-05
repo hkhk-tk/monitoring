@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" font-family="-apple-system, Segoe UI, Roboto, sans-serif">
+  <style>
+    .title { font-size: 16px; font-weight: 700; fill: #1a1a2e; }
+    .lbl   { font-size: 13px; fill: #333; }
+    .dur   { font-size: 11px; fill: #555; }
+    .axis  { font-size: 10px; fill: #888; }
+    .bar   { rx: 4; }
+    .root  { fill: #5b6ee1; }
+    .step  { fill: #6fb98f; }
+    .bake  { fill: #e8a33d; }
+    .burn  { fill: #d64545; }
+    .grid  { stroke: #e3e3e3; stroke-width: 1; }
+    .root-t { fill: #fff; font-size: 11px; font-weight: 600; }
+  </style>
+
+  <text x="20" y="30" class="title">Rain küpsetab rabarberikooki — trace (span-puu)</text>
+
+  <!-- ajatelg gridid (0..90 min, x: 180..620) -->
+  <line x1="180" y1="60" x2="180" y2="280" class="grid"/>
+  <line x1="278" y1="60" x2="278" y2="280" class="grid"/>
+  <line x1="376" y1="60" x2="376" y2="280" class="grid"/>
+  <line x1="474" y1="60" x2="474" y2="280" class="grid"/>
+  <line x1="572" y1="60" x2="572" y2="280" class="grid"/>
+  <text x="180" y="300" class="axis" text-anchor="middle">0</text>
+  <text x="278" y="300" class="axis" text-anchor="middle">20</text>
+  <text x="376" y="300" class="axis" text-anchor="middle">40</text>
+  <text x="474" y="300" class="axis" text-anchor="middle">60</text>
+  <text x="572" y="300" class="axis" text-anchor="middle">80 min</text>
+
+  <!-- skaala: 1 min = 4.9 px, algus x=180 -->
+  <!-- osta_rabarber: 0-5 min -->
+  <text x="20" y="84" class="lbl">osta_rabarber</text>
+  <rect x="180" y="72" width="24.5" height="18" class="bar step"/>
+  <text x="212" y="85" class="dur">5 min</text>
+
+  <!-- tee_tainas: 5-20 min (15) -->
+  <text x="20" y="116" class="lbl">tee_tainas</text>
+  <rect x="204.5" y="104" width="73.5" height="18" class="bar step"/>
+  <text x="285" y="117" class="dur">15 min</text>
+
+  <!-- sega_taidis: 20-30 min (10) -->
+  <text x="20" y="148" class="lbl">sega_taidis</text>
+  <rect x="278" y="136" width="49" height="18" class="bar step"/>
+  <text x="334" y="149" class="dur">10 min</text>
+
+  <!-- kupseta: 30-75 min (45) — pikim -->
+  <text x="20" y="180" class="lbl" font-weight="700">kupseta</text>
+  <rect x="327" y="168" width="220.5" height="18" class="bar bake"/>
+  <text x="554" y="181" class="dur" font-weight="700">45 min ← pikim</text>
+
+  <!-- jahuta: 75-90 min (15) -->
+  <text x="20" y="212" class="lbl">jahuta</text>
+  <rect x="547.5" y="200" width="73.5" height="18" class="bar step"/>
+  <text x="20" y="232" class="dur"></text>
+
+  <!-- SLO joon 50 min -->
+  <line x1="425" y1="60" x2="425" y2="240" stroke="#d64545" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="430" y="252" class="dur" fill="#d64545">SLO: ahjus max 50 min — üle selle kõrbeb</text>
+
+  <text x="20" y="278" class="dur" fill="#888">Trace näitab kohe: ajast kulub enamus ahjus. Sama loogika mis db.query checkout-trace'is.</text>
+</svg>
