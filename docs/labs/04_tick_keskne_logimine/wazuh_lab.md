@@ -97,6 +97,8 @@ Otsi logist rida nagu `Connected to the server` ja `Agent is now ...`. Kui näed
 !!! tip "Kui logis on `Unable to connect` / `Connection refused`"
     Kontrolli, et manageri IP on õige (`grep -A2 '<server>' /var/ossec/etc/ossec.conf` peab näitama `192.168.100.120`) ja et oled VPN/klassivõrgus, kust `192.168.100.120` on kättesaadav. Pordid 1514 (side) ja 1515 (enroll) peavad olema avatud.
 
+    **Pane tähele:** sinu agendi `ossec.conf`-is on mainitud ainult port **1514** — see on normaalne. Port **1515** (enrollimine) elab **manageri** poolel, mitte agendi konfis. Agent kasutab 1515 vaid installihetkel võtme küsimiseks; pärast seda käib kogu side üle 1514.
+
 💭 **Mõtle:** sa ei vahetanud käsitsi ühtegi võtit. Mis julgeolekurisk on sellega, et agent enrollib end automaatselt ilma paroolita? Millal tootmises paneksid enrollimisele parooli (`WAZUH_REGISTRATION_PASSWORD`)?
 
 ---
