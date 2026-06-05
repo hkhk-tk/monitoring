@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://hkhk-tk.github.io/monitoring/labs/05_tempo_otel/lab/">
       
       
-        <link rel="prev" href="../../04_tick_keskne_logimine/tick_lab/">
+        <link rel="prev" href="../../../materials/lectures/paev5-tookindlus-loeng/">
       
       
         <link rel="next" href="../trendid/">
@@ -336,7 +336,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../../../materials/lectures/paev5-tracing-loeng/" class="md-tabs__link">
           
   
   
@@ -1076,6 +1076,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1138,6 +1142,34 @@
     
   
     Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/intro-to-tick-stack.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: TICK Stack intro
   
 
     
@@ -1235,6 +1267,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_tick_keskne_logimine/wazuh_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wazuh labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1252,6 +1312,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -1304,6 +1368,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev5-tracing-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Hajutatud jälgimine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev5-tookindlus-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Töökindlus ja käitamine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2223,7 +2343,7 @@
 <h1 id="paev-5-tempo-opentelemetry-labor">Päev 5: Tempo + OpenTelemetry — Labor<a class="headerlink" href="#paev-5-tempo-opentelemetry-labor" title="Lingi sektsioonile">&para;</a></h1>
 <p><strong>Kestus:</strong> ~4 tundi (klassis Osad 1–4, ülejäänu kodus)
 <strong>Tase:</strong> kesktase
-<strong>Eeldused:</strong> Päev 1 (Docker Compose, Prometheus, Grafana datasource'id). Päev 2 (Loki, LogQL). Hajutatud jälgimise mõisted (span, trace, OTLP, context propagation) — loe enne labi <a href="../../../materials/lectures/paev5-loeng/">Päev 5 loeng</a>.
+<strong>Eeldused:</strong> Päev 1 (Docker Compose, Prometheus, Grafana datasource'id). Päev 2 (Loki, LogQL). Hajutatud jälgimise mõisted (span, trace, OTLP, context propagation) — loe enne labi <a href="../../../materials/lectures/paev5-tracing-loeng/">Päev 5 loeng: hajutatud jälgimine</a>. SLO/veaeelarve viited (Osad 5–6) tulevad <a href="../../../materials/lectures/paev5-tookindlus-loeng/">II mooduli loengust</a>.
 <strong>VM:</strong> sinu VM (<code>ssh &lt;eesnimi&gt;@192.168.35.12X</code> klassivõrgust või <code>192.168.100.12X</code> VPN-ist)</p>
 <hr />
 <h2 id="miks-see-labor">Miks see labor<a class="headerlink" href="#miks-see-labor" title="Lingi sektsioonile">&para;</a></h2>
@@ -2529,7 +2649,7 @@
 <p>See ütleb Grafanale: kui logireas on <code>trace_id=abc123</code>, tee sellest klõpsatav link, mis avab Tempos vastava trace'i.</p>
 <h3 id="42-testi-seost">4.2 Testi seost<a class="headerlink" href="#42-testi-seost" title="Lingi sektsioonile">&para;</a></h3>
 <p>Kui sul on logigeneraator (päev 2 <code>log-generator</code> tekitas ridu <code>trace_id=...</code>), ava <em>Explore</em> → Loki → <code>{job="applog"}</code>. Klõpsa real, kus on <code>trace_id</code>. Näed nüüd klõpsatavat <strong>trace_id</strong> välja → klõps → hüppad Tempo trace'i.</p>
-<p>Kui logigeneraatorit pole, ava lihtsalt päev 3 trace Grafanas ja vaata, kuidas trace-vaates on iga span'i juures sildid, mille kaudu saaks tagasi logidesse liikuda.</p>
+<p>Kui logigeneraatorit pole, ava lihtsalt Osa 3 trace Grafanas ja vaata, kuidas trace-vaates on iga span'i juures sildid, mille kaudu saaks tagasi logidesse liikuda.</p>
 <p>💭 <strong>Mõtle:</strong> korrelatsioon töötab ainult siis, kui <code>trace_id</code> on <strong>nii logis kui jäljes</strong>. Mida see tähendab rakenduse instrumenteerimise jaoks — kes peab tagama, et logirida sisaldab sama <code>trace_id</code>-d, mis jälg? Miks on OTel siin abiks (meenuta loengut)?</p>
 <hr />
 <h2 id="osa-5-traceql-paring-jalgede-peal-kodus">Osa 5 · TraceQL — päring jälgede peal (kodus)<a class="headerlink" href="#osa-5-traceql-paring-jalgede-peal-kodus" title="Lingi sektsioonile">&para;</a></h2>
@@ -2742,7 +2862,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="5. juuni 2026 14:03:13 UTC">5. juuni 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="5. juuni 2026 15:45:58 UTC">5. juuni 2026</span>
   </span>
 
     

@@ -18,7 +18,7 @@
         <link rel="prev" href="../../../materials/lectures/paev4-cheat-sheet/">
       
       
-        <link rel="next" href="../../05_tempo_otel/lab/">
+        <link rel="next" href="../wazuh_lab/">
       
       
         
@@ -336,7 +336,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../05_tempo_otel/lab/" class="md-tabs__link">
+        <a href="../../../materials/lectures/paev5-tracing-loeng/" class="md-tabs__link">
           
   
   
@@ -1078,6 +1078,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1141,6 +1145,34 @@
     
   
     Kava
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/intro-to-tick-stack.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: TICK Stack intro
   
 
     
@@ -1291,7 +1323,7 @@
   <a href="#opivaljundid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🎯 Õpiväljundid
+        Õpiväljundid
       
     </span>
   </a>
@@ -1591,7 +1623,7 @@
   <a href="#lopukontroll-enesekontroll-verifitseeritav" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ✅ Lõpukontroll (enesekontroll, verifitseeritav)
+        Lõpukontroll (enesekontroll, verifitseeritav)
       
     </span>
   </a>
@@ -1602,7 +1634,7 @@
   <a href="#lisaulesanded-kellel-aega" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🚀 Lisaülesanded (kellel aega)
+        Lisaülesanded (kellel aega)
       
     </span>
   </a>
@@ -1640,6 +1672,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wazuh_lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wazuh labor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1655,6 +1715,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -1706,6 +1770,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev5-tracing-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Hajutatud jälgimine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../materials/lectures/paev5-tookindlus-loeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loeng: Töökindlus ja käitamine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1994,7 +2114,7 @@
   <a href="#opivaljundid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🎯 Õpiväljundid
+        Õpiväljundid
       
     </span>
   </a>
@@ -2294,7 +2414,7 @@
   <a href="#lopukontroll-enesekontroll-verifitseeritav" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ✅ Lõpukontroll (enesekontroll, verifitseeritav)
+        Lõpukontroll (enesekontroll, verifitseeritav)
       
     </span>
   </a>
@@ -2305,7 +2425,7 @@
   <a href="#lisaulesanded-kellel-aega" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🚀 Lisaülesanded (kellel aega)
+        Lisaülesanded (kellel aega)
       
     </span>
   </a>
@@ -2368,7 +2488,7 @@
 </div>
 <p>TICK on kerge — InfluxDB + Telegraf mahuvad 4 GB VM-i mängleva kergusega, kui päev 3 stack on maas.</p>
 <hr />
-<h2 id="opivaljundid">🎯 Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="opivaljundid">Õpiväljundid<a class="headerlink" href="#opivaljundid" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>Teadmised:</strong></p>
 <ol>
 <li>Selgitab, miks aegread vajavad eraldi andmebaasi (mitte PostgreSQL-i) — meenuta loengut.</li>
@@ -2713,7 +2833,7 @@
 <p>Data Explorer'is filter <code>_measurement</code> = <code>temperatuur</code> — näed sensori-temperatuure. Sama agent, mis kogus CPU-d, kogub nüüd sensoreid; ainult input-plugin muutus.</p>
 <p>💭 <strong>Mõtle:</strong> miks on Telegraf + InfluxDB IoT maailma jaoks loomulikum valik kui Prometheus + node_exporter?</p>
 <hr />
-<h2 id="lopukontroll-enesekontroll-verifitseeritav">✅ Lõpukontroll (enesekontroll, verifitseeritav)<a class="headerlink" href="#lopukontroll-enesekontroll-verifitseeritav" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="lopukontroll-enesekontroll-verifitseeritav">Lõpukontroll (enesekontroll, verifitseeritav)<a class="headerlink" href="#lopukontroll-enesekontroll-verifitseeritav" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>Tehniline:</strong></p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>docker compose ps</code> kaustas <code>~/paev4</code> näitab <code>influxdb</code> ja <code>telegraf</code> olekus <code>Up</code>.</li>
@@ -2732,7 +2852,7 @@
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Selgitad push (Telegraf) vs pull (Prometheus) ja millal kumb sobib.</li>
 </ul>
 <hr />
-<h2 id="lisaulesanded-kellel-aega">🚀 Lisaülesanded (kellel aega)<a class="headerlink" href="#lisaulesanded-kellel-aega" title="Lingi sektsioonile">&para;</a></h2>
+<h2 id="lisaulesanded-kellel-aega">Lisaülesanded (kellel aega)<a class="headerlink" href="#lisaulesanded-kellel-aega" title="Lingi sektsioonile">&para;</a></h2>
 <p><strong>A. Grafana InfluxDB peal.</strong> Kui päev 1 Grafana stack on alles, lisa InfluxDB datasource (Flux) ja ehita CPU dashboard. Sama Grafana, mis töötas Prometheuse peal, töötab ka TSDB peal — LGTM-põhimõte praktikas.</p>
 <p><strong>B. Docker input.</strong> Lisa <code>[[inputs.docker]]</code> (mount <code>/var/run/docker.sock</code>). Telegraf jälgib nüüd su konteinerite ressursse — sama VM, uus allikas.</p>
 <p><strong>C. Retention.</strong> Sea <code>mon</code> bucket'ile 7-päevane retention (UI: Load Data → Buckets → mon → Settings). Mõtle, miks aegridade puhul on automaatne vanade andmete kustutamine olulisem kui tavalises andmebaasis.</p>
@@ -2858,7 +2978,7 @@
     <span class="md-icon" title="Viimane uuendus">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="30. mai 2026 05:23:00 UTC">30. mai 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="5. juuni 2026 15:45:58 UTC">5. juuni 2026</span>
   </span>
 
     
